@@ -3,7 +3,7 @@
 #### 项目介绍
 专注于接口自动化测试的管理平台，MasterYi  Interface Automated Test Platform  
 
-演示地址： http://wwww.xuwangcheng.com/yi  
+演示地址： http://www.xuwangcheng.com/yi  
 账号： admin/q708162543  
  **开发能力有限，勿喷！！！！！**   
 
