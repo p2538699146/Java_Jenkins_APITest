@@ -1,12 +1,15 @@
 # 易大师接口自动化测试平台
-QQ群交流：576431024，加群验证：易大师
+QQ群交流：468324085，加群验证：易大师
 
 #### 项目介绍 
 专注于接口自动化测试的管理平台，MasterYi  Interface Automated Test Platform。 
-<br>
+
 码云地址：https://gitee.com/xuwangcheng/masteryi-automated-testing  
+
 更新日志： https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?title=%E6%9B%B4%E6%96%B0%E8%AF%B4%E6%98%8E&parent=  
+
 使用说明： https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/  
+
 演示地址： http://www.xuwangcheng.com/yi （admin/q708162543）   
 
 
