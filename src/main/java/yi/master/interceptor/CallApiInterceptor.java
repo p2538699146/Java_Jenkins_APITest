@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import yi.master.business.api.action.BaseApiAction;
 import yi.master.business.log.service.LogRecordService;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
 import yi.master.util.MD5Util;

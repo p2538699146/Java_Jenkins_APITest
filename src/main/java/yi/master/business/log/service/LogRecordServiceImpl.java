@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import yi.master.business.base.service.impl.BaseServiceImpl;
 import yi.master.business.log.bean.LogRecord;
 import yi.master.business.log.dao.LogRecordDao;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
 import yi.master.util.cache.CacheUtil;

@@ -323,7 +323,6 @@ var eventList = {
 			$.post(top.INTERFACE_MOCK_UPDATE_SETTING_URL, sendData, function(json){
 				if (json.returnCode == 0) {
 					layer.msg('更新成功!', {icon:1, time:1500});
-					//layer.close($("#layerIndex").val());
 				} else {
 					layer.alert(json.msg, {icon:5});
 				}

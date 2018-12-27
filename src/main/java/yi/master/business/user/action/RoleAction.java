@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import yi.master.business.base.action.BaseAction;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.Role;
 import yi.master.business.user.service.RoleService;
 import yi.master.constant.ReturnCodeConsts;

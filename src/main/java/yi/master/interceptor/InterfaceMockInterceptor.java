@@ -10,7 +10,7 @@ import yi.master.business.advanced.action.MockAction;
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.advanced.service.InterfaceMockService;
 import yi.master.business.log.service.LogRecordService;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
 import yi.master.util.PracticalUtils;

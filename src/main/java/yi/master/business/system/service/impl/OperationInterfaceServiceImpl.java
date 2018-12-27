@@ -1,4 +1,4 @@
-package yi.master.business.user.service.impl;
+package yi.master.business.system.service.impl;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import yi.master.business.base.service.impl.BaseServiceImpl;
-import yi.master.business.user.bean.OperationInterface;
-import yi.master.business.user.dao.OperationInterfaceDao;
-import yi.master.business.user.service.OperationInterfaceService;
+import yi.master.business.system.bean.OperationInterface;
+import yi.master.business.system.dao.OperationInterfaceDao;
+import yi.master.business.system.service.OperationInterfaceService;
 
 /**
  * 操作接口Service接口实现

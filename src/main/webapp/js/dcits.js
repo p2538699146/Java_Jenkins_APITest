@@ -396,7 +396,7 @@ var publish = {
 };
 
 //设置jQuery Ajax全局的参数  
-$.ajaxSetup({  
+$.ajaxSetup({
     error: function (jqXHR, textStatus, errorThrown) {  
     	layer.closeAll('dialog');
     	$(".page-container").spinModal(false);
@@ -490,9 +490,16 @@ function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting)
 	})*/
 	//ajax完成时
 	.on('xhr.dt', function ( e, settings, json, xhr ) {
-        if(json.returnCode != 0){
-        	layer.alert(json.msg, {icon:5});
+        if(json.returnCode != 0){  
         	$(".page-container").spinModal(false);
+        	if (json.returnCode == 7) {
+        		top.layer.alert('会话过期，请重新登录', {icon:5, title:'警告'}, function () {
+                    sessionStorage.clear();
+                    top.window.location = 'login.html';
+                });
+        		return false;
+        	}        	
+        	layer.alert(json.msg, {icon:5});       	
         	return false;
         }
         data = json.data;

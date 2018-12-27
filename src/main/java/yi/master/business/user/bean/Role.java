@@ -8,6 +8,7 @@ import org.apache.struts2.json.annotations.JSON;
 // default package
 
 import yi.master.annotation.FieldNameMapper;
+import yi.master.business.system.bean.OperationInterface;
 
 
 

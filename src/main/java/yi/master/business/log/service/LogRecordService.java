@@ -2,7 +2,7 @@ package yi.master.business.log.service;
 
 import yi.master.business.base.service.BaseService;
 import yi.master.business.log.bean.LogRecord;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 
 public interface LogRecordService extends BaseService<LogRecord> {

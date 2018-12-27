@@ -8,7 +8,7 @@ import org.apache.struts2.json.annotations.JSON;
 import yi.master.annotation.CustomConditionSetting;
 import yi.master.annotation.FieldNameMapper;
 import yi.master.annotation.FieldRealSearch;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 
 /**

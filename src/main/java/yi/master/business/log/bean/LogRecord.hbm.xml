@@ -13,7 +13,7 @@
 		<many-to-one name="user" class="yi.master.business.user.bean.User" fetch="join">
             <column name="user_id" />
         </many-to-one>
-        <many-to-one name="opInterface" class="yi.master.business.user.bean.OperationInterface" fetch="join">
+        <many-to-one name="opInterface" class="yi.master.business.system.bean.OperationInterface" fetch="join">
             <column name="op_id" />
         </many-to-one>
         <property name="opTime" type="java.sql.Timestamp">

@@ -433,6 +433,15 @@
 			</result>
 		</action>
 		
+		<!-- 菜单管理 -->
+		<action name="menu-*" class="busiMenuInfoAction" method="{1}">
+			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
+			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
+			<result type="json">
+				<param name="root">jsonMap</param>
+			</result>
+		</action>
+		
 		<!-- mock管理 -->
 		<action name="mock-*" class="interfaceMockAction" method="{1}">
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>

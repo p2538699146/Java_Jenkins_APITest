@@ -286,3 +286,9 @@ var WEB_SUITE_CASE_UPDATE_SETTING_URL = "websuite-updateCaseSetting";
 //运行时配置
 var WEB_CONFIG_GET_URL = "webconfig-get";
 var WEB_CONFIG_EDIT_URL = "webconfig-edit";
+
+//菜单相关
+var BUSI_MENU_EDIT_URL = "menu-edit";
+var BUSI_MENU_GET_URL = "menu-get";
+var BUSI_MENU_LIST_ALL_URL = "menu-listAll";
+var BUSI_MENU_DEL_URL = "menu-del";

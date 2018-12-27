@@ -251,8 +251,8 @@
 						},
 						{
 							"_href":"resource/user/role.html",
-							"data-title":"角色权限",
-							"child_name":"角色权限"
+							"data-title":"角色管理",
+							"child_name":"角色管理"
 						}						
 					]		
 				},
@@ -263,8 +263,13 @@
 					"childs":[
 						{
 							"_href":"resource/system/opInterface.html",
-							"data-title":"操作接口",
-							"child_name":"操作接口"
+							"data-title":"系统接口",
+							"child_name":"系统接口"
+						},
+						{
+							"_href":"resource/system/menu.html",
+							"data-title":"菜单管理",
+							"child_name":"菜单管理"
 						},
 						{
 							"_href":"resource/system/logRecord.html",

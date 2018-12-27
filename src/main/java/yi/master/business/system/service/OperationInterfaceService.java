@@ -1,9 +1,9 @@
-package yi.master.business.user.service;
+package yi.master.business.system.service;
 
 import java.util.List;
 
 import yi.master.business.base.service.BaseService;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 
 /**
  * 操作接口Service接口

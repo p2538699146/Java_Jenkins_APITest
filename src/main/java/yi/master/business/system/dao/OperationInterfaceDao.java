@@ -1,9 +1,9 @@
-package yi.master.business.user.dao;
+package yi.master.business.system.dao;
 
 import java.util.List;
 
 import yi.master.business.base.dao.BaseDao;
-import yi.master.business.user.bean.OperationInterface;
+import yi.master.business.system.bean.OperationInterface;
 
 /**
  * 操作接口DAO接口
@@ -11,7 +11,7 @@ import yi.master.business.user.bean.OperationInterface;
  * @version 1.0.0.0,2017.2.14
  */
 
-public interface OperationInterfaceDao extends BaseDao<OperationInterface>{
+public interface OperationInterfaceDao extends BaseDao<OperationInterface> {
 
 	/**
 	 * 获取指定role拥有的操作接口

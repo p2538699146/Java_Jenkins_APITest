@@ -1,12 +1,12 @@
-package yi.master.business.user.action;
+package yi.master.business.system.action;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import yi.master.business.base.action.BaseAction;
-import yi.master.business.user.bean.OperationInterface;
-import yi.master.business.user.service.OperationInterfaceService;
+import yi.master.business.system.bean.OperationInterface;
+import yi.master.business.system.service.OperationInterfaceService;
 import yi.master.constant.ReturnCodeConsts;
 
 /**
@@ -36,7 +36,6 @@ public class OperationInterfaceAction extends BaseAction<OperationInterface> {
 	
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub
 		model.setOi(new OperationInterface(model.getParentOpId2()));
 		return super.edit();
 	}

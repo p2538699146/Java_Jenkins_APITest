@@ -1,4 +1,4 @@
-package yi.master.business.user.bean;
+package yi.master.business.system.bean;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.struts2.json.annotations.JSON;
 
 import yi.master.annotation.FieldRealSearch;
+import yi.master.business.user.bean.Role;
 
 /**
  * 操作接口信息
@@ -62,7 +63,7 @@ public class OperationInterface implements Serializable {
 	/**
 	 * 对应的角色
 	 */
-	private Set<Role> roles=new HashSet<Role>();
+	private Set<Role> roles = new HashSet<Role>();
 	
 	/**
 	 * 子节点

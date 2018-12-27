@@ -1,12 +1,12 @@
-package yi.master.business.user.dao.impl;
+package yi.master.business.system.dao.impl;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import yi.master.business.base.dao.impl.BaseDaoImpl;
-import yi.master.business.user.bean.OperationInterface;
-import yi.master.business.user.dao.OperationInterfaceDao;
+import yi.master.business.system.bean.OperationInterface;
+import yi.master.business.system.dao.OperationInterfaceDao;
 
 /**
  * 操作接口DAO接口实现
@@ -20,7 +20,6 @@ public class OperationInterfaceDaoImpl extends BaseDaoImpl<OperationInterface> i
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<OperationInterface> listByRoleId(Integer roleId) {
-		// TODO Auto-generated method stub
 		String hql = "select o from OperationInterface o join o.roles r where r.roleId=:roleId";
 		return getSession().createQuery(hql).setInteger("roleId", roleId).list();
 	}

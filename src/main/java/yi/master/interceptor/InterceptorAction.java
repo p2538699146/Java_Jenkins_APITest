@@ -3,7 +3,11 @@ package yi.master.interceptor;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Controller;
 
 import yi.master.constant.ReturnCodeConsts;
@@ -38,7 +42,6 @@ public class InterceptorAction extends ActionSupport{
 	 * @return
 	 */
 	public String noLogin() {
-		
 		jsonMap.put("returnCode", ReturnCodeConsts.NOT_LOGIN_CODE);
 		jsonMap.put("msg", "你还没有登录或者登录已失效,请重新登录");
 		
