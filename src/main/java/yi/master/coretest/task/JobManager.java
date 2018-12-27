@@ -104,7 +104,6 @@ public class JobManager {
 			task.setCycleAnalysisData("");
 			interfaceProbeService.edit(task);
 		} catch (Exception e) {
-			// TODO: handle exception
 			LOGGER.error("创建quartz探测任务失败:[任务ID]-" + task.getProbeId(), e);
 		}
     	
@@ -185,7 +184,6 @@ public class JobManager {
         	task.setRunCount(0);
         	taskService.edit(task);
 		} catch (Exception e) {
-			// TODO: handle exception
 			LOGGER.error("创建quartz定时任务失败:\n[任务名称]-" + task.getTaskName() + ",[任务ID]-" + task.getTaskId(), e);
 		}
     	return flag;   
@@ -211,7 +209,6 @@ public class JobManager {
         	//更新task状态
         	taskService.updateStatus(task.getTaskId(), "1");
 		} catch (Exception e) {
-			// TODO: handle exception
 			LOGGER.error("停止quartz定时任务失败:\n[任务名称]-" + task.getTaskName() + ",[任务ID]-" + task.getTaskId(), e);
 		}
     	
@@ -266,7 +263,6 @@ public class JobManager {
     		LOGGER.info("暂停所有任务...");
 			scheduler.pauseAll();			
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
     }

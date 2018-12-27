@@ -168,7 +168,7 @@ public class UserAction extends BaseAction<User>{
 		
 		if (user != null) {
 			jsonMap.put("data", user);
-			jsonMap.put("lastLoginTime",PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, user.getLastLoginTime()));
+			jsonMap.put("lastLoginTime", FrameworkUtil.getSessionMap().get("lastLoginTime"));
 			jsonMap.put("msg", "");
 			
 			FrameworkUtil.getSessionMap().put("user", user);	

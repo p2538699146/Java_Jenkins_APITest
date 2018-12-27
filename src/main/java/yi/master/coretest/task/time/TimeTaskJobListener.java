@@ -75,14 +75,14 @@ public class TimeTaskJobListener implements JobListener {
 		AutoTask task = (AutoTask)dataMap.get(context.getJobDetail().getKey().getName());
 		
 		String[] result = (String[]) context.getResult();
-		String tip = "";
+		StringBuilder tip = new StringBuilder();
 		if (StringUtils.isEmpty(result[0])) {
-			tip = "接口自动化测试定时任务<br><span class=\"label label-primary radius\">[任务Id]</span> = " 
-					+ task.getTaskId() + "<br><span class=\"label label-primary radius\">[任务名称]</span> = " 
-					+ task.getTaskName() + "<br><span class=\"label label-primary radius\">[任务类型]</span> = " 
-					+ getTaskType(task.getTaskType()) + "<br><span class=\"label label-primary radius\">[任务状态]</span> = <span class=\"c-red\"><strong>失败</strong></span><br><pre class=\"prettyprint linenums\">" 
-					+ result[1] + "</pre>";
-			mailService.sendSystemMail("接口自动化定时任务失败提醒", tip, task.getUser().getUserId());
+			tip.append("接口自动化测试定时任务<br><span class=\"label label-primary radius\">[任务Id]</span> = ") 
+				.append(task.getTaskId() + "<br><span class=\"label label-primary radius\">[任务名称]</span> = ") 
+				.append(task.getTaskName() + "<br><span class=\"label label-primary radius\">[任务类型]</span> = ") 
+				.append(getTaskType(task.getTaskType()) + "<br><span class=\"label label-primary radius\">[任务状态]</span> = <span class=\"c-red\"><strong>失败</strong></span><br><pre class=\"prettyprint linenums\">") 
+				.append(result[1] + "</pre>");
+			mailService.sendSystemMail("接口自动化定时任务失败提醒", tip.toString(), task.getUser().getUserId());
 			return;
 		}
 		
@@ -99,11 +99,11 @@ public class TimeTaskJobListener implements JobListener {
 				}
 			}
 			
-			tip = "接口自动化测试定时任务<br><span class=\"label label-primary radius\">[任务Id]</span> = " 
-					+ task.getTaskId() + "<br><span class=\"label label-primary radius\">[任务名称]</span> = " 
-					+ task.getTaskName() + "<br><span class=\"label label-primary radius\">[任务类型]</span> = " 
-					+ getTaskType(task.getTaskType()) + "<br><span class=\"label label-primary radius\">[测试报告ID]</span> = " 
-					+ result[0] + "<br><a href=\"../message/reportView.html?reportId="+ result[0] +"\" target=\"_blank\">详情请查看本次测试报告!</a>";
+			tip.append("接口自动化测试定时任务<br><span class=\"label label-primary radius\">[任务Id]</span> = ") 
+				.append(task.getTaskId() + "<br><span class=\"label label-primary radius\">[任务名称]</span> = ") 
+				.append(task.getTaskName() + "<br><span class=\"label label-primary radius\">[任务类型]</span> = ") 
+				.append(getTaskType(task.getTaskType()) + "<br><span class=\"label label-primary radius\">[测试报告ID]</span> = ") 
+				.append(result[0] + "<br><a href=\"../message/reportView.html?reportId="+ result[0] +"\" target=\"_blank\">详情请查看本次测试报告!</a>");
 		}		
 		
 		task.setRunCount(task.getRunCount() + 1);
@@ -129,21 +129,20 @@ public class TimeTaskJobListener implements JobListener {
 				String sendMailSuccessFlag = NotifyMail.sendEmail(new ReportEmailCreator(report), config.getMailReceiveAddress(), config.getMailCopyAddress());
 				
 				if ("true".equalsIgnoreCase(sendMailSuccessFlag)) {
-					tip += "<p class=\"c-green\">本次测试结果及报告已通过邮件推送!</p>";
+					tip.append("<p class=\"c-green\">本次测试结果及报告已通过邮件推送!</p>");
 				} else {
-					tip += "<p class=\"c-red\">发送推送邮件失败,原因：</p><p>" + sendMailSuccessFlag + "</p>";
+					tip.append("<p class=\"c-red\">发送推送邮件失败,原因：</p><p>" + sendMailSuccessFlag + "</p>");
 				}
 				
 				
 			} catch (Exception e) {
-				// TODO: handle exception
-				tip += "<p class=\"c-red\">发送推送邮件失败，原因：" + e.getMessage() + "。ReportId=" + result[0] + "</p>";
+				tip.append("<p class=\"c-red\">发送推送邮件失败，原因：" + e.getMessage() + "。ReportId=" + result[0] + "</p>");
 			}
 		} else {
-			tip += "<p class=\"c-red\">!!!没有开启测试报告邮件推送或者全局配置中的推送开关被关闭!!!</p>";
+			tip.append("<p class=\"c-red\">!!!没有开启测试报告邮件推送或者全局配置中的推送开关被关闭!!!</p>");
 		}
 		
-		mailService.sendSystemMail("接口自动化定时任务完成提醒", tip, task.getUser().getUserId());
+		mailService.sendSystemMail("接口自动化定时任务完成提醒", tip.toString(), task.getUser().getUserId());
 		
 		
 	}

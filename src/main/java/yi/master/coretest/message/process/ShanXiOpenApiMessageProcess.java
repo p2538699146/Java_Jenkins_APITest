@@ -22,13 +22,10 @@ public class ShanXiOpenApiMessageProcess extends MessageProcess {
 	private static final Logger LOGGER = Logger.getLogger(ShanXiOpenApiMessageProcess.class);
 	
 	protected ShanXiOpenApiMessageProcess() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public String processRequestMessage(String requestMessage,
-			String processParameter) {
-		// TODO Auto-generated method stub
+	public String processRequestMessage(String requestMessage, String processParameter) {
 		try {
 			JSONObject obj = JSONObject.fromObject(processParameter);
 			PrivateKey skPrivateKey = RSAUtils.fileToPrivateKey(PracticalUtils.replaceGlobalVariable(obj.getString(MessageKeys.SHANXI_OPEN_API_PARAMETER_PEM_FILE_PATH), null));	
@@ -39,7 +36,6 @@ public class ShanXiOpenApiMessageProcess extends MessageProcess {
 			
 			return requestMessage + "&sign=" + URLEncoder.encode(signStr, "UTF-8");
 		} catch (Exception e) {
-			// TODO: handle exception
 			LOGGER.error("接口参数加密失败：" + requestMessage + "\n处理配置参数：" + processParameter, e);
 		}
 		return requestMessage;
@@ -48,7 +44,6 @@ public class ShanXiOpenApiMessageProcess extends MessageProcess {
 	@Override
 	public String processResponseMessage(String responseMessage,
 			String processParameter) {
-		// TODO Auto-generated method stub
 		return responseMessage;
 	}
 	

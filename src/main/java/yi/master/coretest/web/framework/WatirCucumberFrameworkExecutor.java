@@ -70,7 +70,6 @@ public class WatirCucumberFrameworkExecutor extends BaseFrameworkExecutor {
 				}
 				//解析详细结果
 				//web自动化脚本需要同步生成一个txt文件，里面包含本次测试的详细结果
-				//格式：
 				File txtFile = new File(FrameworkUtil.getProjectPath() + File.separator + reportHtmlPath + ".txt");
 				if (txtFile.exists()) {
 					try {
@@ -103,8 +102,7 @@ public class WatirCucumberFrameworkExecutor extends BaseFrameworkExecutor {
 						
 						task.setDetailJson(json.toString());
 					} catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
+						logger.error("web自动化测试结果解析出错", e);
 					}
 					
 				}
@@ -118,8 +116,7 @@ public class WatirCucumberFrameworkExecutor extends BaseFrameworkExecutor {
 			try {
 				t.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.warn("InterruptedException", e);
 			}
 		}
 		

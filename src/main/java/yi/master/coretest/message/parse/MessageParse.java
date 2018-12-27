@@ -66,7 +66,7 @@ public abstract class MessageParse {
 	}
 	
 	/**
-	 * 判断报文格式并返回指定的解析实例
+	 * 判断报文格式并返回指定的报文格式名称
 	 * @param message
 	 * @return
 	 */
