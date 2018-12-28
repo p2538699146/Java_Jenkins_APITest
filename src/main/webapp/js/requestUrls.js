@@ -145,11 +145,13 @@ var MAIL_DEL_URL = "mail-del";//删除信息
 var MAIL_CHANGE_STATUS = "mail-changeStatus";//改变已读状态
 
 var ROLE_DEL_URL = "role-del";//删除指定角色信息
-var ROLE_GET_NODES_DETAILS_URL = "role-getNodes";//获取当前所有操作接口，并标记哪些是当前角色拥有的
+var ROLE_GET_NODES_INTERFACE_URL = "role-getInterfaceNodes";//获取当前所有操作接口，并标记哪些是当前角色拥有的
+var ROLE_GET_NODES_MENU_URL = "role-getMenuNodes"; //获取当前所有菜单，并标记哪些是当前角色拥有的
 var ROLE_EDIT_URL = "role-edit";//编辑指定角色信息
 var ROLE_LIST_URL = "role-list";//角色信息列表
 var ROLE_GET_URL = "role-get";//指定角色信息
 var ROLE_UPDATE_POWER_URL = "role-updateRolePower";//更新操作接口与角色之间的关系（角色的权限信息）
+var ROLE_UPDATE_MENU_URL = "role-updateRoleMenu";//更新菜单与角色之间的关系
 var ROLE_LIST_ALL_URL = "role-listAll";//展示所有角色
 
 var USER_LIST_URL = "user-list";//用户列表
@@ -292,3 +294,4 @@ var BUSI_MENU_EDIT_URL = "menu-edit";
 var BUSI_MENU_GET_URL = "menu-get";
 var BUSI_MENU_LIST_ALL_URL = "menu-listAll";
 var BUSI_MENU_DEL_URL = "menu-del";
+var BUSI_MENU_GET_USER_MENUS_URL = "menu-getUserMenus";

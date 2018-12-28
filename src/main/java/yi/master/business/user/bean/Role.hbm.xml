@@ -25,6 +25,11 @@
             <key column="role_id"></key>
         	<many-to-many class="yi.master.business.system.bean.OperationInterface" column="op_id"></many-to-many>
         </set>
+        <set name="menus" table="at_role_menu" cascade="save-update" lazy="true">
+        	<cache usage="read-write"/>
+            <key column="role_id"></key>
+        	<many-to-many class="yi.master.business.system.bean.BusiMenuInfo" column="menu_id"></many-to-many>
+        </set>
         <set name="users" lazy="true" cascade="save-update" inverse="true">
         	<cache usage="read-write"/>
             <key column="role_id"></key>

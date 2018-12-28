@@ -495,16 +495,7 @@ public class TestUtil {
 	
 	@Test
 	public void test21() {
-		JSONArray arr = new JSONArray();
-		arr.add("1");
-		arr.add("2");
-		arr.add("3");
-		arr.add("4");
-		
-		System.out.println(arr.get(0));
-		System.out.println(arr.get(1));
-		System.out.println(arr.get(2));
-		System.out.println(arr.get(3));
+		System.out.println(" 3".trim().replaceAll("\\s", ","));
 	}
 	
 }	

@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.InterfaceInfo;
 import yi.master.business.message.bean.Message;
@@ -32,9 +31,8 @@ import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
-import yi.master.constant.SystemConsts;
-import yi.master.util.PracticalUtils;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
 import yi.master.util.excel.ExportInterfaceInfo;
 import yi.master.util.excel.ImportInterfaceInfo;
 import yi.master.util.excel.PoiExcelUtil;
@@ -90,10 +88,10 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 			conditions.add("exists (select 1 from InterfaceInfo o join o.systems s where s.systemId=" + systemId 
 					+ " and o.interfaceId=t.interfaceId)");
 		}
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
-		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
-			conditions.add("user.userId=" + user.getUserId());
-		}
+//		User user = (User) FrameworkUtil.getSessionMap().get("user");
+//		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
+//			conditions.add("user.userId=" + user.getUserId());
+//		}
 		this.filterCondition = conditions.toArray(new String[0]);
 		return this.filterCondition;
 	}

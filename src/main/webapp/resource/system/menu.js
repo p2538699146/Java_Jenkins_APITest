@@ -1,5 +1,5 @@
 var templateParams = {
-		tableTheads:["菜单名", "菜单路径", "节点等级", "节点图标", "排序", "创建时间", "创建用户", "备注", "操作"],
+		tableTheads:["菜单名", "菜单路径", "节点等级", "节点图标", "排序", "父节点", "状态","创建时间", "创建用户", "备注", "操作"],
 		btnTools:[{
 			type:"success",
 			id:"add-object",
@@ -38,8 +38,9 @@ var templateParams = {
 			label:"节点等级",  			
 			select:[{	
 				name:"nodeLevel",
-				option:[{value:"1", text:"1"},
-				        {value:"2", text:"2", selected:true}]
+				option:[{value:"0", text:"系统"},
+						{value:"1", text:"模块"},
+				        {value:"2", text:"页面", selected:true}]
 				}]
 		},
 		{
@@ -57,9 +58,14 @@ var templateParams = {
 				hidden:true
 				}],
 			button:[{
-				style:"danger",
+				style:"primary",
 				value:"选择",
 				name:"choose-parent-menu"
+				},
+				{
+				style:"danger",
+				value:"清除",
+				name:"clean-parent-menu"
 				}]
 		},
 		{
@@ -69,6 +75,16 @@ var templateParams = {
 			input:[{	
 				name:"seq"
 				}]
+		},
+		{
+			edit:false,
+			required:true,
+			label:"状态",  			
+			select:[{	
+				name:"status",
+				option:[{value:"1", text:"可用", selected:true},
+						{value:"0", text:"禁用"}
+				]}]
 		},
 		{
 			 name:"createTime",
@@ -96,13 +112,50 @@ var columnsSetting = [
 		  		return checkboxHmtl(data.menuName,data.menuId,"selectMenu");
 	           }},
 	{"data":"menuId"},{"data":"menuName"},                                 
-	ellipsisData("menuUrl"),{"data":"nodeLevel"},
+	ellipsisData("menuUrl"),
+	{	
+		"data":"nodeLevel",
+		"render":function(data){
+			return labelCreate(data, {
+				"0":{
+					btnStyle:"success",
+					status:"系统"
+					},
+				"1":{
+					btnStyle:"primary",
+					status:"模块"
+					},
+				"2":{
+					btnStyle:"danger",
+					status:"页面"
+					}
+			});
+		}
+		
+	},
 	{
 		"data":"iconName",
 		"render":function(data) {
 			return '<i class="Hui-iconfont ' + data + '"></i>';
 		}
 	},{"data":"seq"},
+	ellipsisData("parentNodeName"),
+	{	
+		"data":"status",
+		"render":function(data){
+			return labelCreate(data, {
+				"1":{
+					btnStyle:"success",
+					status:"可用"
+					},
+				"0":{
+					btnStyle:"danger",
+					status:"禁用"
+					}
+			});
+		}
+		
+	},
 	ellipsisData("createTime"),ellipsisData("createUser.realName"),
 	{
 		    "data":"mark",
@@ -132,8 +185,12 @@ var columnsSetting = [
 ];
 
 var eventList = {
-		"#choose-parent-menu":function () {
+		"#choose-parent-menu":function () { //打开父节点选择页面
 			chooseParentMenu();
+		},
+		"#clean-parent-menu":function(){ //清除已选择的父节点
+			$(this).siblings('input[type="hidden"]').val('');
+			$(this).siblings('span').remove();
 		},
 		".object-edit":function () {
 			var data = table.row( $(this).parents('tr') ).data();
@@ -159,7 +216,7 @@ var mySetting = {
 			editUrl:top.BUSI_MENU_EDIT_URL,
 			getUrl:top.BUSI_MENU_GET_URL,
 			renderCallback:function (obj) {
-				$("#choose-parent-menu").before('<span>' + obj.parentMenuName + '&nbsp;&nbsp;&nbsp;</span>');
+				$("#choose-parent-menu").before('<span>' + obj.parentNodeName + '&nbsp;&nbsp;&nbsp;</span>');
 			},
 			rules:{
 				menuName:{
@@ -186,7 +243,7 @@ var mySetting = {
 			listUrl:top.BUSI_MENU_LIST_ALL_URL,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
-			columnsJson:[0, 10],
+			columnsJson:[0, 11],
 			dtOtherSetting:{serverSide:false}
 		},
 		templateParams:templateParams		
@@ -217,7 +274,7 @@ var zTreeSetting = {
 				zTree.expandNode(treeNode);
 			},
 			onDblClick:function (event, treeId, treeNode) {//双击之后关闭窗口
-				if (treeNode.nodeLevel != 1) {
+				if (treeNode.nodeLevel == 2) {
 					layer.msg('这不是一个目录节点', {icon:5, time:1500});
 					return false;
 				}

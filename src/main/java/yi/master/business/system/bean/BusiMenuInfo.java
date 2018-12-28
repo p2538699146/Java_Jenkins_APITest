@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.struts2.json.annotations.JSON;
 
 import yi.master.annotation.FieldNameMapper;
+import yi.master.business.user.bean.Role;
 import yi.master.business.user.bean.User;
 
 /**
@@ -32,10 +33,19 @@ public class BusiMenuInfo implements Serializable {
 	private User createUser;
 	private String mark;
 	private BusiMenuInfo parentNode;
+	private String status;
 	private Set<BusiMenuInfo> childs = new HashSet<BusiMenuInfo>();
 
 	private String parentNodeName;
 	private Integer parentNodeId;
+	
+	private boolean isParent;
+	private boolean isOwn;
+	
+	/**
+	 * 对应的角色
+	 */
+	private Set<Role> roles = new HashSet<Role>();
 	
 	public BusiMenuInfo() {
 		super();
@@ -46,23 +56,41 @@ public class BusiMenuInfo implements Serializable {
 		this.menuId = menuId;
 	}
 	
-	public BusiMenuInfo(Integer menuId, String menuName, String menuUrl, String iconName, Integer nodeLevel,
-			Integer seq, Timestamp createTime, User createUser, String mark, BusiMenuInfo parentNode,
-			Set<BusiMenuInfo> childs) {
-		super();
-		this.menuId = menuId;
-		this.menuName = menuName;
-		this.menuUrl = menuUrl;
-		this.iconName = iconName;
-		this.nodeLevel = nodeLevel;
-		this.seq = seq;
-		this.createTime = createTime;
-		this.createUser = createUser;
-		this.mark = mark;
-		this.parentNode = parentNode;
-		this.childs = childs;
+	public boolean getIsParent() {
+		if (this.nodeLevel == 2) {
+			return false;
+		}
+		return true;
 	}
 
+	public void setIsParent(boolean isParent) {
+		this.isParent = isParent;
+	}
+
+	public boolean getIsOwn() {
+		return isOwn;
+	}
+
+	public void setIsOwn(boolean isOwn) {
+		this.isOwn = isOwn;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+	
+	@JSON(serialize=false)
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
 	
 	public void setParentNodeName(String parentNodeName) {
 		this.parentNodeName = parentNodeName;
@@ -180,4 +208,31 @@ public class BusiMenuInfo implements Serializable {
 	public void setChilds(Set<BusiMenuInfo> childs) {
 		this.childs = childs;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((menuId == null) ? 0 : menuId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BusiMenuInfo other = (BusiMenuInfo) obj;
+		if (menuId == null) {
+			if (other.menuId != null)
+				return false;
+		} else if (!menuId.equals(other.menuId))
+			return false;
+		return true;
+	}
+	
+	
 }

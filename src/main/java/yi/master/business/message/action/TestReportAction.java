@@ -14,11 +14,10 @@ import yi.master.business.message.bean.TestSet;
 import yi.master.business.message.service.TestReportService;
 import yi.master.business.message.service.TestSetService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
-import yi.master.util.cache.CacheUtil;
 import yi.master.util.notify.NotifyMail;
 import yi.master.util.notify.ReportEmailCreator;
-import yi.master.util.FrameworkUtil;
 
 /**
  * 接口自动化<br>

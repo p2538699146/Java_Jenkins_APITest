@@ -2,7 +2,7 @@
 <script id="menu-template" type="text/x-handlebars-template">
 {{#each this}}
 <dl id="{{id}}">
-    <dt><i class="Hui-iconfont">{{{icon}}}</i> {{name}}<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+    <dt><i class="Hui-iconfont {{ icon }}"></i> {{name}}<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
     <dd>
         <ul>
         	{{#each childs}}

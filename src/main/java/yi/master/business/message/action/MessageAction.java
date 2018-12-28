@@ -70,10 +70,10 @@ public class MessageAction extends BaseAction<Message>{
 		if (this.interfaceId != null) {
 			conditions.add("interfaceInfo.interfaceId=" + interfaceId);
 		}		
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		/*User user = (User) FrameworkUtil.getSessionMap().get("user");
 		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
 			conditions.add("user.userId=" + user.getUserId());
-		}
+		}*/
 		this.filterCondition = conditions.toArray(new String[0]);
 		return this.filterCondition;
 	}

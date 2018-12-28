@@ -52,7 +52,11 @@ public class MailAction extends BaseAction<Mail> {
 	//获取未读邮件数量
 	public String getNoReadMailNum() {
 		User user = (User) FrameworkUtil.getSessionMap().get("user");
-		int num = mailService.getNoReadNum(user.getUserId());
+		int num = 0;
+		if (user != null) {
+			num = mailService.getNoReadNum(user.getUserId());
+		}
+		
 		jsonMap.put("mailNum", num);
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;

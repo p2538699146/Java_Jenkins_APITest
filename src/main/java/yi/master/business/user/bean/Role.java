@@ -8,6 +8,7 @@ import org.apache.struts2.json.annotations.JSON;
 // default package
 
 import yi.master.annotation.FieldNameMapper;
+import yi.master.business.system.bean.BusiMenuInfo;
 import yi.master.business.system.bean.OperationInterface;
 
 
@@ -46,7 +47,12 @@ public class Role implements Serializable {
 	/**
 	 * 拥有的操作接口
 	 */
-	private Set<OperationInterface> ois=new HashSet<OperationInterface>();
+	private Set<OperationInterface> ois = new HashSet<OperationInterface>();
+	
+	/**
+	 * 拥有的菜单
+	 */
+	private Set<BusiMenuInfo> menus = new HashSet<BusiMenuInfo>();
 	
 	/**
 	 * 对应用户
@@ -59,6 +65,25 @@ public class Role implements Serializable {
 	@FieldNameMapper(fieldPath="size(ois)",ifSearch=false)
 	private Integer oiNum;
 	
+	/**
+	 * 拥有的菜单个数
+	 */
+	@FieldNameMapper(fieldPath="size(menus)",ifSearch=false)
+	private Integer menuNum;
+	
+	@JSON(serialize=false)
+	public Set<BusiMenuInfo> getMenus() {
+		return menus;
+	}
+	public void setMenus(Set<BusiMenuInfo> menus) {
+		this.menus = menus;
+	}
+	public Integer getMenuNum() {
+		return menuNum;
+	}
+	public void setMenuNum() {
+		this.menuNum = this.menus.size();
+	}
 	@JSON(serialize=false)
 	public Set<User> getUsers() {
 		return users;

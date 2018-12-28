@@ -34,10 +34,6 @@
                     <li class="dropDown dropDown_hover">
                     	<a href="javascript:;" class="dropDown_A" id="system-type-name">切换系统<i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
-                            <li><a system-type="interface" href="javascript:void(0)" class="switch-system"><i class="Hui-iconfont">&#xe654;</i>接口自动化</a></li>
-							<li><a system-type="web" href="javascript:void(0)" class="switch-system"><i class="Hui-iconfont">&#xe6d2;</i>web自动化</a></li>	
-							<li><a system-type="app" href="javascript:void(0)" class="switch-system"><i class="Hui-iconfont">&#xe708;</i>app自动化</a></li>
-							<li><a system-type="manage" href="javascript:void(0)" class="switch-system"><i class="Hui-iconfont">&#xe62e;</i>平台管理</a></li>					                           
                         </ul>
                     </li>
                 </ul>
@@ -172,26 +168,40 @@
     
     /********************加载菜单***************************/
     function loadMenuTemplate() {
-    	$.getJSON("./js/json/menu.json", function(json){
-    		menuJson = json;
-    		$("#menu-page").load("./resource/template/menuTemplate.htm", function(){
-    			templates['menu-template'] = Handlebars.compile($("#menu-page > script").html());
-    			loadMenu(getCookie('menuType'), true);
-    			$(".switch-system").click(function(){
-    				var name = loadMenu($(this).attr('system-type'));
-    				name && (layer.msg('已切换至系统：' + name, {time:2000}));    			
+    	$.get('menu-getUserMenus', function(data){
+    		if (data.returnCode == 0) {
+    			menuJson = data.data;
+    			var systemSwitchDom = $('#system-type-name').siblings('ul');
+    			var defaultTypeKey = null;
+    			$.each(menuJson, function(systemKey, content){
+    				defaultTypeKey == null && (defaultTypeKey = systemKey);
+    				systemSwitchDom.append('<li><a system-type="' + systemKey + '" href="javascript:void(0)" class="switch-system"><i class="Hui-iconfont ' + content.icon + '"></i>' + content.name + '</a></li>');
     			});
-    		})
+    			
+    			$("#menu-page").load("./resource/template/menuTemplate.htm", function(){
+        			templates['menu-template'] = Handlebars.compile($("#menu-page > script").html());
+        			loadMenu(getCookie('menuType') == null ? defaultTypeKey : getCookie('menuType'), true, defaultTypeKey);
+        			$(".switch-system").click(function(){
+        				var name = loadMenu($(this).attr('system-type'));
+        				name && (layer.msg('已切换至系统：' + name, {time:2000}));    			
+        			});
+        		})
+    		} else {
+    			layer.alert('获取菜单信息失败:' + (data.msg || '未知原因'), {icon: 5});
+    		}
     	});
     } 
     
-    function loadMenu(menuType, init) {
+    function loadMenu(menuType, init, defaultTypeKey) {
     	if (menuType == null) {
     		menuType = "interface";
     	}    	
 		if (menuType == getCookie('menuType') && !init) {
     		return null;
-    	}   	   	
+    	}   
+		if (menuJson[menuType] == null) {
+			menuType = defaultTypeKey;
+		}
     	$("#menu").html(templates['menu-template'](menuJson[menuType]['menu']));
     	//重新初始化菜单效果
     	$.Huifold(".menu_dropdown dl dt",".menu_dropdown dl dd","fast",3,"click");
