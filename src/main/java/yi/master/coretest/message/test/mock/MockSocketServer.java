@@ -81,7 +81,6 @@ public class MockSocketServer {
 
 	public MockSocketServer() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	private void start() {
@@ -104,14 +103,12 @@ public class MockSocketServer {
 				logger.debug("MockSocketServer " + getMockUrl() + " 回复数据：" + responseMsg);
 				connection.close();
 			} catch (Exception e) {
-				// TODO: handle exception
 				logger.error("Socket Server " + getMockUrl() + " 处理socket请求出错!", e);
 			} finally {
 				if (connection != null) {
 					try {
 						connection.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						logger.warn("IOException", e);
 					}
 				}
@@ -126,7 +123,6 @@ public class MockSocketServer {
 			}	
 			CacheUtil.getSocketServers().remove(mockId);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			logger.error("关闭Socket server 失败！", e);
 		}
 	}
@@ -196,7 +192,6 @@ public class MockSocketServer {
 			InetAddress addr = InetAddress.getLocalHost();  
 	        ip = addr.getHostAddress().toString();
 		} catch (Exception e) {
-			// TODO: handle exception
 			logger.error("获取服务器本地地址失败,使用配置选项!", e);
 			String homeUrl = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_HOME);
 			ip = homeUrl.substring(homeUrl.indexOf("/") + 2, homeUrl.lastIndexOf(":"));

@@ -11,7 +11,6 @@ public class LogRecordStorageTimeTask extends TimerTask {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		if (CacheUtil.getRecordCount() > 0) {
 			logger.info("操作日志信息异步入库开始...");
 			while (CacheUtil.saveRecord()) {				

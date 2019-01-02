@@ -41,7 +41,6 @@ public class InitWebListener implements ServletContextListener {
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		// TODO Auto-generated method stub
 		//处理未入库的信息
 		while (CacheUtil.saveRecord()) {}
 		
@@ -86,19 +85,18 @@ public class InitWebListener implements ServletContextListener {
 			globalSettingMap.put(g.getSettingName(), g);
 		}
 		//放置到全局context中
-		//context.setAttribute(SystemConsts.APPLICATION_ATTRIBUTE_WEB_SETTING, globalSettingMap);	
 		CacheUtil.setSettingMap(globalSettingMap);
 		
 		//获取查询数据库信息
-		LOGGER.info("获取查询数据库信息!");
+		LOGGER.info("获取测试数据源信息!");
 		List<DataDB> dbs = dbService.findAll();
 		Map<String,DataDB> dataDBMap = new HashMap<String,DataDB>();
 		for (DataDB db:dbs) {
 			dataDBMap.put(String.valueOf(db.getDbId()), db);
 		}
 		CacheUtil.setQueryDBMap(dataDBMap);
-		//context.setAttribute(SystemConsts.APPLICATION_ATTRIBUTE_QUERY_DB, dbs);
 		
+		//获取项目根路径
 		FrameworkUtil.setProjectPath(context.getRealPath(""));
 		
 		//启动quartz定时任务
@@ -116,7 +114,6 @@ public class InitWebListener implements ServletContextListener {
 			try {
 				new MockSocketServer(mock.getMockId());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				LOGGER.error("Mock Socket服务失败:mockName=" + mock.getMockName() + ",mockId=" + mock.getMockId(), e);
 			}
 		}

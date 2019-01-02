@@ -136,7 +136,7 @@ public class AnnotationUtil {
 					//判断是不是时间格式
 					if (CustomConditionSetting.DATETIME_TYPE.equalsIgnoreCase(ccs.conditionType())) {
 						String[] dates = value.split("~");
-						querys.add(fieldName + ">'" + dates[0].trim() + " 00:00:00" +"'");
+						querys.add(fieldName + ">='" + dates[0].trim() + " 00:00:00" +"'");
 						querys.add(fieldName + "<'" + dates[1].trim() + " 23:59:59" +"'");
 						continue;
 					}
@@ -155,7 +155,6 @@ public class AnnotationUtil {
 				querys.add(fieldName + condition);
 				
 			} catch (Exception e) {
-				// TODO: handle exception
 				LOGGER.warn(e.getMessage(), e);
 			}
 			
