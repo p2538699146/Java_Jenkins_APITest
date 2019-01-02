@@ -112,6 +112,12 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 			config = testConfigService.getConfigByUserId(0);
 		}
 		
+		if (complexScene.getSceneNum() == 0) {
+			jsonMap.put("returnCode", ReturnCodeConsts.AUTO_TEST_NO_SCENE_CODE);
+			jsonMap.put("msg", "该组合场景没有可测试场景");
+			return SUCCESS;
+		}
+		
 		Object results = autoTest.singleTestComplexScene(autoTest.packageComplexRequestObject(complexScene, config), null);
 		
 		jsonMap.put("result", results);
