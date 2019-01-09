@@ -432,11 +432,13 @@
   	<sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
+        <directory>src/main/resources</directory>       
+      </resource>
+      <resource>
+        <directory>src/main/java</directory>   
         <includes>
-           <include>**/*.xml</include>
-        </includes>
-        <filtering>false</filtering>
+            <include>**/*.xml</include>
+        </includes>   
       </resource>
     </resources>
     <finalName>yi</finalName>
