@@ -433,6 +433,10 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
+        <includes>
+           <include>**/*.xml</include>
+        </includes>
+        <filtering>false</filtering>
       </resource>
     </resources>
     <finalName>yi</finalName>
@@ -453,7 +457,7 @@
                <resource>
                    <directory>${project.basedir}/lib</directory>
                    <targetPath>WEB-INF/lib</targetPath>
-                   <filtering>true</filtering>
+                   <filtering>false</filtering>
                    <includes>
                        <include>**/*.jar</include>
                    </includes>
