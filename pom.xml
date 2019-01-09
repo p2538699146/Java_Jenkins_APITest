@@ -416,13 +416,13 @@
 	
 		 	
   </dependencies>
-  <repositories>
+<!--   <repositories>
     <repository>
       <id>jahia</id>
       <name>mvnrepository</name>
       <url>http://maven.jahia.org/maven2</url>
     </repository>
-  </repositories>
+  </repositories> -->
   
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
