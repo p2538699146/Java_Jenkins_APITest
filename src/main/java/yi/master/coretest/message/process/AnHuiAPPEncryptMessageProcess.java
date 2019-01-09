@@ -22,16 +22,15 @@ import java.util.TreeMap;
 
 import javax.crypto.Cipher;
 
-import net.sf.json.JSONObject;
-
 import org.apache.axis.encoding.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import net.sf.json.JSONObject;
 import yi.master.constant.MessageKeys;
 import yi.master.coretest.message.parse.URLMessageParse;
-import yi.master.test.common.RSABase64Utils;
 import yi.master.util.PracticalUtils;
+import yi.master.util.rsa.RSABase64Utils;
 
 /**
  * @author xuwangcheng
