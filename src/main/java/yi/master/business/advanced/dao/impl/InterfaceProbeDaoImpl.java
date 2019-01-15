@@ -35,7 +35,7 @@ public class InterfaceProbeDaoImpl extends BaseDaoImpl<InterfaceProbe> implement
 	@Override
 	public TestResult getLastResult(Integer probeId, Timestamp lastRunTime) {
 		// TODO Auto-generated method stub
-		String hql = "from TestResult t where t.interfaceProbe.probeId=:probeId and t.opTime>=:lastRunTime";
+		String hql = "from TestResult t where t.interfaceProbe.probeId=:probeId and t.opTime>=:lastRunTime order by t.opTime desc limit 1";
 		return (TestResult) getSession().createQuery(hql).setInteger("probeId", probeId).setTimestamp("lastRunTime", lastRunTime).uniqueResult();
 	}
 
