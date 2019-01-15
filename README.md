@@ -3,12 +3,12 @@ QQ群交流：468324085，加群验证：易大师
 
 #### 项目介绍 
 专注于接口自动化测试的管理平台，MasterYi  Interface Automated Test Platform  
-码云地址[https://gitee.com/xuwangcheng/masteryi-automated-testing]
-更新日志[https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?title=%E6%9B%B4%E6%96%B0%E8%AF%B4%E6%98%8E&parent=]  
 
-使用说明[ https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/]
-简单的功能演示视频[https://pan.baidu.com/s/1aMPchusaQt_LHDT9-v1RzQ]]
-演示地址[http://www.xuwangcheng.com/yi ]（admin/q708162543） 
+[码云地址](https://gitee.com/xuwangcheng/masteryi-automated-testing)
+[更新日志](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?title=%E6%9B%B4%E6%96%B0%E8%AF%B4%E6%98%8E&parent=)
+[使用说明](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/)
+[简单的功能演示视频](https://pan.baidu.com/s/1aMPchusaQt_LHDT9-v1RzQ)
+[演示地址](http://www.xuwangcheng.com/yi)（admin/q708162543） 
 
 **请勿使用随意使用接口探测和性能测试模块，垃圾服务器不行。**
 
@@ -34,71 +34,71 @@ QQ群交流：468324085，加群验证：易大师
 有些截图是老版本的，也是之前公司用过的，有兴趣的可以自行去演示站点体验。
 
 ##### 接口管理
-![接口管理](/uploads/photo/2019/01763141-935a-48cf-aa95-243d1ca19153.jpg)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112751_6a3a599f_431003.jpeg "接口管理.jpg")
 ##### 接口参数
-![接口参数](/uploads/photo/2019/3fa550c3-47aa-47a6-9249-53176b28680c.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112859_df6a947e_431003.jpeg "接口参数管理.jpg")
 ##### 报文管理
-![报文管理](/uploads/photo/2019/8dde375f-e968-4e9d-bb2d-06fb9bdb6308.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112915_aea566ac_431003.jpeg "报文管理.jpg")
 ##### 报文编辑
-![报文编辑](/uploads/photo/2019/bbdf9fb9-f422-4c31-8bdf-42b3c40d8a99.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112923_62b89203_431003.jpeg "报文编辑.jpg")
 ##### 测试数据
-![测试数据](/uploads/photo/2019/3630f58a-e8b1-4d1e-8246-ad4e4623da33.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112935_853fa69f_431003.jpeg "测试数据管理.jpg")
 ##### 验证规则
-![验证规则](/uploads/photo/2019/9d0730b1-8b55-4f9f-8efe-8ec8c157159e.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112944_335982ac_431003.jpeg "验证规则管理.jpg")
 ##### 组合场景
-![组合场景](/uploads/photo/2019/6aa5182c-722c-4ae3-937e-49220bf0a8ca.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112953_e873c268_431003.jpeg "组合场景.jpg")
 ##### 组合场景配置
-![组合场景配置](/uploads/photo/2019/d2b90894-1dee-4f30-906b-3f3f9b35beec.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113001_a0a8a889_431003.jpeg "组合场景配置.jpg")
 ##### 测试集管理
-![测试集管理](/uploads/photo/2019/ce0751f4-2fe1-46e4-9309-4d5cf48430b3.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113013_84fc238e_431003.jpeg "测试集管理.jpg")
 ##### 测试执行
-![测试执行](/uploads/photo/2019/8f16581d-78dc-41a3-8e4b-40fc9acc8687.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113024_435f4e58_431003.jpeg "测试执行.jpg")
 ##### 定时任务
-![](/uploads/photo/2019/954e9f45-1748-4f3b-9170-dee2396b2b2d.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113032_8edfa04f_431003.jpeg "定时任务.jpg")
 ##### 测试报告
-![测试报告](/uploads/photo/2019/8916e644-8cc7-4fc9-84f3-27ec88d980c9.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113041_1f6daeb4_431003.jpeg "测试报告管理.jpg")
 ##### 报告详情
-![报告详情](/uploads/photo/2019/2fd75210-0897-4cdd-b486-e362dd54a890.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113049_a93ae4b1_431003.jpeg "测试报告详情.jpg")
 ##### 测试环境
-![测试环境](/uploads/photo/2019/e0817180-d713-4013-be49-04577f0e9a29.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113056_6631772d_431003.jpeg "测试环境管理.jpg")
 ##### 数据源配置
-![数据源配置](/uploads/photo/2019/1188e29e-032a-4988-8a71-1f7c006ad317.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113106_121da298_431003.jpeg "数据源配置.jpg")
 ##### 全局变量模板
-![](/uploads/photo/2019/7327baae-9721-491e-a432-a3e7f17d8658.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113115_d23e1d68_431003.jpeg "变量模板.jpg")
 ##### json格式化
-![json格式化](/uploads/photo/2019/382a18d7-d1a7-4e4a-99c3-99f385d66991.png!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112615_7bcb749c_431003.png "JSON格式化.png")
 ##### xml格式化
-![xml格式化](/uploads/photo/2019/e158a884-9506-4b72-9db1-923ac7b950da.png!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113129_053a4b87_431003.png "XML格式化.png")
 ##### 接口Mock
-![接口Mock](/uploads/photo/2019/35898549-83c1-43c0-9625-3d5b74d5eba2.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113143_eff11b2c_431003.jpeg "接口Mock.jpg")
 ##### 接口mock入场验证
-![接口mock入场验证](/uploads/photo/2019/f5c802c7-8e5e-4d29-a71f-aed0990c8240.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113152_def74fee_431003.jpeg "接口mock入场.jpg")
 ##### 接口mocl出参模拟
-![接口mocl出参模拟](/uploads/photo/2019/90196ea1-a9c5-404d-a19e-bb344318fdb2.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113159_0f5c7e34_431003.jpeg "接口mock出参.jpg")
 ##### 接口探测
-![接口探测](/uploads/photo/2019/746cc4bb-719b-46e6-b4ed-400e5b459952.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113214_68141dce_431003.jpeg "接口探测.jpg")
 ##### 接口探测统计
-![接口探测统计](/uploads/photo/2019/a2eb6401-bfe5-43ca-891e-e0def0bb1946.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113222_338dbac3_431003.jpeg "接口探测图表统计.jpg")
 ##### 接口性能测试
-![接口性能测试](/uploads/photo/2019/d4fb63b8-41e9-45ca-b260-b48c5b98b514.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113231_2d9baed3_431003.jpeg "接口性能测试.jpg")
 ##### 性能测试视图
-![性能测试视图](/uploads/photo/2019/2688063b-df38-4b7b-bcfc-6b3db07749e1.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113239_fc1f73e2_431003.jpeg "接口性能测试视图.jpg")
 ##### 性能测试结果列表
-![性能测试结果列表](/uploads/photo/2019/8362442e-c30b-4ecb-8135-af2d58a534e6.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113251_eda1be42_431003.jpeg "性能测试结果列表.jpg")
 ##### 性能测试任务
-![性能测试任务](/uploads/photo/2019/e8680406-3bde-406a-afaa-cf197dedcc13.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113259_bff66447_431003.jpeg "性能测试任务列表.jpg")
 ##### 菜单管理
-![菜单管理](/uploads/photo/2019/c37947cf-e474-44dd-9071-38b8d98c2b50.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113309_55d4aeca_431003.jpeg "菜单管理.jpg")
 ##### 系统接口权限
-![系统接口权限](/uploads/photo/2019/ddf9a6f4-dd44-4422-8d37-5a24545422ee.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113319_c7957dab_431003.jpeg "系统接口.jpg")
 ##### 用户管理
-![用户管理](/uploads/photo/2019/6e53624a-ab05-4abd-99f3-ba957d28a752.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113636_95ac83e7_431003.jpeg "在这里输入图片标题")
 ##### 角色权限
-![角色权限](/uploads/photo/2019/d95061ff-a8e7-49d9-87fb-c5021820e3d7.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113657_3c7bb727_431003.jpeg "在这里输入图片标题")
 ##### 系统日志
-![系统日志](/uploads/photo/2019/3dc2bd07-f3aa-4724-a9f9-e26cdb7835d2.jpg!large)
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113703_a8bd3149_431003.jpeg "在这里输入图片标题")
 ##### 全局设置
-![全局设置](/uploads/photo/2019/efbf1444-ab40-4fb3-9749-b4d660a0d63e.jpg!large)
+![输入图片说明](http://images.xuwangcheng.com/%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE.jpg "在这里输入图片标题")
 
 
 
@@ -121,4 +121,4 @@ QQ群交流：468324085，加群验证：易大师
 1. 使用git clone克隆项目到本地;  
 2. 导入到eclipse或者idea为maven项目;  
 3. 导入项目根目录下的sql脚本到mysql数据库，修改配置文件db_druid.properties中的数据库链接信息;  
-4. 使用tomcat启动项目，访问http://localhot:8080/yi, 登录账号 admin/q708162543.
+4. 使用tomcat启动项目，访问http://localhot:8080/yi, 登录账号 admin/q708162543.![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112158_9be15da2_431003.png "在这里输入图片标题")
