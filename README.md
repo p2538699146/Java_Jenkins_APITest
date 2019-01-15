@@ -121,4 +121,4 @@ QQ群交流：468324085，加群验证：易大师
 1. 使用git clone克隆项目到本地;  
 2. 导入到eclipse或者idea为maven项目;  
 3. 导入项目根目录下的sql脚本到mysql数据库，修改配置文件db_druid.properties中的数据库链接信息;  
-4. 使用tomcat启动项目，访问http://localhot:8080/yi, 登录账号 admin/q708162543.![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/112158_9be15da2_431003.png "在这里输入图片标题")
+4. 使用tomcat启动项目，访问http://localhot:8080/yi, 登录账号 admin/q708162543.
