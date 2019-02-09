@@ -4,15 +4,16 @@ QQ群交流：468324085，加群验证：易大师
 #### 项目介绍 
 专注于接口自动化测试的管理平台，MasterYi  Interface Automated Test Platform  
 
-[码云地址](https://gitee.com/xuwangcheng/masteryi-automated-testing)
-[更新日志](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?title=%E6%9B%B4%E6%96%B0%E8%AF%B4%E6%98%8E&parent=)
-[使用说明](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/)
-[简单的功能演示视频](https://pan.baidu.com/s/1aMPchusaQt_LHDT9-v1RzQ)
-[演示地址](http://www.xuwangcheng.com/yi)（admin/q708162543） 
-
-**请勿使用随意使用接口探测和性能测试模块，垃圾服务器不行。**
-
-
+[码云地址](https://gitee.com/xuwangcheng/masteryi-automated-testing)  
+[更新日志](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?title=%E6%9B%B4%E6%96%B0%E8%AF%B4%E6%98%8E&parent=)  
+[使用说明](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/)  
+[简单的功能演示视频](https://pan.baidu.com/s/1aMPchusaQt_LHDT9-v1RzQ)  
+[演示地址](http://www.xuwangcheng.com/yi)（admin/q708162543）   
+(**请勿使用随意使用接口探测和性能测试模块，垃圾服务器不行。**)
+#### 一键安装包
+百度云： https://pan.baidu.com/s/1wFke4YqF2Aore3_WY98gFw  
+账号 admin/q708162543  
+ **安装完成进入安装根目录，双击执行start.bat，弹出两个cmd窗口不要关闭，打开浏览器输入http://localhost:8080** 
 #### 主要功能  
 
 - 接口、报文、场景三层分离，接口测试更加灵活多变；
@@ -98,7 +99,7 @@ QQ群交流：468324085，加群验证：易大师
 ##### 系统日志
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0115/113703_a8bd3149_431003.jpeg "在这里输入图片标题")
 ##### 全局设置
-![输入图片说明](http://images.xuwangcheng.com/%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE.jpg "在这里输入图片标题")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0209/224134_d0118082_431003.jpeg "在这里输入图片标题")
 
 
 
