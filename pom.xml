@@ -418,6 +418,12 @@
 	    <version>1.6.4</version>
 	</dependency>
 	
+	<!-- 图片验证码 -->
+	<dependency>
+	    <groupId>cn.hutool</groupId>
+	    <artifactId>hutool-captcha</artifactId>
+	    <version>4.5.2</version>
+	</dependency>
 		 	
   </dependencies>
 <!--   <repositories>

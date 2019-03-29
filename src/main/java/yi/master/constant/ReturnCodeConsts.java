@@ -98,6 +98,12 @@ public class ReturnCodeConsts {
 	public static final Integer USER_ACCOUNT_LOCK_CODE = 212; 
 	
 	/**
+	 * 验证码不正确<br>
+	 * '213'
+	 */
+	public static final Integer VERIFY_CODE_ERROR = 213; 
+	
+	/**
 	 * 账号或者密码错误<br>
 	 * '211'
 	 */

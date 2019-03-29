@@ -40,6 +40,10 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hyperic.sigar.Sigar;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.LineCaptcha;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import yi.master.business.advanced.bean.config.probe.ProbeConfig;
 import yi.master.business.message.bean.ComplexSceneConfig;
 import yi.master.business.message.bean.Parameter;
@@ -59,9 +63,6 @@ import yi.master.coretest.message.protocol.TestClient;
 import yi.master.util.cache.CacheUtil;
 import yi.master.util.jsonlib.JsonDateValueProcessor;
 import yi.master.util.message.JsonUtil;
-
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 
 /**
  * 常用工具类
@@ -90,6 +91,10 @@ public class PracticalUtils {
 		throw new Error("Please don't instantiate me！");
 	}
 
+	/**
+	 * 初始化Sigar工具
+	 * @return
+	 */
 	public static Sigar initSigar() {
 		try {
             //此处只为得到依赖库文件的目录，可根据实际项目自定义
@@ -114,7 +119,11 @@ public class PracticalUtils {
         }
 	}
 	
-	public static boolean isOSWin(){//OS 版本判断
+	/**
+	 * OS 版本判断
+	 * @return
+	 */
+	public static boolean isOSWin(){
         String OS = System.getProperty("os.name").toLowerCase();
         if (OS.indexOf("win") >= 0) {
             return true;
@@ -997,6 +1006,11 @@ public class PracticalUtils {
 		return getValue;
 	}
 	
+	/**
+	 * 根据质量等级获取html显示代码
+	 * @param qualityLevel 质量等级 
+	 * @return
+	 */
 	public static String getProbeResultQualityLevelHtml (Integer qualityLevel) {
 		if (ProbeConfig.PROBE_EXCELLENT_LEVEL.equals(qualityLevel)) {
 			return "<span class=\"label label-success radius\">ExcellentLevel(优秀的)</span>";
@@ -1012,5 +1026,4 @@ public class PracticalUtils {
 		}
 		return "";
 	}
-
 }

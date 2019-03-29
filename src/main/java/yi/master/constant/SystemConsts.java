@@ -83,24 +83,22 @@ public class SystemConsts {
 	
 	
 	//ApplicationMap中指定属性名	
-	public static final String APPLICATION_ATTRIBUTE_QUERY_DB = "queryDb";
-	
-	public static final String APPLICATION_ATTRIBUTE_WEB_SETTING = "settingMap";
-	
+	public static final String APPLICATION_ATTRIBUTE_QUERY_DB = "queryDb";	
+	public static final String APPLICATION_ATTRIBUTE_WEB_SETTING = "settingMap";	
 	public static final String APPLICATION_ATTRIBUTE_OPERATION_INTERFACE = "ops";
+	
+	//SessionMap中指定属性名
+	public static final String SESSION_ATTRIBUTE_VERIFY_CODE = "verifyCode";
 	
 	//定时任务相关标志词语	
 	public static final String QUARTZ_TIME_TASK_NAME_PREFIX_KEY = "timeScheduleJob";
-	public static final String QUARTZ_PROBE_TASK_NAME_PREFIX_KEY = "probeScheduleJob";
-	
-	public static final String QUARTZ_SCHEDULER_START_FLAG = "quartzStatus";
-	
-	public static final String QUARTZ_SCHEDULER_IS_START = "true"; 
-	
+	public static final String QUARTZ_PROBE_TASK_NAME_PREFIX_KEY = "probeScheduleJob";	
+	public static final String QUARTZ_SCHEDULER_START_FLAG = "quartzStatus";	
+	public static final String QUARTZ_SCHEDULER_IS_START = "true"; 	
 	public static final String QUARTZ_SCHEDULER_IS_STOP = "false";
 	
-	
-	//全局设置指定设置名称
+	///////////////////////////////////全局设置指定设置名称/////////////////////////////////////////////////////////////////////
+	//通用设置
 	public static final String GLOBAL_SETTING_HOME = "home";	
 	public static final String GLOBAL_SETTING_NOTICE = "notice";	
 	public static final String GLOBAL_SETTING_VERSION = "version";	
@@ -133,24 +131,52 @@ public class SystemConsts {
 	public static final String GLOBAL_SETTING_MAIL_SEND_ADDRESS = "mailSendAddress";
 	public static final String GLOBAL_SETTING_MAIL_PERSONAL_NAME = "mailPersonalName";
 	
-	//日志记录有关
+	/**
+	 * 日志记录接口白名单
+	 */
 	public static final String GLOBAL_SETTING_LOG_RECORD_WHITELIST = "logRecordWhitelist";
+	/**
+	 * 日志记录接口黑名单
+	 */
 	public static final String GLOBAL_SETTING_LOG_RECORD_BLACKLIST = "logRecordBlacklist";
 	
-	//测试报告静态html存储文件夹
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	/**
+	 * 测试报告静态html存储文件夹
+	 */
 	public static final String REPORT_VIEW_HTML_FOLDER = "reportHtml";
-	//静态报告
+	/**
+	 * 静态报告模板
+	 */
 	public static final String REPORT_VIEW_HTML_FIXED_HTML = "viewTemplate.xml";
+	/**
+	 * 静态报告模板
+	 */
 	public static final String REPORT_VIEW_HTML_FIXED_HTML_NEW = "offlineReportTemplateNew.xml";
-	//测试集测试请求地址
+	/**
+	 * 测试集测试请求地址
+	 */
 	public static final String AUTO_TASK_TEST_RMI_URL = "test-scenesTest";
 	
-	//接口探测测试请求地址
+	/**
+	 * 接口探测测试请求地址
+	 */
 	public static final String PROBE_TASK_TEST_RMI_URL = "test-probeTest";
 	
-	//生成静态报告请求地址
+	/**
+	 * 生成静态报告请求地址
+	 */
 	public static final String CREATE_STATIC_REPORT_HTML_RMI_URL = "report-generateStaticReportHtml";
 	
-	//上传或者下载 excel保存的文件夹
+	/**
+	 * 上传或者下载 excel保存的文件夹
+	 */
 	public static final String EXCEL_FILE_FOLDER = "excel";
+	
+	/**
+	 * 验证码图片厨存放文件夹
+	 */
+	public static final String VERIFY_CODE_FOLDER = "code";
 }

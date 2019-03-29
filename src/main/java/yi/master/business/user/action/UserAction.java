@@ -1,5 +1,6 @@
 package yi.master.business.user.action;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -11,14 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.LineCaptcha;
+import cn.hutool.core.lang.UUID;
 import yi.master.business.base.action.BaseAction;
-import yi.master.business.testconfig.service.TestConfigService;
 import yi.master.business.user.bean.User;
 import yi.master.business.user.service.UserService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
+import yi.master.util.FrameworkUtil;
 import yi.master.util.MD5Util;
 import yi.master.util.PracticalUtils;
-import yi.master.util.FrameworkUtil;
 
 
 /**
@@ -39,11 +43,15 @@ public class UserAction extends BaseAction<User>{
 	 * 对用户进行锁定或者解锁
 	 */
 	private String mode;
-
-	@Autowired
-	private TestConfigService testConfigService;
-	
+	/**
+	 * 第三方登录token
+	 */
 	private String token;
+	
+	/**
+	 * 登录验证码
+	 */
+	private String verifyCode;
 	
 	private UserService userService;
 	@Autowired
@@ -70,6 +78,12 @@ public class UserAction extends BaseAction<User>{
 		if (PracticalUtils.isNormalString(model.getLoginIdentification())) {
 			model = userService.loginByIdentification(model.getUsername(), model.getLoginIdentification());
 		} else {
+			//如果是账号密码登录，先验证验证码
+			if (StringUtils.isBlank(verifyCode) 
+					|| !verifyCode.equalsIgnoreCase(FrameworkUtil.getSessionMap().get(SystemConsts.SESSION_ATTRIBUTE_VERIFY_CODE).toString())) {
+				setReturnInfo(ReturnCodeConsts.VERIFY_CODE_ERROR, "验证码不正确");
+				return SUCCESS;
+			}
 			model = userService.login(model.getUsername(), MD5Util.code(model.getPassword()));
 			passwdLogin = true;
 		}
@@ -339,6 +353,20 @@ public class UserAction extends BaseAction<User>{
 		return SUCCESS;
 	}
 	
+	/**
+	 * 创建验证码图片并返回路径给前台
+	 * @return
+	 */
+	public String createVerifyCode() {
+		//ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(200, 100, 4, 4);
+		LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);
+		String imgPath = SystemConsts.VERIFY_CODE_FOLDER + File.separator + UUID.fastUUID() + ".png";
+		lineCaptcha.write(FrameworkUtil.getProjectPath() + File.separator + imgPath);
+		setSuccessReturnInfo().setData("path", imgPath);
+		FrameworkUtil.getSessionMap().put(SystemConsts.SESSION_ATTRIBUTE_VERIFY_CODE
+				, lineCaptcha.getCode());
+		return SUCCESS;
+	}	
 	
 	/*****************************GET-SET******************************************************/
 	
@@ -348,5 +376,9 @@ public class UserAction extends BaseAction<User>{
 	
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	public void setVerifyCode(String verifyCode) {
+		this.verifyCode = verifyCode;
 	}
 }

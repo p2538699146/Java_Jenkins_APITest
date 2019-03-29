@@ -9,13 +9,14 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.json.annotations.JSON;
 
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
+
 import yi.master.annotation.util.AnnotationUtil;
 import yi.master.business.base.bean.PageModel;
 import yi.master.business.base.service.BaseService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.util.FrameworkUtil;
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.ModelDriven;
 
 /**
  * 通用Action类，默认继承ActionSupport并实现ModelDriven接口
@@ -277,6 +278,24 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	
 	public BaseAction setReturnInfo(Integer returnCode, String returnMsg) {
 		jsonMap.put("returnCode", returnCode);
+		jsonMap.put("msg", returnMsg);
+		return this;
+	}
+	
+	public BaseAction setReturnInfo(Integer returnCode) {
+		jsonMap.put("returnCode", returnCode);
+		jsonMap.put("msg", "");
+		return this;
+	}
+	
+	public BaseAction setSuccessReturnInfo() {
+		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		jsonMap.put("msg", "");
+		return this;
+	}
+	
+	public BaseAction setSuccessReturnInfo(String returnMsg) {
+		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		jsonMap.put("msg", returnMsg);
 		return this;
 	}

@@ -39,11 +39,18 @@
                 </div>
             </div>
             <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe613;</i></label>
+                    <div class="formControls col-xs-8">             
+	                    <input id="verifyCode"  type="text" placeholder="验证码" class="input-text size-L" style="width:280px;">                 
+	                    <img src="img/code.png" style="width:80px;height:40px;cursor:pointer;"/>    
+                	</div>
+            </div>
+            <div class="row cl">
                 <div class="formControls col-xs-8 col-xs-offset-3">
                     <label for="online">
                         <input type="checkbox" name="online" id="online" checked="checked">使我保持登录状态</label>
                 </div>
-            </div>
+            </div>        
             <div class="row cl">
                 <div class="formControls col-xs-8 col-xs-offset-3">
                     <input id="loginBtn" type="button" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
@@ -54,11 +61,22 @@
         </form>
     </div>
 </div>
-<div class="footer">Copyright By MasterYi Devops@2017-2018 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1275927783'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275927783%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script></div>
+<div class="footer">Copyright By MasterYi Devops@2017-2019 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1275927783'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275927783%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script></div>
 <script type="text/javascript" src="libs/jquery/1.9.1/jquery.js"></script>
 <script type="text/javascript" src="libs/h-ui/js/H-ui.js"></script>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function(){   	
+    	 $("#verifyCode").siblings('img').click(function(){
+    		 let that = this;
+    		 $.get('user-createVerifyCode', function(data){
+        		 if (data.returnCode == 0) {
+        			 $(that).attr('src', data.path);
+        		 }
+        	 });
+    	 });
+    	 
+    	 $("#verifyCode").siblings('img').click();
+    	 
     	 $("#loginBtn").click(userLogin);
     	 //监听键盘回车事件
     	 $(document).keyup(function (event) {
@@ -70,7 +88,7 @@
     	 });
         //判断当前是否有用户登录
         $.post("user-judgeLogin",function(data){
-            if(data.returnCode==0){
+            if(data.returnCode == 0){
                 //跳转首页
             	window.location.href="index.html";
             }else{
@@ -78,7 +96,7 @@
             	var username = getCookie("username");
             	var loginIdentification = getCookie("loginIdentification");
             	if(username != null && loginIdentification != null){
-            		postLogin(username, null, loginIdentification);
+            		postLogin(username, null, null,loginIdentification);
             	}
             }
         });
@@ -86,18 +104,22 @@
     function userLogin(){
         var username = $("#username").val();
         var password = $("#password").val();
-        if(username != "" && username != null && password != "" && password != null){
-        	postLogin(username,password, null);
+        var verifyCode = $("#verifyCode").val();$
+        if(username != "" && username != null 
+        		&& password != "" && password != null 
+        		&& verifyCode != "" && verifyCode != null){
+        	postLogin(username,password, verifyCode, null);
         }else{
             tipMsg.text("请填写完整再提交登录");
         }
     }
     
-    function postLogin(username, password, loginIdentification){
+    function postLogin(username, password, verifyCode,loginIdentification){
     	var tipMsg = $("#loginTip");
     	$.post("user-toLogin",{
             username:username,
             password:password,
+            verifyCode:verifyCode,
             loginIdentification:loginIdentification
         },function(data){
             if(data.returnCode==0){
