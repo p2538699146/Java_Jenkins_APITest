@@ -11,7 +11,7 @@ public class WebScriptModuleDaoImpl extends BaseDaoImpl<WebScriptModule> impleme
 
 	@Override
 	public WebScriptModule findByModuleCode(String moduleCode) {
-		// TODO Auto-generated method stub
+		
 		String hql = "from WebScriptModule m where m.moduleCode=:moduleCode";
 		return (WebScriptModule) getSession().createQuery(hql).setString("moduleCode", moduleCode).uniqueResult();
 	}

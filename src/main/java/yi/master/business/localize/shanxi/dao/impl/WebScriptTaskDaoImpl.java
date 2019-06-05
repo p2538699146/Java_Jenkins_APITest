@@ -11,7 +11,7 @@ public class WebScriptTaskDaoImpl extends BaseDaoImpl<WebScriptTask> implements 
 
 	@Override
 	public WebScriptTask findByGuid(String guid) {
-		// TODO Auto-generated method stub
+		
 		String hql = "from WebScriptTask w where w.guid=:guid";
 		return (WebScriptTask) getSession().createQuery(hql).setString("guid", guid).uniqueResult();
 	}

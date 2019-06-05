@@ -57,7 +57,7 @@ public class Upload {
         	}						
             
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("上传文件失败：源文件名-" + fileName + "目的文件-" + path, e);
 			return null;
 		} finally {
@@ -65,7 +65,6 @@ public class Upload {
 				try {
 					is.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -73,7 +72,6 @@ public class Upload {
 				try {
 					os.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

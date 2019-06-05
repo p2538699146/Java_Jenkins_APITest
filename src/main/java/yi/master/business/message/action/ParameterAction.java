@@ -138,7 +138,7 @@ public class ParameterAction extends BaseAction<Parameter> {
 	 */
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub
+		
 
 		model.setPath(StringUtils.isEmpty(model.getPath()) ? MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH 
 				: MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH + "." + model.getPath());

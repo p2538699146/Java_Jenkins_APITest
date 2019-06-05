@@ -19,7 +19,7 @@ public class GlobalVariableDaoImpl extends BaseDaoImpl<GlobalVariable> implement
 
 	@Override
 	public GlobalVariable findByKey(String key) {
-		// TODO Auto-generated method stub
+		
 		String hql = "From GlobalVariable g where g.key=:key";
 		return (GlobalVariable) getSession().createQuery(hql)
 				.setString("key", key).uniqueResult();
@@ -27,7 +27,7 @@ public class GlobalVariableDaoImpl extends BaseDaoImpl<GlobalVariable> implement
 
 	@Override
 	public void updateValue(Integer variableId, String value) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update GlobalVariable g set g.value=:value where g.variableId=:variableId";
 		getSession().createQuery(hql).setString("value", value).setInteger("variableId", variableId)
 			.executeUpdate();
@@ -36,7 +36,7 @@ public class GlobalVariableDaoImpl extends BaseDaoImpl<GlobalVariable> implement
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<GlobalVariable> findByVariableType(String variableType) {
-		// TODO Auto-generated method stub
+		
 		String hql = "From GlobalVariable g where g.variableType=:variableType";
 		return getSession().createQuery(hql).setString("variableType", variableType).list();
 	}	

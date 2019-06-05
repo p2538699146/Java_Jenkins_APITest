@@ -26,7 +26,6 @@ public class ApiReturnInfo {
 	
 	public ApiReturnInfo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public ApiReturnInfo addData(String key, Object value) {

@@ -32,7 +32,7 @@ public class LogRecordServiceImpl extends BaseServiceImpl<LogRecord> implements 
 			String userHost, String browserAgent, int validateTime,
 			int executeTime, String requestParams, String responseParams,
 			String mark) {
-		// TODO Auto-generated method stub
+		
 		//检查日志开关并排除某些url
 		if (!"0".equals(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_LOGSWITCH)) 
 				|| Pattern.matches("log-.*|mail-getNoReadMailNum|.*[Ll]ist.*|.*-get.*|ptc-viewTest", callUrl)) {

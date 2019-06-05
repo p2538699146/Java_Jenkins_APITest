@@ -111,7 +111,6 @@ public class InterfaceProbe implements Serializable, Cloneable {
 
 	public InterfaceProbe() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	
@@ -392,12 +391,12 @@ public class InterfaceProbe implements Serializable, Cloneable {
 	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
+		
 		Object o = null;
 		try {
 			o = super.clone();
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.warn(e.getMessage(), e);
 		}
 		return o;

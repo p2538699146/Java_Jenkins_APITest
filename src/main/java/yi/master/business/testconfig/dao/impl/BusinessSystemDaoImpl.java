@@ -20,7 +20,7 @@ public class BusinessSystemDaoImpl extends BaseDaoImpl<BusinessSystem> implement
 			int dataNo, int pageSize, String orderDataName, String orderType,
 			String searchValue, List<List<String>> dataParams, int mode, String procotolType,
 			String... filterCondition) {
-		// TODO Auto-generated method stub
+		
 		PageModel<InterfaceInfo> pm = new PageModel<InterfaceInfo>(orderDataName, orderType, searchValue, dataParams, dataNo, pageSize);
 		StringBuilder hql = new StringBuilder("from InterfaceInfo m1 where");
 		//mode=0 查询存在的 mode=1查询不存在的
@@ -94,7 +94,7 @@ public class BusinessSystemDaoImpl extends BaseDaoImpl<BusinessSystem> implement
 
 	@Override
 	public void addInterfaceToSystem(Integer systemId, Integer interfaceId) {
-		// TODO Auto-generated method stub
+		
 		String sql = "insert into at_interface_info_business_system (system_id, interface_id) VALUES (:systemId, :interfaceId)";
 		getSession().createSQLQuery(sql).setInteger("systemId", systemId).setInteger("interfaceId", interfaceId).executeUpdate();
 		
@@ -102,7 +102,7 @@ public class BusinessSystemDaoImpl extends BaseDaoImpl<BusinessSystem> implement
 
 	@Override
 	public void delInterfaceFromSystem(Integer systemId, Integer interfaceId) {
-		// TODO Auto-generated method stub
+		
 		String sql = "delete from at_interface_info_business_system where system_id=:systemId and interface_id=:interfaceId";
 		getSession().createSQLQuery(sql).setInteger("systemId", systemId).setInteger("interfaceId", interfaceId).executeUpdate();
 	}

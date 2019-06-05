@@ -109,7 +109,7 @@ public class WebTestSuite implements Serializable {
 
 	public WebTestSuite() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void setSuiteCaseComps(Set<WebSuiteCaseComp> suiteCaseComps) {

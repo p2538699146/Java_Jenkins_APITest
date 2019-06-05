@@ -80,7 +80,6 @@ public class AutoTask {
 	
 	public AutoTask() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public AutoTask(String taskName, String taskType, Integer relatedId,

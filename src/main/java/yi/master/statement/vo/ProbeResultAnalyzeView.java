@@ -33,7 +33,7 @@ public class ProbeResultAnalyzeView {
 
 	public ProbeResultAnalyzeView() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public ProbeResultAnalyzeView(Timestamp startTime, Timestamp lastTime,

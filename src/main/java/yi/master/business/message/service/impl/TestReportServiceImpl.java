@@ -21,19 +21,19 @@ public class TestReportServiceImpl extends BaseServiceImpl<TestReport> implement
 
 	@Override
 	public String isFinished(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		return testReportDao.isFinished(reportId);
 	}
 
 	@Override
 	public TestReport findByGuid(String guid) {
-		// TODO Auto-generated method stub
+		
 		return testReportDao.findByGuid(guid);
 	}
 
 	@Override
 	public String getDetailsJson(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		return testReportDao.getDetailsJson(reportId);
 	}
 

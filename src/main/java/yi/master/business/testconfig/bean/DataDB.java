@@ -64,7 +64,6 @@ public class DataDB implements Serializable {
 
 	public DataDB() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getDbId() {

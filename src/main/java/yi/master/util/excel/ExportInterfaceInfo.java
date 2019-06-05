@@ -49,7 +49,7 @@ public class ExportInterfaceInfo {
 			wb.write(outputStream); 
 			path = SystemConsts.EXCEL_FILE_FOLDER + File.separator + fileName;
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("写Excel文件失败:文件路径" + FrameworkUtil.getProjectPath() + File.separator + SystemConsts.EXCEL_FILE_FOLDER  + File.separator + fileName, e);
 			throw e;
 		} finally {
@@ -57,7 +57,6 @@ public class ExportInterfaceInfo {
 				try {
 					outputStream.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

@@ -141,7 +141,7 @@ public class WebTestStep implements Serializable, LogModifyUtil {
 
 	public WebTestStep() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public String getObjectName() {
@@ -370,7 +370,7 @@ public class WebTestStep implements Serializable, LogModifyUtil {
 
 	@Override
 	public void logModify(String userName, Object oldObject) {
-		// TODO Auto-generated method stub
+		
 		if (oldObject == null || !(oldObject instanceof WebTestStep)) {
 			return;
 		}

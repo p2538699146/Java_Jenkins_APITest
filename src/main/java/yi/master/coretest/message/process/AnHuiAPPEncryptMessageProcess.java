@@ -59,7 +59,7 @@ public class AnHuiAPPEncryptMessageProcess extends MessageProcess {
 
 	@Override
 	public String processRequestMessage(String requestMessage, String processParameter) {
-		// TODO Auto-generated method stub
+		
 		JSONObject parameter = JSONObject.fromObject(processParameter);
 		String key = PracticalUtils.replaceGlobalVariable(parameter.getString(MessageKeys.ANHUI_APP_ENCRYPT_KEY), null);
 		List<String> sensitiveInformationParameters = Arrays.asList(PracticalUtils.replaceGlobalVariable(parameter.getString(MessageKeys.ANHUI_APP_ENCRYPT_SENSITIVE_INFORMATION), null).split(","));
@@ -78,7 +78,7 @@ public class AnHuiAPPEncryptMessageProcess extends MessageProcess {
 					String value = encrypt(requestParameters.get(infoKey), publicKey, algorithmType);
 					requestParameters.put(infoKey, value);
 				} catch (Exception e) {
-					// TODO: handle exception
+					
 					LOGGER.error("敏感字段加密失败,该字段" + infoKey + "未进行敏感字段加密!", e);
 				}
 				
@@ -94,7 +94,7 @@ public class AnHuiAPPEncryptMessageProcess extends MessageProcess {
 			params = params.substring(0, params.length() - 1);*/
 			return params + "&token=" + token;
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("加密token失败:requestMessage=" + requestMessage + ",processParameter=" + processParameter);
 			return requestMessage;
 		}
@@ -103,7 +103,7 @@ public class AnHuiAPPEncryptMessageProcess extends MessageProcess {
 	@Override
 	public String processResponseMessage(String responseMessage,
 			String processParameter) {
-		// TODO Auto-generated method stub
+		
 		return responseMessage;
 	}
 	

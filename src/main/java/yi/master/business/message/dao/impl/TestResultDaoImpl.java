@@ -19,7 +19,7 @@ public class TestResultDaoImpl extends BaseDaoImpl<TestResult> implements TestRe
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TestResult> listByReportId(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "from TestResult t where t.testReport.reportId=:reportId";
 		
 		return getSession().createQuery(hql).setInteger("reportId", reportId).setCacheable(true).list();
@@ -29,7 +29,7 @@ public class TestResultDaoImpl extends BaseDaoImpl<TestResult> implements TestRe
 	@Override
 	public int[] countProbeResultQuality(Integer probeId,
 			Timestamp startTime, Timestamp lastTime) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select new list(count(*),t.qualityLevel) from TestResult t where t.interfaceProbe.probeId=:probeId"
 				+ " and t.opTime between :startTime and :lastTime group by t.qualityLevel";
 		List<List> list1 = getSession().createQuery(hql).setInteger("probeId", probeId).setTimestamp("startTime", startTime).
@@ -66,7 +66,7 @@ public class TestResultDaoImpl extends BaseDaoImpl<TestResult> implements TestRe
 	@Override
 	public Object[] countProbeResultStatusByHour(Integer probeId,
 			Timestamp startTime, Timestamp lastTime) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select new list(year(t.opTime)||'-'||month(t.opTime)||'-'||day(t.opTime)||' '||hour(t.opTime)||':00:00',count(*)) from"
 				+ " TestResult t where t.interfaceProbe.probeId=:probeId and t.opTime between :startTime and :lastTime and"
 				+ " t.runStatus=:runStatus group by year(t.opTime),month(t.opTime),day(t.opTime),hour(t.opTime) order by t.opTime";
@@ -84,7 +84,7 @@ public class TestResultDaoImpl extends BaseDaoImpl<TestResult> implements TestRe
 	@Override
 	public List[] countProbeResultResponseTime(Integer probeId,
 			Timestamp startTime, Timestamp lastTime) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select new list(t.opTime,t.useTime) from TestResult t where t.interfaceProbe.probeId=:probeId and"
 				+ " t.opTime between :startTime and :lastTime and t.runStatus!='2' order by t.opTime";
 		List<List> list1 = getSession().createQuery(hql).setInteger("probeId", probeId).setTimestamp("startTime", startTime).
@@ -100,7 +100,7 @@ public class TestResultDaoImpl extends BaseDaoImpl<TestResult> implements TestRe
 
 	@Override
 	public String[] getReportSystemNames(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select new list(t.businessSystemName) from TestResult t where t.testReport.reportId=:reportId group by t.businessSystemName";
 		List<List> list = getSession().createQuery(hql).setInteger("reportId", reportId).list();
 		String[] names = new String[list.size()];

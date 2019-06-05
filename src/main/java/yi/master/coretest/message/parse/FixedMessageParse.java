@@ -21,19 +21,18 @@ import net.sf.json.JSONObject;
 public class FixedMessageParse extends MessageParse {
 	
 	protected FixedMessageParse() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean messageFormatValidation(String message) {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
 	@Override
 	public Set<Parameter> importMessageToParameter(String message,
 			Set<Parameter> existParams) {
-		// TODO Auto-generated method stub
+		
 		Set<Parameter> params = new HashSet<Parameter>();
 		Parameter param = new Parameter(message, "name", "defaultValue", "path", "String");
 		if (validateRepeatabilityParameter(existParams, param)) {
@@ -45,21 +44,21 @@ public class FixedMessageParse extends MessageParse {
 	@Override
 	public ComplexParameter parseMessageToObject(String message,
 			List<Parameter> params) {
-		// TODO Auto-generated method stub
+		
 		return new ComplexParameter(params.get(0), null, null);
 	}
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter,
 			String paramsData) {
-		// TODO Auto-generated method stub
+		
 		Parameter param = complexParameter.getSelfParameter();
 		return messageFormatBeautify(param.getParameterIdentify());
 	}
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		// TODO Auto-generated method stub
+		
 		
 		for (Parameter p:params) {
 			if (message.equals(p.getParameterIdentify())) {
@@ -72,13 +71,13 @@ public class FixedMessageParse extends MessageParse {
 
 	@Override
 	public String getObjectByPath(String message, String path) {
-		// TODO Auto-generated method stub
+		
 		return message;
 	}
 
 	@Override
 	public String createMessageByNodes(JSONObject nodes) {
-		// TODO Auto-generated method stub
+		
 		for (Object key:nodes.keySet()) {
 			if ("rootId".equals(key.toString())) continue;
 			JSONObject node = nodes.getJSONObject(key.toString());

@@ -282,7 +282,7 @@ public class PracticalUtils {
 		try {
 			return dateFormat.parse(date);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			return null;
 		}
 		
@@ -427,14 +427,12 @@ public class PracticalUtils {
 			bos.write(html.toString().getBytes(encoding));
 			bos.flush();
 		} catch (Exception e) {
-			// TODO: handle exception
 			throw e;
 		} finally {
 			if (fos != null) {
 				try {
 					fos.close();
 				} catch (Exception e) {
-					// TODO: handle exception
 					e.printStackTrace();
 				}
 			}
@@ -442,7 +440,6 @@ public class PracticalUtils {
 				try {
 					bos.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}			
@@ -450,7 +447,6 @@ public class PracticalUtils {
 				try {
 					fis.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -693,7 +689,6 @@ public class PracticalUtils {
 
 			return returnMsg.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return e.getMessage();
 		} finally {
@@ -785,7 +780,7 @@ public class PracticalUtils {
 			}
 			return wholeStr;
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		}
 		return null;
@@ -859,7 +854,6 @@ public class PracticalUtils {
 		try {
 			maps = mapper.readValue(json, Map.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("json串解析失败:" + json, e);
 		}
 		

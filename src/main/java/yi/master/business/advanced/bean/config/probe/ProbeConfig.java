@@ -55,7 +55,7 @@ public class ProbeConfig implements Serializable {
 
 	public ProbeConfig() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	/**

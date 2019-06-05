@@ -24,26 +24,26 @@ public class TestDataServiceImpl extends BaseServiceImpl<TestData> implements Te
 	@Override
 	public void updateDataValue(Integer dataId, String dataName,
 			String dataValue) {
-		// TODO Auto-generated method stub
+		
 		testDataDao.updateDataValue(dataId, dataName, dataValue);
 		
 	}
 
 	@Override
 	public TestData findByDisrc(String dataDiscr, Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		return testDataDao.findByDisrc(dataDiscr, messageSceneId);
 	}
 
 	@Override
 	public List<TestData> getDatasByScene(Integer messageSceneId, int count) {
-		// TODO Auto-generated method stub
+		
 		return testDataDao.getDatasByScene(messageSceneId, count);
 	}
 
 	@Override
 	public void updateParamsData(Integer dataId, String paramsData) {
-		// TODO Auto-generated method stub
+		
 		testDataDao.updateDataValue(dataId, "paramsData", paramsData);
 	}
 }

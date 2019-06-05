@@ -15,14 +15,14 @@ public class TestDataDaoImpl extends BaseDaoImpl<TestData> implements TestDataDa
 	@Override
 	public void updateDataValue(Integer dataId, String dataName,
 			String dataValue) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update TestData set " + dataName + "= :dataValue where dataId= :dataId";
 		getSession().createQuery(hql).setString("dataValue", dataValue).setInteger("dataId", dataId).executeUpdate();
 	}
 
 	@Override
 	public TestData findByDisrc(String dataDiscr, Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "from TestData t where messageScene.messageSceneId=:messageSceneId and dataDiscr=:dataDiscr";
 		
 		return (TestData) getSession().createQuery(hql).setInteger("messageSceneId", messageSceneId).setString("dataDiscr", dataDiscr).uniqueResult();
@@ -31,7 +31,7 @@ public class TestDataDaoImpl extends BaseDaoImpl<TestData> implements TestDataDa
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TestData> getDatasByScene(Integer messageSceneId, int count) {
-		// TODO Auto-generated method stub
+		
 		String hql = "from TestData t where t.messageScene.messageSceneId=:messageSceneId and t.status != '1'";
 		Query query = getSession().createQuery(hql).setInteger("messageSceneId", messageSceneId);
 		if (count != 0) {

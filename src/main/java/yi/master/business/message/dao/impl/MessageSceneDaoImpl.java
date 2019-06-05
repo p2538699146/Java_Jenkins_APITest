@@ -22,7 +22,7 @@ public class MessageSceneDaoImpl extends BaseDaoImpl<MessageScene> implements Me
 
 	@Override
 	public void updateValidateFlag(Integer messageSceneId, String validateRuleFlag) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update MessageScene m set m.validateRuleFlag=:validateRuleFlag where m.messageSceneId=:messageSceneId";
 		getSession().createQuery(hql)
 			.setString("validateRuleFlag", validateRuleFlag)
@@ -33,7 +33,7 @@ public class MessageSceneDaoImpl extends BaseDaoImpl<MessageScene> implements Me
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<MessageScene> findAll(String ...filterCondition) {
-		// TODO Auto-generated method stub		
+				
 		String hql = "From MessageScene m where m.message is not null and m.message.status='0' and m.message.interfaceInfo.status='0'";
 		return getSession().createQuery(hql).setCacheable(true).list();
 	}
@@ -41,28 +41,28 @@ public class MessageSceneDaoImpl extends BaseDaoImpl<MessageScene> implements Me
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<MessageScene> getBySetId(Integer setId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select m from MessageScene m join m.testSets s where s.setId=:setId and m.message.status='0' and m.message.interfaceInfo.status='0'";		
 		return getSession().createQuery(hql).setInteger("setId", setId).setCacheable(true).list();
 	}
 
 	@Override
 	public InterfaceInfo getInterfaceOfScene(Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select m.message.interfaceInfo from MessageScene m where m.messageSceneId=:messageSceneId";		
 		return (InterfaceInfo) getSession().createQuery(hql).setInteger("messageSceneId", messageSceneId).uniqueResult();
 	}
 
 	@Override
 	public Message getMessageOfScene(Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select m.message from MessageScene m where m.messageSceneId=:messageSceneId";
 		return (Message) getSession().createQuery(hql).setInteger("messageSceneId", messageSceneId).uniqueResult();
 	}	
 
 	@Override
 	public void updateResponseExample(Integer messageSceneId, String response) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update MessageScene set responseExample=:response where messageSceneId=:messageSceneId";
 		getSession().createQuery(hql).setString("response", response).setInteger("messageSceneId", messageSceneId).executeUpdate();
 	}

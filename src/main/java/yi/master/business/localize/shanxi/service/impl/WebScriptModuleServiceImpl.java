@@ -21,7 +21,7 @@ public class WebScriptModuleServiceImpl extends BaseServiceImpl<WebScriptModule>
 
 	@Override
 	public WebScriptModule findByModuleCode(String moduleCode) {
-		// TODO Auto-generated method stub
+		
 		return webScriptModuleDao.findByModuleCode(moduleCode);
 	}
 }

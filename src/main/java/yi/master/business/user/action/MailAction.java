@@ -41,7 +41,7 @@ public class MailAction extends BaseAction<Mail> {
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		User user = (User) FrameworkUtil.getSessionMap().get("user");
 		if (user != null) {
 			this.filterCondition = new String[]{"receiveUser.userId=" + user.getUserId()};

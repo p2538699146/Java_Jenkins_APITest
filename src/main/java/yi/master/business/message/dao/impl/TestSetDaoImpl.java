@@ -24,7 +24,7 @@ public class TestSetDaoImpl extends BaseDaoImpl<TestSet> implements TestSetDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<MessageScene> getEnableAddScenes(Integer setId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "from MessageScene m1 where not exists (select 1 from MessageScene m2 "
 				+ "join m2.testSets s where s.setId=:setId and m1.messageSceneId=m2.messageSceneId) "
 				+ "and m1.message is not null";		
@@ -111,14 +111,14 @@ public class TestSetDaoImpl extends BaseDaoImpl<TestSet> implements TestSetDao {
 	
 	@Override
 	public void addSceneToSet(Integer setId, Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		String sql = "insert into at_set_scene(set_id,message_scene_id) values(:setId,:messageSceneId)";
 		getSession().createSQLQuery(sql).setInteger("setId" ,setId).setInteger("messageSceneId", messageSceneId).executeUpdate();
 	}
 
 	@Override
 	public void delSceneToSet(Integer setId, Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		String sql = "delete from at_set_scene where set_id=:setId and message_scene_id=:messageSceneId";
 		getSession().createSQLQuery(sql).setInteger("setId" ,setId).setInteger("messageSceneId", messageSceneId).executeUpdate();
 	}
@@ -126,14 +126,14 @@ public class TestSetDaoImpl extends BaseDaoImpl<TestSet> implements TestSetDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TestSet> getUserSets(Integer userId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "from TestSet t where t.status='0'";
 		return getSession().createQuery(hql).setCacheable(true).list();
 	}
 
 	@Override
 	public void updateSettingConfig(Integer setId, TestConfig config) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update TestSet t set t.config.configId=:configId where t.setId=:setId";	
 		getSession().createQuery(hql).setInteger("configId", config.getConfigId()).setInteger("setId", setId).executeUpdate();
 		
@@ -142,14 +142,14 @@ public class TestSetDaoImpl extends BaseDaoImpl<TestSet> implements TestSetDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TestSet> getRootSet() {
-		// TODO Auto-generated method stub
+		
 		String hql = "from TestSet t where t.parentSet=null";
 		return getSession().createQuery(hql).setCacheable(true).list();
 	}
 
 	@Override
 	public void moveFolder(Integer setId, Integer parentId) {
-		// TODO Auto-generated method stub
+		
 		String sql = "update at_test_set s set s.parent_id=:parentId where s.set_id=:setId";
 		getSession().createSQLQuery(sql).setInteger("setId", setId).setInteger("parentId", parentId).executeUpdate();
 	}

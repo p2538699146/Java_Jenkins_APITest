@@ -17,7 +17,7 @@ public class StatisticalQuantity {
 	
 	public StatisticalQuantity() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public StatisticalQuantity(String itemNane) {

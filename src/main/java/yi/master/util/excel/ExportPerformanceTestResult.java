@@ -36,7 +36,7 @@ public class ExportPerformanceTestResult {
 			
 			wb.write(outputStream); 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("写Excel文件失败:文件路径" + FrameworkUtil.getProjectPath() + File.separator + SystemConsts.EXCEL_FILE_FOLDER  + File.separator + fileName, e);
 			throw e;
 		} finally {
@@ -44,7 +44,6 @@ public class ExportPerformanceTestResult {
 				try {
 					outputStream.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

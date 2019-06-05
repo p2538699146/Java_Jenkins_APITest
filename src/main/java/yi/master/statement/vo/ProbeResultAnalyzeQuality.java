@@ -25,7 +25,7 @@ public class ProbeResultAnalyzeQuality {
 	
 	public ProbeResultAnalyzeQuality() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public Integer getExcellentLevelCount() {
 		return excellentLevelCount;

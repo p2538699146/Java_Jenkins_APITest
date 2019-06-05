@@ -30,19 +30,19 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
 	@Override
 	public User login(String userName, String passWord) {
-		// TODO Auto-generated method stub
+		
 		return userDao.login(userName, passWord);
 	}
 
 	@Override
 	public void resetPasswd(Integer userId, String passwd) {
-		// TODO Auto-generated method stub
+		
 		userDao.resetPasswd(userId, passwd);
 	}
 
 	@Override
 	public void lockUser(Integer userId, String status) {
-		// TODO Auto-generated method stub
+		
 		userDao.lockUser(userId, status);
 	}
 
@@ -56,39 +56,39 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
 	@Override
 	public void updateRealName(String realName, Integer userId) {
-		// TODO Auto-generated method stub
+		
 		userDao.updateRealName(realName, userId);
 		
 	}
 
 	@Override
 	public List<User> findByRealName(String realName) {
-		// TODO Auto-generated method stub
+		
 		return userDao.findByRealName(realName);
 	}
 
 	@Override
 	public User loginByIdentification(String username,
 			String loginIdentification) {
-		// TODO Auto-generated method stub
+		
 		return userDao.loginByIdentification(username, loginIdentification);
 	}
 	
 	@Override
 	public User loginSSO(String userId_t, String passwd) {
-		// TODO Auto-generated method stub
+		
 		return userDao.loginSSO(userId_t, passwd);
 	}
 
 	@Override
 	public void delByUserId_t(String userId_t) {
-		// TODO Auto-generated method stub
+		
 		userDao.delByUserId_t(userId_t);
 	}
 
 	@Override
 	public User findByUserId_t(String userId_t) {
-		// TODO Auto-generated method stub
+		
 		return userDao.findByUserId_t(userId_t);
 	}
 

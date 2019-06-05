@@ -80,7 +80,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		try {
 			requestParams = JSONObject.fromObject(paramMap).toString();
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			
 		}
 		
@@ -105,7 +105,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				validateTime = Integer.valueOf(String.valueOf(time1 - beginTime));
 				executeTime = Integer.valueOf(String.valueOf(time2 - time1));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				validateTime = Integer.valueOf(String.valueOf(System.currentTimeMillis() - beginTime));
 				
 				logger.error("系统异常,请求失败!", e);
@@ -251,7 +251,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 			return result;
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			validateTime = Integer.valueOf(String.valueOf(System.currentTimeMillis() - beginTime));
 			
 			logger.error("系统异常,请求失败!", e);

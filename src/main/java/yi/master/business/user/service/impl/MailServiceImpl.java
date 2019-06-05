@@ -32,31 +32,31 @@ public class MailServiceImpl extends BaseServiceImpl<Mail> implements MailServic
 
 	@Override
 	public int getNoReadNum(Integer receiveUserId) {
-		// TODO Auto-generated method stub
+		
 		return mailDao.getNoReadNum(receiveUserId);
 	}
 
 	@Override
 	public List<Mail> findReadMails(Integer receiveUserId) {
-		// TODO Auto-generated method stub
+		
 		return mailDao.findReadMails(receiveUserId);
 	}
 
 	@Override
 	public List<Mail> findSendMails(Integer sendUserId) {
-		// TODO Auto-generated method stub
+		
 		return mailDao.findSendMails(sendUserId);
 	}
 
 	@Override
 	public void changeStatus(Integer mailId, String statusName, String status) {
-		// TODO Auto-generated method stub
+		
 		mailDao.changeStatus(mailId, statusName, status);
 	}
 
 	@Override
 	public void sendSystemMail(String title, String messageInfo, Integer receiveUserId) {
-		// TODO Auto-generated method stub
+		
 		Mail mail = new Mail(new User(SystemConsts.ADMIN_USER_ID), null, "1", messageInfo, "0", "1", new Timestamp(System.currentTimeMillis()), "", "", title);
 		edit(mail);		
 	}

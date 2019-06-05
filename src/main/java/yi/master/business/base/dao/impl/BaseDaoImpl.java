@@ -51,35 +51,35 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 	
 	public Integer save(T entity) {
-		// TODO Auto-generated method stub
+		
 		Integer id = (Integer) getSession().save(entity);
 		return id;
 	}
 
 	public void delete(int id) {
-		// TODO Auto-generated method stub
+		
 		getSession().delete(get(id));
 	}
 
 	public void edit(T entity) {
-		// TODO Auto-generated method stub
+		
 		getSession().merge(entity);
 	}
 
 	
 	public T get(Integer id) {
-		// TODO Auto-generated method stub
+		
 		
 		return (T)getSession().get(clazz, id);
 	}
 
 	public T load(Integer id) {
-		// TODO Auto-generated method stub
+		
 		return (T)getSession().load(clazz, id);
 	}
 
 	public List<T> findAll(String ...filterCondition) {
-		// TODO Auto-generated method stub
+		
 		String hsql = "select t from " + clazz.getSimpleName() + " t";
 		
 		if (filterCondition != null && filterCondition.length > 0) {
@@ -98,7 +98,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	public int totalCount(String ...filterCondition) {
-		// TODO Auto-generated method stub
+		
 		int count = 0;
 		StringBuilder hql = new StringBuilder("select count(t) from " + clazz.getSimpleName() + " t");
 		
@@ -122,7 +122,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	public PageModel<T> findByPager(int dataNo, int pageSize, String orderDataName, String orderType, String searchValue, List<List<String>> dataParams, String ...filterCondition) {
-		// TODO Auto-generated method stub
+		
 		PageModel<T> pm = new PageModel<T>(orderDataName, orderType, searchValue, dataParams, dataNo, pageSize);
 		
 		StringBuilder hql = new StringBuilder("from " + clazz.getSimpleName() + " t");
@@ -193,18 +193,18 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	public void update(String sql) {
-		// TODO Auto-generated method stub
+		
 		getSession().createQuery(sql).executeUpdate();
 	}
 
 	public T findUnique(String sql) {
-		// TODO Auto-generated method stub	
+			
 		return (T)getSession().createQuery(sql).uniqueResult();
 	}
 
 	@Override
 	public int countByTime(String fieldName, Date ...time) {
-		// TODO Auto-generated method stub
+		
 		int count = 0;
 		String hql = "select count(t) from " + clazz.getSimpleName() + " t where t." + fieldName + ">:endTime1";			
 		if (time.length > 1) {
@@ -223,7 +223,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	@Override
 	public int getHqlCount(String hql) {
-		// TODO Auto-generated method stub
+		
 		Query query = getSession().createQuery(hql);
 		int count = 0;
 		Long temp = (Long)query.uniqueResult();

@@ -129,7 +129,7 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 	
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub
+		
 		if (!leadValidation()) {						
 			return SUCCESS;
 		}
@@ -186,7 +186,7 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 				probe.setScene(new MessageScene(Integer.valueOf(id)));
 				interfaceProbeService.edit(probe);
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				LOGGER.error("The interfaceProbe clone fail！", e);
 			}						
 		}
@@ -197,7 +197,7 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 	
 	@Override
 	public String del() {
-		// TODO Auto-generated method stub
+		
 		if (!leadValidation()) {						
 			return SUCCESS;
 		}
@@ -208,7 +208,7 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 
 	@Override
 	public boolean leadValidation() {
-		// TODO Auto-generated method stub
+		
 		if (model.getProbeId() != null) {
 			//验证是否处理停止状态
 			InterfaceProbe probe = interfaceProbeService.get(model.getProbeId());

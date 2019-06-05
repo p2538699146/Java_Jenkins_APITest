@@ -40,7 +40,7 @@ public class ReportEmailCreator implements EmailCreator {
 
 	public ReportEmailCreator() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public TestReport getReport() {
@@ -54,7 +54,7 @@ public class ReportEmailCreator implements EmailCreator {
 	@Override
 	public MimeMessage createMessage(Session session, String sendAddress,
 			Address[] receiveAddresses, Address[] copyAddresses) throws Exception {
-		// TODO Auto-generated method stub
+		
 		MimeMessage message = new MimeMessage(session);
 		
 		try {
@@ -100,7 +100,7 @@ public class ReportEmailCreator implements EmailCreator {
 			message.setSentDate(new Date());
 			message.saveChanges();
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			//创建失败做二次处理
 			//do something
 			

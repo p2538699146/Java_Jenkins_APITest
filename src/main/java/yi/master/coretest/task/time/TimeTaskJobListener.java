@@ -53,7 +53,7 @@ public class TimeTaskJobListener implements JobListener {
 	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
+		
 		return LISTENER_NAME;
 	}
 
@@ -70,7 +70,7 @@ public class TimeTaskJobListener implements JobListener {
 	@Override
 	public void jobWasExecuted(JobExecutionContext context,
 			JobExecutionException jobException) {
-		// TODO Auto-generated method stub
+		
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 		AutoTask task = (AutoTask)dataMap.get(context.getJobDetail().getKey().getName());
 		
@@ -94,7 +94,6 @@ public class TimeTaskJobListener implements JobListener {
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					LOGGER.warn("InterruptedException", e);
 				}
 			}
@@ -149,7 +148,7 @@ public class TimeTaskJobListener implements JobListener {
 	
 	@Override
 	public void jobExecutionVetoed(JobExecutionContext context) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

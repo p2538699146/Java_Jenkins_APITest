@@ -30,32 +30,32 @@ public class AutoTaskServiceImpl extends BaseServiceImpl<AutoTask> implements Au
 
 	@Override
 	public List<AutoTask> findRunTasks() {
-		// TODO Auto-generated method stub
+		
 		return autoTaskDao.findRunTasks();
 	}
 
 	@Override
 	public void updateStatus(Integer taskId, String status) {
-		// TODO Auto-generated method stub
+		
 		autoTaskDao.updateStatus(taskId, status);
 	}
 
 	@Override
 	public void updateExpression(Integer taskId, String expression) {
-		// TODO Auto-generated method stub
+		
 		autoTaskDao.updateExpression(taskId, expression);
 	}
 
 	@Override
 	public void updateCount(Integer taskId, Integer mode) {
-		// TODO Auto-generated method stub
+		
 		autoTaskDao.updateCount(taskId, mode);
 	}
 
 
 	@Override
 	public AutoTask findByName(String taskName) {
-		// TODO Auto-generated method stub
+		
 		return autoTaskDao.findByName(taskName);
 	}
 

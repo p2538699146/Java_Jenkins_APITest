@@ -38,7 +38,7 @@ public class WebTestCaseAction extends BaseAction<WebTestCase> {
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		if (StringUtils.isNotEmpty(model.getCaseType())) {
 			conditions.add("caseType='" + model.getCaseType() + "'");			

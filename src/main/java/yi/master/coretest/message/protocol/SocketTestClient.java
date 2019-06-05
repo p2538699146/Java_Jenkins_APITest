@@ -20,13 +20,13 @@ public class SocketTestClient extends TestClient {
 	private static final Logger LOGGER = Logger.getLogger(SocketTestClient.class);
 	
 	protected SocketTestClient() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public Map<String, String> sendRequest(String requestUrl,
 			String requestMessage, Map<String, Object> callParameter, TestConfig config, Object client) {
-		// TODO Auto-generated method stub
+		
 		Map<String, String> returnMap = new HashMap<String, String>();
 		
 		int connectTimeOut = config.getConnectTimeOut();
@@ -65,25 +65,25 @@ public class SocketTestClient extends TestClient {
 
 	@Override
 	public boolean testInterface(String requestUrl) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
 	public void closeConnection() {
-		// TODO Auto-generated method stub
+		
 		
 	}	
 	
 	@Override
 	public Object getTestClient() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
 	@Override
 	public void putBackTestClient(Object procotolClient) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
@@ -113,7 +113,6 @@ public class SocketTestClient extends TestClient {
             	responseMsg.append(reply);
 	        }           			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			LOGGER.debug("Send Socket msg to [" + ip + ":" + port + "] Fail！", e);
 			responseMsg = new StringBuilder("Send Socket msg to [" + ip + ":" + port + "] Fail:" + e.getMessage());
 		} finally {
@@ -121,13 +120,11 @@ public class SocketTestClient extends TestClient {
 				try {
 					br.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					LOGGER.warn("IOException", e);
 				}  
             try {
 				socket.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				LOGGER.warn("IOException", e);
 			}
 		}		

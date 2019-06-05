@@ -29,7 +29,7 @@ public class WebTestCaseConfig implements Serializable {
 
 	public WebTestCaseConfig() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Map<String, String> getCaseVariables() {

@@ -114,7 +114,7 @@ public class TestReport implements Serializable{
 	
 	public TestReport() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	/**

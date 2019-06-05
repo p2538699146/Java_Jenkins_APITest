@@ -128,7 +128,7 @@ public class WebTestCase implements Serializable,Cloneable {
 
 	public WebTestCase() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	
@@ -304,12 +304,12 @@ public class WebTestCase implements Serializable,Cloneable {
 	
 	@Override
 	public Object clone() {
-		// TODO Auto-generated method stub
+		
 		Object o = null;
 		try {
 			o = super.clone();
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.warn("clone exceptin!", e);
 		}
 		return o;

@@ -71,14 +71,13 @@ public class MockAction extends ActionSupport {
 				requestMessageB.append(line);
 			}			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			logger.error(request.getRequestURI() + "获取请求报文失败！", e);
 		} finally {
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					logger.warn("IOException", e);
 				}
 			}
@@ -86,7 +85,6 @@ public class MockAction extends ActionSupport {
 				try {
 					br.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					logger.warn("IOException", e);
 				}
 			}
@@ -107,7 +105,7 @@ public class MockAction extends ActionSupport {
 			out.print(responseMsg);
 			out.flush();
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			logger.error("返回出参报文出错", e);
 		} finally {
 			if (out != null) {

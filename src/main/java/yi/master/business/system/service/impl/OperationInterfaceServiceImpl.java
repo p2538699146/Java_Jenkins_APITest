@@ -29,7 +29,7 @@ public class OperationInterfaceServiceImpl extends BaseServiceImpl<OperationInte
 
 	@Override
 	public List<OperationInterface> listByRoleId(Integer roleId) {
-		// TODO Auto-generated method stub
+		
 		return operationInterfaceDao.listByRoleId(roleId);
 	}
 

@@ -36,7 +36,7 @@ public class ProbeEmailCreator implements EmailCreator {
 	@Override
 	public MimeMessage createMessage(Session session, String sendAddress, Address[] receiveAddresses,
 			Address[] copyAddresses) throws Exception {
-		// TODO Auto-generated method stub
+		
 		String content = null;
 		JSONObject obj = JSONObject.fromObject(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_MESSAGE_MAIL_STYLE));
 		if (StringUtils.isNotBlank(obj.getString(SystemConsts.GLOBAL_SETTING_MESSAGE_MAIL_STYLE_PROBE_REPORT))) {

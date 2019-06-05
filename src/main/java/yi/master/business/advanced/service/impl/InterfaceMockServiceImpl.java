@@ -24,27 +24,27 @@ public class InterfaceMockServiceImpl extends BaseServiceImpl<InterfaceMock> imp
 
 	@Override
 	public InterfaceMock findByMockUrl(String mockUrl) {
-		// TODO Auto-generated method stub
+		
 		return interfaceMockDao.findByMockUrl(mockUrl);
 	}
 
 	@Override
 	public void updateStatus(Integer mockId, String status) {
-		// TODO Auto-generated method stub
+		
 		interfaceMockDao.updateStatus(mockId, status);
 	}
 
 	@Override
 	public void updateSetting(Integer mockId, String settingType,
 			String configJson) {
-		// TODO Auto-generated method stub
+		
 		if (StringUtils.isBlank(settingType) || StringUtils.isBlank(configJson)) return;
 		interfaceMockDao.updateSetting(mockId, settingType, configJson);
 	}
 
 	@Override
 	public List<InterfaceMock> getEnableSocketMock() {
-		// TODO Auto-generated method stub
+		
 		return interfaceMockDao.getEnableSocketMock();
 	}
 }

@@ -60,7 +60,6 @@ public class ComplexSceneConfig {
 	
 	public ComplexSceneConfig() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 

@@ -64,14 +64,14 @@ public class MockSocketServer {
 				socket = new ServerSocket(PracticalUtils.getRandomNum(65535, 10025));
 				flag = false;
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				logger.error("创建Socket server 出错, 等待重新创建!", e);
 			}			
 		}
 		new Thread(new Runnable() {			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
+				
 				start();
 			}
 		}).start();

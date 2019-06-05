@@ -137,7 +137,6 @@ public class GlobalVariable implements Serializable {
 
 	public GlobalVariable() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getVariableId() {
@@ -288,7 +287,7 @@ public class GlobalVariable implements Serializable {
 				break;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("获取变量" + this.variableName + "[" + this.key + "]失败：" + this.value, e);
 			createErrorInfo = e.getMessage();
 		}

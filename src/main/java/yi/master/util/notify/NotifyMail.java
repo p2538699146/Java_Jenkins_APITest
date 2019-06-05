@@ -76,7 +76,6 @@ public class NotifyMail {
 	        transport.sendMessage(message, message.getAllRecipients());
 	        transport.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("发送邮件失败", e);
 			return "发送邮件失败:" + e.getMessage();
 		}
@@ -99,7 +98,6 @@ public class NotifyMail {
 				addr = new InternetAddress(addresses[i]);
 				addressObjs.add(addr);
 			} catch (AddressException e) {
-				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				LOGGER.info("邮件地址:" + addresses[i] + "不正确!");
 			}

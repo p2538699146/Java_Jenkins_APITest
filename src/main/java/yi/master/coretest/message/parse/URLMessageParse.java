@@ -30,12 +30,12 @@ import yi.master.util.FrameworkUtil;
 public class URLMessageParse extends MessageParse {
 	
 	protected URLMessageParse() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override
 	public ComplexParameter parseMessageToObject(String message, List<Parameter> params) {
-		// TODO Auto-generated method stub
+		
 		if (!messageFormatValidation(message)) {
 			return null;
 		}
@@ -53,13 +53,13 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter, String paramsData) {
-		// TODO Auto-generated method stub	
+			
 		return messageFormatBeautify(paraseUrlMessage(complexParameter, new StringBuilder(""), PracticalUtils.jsonToMap(paramsData)).toString().substring(1));		
 	}
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		// TODO Auto-generated method stub
+		
 		if (!messageFormatValidation(message)) {
 			return "不是合法的url入参格式,请检查!";
 		}
@@ -116,7 +116,7 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public boolean messageFormatValidation(String message) {
-		// TODO Auto-generated method stub
+		
 		String[] params = parseMessageToSingleRow(message).split("&");
 		for (String s:params) {
 			String[] parameter = StringUtils.split(s, "=", 2);
@@ -129,7 +129,7 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public Set<Parameter> importMessageToParameter(String message, Set<Parameter> existParams) {
-		// TODO Auto-generated method stub
+		
 		if (!messageFormatValidation(message)) {
 			return null;
 		}
@@ -152,7 +152,7 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public String getObjectByPath(String message, String path) {
-		// TODO Auto-generated method stub
+		
 		Map<String, String> urlParams = parseUrlToMap(message, null);
 		path = path.substring(path.lastIndexOf(".") < 0 ? 0 : path.lastIndexOf("."));		
 		return urlParams.get(path);
@@ -190,7 +190,7 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public String createMessageByNodes(JSONObject nodes) {
-		// TODO Auto-generated method stub
+		
 		StringBuilder message = new StringBuilder();
 		for (Object key:nodes.keySet()) {
 			if ("rootId".equals(key.toString())) continue;

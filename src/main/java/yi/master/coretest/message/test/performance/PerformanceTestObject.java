@@ -150,7 +150,7 @@ public class PerformanceTestObject {
 
 	public PerformanceTestObject() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 
@@ -305,7 +305,7 @@ public class PerformanceTestObject {
 				out = new ObjectOutputStream(fos);
 				out.writeObject(result.getTestResults());			
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				logger.error("写测试结果到文件中出错!", e);
 				errorMsg.add(timeTag() + "写测试结果到文件中出错!");
 			} finally {
@@ -313,7 +313,6 @@ public class PerformanceTestObject {
 					try {
 						fos.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						logger.warn("IOException", e);
 					}
 				}				
@@ -321,7 +320,6 @@ public class PerformanceTestObject {
 					try {
 						out.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						logger.warn("IOException", e);
 					}
 				}
@@ -465,7 +463,7 @@ public class PerformanceTestObject {
 		try {
 			infos = FileUtils.readLines(parameterizedFile);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			errorMsg.add(timeTag() + "读取参数化文件:" + parameterizedFile.getPath() + "失败，本次测试不进行参数化操作!");
 			logger.error("读取参数化文件:" + parameterizedFile.getPath() + "失败!", e);
 			return;
@@ -661,7 +659,7 @@ public class PerformanceTestObject {
 				analyzeResult.getPressCpu().add((double) Math.round((PracticalUtils.sigar.getCpuPerc().getCombined() * 100) * 100) / 100);				
 				analyzeResult.getPressMemory().add((double) Math.round((PracticalUtils.sigar.getMem().getUsedPercent()) * 100) / 100);
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				logger.error("获取压力机资源消耗失败!", e);
 				errorMsg.add(timeTag() + "获取压力机的资源消耗情况失败!");
 				analyzeResult.getPressCpu().add(0.00);
@@ -683,14 +681,14 @@ public class PerformanceTestObject {
 		
 		
 		public ThreadPerformanceTest(List<Map<String, String>> threadParameters, int maxCount) {
-			// TODO Auto-generated constructor stub
+			
 			this.threadParameters = threadParameters;
 			this.maxCount = maxCount;
 		}
 		
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
+			
 			infoMsg.add(timeTag() + Thread.currentThread().getName() + " - 开始进行测试...");
 			//复制一份测试对象,注意此时操作是浅复制
 			TestMessageScene threadTestScene = (TestMessageScene) testScene.clone();

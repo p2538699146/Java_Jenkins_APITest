@@ -101,7 +101,7 @@ public class WebTestSuiteReport implements Serializable {
 
 	public WebTestSuiteReport() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void setCaseReports(Set<WebTestCaseReport> caseReports) {

@@ -72,7 +72,6 @@ public class MockResponseConfig implements Serializable {
 	
 	public MockResponseConfig() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public String generate(HttpServletResponse response, String requestMsg) {	
@@ -118,7 +117,6 @@ public class MockResponseConfig implements Serializable {
 			try {
 				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				logger.warn("InterruptedException", e);
 			}
 		}

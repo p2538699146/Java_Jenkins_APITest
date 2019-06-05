@@ -147,7 +147,7 @@ public class TestResult implements Serializable, Comparable<TestResult> {
 	
 	public TestResult() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public TestResult(MessageScene messageScene,String messageInfo,
@@ -348,14 +348,14 @@ public class TestResult implements Serializable, Comparable<TestResult> {
 
 	@Override
 	public int compareTo(TestResult o) {
-		// TODO Auto-generated method stub
+		
 		//return -(o.getOpTime().compareTo(this.opTime));
 		return this.opTime.compareTo(o.getOpTime());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
+		
 		return super.equals(obj);
 	}
 

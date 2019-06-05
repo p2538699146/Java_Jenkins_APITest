@@ -54,7 +54,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		if (ptId != null) {
 			conditions.add("performanceTestConfig.ptId=" + ptId);
@@ -119,7 +119,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 			setData("path", ExportPerformanceTestResult.exportDocuments(results));
 			setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			setReturnInfo(ReturnCodeConsts.SYSTEM_ERROR_CODE, "创建excel文件出错!");
 		}
 		return SUCCESS;
@@ -130,7 +130,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	 */
 	@Override
 	public String del() {
-		// TODO Auto-generated method stub
+		
 		model = performanceTestResultService.get(id);
 		if (model != null) {
 			FileUtils.deleteQuietly(new File(model.getDetailsResultFilePath()));
@@ -157,7 +157,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 			     ObjectInputStream ois = new ObjectInputStream(fn);	
 			     results = (List<TestResult>) ois.readObject();
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				LOGGER.error("反序列化失败：" + model.getDetailsResultFilePath(), e);
 				setReturnInfo(ReturnCodeConsts.SYSTEM_ERROR_CODE, "测试结果文件反序列化失败！");
 			} finally {
@@ -165,7 +165,6 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 					try {
 						fn.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						LOGGER.warn("IOException", e);
 					}
 				}

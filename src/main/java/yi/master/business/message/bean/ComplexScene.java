@@ -111,7 +111,7 @@ public class ComplexScene  implements Serializable {
 			try {
 				complexSceneConfigs = PracticalUtils.getComplexSceneConfigs(configInfo);
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				LOGGER.error("无法转换该组合场景的配置信息:" + configInfo, e);
 			}			
 		} else {

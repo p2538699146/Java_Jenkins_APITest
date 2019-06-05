@@ -61,7 +61,6 @@ public class DataDBAction extends BaseAction<DataDB> {
 	
 	@Override
 	public String del() {
-		// TODO Auto-generated method stub
 		dataDBService.delete(id);
 		CacheUtil.updateQueryDBMap(null, id);
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
@@ -80,10 +79,8 @@ public class DataDBAction extends BaseAction<DataDB> {
 		try {
 			conn = DBUtil.getConnection(db.getDbType(), db.getDbUrl(), db.getDbName(), db.getDbUsername(), db.getDbPasswd());
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			LOGGER.error(db.getDbUrl() + "," + db.getDbUrl() + ":不能正确的加载数据库驱动程序", e);			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			LOGGER.error(db.getDbUrl() + "," + db.getDbUrl() + "建立查询数据库连接失败!", e1);	
 		}
 		
@@ -92,7 +89,6 @@ public class DataDBAction extends BaseAction<DataDB> {
 			try {
 				DBUtil.close(conn);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				LOGGER.warn("SQLException", e);
 			}
 		} else {

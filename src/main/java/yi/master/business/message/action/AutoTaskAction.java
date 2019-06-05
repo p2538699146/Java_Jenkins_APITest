@@ -44,7 +44,7 @@ public class AutoTaskAction extends BaseAction<AutoTask> {
 	
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub
+		
 		checkObjectName();
 		if (!checkNameFlag.equals("true")) {
 			jsonMap.put("returnCode", ReturnCodeConsts.NAME_EXIST_CODE);
@@ -79,7 +79,7 @@ public class AutoTaskAction extends BaseAction<AutoTask> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object processListData(Object o) {
-		// TODO Auto-generated method stub
+		
 		List<AutoTask> tasks = (List<AutoTask>) o;
 		
 		for (AutoTask task:tasks) {
@@ -90,7 +90,7 @@ public class AutoTaskAction extends BaseAction<AutoTask> {
 		
 	@Override
 	public String get() {
-		// TODO Auto-generated method stub
+		
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		model = autoTaskService.get(id);
 		
@@ -164,7 +164,7 @@ public class AutoTaskAction extends BaseAction<AutoTask> {
 		try {
 			jobManager.addTimeTask(model);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("定时任务规则设置有误!", e);
 			jsonMap.put("msg", "启动定时任务出错，详情：" + e.getMessage());
 			jsonMap.put("returnCode", ReturnCodeConsts.QUARTZ_CRON_EXPRESSION_SETTING_ERROR);	

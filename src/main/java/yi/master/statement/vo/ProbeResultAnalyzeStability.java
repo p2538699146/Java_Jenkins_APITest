@@ -21,7 +21,7 @@ public class ProbeResultAnalyzeStability {
 
 	public ProbeResultAnalyzeStability() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	

@@ -78,7 +78,6 @@ public class MockRequestValidateConfig implements Serializable {
 
 	public MockRequestValidateConfig() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public static MockRequestValidateConfig getInstance(String configJson) {
@@ -147,7 +146,7 @@ public class MockRequestValidateConfig implements Serializable {
 			try {
 				requestParameters = new ArrayList<Parameter>(parseUtil.importMessageToParameter(requestMessage, new HashSet<Parameter>()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				logger.error(e);
 			}
 			for (MockValidateRuleConfig config:parameters) {

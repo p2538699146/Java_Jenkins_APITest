@@ -49,7 +49,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 
 	@Override
 	public String get() {
-		// TODO Auto-generated method stub
+		
 		model = testReportService.get(model.getReportId());
 		model.countSceneNum();
 		
@@ -61,7 +61,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object processListData(Object o) {
-		// TODO Auto-generated method stub
+		
 		List<TestReport> reports = (List<TestReport>) o;
 		
 		for (TestReport r:reports) {
@@ -158,7 +158,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 			try {
 				PracticalUtils.createReportNew(report.getDetailsJson(), new File( FrameworkUtil.getProjectPath() + "/" + report.getReportHtmlPath()));
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				LOGGER.error("写静态报告文件出错!reportId=" + report.getReportId() + ",输出文件路径=" + FrameworkUtil.getProjectPath() 
 						+ "/" + report.getReportHtmlPath(), e);
 				successFlag = false;

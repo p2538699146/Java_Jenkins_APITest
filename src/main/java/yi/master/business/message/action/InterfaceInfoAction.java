@@ -82,7 +82,7 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		if (systemId != null) {
 			conditions.add("exists (select 1 from InterfaceInfo o join o.systems s where s.systemId=" + systemId 
@@ -144,7 +144,7 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 		try {
 			path = ExportInterfaceInfo.exportDocuments(infos, PoiExcelUtil.XLSX);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
 			jsonMap.put("msg", "后台写文件出错:<br>" + e.getMessage() + "<br>请联系管理员!");
 			return SUCCESS;
@@ -165,7 +165,7 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 		try {
 			result = ImportInterfaceInfo.importToDB(path);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			setReturnInfo(ReturnCodeConsts.PARAMETER_VALIDATE_FAIL_CODE, "读取文件内容失败!");
 		}
 				
@@ -286,7 +286,7 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 	
 	@Override
 	public String get() {
-		// TODO Auto-generated method stub
+		
 		if (id == null) {
 			jsonMap.put("object", messageService.get(messageId).getInterfaceInfo());
 		} 

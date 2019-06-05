@@ -30,7 +30,7 @@ public class InterfaceInfoServiceImpl extends BaseServiceImpl<InterfaceInfo> imp
 
 	@Override
 	public List<InterfaceInfo> findInterfaceByCondition(String condition) {
-		// TODO Auto-generated method stub
+		
 		return interfaceInfoDao.findInterfaceByCondition(condition);
 	}
 
@@ -42,7 +42,7 @@ public class InterfaceInfoServiceImpl extends BaseServiceImpl<InterfaceInfo> imp
 
 	@Override
 	public InterfaceInfo findInterfaceByName(String interfaceName) {
-		// TODO Auto-generated method stub
+		
 		return interfaceInfoDao.findInterfaceByName(interfaceName);
 	}
 	

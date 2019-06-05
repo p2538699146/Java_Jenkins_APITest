@@ -21,7 +21,7 @@ public class WebScriptTaskServiceImpl extends BaseServiceImpl<WebScriptTask> imp
 
 	@Override
 	public WebScriptTask findByGuid(String guid) {
-		// TODO Auto-generated method stub
+		
 		return webScriptTaskDao.findByGuid(guid);
 	}
 }

@@ -21,7 +21,7 @@ public class TestConfigServiceImpl extends BaseServiceImpl<TestConfig> implement
 	
 	@Override
 	public TestConfig getConfigByUserId(Integer userId) {
-		// TODO Auto-generated method stub
+		
 		return testConfigDao.getConfigByUserId(userId);
 	}
 

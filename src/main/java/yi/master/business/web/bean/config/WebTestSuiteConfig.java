@@ -29,7 +29,7 @@ public class WebTestSuiteConfig implements Serializable {
 
 	public WebTestSuiteConfig() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Map<String, String> getSuiteVariables() {

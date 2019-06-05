@@ -120,7 +120,7 @@ public class TestMessageScene implements Cloneable {
 
 	public TestMessageScene() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	
@@ -247,12 +247,12 @@ public class TestMessageScene implements Cloneable {
 	
 	@Override
 	public Object clone() {
-		// TODO Auto-generated method stub
+		
 		Object o = null;
 		try {
 			o = super.clone();
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.warn("clone exception!", e);
 		}
 		return o;

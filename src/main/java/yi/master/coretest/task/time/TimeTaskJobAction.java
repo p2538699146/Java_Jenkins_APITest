@@ -31,7 +31,7 @@ public class TimeTaskJobAction implements Job {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(JobExecutionContext context) {
-		// TODO Auto-generated method stub
+		
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 		
 		AutoTask task = (AutoTask)dataMap.get(context.getJobDetail().getKey().getName());
@@ -53,7 +53,7 @@ public class TimeTaskJobAction implements Job {
 				result[1] = returnJson;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("[自动化定时任务]自动化测试出错:" + returnJson, e);
 			result[1] = returnJson;
 		}

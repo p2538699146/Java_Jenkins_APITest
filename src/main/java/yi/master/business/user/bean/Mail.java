@@ -69,7 +69,6 @@ public class Mail implements Serializable {
 	
 	public Mail() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 

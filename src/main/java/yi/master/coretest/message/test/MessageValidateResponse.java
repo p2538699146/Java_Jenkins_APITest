@@ -121,7 +121,6 @@ public class MessageValidateResponse {
 		try {
 			maps = mapper.readValue(rule.getParameterName(), Map.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("解析关键字关联验证规则出错!", e);
 		}
 		

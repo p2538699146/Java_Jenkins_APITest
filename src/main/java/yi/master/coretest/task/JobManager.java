@@ -131,7 +131,7 @@ public class JobManager {
         	task.setStatus("0");
 			interfaceProbeService.edit(task);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("停止quartz探测任务失败:,[任务ID]-" + task.getProbeId(), e);
 		}
     	

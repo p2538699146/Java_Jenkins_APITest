@@ -53,7 +53,6 @@ public class GlobalSetting implements Serializable {
 
 	public GlobalSetting() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getSettingId() {

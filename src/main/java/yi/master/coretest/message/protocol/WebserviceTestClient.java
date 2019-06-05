@@ -16,13 +16,13 @@ import yi.master.util.PracticalUtils;
 public class WebserviceTestClient extends TestClient {
 	
 	protected WebserviceTestClient() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public Map<String, String> sendRequest(String requestUrl,
 			String requestMessage, Map<String, Object> callParameter, TestConfig config, Object client) {
-		// TODO Auto-generated method stub
+		
 		String username = null;
 		String password = null;
 		String namespace = "";
@@ -48,7 +48,7 @@ public class WebserviceTestClient extends TestClient {
 			long endTime = System.currentTimeMillis();
 			useTime = String.valueOf(endTime - beginTime);			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			statusCode = "false";
 			mark = "Fail to call web-service url=" + requestUrl + ",namespace=" + namespace + ",method=" + method + "!";
 		}
@@ -62,24 +62,24 @@ public class WebserviceTestClient extends TestClient {
 
 	@Override
 	public boolean testInterface(String requestUrl) {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
 	@Override
 	public void closeConnection() {
-		// TODO Auto-generated method stub		
+				
 	}
 	
 	@Override
 	public Object getTestClient() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public void putBackTestClient(Object procotolClient) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
@@ -124,7 +124,7 @@ public class WebserviceTestClient extends TestClient {
 					new Object[] { request }, new Class[] { String.class });
 			return result[0].toString();
 		} catch (Exception e) {
-			// TODO: handle exception	
+				
 			LOGGER.debug("Fail to call web-service url=" + requestUrl + ",namespace=" + namespace + ",method=" + method + "!", e);
 			throw e;
 		}

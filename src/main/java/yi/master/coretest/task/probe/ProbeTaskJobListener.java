@@ -18,7 +18,7 @@ public class ProbeTaskJobListener implements JobListener {
 	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
+		
 		return LISTENER_NAME;
 	}
 
@@ -27,7 +27,7 @@ public class ProbeTaskJobListener implements JobListener {
 	 */
 	@Override
 	public void jobToBeExecuted(JobExecutionContext context) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -37,7 +37,7 @@ public class ProbeTaskJobListener implements JobListener {
 	 */
 	@Override
 	public void jobExecutionVetoed(JobExecutionContext context) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -47,7 +47,7 @@ public class ProbeTaskJobListener implements JobListener {
 	@Override
 	public void jobWasExecuted(JobExecutionContext context,
 			JobExecutionException jobException) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

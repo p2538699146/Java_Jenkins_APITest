@@ -140,7 +140,7 @@ public class ApiAutoTestAction extends BaseApiAction {
 	}
 	
 	private ApiTaskService getTaskService() {
-		// TODO Auto-generated method stub
+		
 		if ("1".equals(testType)) return interfaceApiTaskService;
 		if ("0".equals(testType)) return webApiTaskService;
 		return null;

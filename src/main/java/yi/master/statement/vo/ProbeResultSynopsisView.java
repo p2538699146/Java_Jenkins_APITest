@@ -34,7 +34,7 @@ public class ProbeResultSynopsisView {
 
 	public ProbeResultSynopsisView() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@JSON(format="yyyy-MM-dd HH:mm:ss")

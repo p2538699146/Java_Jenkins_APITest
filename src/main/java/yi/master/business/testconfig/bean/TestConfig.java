@@ -127,7 +127,7 @@ public class TestConfig implements Serializable, Cloneable {
 
 	public TestConfig() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void setTopScenes(String topScenes) {
@@ -254,7 +254,7 @@ public class TestConfig implements Serializable, Cloneable {
 		try {
 			config = (TestConfig) super.clone();
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.warn("clone exception!", e);
 		}
 		return config;

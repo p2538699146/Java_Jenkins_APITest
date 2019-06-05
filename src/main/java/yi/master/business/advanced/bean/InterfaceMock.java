@@ -84,7 +84,6 @@ public class InterfaceMock implements Serializable {
 
 	public InterfaceMock() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

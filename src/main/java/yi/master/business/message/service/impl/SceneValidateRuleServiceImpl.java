@@ -24,25 +24,25 @@ public class SceneValidateRuleServiceImpl extends BaseServiceImpl<SceneValidateR
 
 	@Override
 	public SceneValidateRule getValidate(Integer messageSceneId, String type) {
-		// TODO Auto-generated method stub
+		
 		return sceneValidateRuleDao.getValidate(messageSceneId, type);
 	}
 
 	@Override
 	public void updateValidate(Integer validateId, String validateValue, String parameterName) {
-		// TODO Auto-generated method stub
+		
 		sceneValidateRuleDao.updateValidate(validateId, validateValue, parameterName);
 	}
 
 	@Override
 	public List<SceneValidateRule> getParameterValidate(Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		return sceneValidateRuleDao.getParameterValidate(messageSceneId);
 	}
 
 	@Override
 	public void updateStatus(Integer validateId, String status) {
-		// TODO Auto-generated method stub
+		
 		sceneValidateRuleDao.updateStatus(validateId, status);
 	}
 

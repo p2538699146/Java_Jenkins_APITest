@@ -22,19 +22,19 @@ import yi.master.util.PracticalUtils;
 public class OPTMessageParse extends FixedMessageParse {
 	
 	protected OPTMessageParse() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		// TODO Auto-generated method stub
+		
 		return "true";
 	}
 	
 	@Override
 	public ComplexParameter parseMessageToObject(String message,
 			List<Parameter> params) {
-		// TODO Auto-generated method stub
+		
 		ParameterService ps = (ParameterService) FrameworkUtil.getSpringBean("parameterService");
 		int pid = ps.save(new Parameter(message, "name", "defaultValue", "path", "String"));
 		return new ComplexParameter(new Parameter(pid), null, null);
@@ -43,7 +43,7 @@ public class OPTMessageParse extends FixedMessageParse {
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter,
 			String paramsData) {
-		// TODO Auto-generated method stub
+		
 		if (StringUtils.isNotEmpty(paramsData)) {
 			Map<String, Object> params = PracticalUtils.jsonToMap(paramsData);
 			for (Object o:params.values()) {

@@ -42,7 +42,7 @@ public class WatirCucumberFrameworkExecutor extends BaseFrameworkExecutor {
 		Thread t = new Thread(new Runnable() {			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
+				
 				String workHome = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_WEB_SCRIPT_WORKPLACE);
 				String modulePath =  CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH) + File.separator + module.getFolderName();
 				String reportHtmlPath = WebScriptConsts.WEB_SCRIPT_REPORT_FOLDER_PATH + File.separator + module.getModuleId() + "_" + System.currentTimeMillis() + ".html";	
@@ -59,8 +59,7 @@ public class WatirCucumberFrameworkExecutor extends BaseFrameworkExecutor {
 				while (true) {
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block		
+					} catch (InterruptedException e) {	
 						logger.warn("Interrupted", e);;
 						Thread.currentThread().interrupt();
 					}

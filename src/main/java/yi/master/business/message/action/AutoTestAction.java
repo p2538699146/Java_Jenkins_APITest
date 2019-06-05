@@ -342,7 +342,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 
 	@Override
 	public TestConfig getModel() {
-		// TODO Auto-generated method stub
+		
 		return this.config;
 	}
 	

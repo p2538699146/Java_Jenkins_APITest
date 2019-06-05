@@ -37,7 +37,7 @@ public class WebScriptModuleAction extends BaseAction<WebScriptModule> {
 
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub
+		
 		//检查是否存在指定的文件夹
 		File f = new File(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH) + File.separator + model.getFolderName());
 		if (!f.exists() || !f.isDirectory()) {
@@ -53,7 +53,7 @@ public class WebScriptModuleAction extends BaseAction<WebScriptModule> {
 
 	@Override
 	public String del() {
-		// TODO Auto-generated method stub
+		
 		//删除也会同时删除文件夹
 		model = webScriptModuleService.get(id);
 		File f = new File(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH) + File.separator + model.getFolderName());

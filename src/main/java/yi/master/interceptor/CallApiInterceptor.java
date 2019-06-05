@@ -80,7 +80,6 @@ public class CallApiInterceptor extends AbstractInterceptor {
 			try {
 				result = arg0.invoke();
 			} catch (Exception e) {
-				// TODO: handle exception
 				logger.error("系统内部错误,请求失败!", e);
 				interceptStatus = "6";
 				mark = PracticalUtils.getExceptionAllinformation(e);

@@ -78,7 +78,6 @@ public class MockValidateRuleConfig implements Serializable {
 	}
 	public MockValidateRuleConfig() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

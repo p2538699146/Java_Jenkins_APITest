@@ -42,11 +42,9 @@ public class AnnotationUtil {
 		try {
 			field = clazz.getDeclaredField(fieldName);
 		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
 			LOGGER.warn("NoSuchFieldException", e);
 			return null;
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			LOGGER.warn("SecurityException", e);
 			return null;
 		}

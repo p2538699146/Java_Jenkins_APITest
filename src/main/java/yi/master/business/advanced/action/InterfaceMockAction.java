@@ -80,7 +80,6 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 			try {
 				new MockSocketServer(model.getMockId());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				LOGGER.warn(e.getMessage(), e);
 			}
 		}

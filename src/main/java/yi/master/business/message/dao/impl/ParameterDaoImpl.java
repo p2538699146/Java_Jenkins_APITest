@@ -39,7 +39,7 @@ public class ParameterDaoImpl extends BaseDaoImpl<Parameter> implements Paramete
 
 	@Override
 	public void delByInterfaceId(int interfaceId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "delete from Parameter p where p.interfaceInfo.interfaceId=:interfaceId";
 		
 		getSession().createQuery(hql)
@@ -51,7 +51,7 @@ public class ParameterDaoImpl extends BaseDaoImpl<Parameter> implements Paramete
 	public Parameter checkRepeatParameter(Integer parameterId,
 			String parameterIdentify, String path, String type,
 			Integer interfaceId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "From Parameter p where p.interfaceInfo.interfaceId=:interfaceId and p.parameterIdentify=:parameterIdentify"
 				+ " and p.path=:path";
 		Parameter p = (Parameter) getSession().createQuery(hql).setString("parameterIdentify", parameterIdentify).setString("path", path)

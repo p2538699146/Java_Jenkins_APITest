@@ -28,20 +28,20 @@ public class BusinessSystemServiceImpl extends BaseServiceImpl<BusinessSystem> i
 			int dataNo, int pageSize, String orderDataName, String orderType,
 			String searchValue, List<List<String>> dataParams, int mode, String procotolType,
 			String... filterCondition) {
-		// TODO Auto-generated method stub
+		
 		return businessSystemDao.listSystemInterface(systemId, dataNo, pageSize, orderDataName, orderType
 				, searchValue, dataParams, mode, procotolType, filterCondition);
 	}
 
 	@Override
 	public void addInterfaceToSystem(Integer systemId, Integer interfaceId) {
-		// TODO Auto-generated method stub
+		
 		businessSystemDao.addInterfaceToSystem(systemId, interfaceId);
 	}
 
 	@Override
 	public void delInterfaceFromSystem(Integer systemId, Integer interfaceId) {
-		// TODO Auto-generated method stub
+		
 		businessSystemDao.delInterfaceFromSystem(systemId, interfaceId);
 		
 	}

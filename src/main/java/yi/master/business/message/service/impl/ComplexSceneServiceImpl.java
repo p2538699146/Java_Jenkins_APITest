@@ -29,46 +29,46 @@ public class ComplexSceneServiceImpl extends BaseServiceImpl<ComplexScene> imple
 
 	@Override
 	public List<ComplexScene> listComplexScenesBySetId(Integer setId) {
-		// TODO Auto-generated method stub
+		
 		return complexSceneDao.listComplexScenesBySetId(setId);
 	}
 
 	@Override
 	public void editComplexScene(Integer id, String complexSceneName,
 			String mark) {
-		// TODO Auto-generated method stub
+		
 		complexSceneDao.editComplexScene(id, complexSceneName, mark);
 	}
 
 	@Override
 	public void editComplexSceneVariables(Integer id, String scenes,
 			String saveVariables, String useVariables) {
-		// TODO Auto-generated method stub
+		
 		complexSceneDao.editComplexSceneVariables(id, scenes, saveVariables, useVariables);
 		
 	}
 
 	@Override
 	public ComplexScene findAssignScene(Integer id, Integer setId) {
-		// TODO Auto-generated method stub
+		
 		return complexSceneDao.findAssignScene(id, setId);
 	}
 
 	@Override
 	public void addToSet(Integer id, Integer setId) {
-		// TODO Auto-generated method stub
+		
 		complexSceneDao.addToSet(id, setId);
 	}
 
 	@Override
 	public void delFromSet(Integer id, Integer setId) {
-		// TODO Auto-generated method stub
+		
 		complexSceneDao.delFromSet(id, setId);
 	}
 
 	@Override
 	public void updateConfigInfo(Integer id, String configJson) {
-		// TODO Auto-generated method stub
+		
 		complexSceneDao.updateConfigInfo(id, configJson);
 	}
 }	

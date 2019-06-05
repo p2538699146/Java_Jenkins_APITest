@@ -97,7 +97,7 @@ public class ImportMessageScene {
 				successCount++;				
 				
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				LOGGER.error("在进行Excel批量导入场景信息时发生了错误：" + info.toString(), e);
 				msg.append("<span class=\"c-red\">导入过程中发生了错误：" + e.getMessage() + "！导入该条信息失败.</span><br>");
 				failCount++;
@@ -136,7 +136,7 @@ public class ImportMessageScene {
 				try {
 					rule = (SceneValidateRule) variable.createSettingValue();
 				} catch (Exception e) {
-					// TODO: handle exception
+					
 					e.printStackTrace();
 				}
 				
@@ -180,7 +180,7 @@ public class ImportMessageScene {
 			 InputStream is = new FileInputStream(path);
 			 hssfWorkbook = new HSSFWorkbook(is);			 
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 		}
 		MessageScene info = null;

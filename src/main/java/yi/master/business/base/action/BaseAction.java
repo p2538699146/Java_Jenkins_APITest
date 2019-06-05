@@ -319,7 +319,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	@JSON(serialize=false)
 	@Override
 	public T getModel() {
-		// TODO Auto-generated method stub
+		
 		return model;
 	}
 	

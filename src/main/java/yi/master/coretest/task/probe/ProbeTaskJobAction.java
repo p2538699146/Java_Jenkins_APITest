@@ -49,7 +49,7 @@ public class ProbeTaskJobAction implements Job {
 	@Override
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
-		// TODO Auto-generated method stub
+		
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 		InterfaceProbe task = (InterfaceProbe) dataMap.get(context.getJobDetail().getKey().getName());
 		
@@ -71,7 +71,7 @@ public class ProbeTaskJobAction implements Job {
 				task.setMark(maps.get("msg").toString());
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.error("[接口探测任务]探测任务执行出错:" + returnJson, e);
 		}
 		Timestamp lastCallTime = null;

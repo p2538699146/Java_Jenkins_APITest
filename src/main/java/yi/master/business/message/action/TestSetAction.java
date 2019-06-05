@@ -68,7 +68,7 @@ public class TestSetAction extends BaseAction<TestSet> {
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		conditions.add("parented=1");
 		
@@ -99,7 +99,7 @@ public class TestSetAction extends BaseAction<TestSet> {
 
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub		
+				
 		if (model.getSetId() == null) {
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			model.setUser((User)(FrameworkUtil.getSessionMap().get("user")));	

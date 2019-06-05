@@ -41,7 +41,7 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 
 	@Override
 	public String listAll() {
-		// TODO Auto-generated method stub
+		
 		if (model.getProtocolType() != null) {
 			List<BusinessSystem> ts = businessSystemService.findAll("protocolType='" + model.getProtocolType() + "'");
 			jsonMap.put("data", processListData(ts));
@@ -54,7 +54,7 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub
+		
 		User user = (User)FrameworkUtil.getSessionMap().get("user");
 		model.setLastModifyUser(user.getRealName());
 		businessSystemService.edit(model);
@@ -66,7 +66,7 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 
 	@Override
 	public String del() {
-		// TODO Auto-generated method stub
+		
 		model = businessSystemService.get(id);
 		if (model.getInfoCount() > 0) {
 			jsonMap.put("msg", "该测试环境尚有接口信息,请先解除关联!");

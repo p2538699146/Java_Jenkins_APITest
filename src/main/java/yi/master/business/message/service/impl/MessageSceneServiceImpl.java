@@ -30,31 +30,31 @@ public class MessageSceneServiceImpl extends BaseServiceImpl<MessageScene> imple
 	
 	@Override
 	public void updateValidateFlag(Integer messageSceneId, String validateRuleFlag) {
-		// TODO Auto-generated method stub
+		
 		messageSceneDao.updateValidateFlag(messageSceneId, validateRuleFlag);
 	}
 
 	@Override
 	public List<MessageScene> getBySetId(Integer setId) {
-		// TODO Auto-generated method stub
+		
 		return messageSceneDao.getBySetId(setId);
 	}
 
 	@Override
 	public InterfaceInfo getInterfaceOfScene(Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		return messageSceneDao.getInterfaceOfScene(messageSceneId);
 	}
 
 	@Override
 	public Message getMessageOfScene(Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		return messageSceneDao.getMessageOfScene(messageSceneId);
 	}
 
 	@Override
 	public void updateResponseExample(Integer messageSceneId, String response) {
-		// TODO Auto-generated method stub
+		
 		messageSceneDao.updateResponseExample(messageSceneId, response);
 	}
 

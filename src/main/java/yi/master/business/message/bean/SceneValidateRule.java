@@ -88,7 +88,7 @@ public class SceneValidateRule implements Serializable {
 
 	public SceneValidateRule() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	

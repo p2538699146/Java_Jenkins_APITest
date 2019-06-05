@@ -36,22 +36,21 @@ public class JSONMessageParse extends MessageParse {
 	private static ObjectMapper mapper = new ObjectMapper();
 	
 	protected JSONMessageParse() {
-		// TODO Auto-generated constructor stub
 	} 
 	
 	@Override
 	public String getObjectByPath(String message, String path) {
-		// TODO Auto-generated method stub
+		
 		return JsonUtil.getObjectByJson(message, path, TypeEnum.string);
 	}	
 	
 	protected static String JSONMessageFormatBeautify(String message) {
-		// TODO Auto-generated method stub
+		
 		try {
 			Object obj = mapper.readValue(message, Object.class);
 		    return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.info("json串美化失败：\n" + message, e);			
 		}
 		return message;
@@ -73,14 +72,14 @@ public class JSONMessageParse extends MessageParse {
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter, String paramsData) {
-		// TODO Auto-generated method stub				
+						
 		return messageFormatBeautify(paraseJsonMessage(complexParameter, new StringBuilder(""), PracticalUtils.jsonToMap(paramsData)).toString());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		// TODO Auto-generated method stub
+		
 		
 		Object[] o = null;
 		try {
@@ -206,12 +205,12 @@ public class JSONMessageParse extends MessageParse {
 	
 	@Override
 	public boolean messageFormatValidation(String message) {
-		// TODO Auto-generated method stub
+		
 		try {
 			JSONObject.fromObject(message);
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			return false;
 		}	
 	}
@@ -219,7 +218,7 @@ public class JSONMessageParse extends MessageParse {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Parameter> importMessageToParameter(String message, Set<Parameter> existParams) {
-		// TODO Auto-generated method stub
+		
 		Object[] jsonTree = null;
 		try {
 			jsonTree = (Object[]) JsonUtil.getJsonList(message, 3);
@@ -250,7 +249,7 @@ public class JSONMessageParse extends MessageParse {
 
 	@Override
 	public String createMessageByNodes(JSONObject nodes) {
-		// TODO Auto-generated method stub
+		
 		Map<String, Object> message = new HashMap<String, Object>();
 		for (Object key:nodes.keySet()) {
 			if ("rootId".equals(key.toString())) continue;

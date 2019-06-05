@@ -161,7 +161,7 @@ public class HTTPTestClient extends TestClient {
 	
 	@Override
 	public Object getTestClient() {
-		// TODO Auto-generated method stub
+		
 		return getHttpClient();
 	}
 
@@ -204,7 +204,7 @@ public class HTTPTestClient extends TestClient {
 				}
 				
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				LOGGER.info("报文附加参数获取出错:" + callParameter.toString(), e);
 			}
 		}
@@ -231,7 +231,6 @@ public class HTTPTestClient extends TestClient {
     			}
     			requestSuccessFlag = true;
     		} catch (Exception e) {
-    			// TODO Auto-generated catch block
     			LOGGER.info("发送请求出错...重试次数..." + retryCount, e);
     			errorMsg = e.getMessage();   			
     		} finally {
@@ -266,7 +265,7 @@ public class HTTPTestClient extends TestClient {
 					returnMsg.append(scan.nextLine());
 				}				
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				LOGGER.info("解析返回出错", e);
 				returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_TEST_MARK, "解析返回内容出错：" + e.getMessage());
 			}
@@ -279,7 +278,7 @@ public class HTTPTestClient extends TestClient {
 			try {
 				headersObject.put("RequestQuery", request.getURI().getQuery());
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
 			
 			request.releaseConnection();
@@ -294,12 +293,12 @@ public class HTTPTestClient extends TestClient {
 	
 	@Override
 	public void closeConnection() {
-		// TODO Auto-generated method stub	
+			
 	}
 
 	@Override
 	public void putBackTestClient(Object procotolClient) {
-		// TODO Auto-generated method stub
+		
 		if (procotolClient != null && procotolClient instanceof DefaultHttpClient) {
 			availableClientPool.add((DefaultHttpClient) procotolClient);
 		}
@@ -308,7 +307,7 @@ public class HTTPTestClient extends TestClient {
 	
 	@Override
 	public boolean testInterface(String requestUrl) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 	/**********************************************************************************************/

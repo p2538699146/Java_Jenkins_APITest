@@ -20,7 +20,6 @@ public class ComplexSceneDaoImpl extends BaseDaoImpl<ComplexScene> implements Co
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ComplexScene> listComplexScenesBySetId(Integer setId) {
-		// TODO Auto-generated method stu
 		String hql = "select c from ComplexScene c join c.testSets s where s.setId=:setId";		
 		return getSession().createQuery(hql).setInteger("setId", setId).list();
 	}
@@ -28,7 +27,7 @@ public class ComplexSceneDaoImpl extends BaseDaoImpl<ComplexScene> implements Co
 	@Override
 	public void editComplexScene(Integer id, String complexSceneName,
 			String mark) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update ComplexScene c set c.complexSceneName=:complexSceneName "
 				+ ",c.mark=:mark where c.id=:id";
 		getSession().createQuery(hql).setString("complexSceneName", complexSceneName)
@@ -38,7 +37,7 @@ public class ComplexSceneDaoImpl extends BaseDaoImpl<ComplexScene> implements Co
 	@Override
 	public void editComplexSceneVariables(Integer id, String scenes,
 			String saveVariables, String useVariables) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update ComplexScene c set c.scenes=:scenes,c.saveVariables=:saveVariables "
 				+ ",c.useVariables=:useVariables where c.id=:id";
 		getSession().createQuery(hql).setString("scenes", scenes).setString("saveVariables", saveVariables)
@@ -48,28 +47,28 @@ public class ComplexSceneDaoImpl extends BaseDaoImpl<ComplexScene> implements Co
 
 	@Override
 	public ComplexScene findAssignScene(Integer id, Integer setId) {
-		// TODO Auto-generated method stub
+		
 		String hql = "select c from ComplexScene c join c.testSets s where s.setId=:setId and c.id=:id";
 		return (ComplexScene) getSession().createQuery(hql).setInteger("id", id).setInteger("setId", setId).uniqueResult();
 	}
 
 	@Override
 	public void addToSet(Integer id, Integer setId) {
-		// TODO Auto-generated method stub
+		
 		String sql = "insert into at_set_complex_scene (set_id, complex_scene_id) values (:setId, :id)";
 		getSession().createSQLQuery(sql).setInteger("setId", setId).setInteger("id", id).executeUpdate();
 	}
 
 	@Override
 	public void delFromSet(Integer id, Integer setId) {
-		// TODO Auto-generated method stub
+		
 		String sql = "delete from at_set_complex_scene where set_id=:setId and complex_scene_id=:id";
 		getSession().createSQLQuery(sql).setInteger("setId", setId).setInteger("id", id).executeUpdate();
 	}
 
 	@Override
 	public void updateConfigInfo(Integer id, String configJson) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update ComplexScene c set c.configInfo=:configJson where c.id=:id";
 		getSession().createQuery(hql).setInteger("id", id).setString("configJson", configJson).executeUpdate();
 	}

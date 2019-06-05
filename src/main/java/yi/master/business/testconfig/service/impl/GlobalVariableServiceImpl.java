@@ -28,20 +28,20 @@ public class GlobalVariableServiceImpl extends BaseServiceImpl<GlobalVariable> i
 
 	@Override
 	public GlobalVariable findByKey(String key) {
-		// TODO Auto-generated method stub
+		
 		return globalVariableDao.findByKey(key);
 	}
 
 	@Override
 	public void updateValue(Integer variableId, String value) {
-		// TODO Auto-generated method stub
+		
 		globalVariableDao.updateValue(variableId, value);
 		
 	}
 
 	@Override
 	public List<GlobalVariable> findByVariableType(String variableType) {
-		// TODO Auto-generated method stub
+		
 		return globalVariableDao.findByVariableType(variableType);
 	}
 }

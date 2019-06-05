@@ -39,7 +39,7 @@ public class WebTestStepAction extends BaseAction<WebTestStep> {
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		if (caseId != null) {
 			conditions.add("webTestCase.caseId=" + caseId);

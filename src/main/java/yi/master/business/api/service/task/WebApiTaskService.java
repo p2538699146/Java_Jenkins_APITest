@@ -30,7 +30,7 @@ public class WebApiTaskService implements ApiTaskService{
 
 	@Override
 	public ApiReturnInfo startTest(String moduleId, String guid) {
-		// TODO Auto-generated method stub
+		
 		JSONObject obj = new JSONObject();
 		
 		if (BaseFrameworkExecutor.getRunningWebScriptId() != null) {
@@ -68,7 +68,7 @@ public class WebApiTaskService implements ApiTaskService{
 
 	@Override
 	public ApiReturnInfo checkTask(Integer taskId) {
-		// TODO Auto-generated method stub
+		
 		WebScriptTask task = taskService.get(taskId);
 		if (task == null) {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "测试任务不存在", null);
@@ -79,7 +79,7 @@ public class WebApiTaskService implements ApiTaskService{
 
 	@Override
 	public ApiReturnInfo stopTest(Integer taskId) {
-		// TODO Auto-generated method stub
+		
 		WebScriptTask task = taskService.get(taskId);
 		if (task == null) {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "测试任务不存在", null);
@@ -105,7 +105,7 @@ public class WebApiTaskService implements ApiTaskService{
 
 	@Override
 	public ApiReturnInfo listModule() {
-		// TODO Auto-generated method stub
+		
 		JSONArray arr = new JSONArray();
 		
 		List<WebScriptModule> modules = moduleService.findAll();
@@ -122,7 +122,7 @@ public class WebApiTaskService implements ApiTaskService{
 
 	@Override
 	public ApiReturnInfo checkTaskByGuid(String guid) {
-		// TODO Auto-generated method stub
+		
 		
 		WebScriptTask task = taskService.findByGuid(guid);
 		if (task == null) {

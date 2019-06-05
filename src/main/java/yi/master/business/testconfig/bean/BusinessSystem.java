@@ -97,11 +97,10 @@ public class BusinessSystem implements Serializable {
 
 	public BusinessSystem() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getReuqestUrl(String requestPath, String defaultPath, String interfaceName) {
-		// TODO Auto-generated method stub		
+				
 		if (MessageKeys.MESSAGE_PROTOCOL_HTTP.equalsIgnoreCase(this.protocolType) || 
 				MessageKeys.MESSAGE_PROTOCOL_WEBSERVICE.equalsIgnoreCase(this.protocolType) || 
 				MessageKeys.MESSAGE_PROTOCOL_HTTPS.equalsIgnoreCase(this.protocolType)) {

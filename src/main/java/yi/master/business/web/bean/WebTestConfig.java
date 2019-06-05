@@ -69,7 +69,7 @@ public class WebTestConfig implements Serializable {
 
 	public WebTestConfig() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Integer getConfigId() {

@@ -14,7 +14,7 @@ public class AutoJobFactory extends AdaptableJobFactory implements ApplicationCo
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {
-		// TODO Auto-generated method stub
+		
 		this.applicationContext = applicationContext; 
 		
 	}

@@ -234,7 +234,7 @@ public class XmlUtil {
 		try {
 			doc = DocumentHelper.parseText(docStr);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			e.printStackTrace();
 			throw e;
 		}

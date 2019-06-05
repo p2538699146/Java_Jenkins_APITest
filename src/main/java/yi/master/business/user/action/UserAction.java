@@ -223,7 +223,6 @@ public class UserAction extends BaseAction<User>{
 				jsonMap.put("msg", "密码验证失败!");		
 			}
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("加密失败!", e);
 			return ERROR;
 		}		
@@ -243,7 +242,6 @@ public class UserAction extends BaseAction<User>{
 			user.setLoginIdentification("");
 			userService.edit(user);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("加密失败!", e);
 			return ERROR;
 		}		
@@ -292,7 +290,6 @@ public class UserAction extends BaseAction<User>{
 		try {
 			userService.resetPasswd(model.getUserId(), MD5Util.code("111111"));
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			LOGGER.warn("NoSuchAlgorithmException", e);
 		}
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
@@ -319,7 +316,6 @@ public class UserAction extends BaseAction<User>{
 			try {
 				model.setPassword(MD5Util.code("111111"));
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				LOGGER.error("密码加密失败!", e);
 				return ERROR;
 			}

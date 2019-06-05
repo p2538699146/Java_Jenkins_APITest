@@ -24,41 +24,41 @@ public class TestResultServiceImpl extends BaseServiceImpl<TestResult> implement
 
 	@Override
 	public List<TestResult> listByReportId(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		return testResultDao.listByReportId(reportId);
 	}
 
 	@Override
 	public int[] countProbeResultQuality(Integer probeId,
 			Timestamp startTime, Timestamp lastTime) {
-		// TODO Auto-generated method stub
+		
 		return testResultDao.countProbeResultQuality(probeId, startTime, lastTime);
 	}
 
 	@Override
 	public Object[] countProbeResultStatusByDay(Integer probeId,
 			Timestamp startTime, Timestamp lastTime) {
-		// TODO Auto-generated method stub
+		
 		return testResultDao.countProbeResultStatusByDay(probeId, startTime, lastTime);
 	}
 
 	@Override
 	public Object[] countProbeResultStatusByHour(Integer probeId,
 			Timestamp startTime, Timestamp lastTime) {
-		// TODO Auto-generated method stub
+		
 		return testResultDao.countProbeResultStatusByHour(probeId, startTime, lastTime);
 	}
 
 	@Override
 	public List[] countProbeResultResponseTime(Integer probeId,
 			Timestamp startTime, Timestamp lastTime) {
-		// TODO Auto-generated method stub
+		
 		return testResultDao.countProbeResultResponseTime(probeId, startTime, lastTime);
 	}
 
 	@Override
 	public String[] getReportSystemNames(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		return testResultDao.getReportSystemNames(reportId);
 	}
 

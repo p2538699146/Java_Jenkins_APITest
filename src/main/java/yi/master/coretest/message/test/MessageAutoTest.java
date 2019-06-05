@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.sf.json.JSONObject;
 import yi.master.business.message.bean.ComplexScene;
 import yi.master.business.message.bean.InterfaceInfo;
 import yi.master.business.message.bean.Message;
@@ -46,8 +47,6 @@ import yi.master.coretest.message.process.MessageProcess;
 import yi.master.coretest.message.protocol.TestClient;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
-
-import net.sf.json.JSONObject;
 
 
 
@@ -252,7 +251,6 @@ public class MessageAutoTest {
 				try {
 					Thread.sleep(scene.getScene().getConfig().getIntervalTime());
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					
 				}
@@ -303,7 +301,6 @@ public class MessageAutoTest {
 				try {
 					Thread.sleep(scene.getScene().getConfig().getIntervalTime());
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					LOGGER.warn("InterruptedException", e);
 				}
 			}									
@@ -432,7 +429,7 @@ public class MessageAutoTest {
 		Collections.sort(testObjects, new Comparator<TestMessageScene>() {
 			@Override
 			public int compare(TestMessageScene o1, TestMessageScene o2) {
-				// TODO Auto-generated method stub				
+								
 				return o2.getPriority() - o1.getPriority();
 			}
 		});
@@ -476,7 +473,6 @@ public class MessageAutoTest {
 							testThread.join();
 						}
 					} catch (Exception e) {
-						// TODO: handle exception
 						LOGGER.warn(e.getMessage(), e);
 					}
 				}
@@ -488,7 +484,6 @@ public class MessageAutoTest {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					LOGGER.warn("InterruptedException", e);
 				}
 			}

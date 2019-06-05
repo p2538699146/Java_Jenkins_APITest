@@ -32,7 +32,7 @@ public class WebScriptTaskAction extends BaseAction<WebScriptTask> {
 
 	@Override
 	public String del() {
-		// TODO Auto-generated method stub
+		
 		//查看是否有报告文件，否则一并删除
 		model = webScriptTaskService.get(id);
 		FileUtils.deleteQuietly(new File(FrameworkUtil.getProjectPath() + File.separator + model.getReportPath()));		

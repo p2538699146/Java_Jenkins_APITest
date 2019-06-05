@@ -43,18 +43,17 @@ public class XMLMessageParse extends MessageParse {
 	
 	
 	protected XMLMessageParse() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public ComplexParameter parseMessageToObject(String message, List<Parameter> params) {
-		// TODO Auto-generated method stub
+		
 		Map maps = null;
 		try {
 			maps = XmlUtil.Dom2Map(message, null, null);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			LOGGER.error("xml报文解析失败:" + message, e);
 			return null;
 		}
@@ -70,7 +69,7 @@ public class XMLMessageParse extends MessageParse {
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter, String paramsData) {
-		// TODO Auto-generated method stub
+		
 		//return MessageKeys.XML_MESSAGE_HEAD_STRING + parseXmlMessage(complexParameter, new StringBuilder(""), messageData).toString();
 		return messageFormatBeautify(parseXmlMessage(complexParameter, new StringBuilder(""), PracticalUtils.jsonToMap(paramsData)).toString());
 	}
@@ -78,7 +77,7 @@ public class XMLMessageParse extends MessageParse {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		// TODO Auto-generated method stub
+		
 		Object[] o = null;
 		try {
 			o = (Object[]) XmlUtil.getXmlList(message, 3);
@@ -144,7 +143,7 @@ public class XMLMessageParse extends MessageParse {
 					JSONObject jo = JSONObject.fromObject(attributes);
 					attributesMap = (Map<String, String>) JSONObject.toBean(jo, Map.class);
 				} catch (Exception e) {
-					// TODO: handle exception
+					
 					LOGGER.error("属性参数转换成JSONObject失败:" + attributes, e);
 				}	
 				if (attributesMap != null) {
@@ -196,12 +195,12 @@ public class XMLMessageParse extends MessageParse {
 
 	@Override
 	public boolean messageFormatValidation(String message) {
-		// TODO Auto-generated method stub
+		
 		Document doc = null;
 	  	try {
 			doc = DocumentHelper.parseText(message);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			
 		}
 		
@@ -215,7 +214,7 @@ public class XMLMessageParse extends MessageParse {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Parameter> importMessageToParameter(String message, Set<Parameter> existParams) {
-		// TODO Auto-generated method stub
+		
 		Object[] paramsInfo = null;
 		try {
 			paramsInfo = (Object[]) XmlUtil.getXmlList(message, 3);
@@ -250,7 +249,7 @@ public class XMLMessageParse extends MessageParse {
 
 	@Override
 	public String getObjectByPath(String message, String path) {
-		// TODO Auto-generated method stub
+		
 		return XmlUtil.getObjectByXml(message, path, TypeEnum.string);
 	}
 	
@@ -267,7 +266,7 @@ public class XMLMessageParse extends MessageParse {
 		    writer.close();  
 		    return out.toString();			
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.warn("format xml message fail!", e);
 			return message;
 		}		
@@ -275,14 +274,14 @@ public class XMLMessageParse extends MessageParse {
 
 	@Override
 	public String parseMessageToSingleRow(String message) {
-		// TODO Auto-generated method stub
+		
 		String msg = super.parseMessageToSingleRow(message);
 		return msg.replaceAll(">\\s+<", "><");		
 	}
 
 	@Override
 	public String createMessageByNodes(JSONObject nodes) {
-		// TODO Auto-generated method stub
+		
 		Document document = DocumentHelper.createDocument();
 		//创建根节点
 		String rootName = nodes.getJSONObject(nodes.getString("rootId")).getString("parameterIdentify");

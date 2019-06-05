@@ -34,7 +34,7 @@ public class InterfaceApiTaskService implements ApiTaskService {
 
 	@Override
 	public ApiReturnInfo startTest(String moduleId, String guid) {
-		// TODO Auto-generated method stub
+		
 		Integer setId = Integer.valueOf(moduleId);
 		TestSet set = setService.get(setId);
 		if (set == null) {
@@ -66,7 +66,7 @@ public class InterfaceApiTaskService implements ApiTaskService {
 
 	@Override
 	public ApiReturnInfo checkTask(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		TestReport report = reportService.get(reportId);
 		if (report == null) {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "测试任务不存在", null);
@@ -76,13 +76,13 @@ public class InterfaceApiTaskService implements ApiTaskService {
 
 	@Override
 	public ApiReturnInfo stopTest(Integer reportId) {
-		// TODO Auto-generated method stub
+		
 		return new ApiReturnInfo(ApiReturnInfo.SUCCESS_CODE, "停止测试任务成功", null);
 	}
 
 	@Override
 	public ApiReturnInfo listModule() {
-		// TODO Auto-generated method stub
+		
 		JSONArray arr = new JSONArray();
 		
 		List<TestSet> sets = setService.findAll("parented='1'");
@@ -99,7 +99,7 @@ public class InterfaceApiTaskService implements ApiTaskService {
 
 	@Override
 	public ApiReturnInfo checkTaskByGuid(String guid) {
-		// TODO Auto-generated method stub
+		
 		TestReport report = reportService.findByGuid(guid);
 		if (report == null) {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "该测试任务不存在", null);

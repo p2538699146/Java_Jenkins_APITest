@@ -76,7 +76,7 @@ public class WebTestStepConfig implements Serializable {
 	}
 	public WebTestStepConfig() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String getWindowName() {
 		return windowName;

@@ -32,20 +32,20 @@ public class ParameterServiceImpl extends BaseServiceImpl<Parameter> implements 
 	
 	@Override
 	public List<Parameter> findByInterfaceId(int interfaceId) {
-		// TODO Auto-generated method stub
+		
 		return parameterDao.findByInterfaceId(interfaceId);
 	}
 
 	@Override
 	public void editProperty(int parameterId, String attrName, String attrValue) {
-		// TODO Auto-generated method stub
+		
 		parameterDao.editProperty(parameterId, attrName, attrValue);
 	}
 
 
 	@Override
 	public void delByInterfaceId(int interfaceId) {
-		// TODO Auto-generated method stub
+		
 		List<Parameter> params = findByInterfaceId(interfaceId);
 		
 		for (Parameter p:params) {
@@ -58,7 +58,7 @@ public class ParameterServiceImpl extends BaseServiceImpl<Parameter> implements 
 	public Parameter checkRepeatParameter(Integer parameterId,
 			String parameterIdentify, String path, String type,
 			Integer interfaceId) {
-		// TODO Auto-generated method stub
+		
 		return parameterDao.checkRepeatParameter(parameterId, parameterIdentify, path, type, interfaceId);
 	}
 

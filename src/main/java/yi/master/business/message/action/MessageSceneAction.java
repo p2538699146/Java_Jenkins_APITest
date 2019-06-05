@@ -173,7 +173,7 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		if (messageId != null) {
 			this.filterCondition = new String[]{"message.messageId=" + messageId};
 		}

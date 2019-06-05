@@ -179,7 +179,7 @@ public class TestData implements Serializable {
 
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
+		
 		int result = 17;
 		result = result * 31 + dataId;
 		
@@ -189,7 +189,7 @@ public class TestData implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
+		
 		if (obj == this) {
 			return true;
 		}

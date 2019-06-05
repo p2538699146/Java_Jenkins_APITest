@@ -72,7 +72,7 @@ public class WebScriptModule implements Serializable {
 
 	public WebScriptModule() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void setTasks(Set<WebScriptTask> tasks) {

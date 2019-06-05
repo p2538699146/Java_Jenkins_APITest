@@ -33,43 +33,43 @@ public class TestSetServiceImpl extends BaseServiceImpl<TestSet> implements Test
 
 	@Override
 	public List<MessageScene> getEnableAddScenes(Integer setId) {
-		// TODO Auto-generated method stub
+		
 		return testSetDao.getEnableAddScenes(setId);
 	}
 
 	@Override
 	public void addSceneToSet(Integer setId, Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		testSetDao.addSceneToSet(setId, messageSceneId);
 	}
 
 	@Override
 	public void delSceneToSet(Integer setId, Integer messageSceneId) {
-		// TODO Auto-generated method stub
+		
 		testSetDao.delSceneToSet(setId, messageSceneId);
 	}
 
 	@Override
 	public List<TestSet> getUserSets(Integer userId) {
-		// TODO Auto-generated method stub
+		
 		return testSetDao.getUserSets(userId);
 	}
 
 	@Override
 	public void updateSettingConfig(Integer setId, TestConfig config) {
-		// TODO Auto-generated method stub
+		
 		testSetDao.updateSettingConfig(setId, config);
 	}
 
 	@Override
 	public List<TestSet> getRootSet() {
-		// TODO Auto-generated method stub
+		
 		return testSetDao.getRootSet();
 	}
 
 	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
+		
 		TestSet set = get(id);
 		if (set == null) {
 			return;
@@ -90,7 +90,7 @@ public class TestSetServiceImpl extends BaseServiceImpl<TestSet> implements Test
 
 	@Override
 	public void moveFolder(Integer setId, Integer parentId) {
-		// TODO Auto-generated method stub
+		
 		testSetDao.moveFolder(setId, parentId);
 	}
 
@@ -99,7 +99,7 @@ public class TestSetServiceImpl extends BaseServiceImpl<TestSet> implements Test
 			int dataNo, int pageSize, String orderDataName, String orderType,
 			String searchValue, List<List<String>> dataParams, int mode,
 			String... filterCondition) {
-		// TODO Auto-generated method stub
+		
 		return testSetDao.listSetMessageScene(setId, dataNo, pageSize, orderDataName, orderType,
 				searchValue, dataParams, mode, filterCondition);
 	}

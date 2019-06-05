@@ -63,7 +63,7 @@ public class TestDataAction extends BaseAction<TestData> {
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		if (this.messageSceneId != null) {
 			this.filterCondition = new String[]{"messageScene.messageSceneId=" + messageSceneId};
 		}
@@ -121,7 +121,7 @@ public class TestDataAction extends BaseAction<TestData> {
 	
 	@Override
 	public String get() {
-		// TODO Auto-generated method stub
+		
 		if (model.getDataId() == null) {
 			model.setDataId(id);
 		}
@@ -151,7 +151,7 @@ public class TestDataAction extends BaseAction<TestData> {
 		try {
 			params = msg.getComplexParameter().getEnableSettingDataParameter(null);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.warn(msg.getInterfaceName() + "-" + msg.getMessageName() + ":" + e.getMessage(), e);
 			
 			jsonMap.put("msg", "接口参数有改动,请检查或者重新设置该场景所属报文的入参规则!");
@@ -270,7 +270,6 @@ public class TestDataAction extends BaseAction<TestData> {
 				testData.setParamsData(JsonUtil.getObjectByJson(paramsData));
 				testDataService.edit(testData);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				LOGGER.warn(e.getMessage(), e);
 				failCount++;
 				continue;
@@ -294,7 +293,7 @@ public class TestDataAction extends BaseAction<TestData> {
 	
 	@Override
 	public String del() {
-		// TODO Auto-generated method stub
+		
 		if (CacheUtil.checkLockedTestData(model.getDataId())) {
 			
 			jsonMap.put("msg", "该条测试数据正在被使用，请稍后再更新!");
@@ -307,7 +306,7 @@ public class TestDataAction extends BaseAction<TestData> {
 
 	@Override
 	public String edit() {
-		// TODO Auto-generated method stub
+		
 		if (CacheUtil.checkLockedTestData(model.getDataId())) {
 			
 			jsonMap.put("msg", "该条测试数据正在被使用，请稍后再更新!");

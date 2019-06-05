@@ -36,7 +36,7 @@ public class InterfaceMockInterceptor extends AbstractInterceptor {
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
-		// TODO Auto-generated method stub
+		
 		User user = null;
 		OperationInterface opInterface = null;
 		String callUrl = null; 
@@ -82,7 +82,7 @@ public class InterfaceMockInterceptor extends AbstractInterceptor {
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			logger.error(request.getRequestURI() + " 接口mock出错!", e);
 			interceptStatus = "7";
 			mark = PracticalUtils.getExceptionAllinformation(e);

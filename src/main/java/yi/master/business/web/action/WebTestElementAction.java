@@ -57,7 +57,7 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		if (StringUtils.isNotEmpty(nodeFlag)) {
 			conditions.add("elementType not in ('" + WebTestKeys.WEB_ELEMENT_TYPE_TAG + "','" + WebTestKeys.WEB_ELEMENT_TYPE_URL + "')");

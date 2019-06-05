@@ -48,7 +48,6 @@ public class MockGenerateRuleConfig implements Serializable {
 	}
 	public MockGenerateRuleConfig() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public String generateValue(String requestMsg) {

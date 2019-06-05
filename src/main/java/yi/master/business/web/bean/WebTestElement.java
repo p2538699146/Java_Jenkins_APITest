@@ -108,7 +108,7 @@ public class WebTestElement implements Serializable, LogModifyUtil, Cloneable {
 
 	public WebTestElement() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	
@@ -281,7 +281,7 @@ public class WebTestElement implements Serializable, LogModifyUtil, Cloneable {
 	
 	@Override
 	public Object clone() {
-		// TODO Auto-generated method stub
+		
 		Object o = null;
 		try {
 			o = super.clone();
@@ -290,7 +290,7 @@ public class WebTestElement implements Serializable, LogModifyUtil, Cloneable {
 				((WebTestElement) o).setChildElements(new HashSet<WebTestElement>());
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			LOGGER.warn("clone exception", e);
 		}
 		return o;
@@ -298,7 +298,7 @@ public class WebTestElement implements Serializable, LogModifyUtil, Cloneable {
 
 	@Override
 	public void logModify(String userName, Object oldObject) {
-		// TODO Auto-generated method stub
+		
 		if (oldObject == null || !(oldObject instanceof WebTestElement)) {
 			return;
 		}		

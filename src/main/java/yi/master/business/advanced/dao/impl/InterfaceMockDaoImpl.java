@@ -13,14 +13,14 @@ public class InterfaceMockDaoImpl extends BaseDaoImpl<InterfaceMock> implements 
 
 	@Override
 	public InterfaceMock findByMockUrl(String mockUrl) {
-		// TODO Auto-generated method stub
+		
 		String hql = "From InterfaceMock m where m.mockUrl=:mockUrl";		
 		return (InterfaceMock) getSession().createQuery(hql).setString("mockUrl", mockUrl).uniqueResult();
 	}
 
 	@Override
 	public void updateStatus(Integer mockId, String status) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update InterfaceMock m set m.status=:status where m.mockId=:mockId";
 		getSession().createQuery(hql).setInteger("mockId", mockId).setString("status", status).executeUpdate();
 	}
@@ -28,14 +28,14 @@ public class InterfaceMockDaoImpl extends BaseDaoImpl<InterfaceMock> implements 
 	@Override
 	public void updateSetting(Integer mockId, String settingType,
 			String configJson) {
-		// TODO Auto-generated method stub
+		
 		String hql = "update InterfaceMock m set m." + settingType + "=:configJson where m.mockId=:mockId";
 		getSession().createQuery(hql).setInteger("mockId", mockId).setString("configJson", configJson).executeUpdate();
 	}
 
 	@Override
 	public List<InterfaceMock> getEnableSocketMock() {
-		// TODO Auto-generated method stub
+		
 		String hql = "From InterfaceMock m where m.protocolType='Socket' and m.status='0'";
 		return getSession().createQuery(hql).list();
 	}

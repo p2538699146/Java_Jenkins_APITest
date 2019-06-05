@@ -65,7 +65,7 @@ public class MessageAction extends BaseAction<Message>{
 	
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		if (this.interfaceId != null) {
 			conditions.add("interfaceInfo.interfaceId=" + interfaceId);
@@ -191,7 +191,7 @@ public class MessageAction extends BaseAction<Message>{
 	
 	@Override
 	public String get() {
-		// TODO Auto-generated method stub
+		
 		Message msg = messageService.get(id);		
 		
 		MessageParse parseUtil = MessageParse.getParseInstance(msg.getMessageType());

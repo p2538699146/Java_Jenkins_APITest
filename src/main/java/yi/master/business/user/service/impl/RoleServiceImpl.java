@@ -27,20 +27,20 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
 	@Override
 	public Role get(String roleName) {
-		// TODO Auto-generated method stub
+		
 		return roleDao.get(roleName);
 	}
 
 	@Override
 	public void changeUserRole(int roleId) {
-		// TODO Auto-generated method stub
+		
 		roleDao.changeUserRole(roleId);
 		
 	}
 
 	@Override
 	public void del(int roleId) {
-		// TODO Auto-generated method stub
+		
 		roleDao.changeUserRole(roleId);
 		roleDao.delete(roleId);		
 	}

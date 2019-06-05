@@ -47,7 +47,7 @@ public class TestResultAction extends BaseAction<TestResult> {
 		
 	@Override
 	public String[] prepareList() {
-		// TODO Auto-generated method stub
+		
 		List<String> conditions = new ArrayList<String>();
 		if (reportId != null && model.getRunStatus() != null) {
 			conditions.add("protocolType!='FIXED'");

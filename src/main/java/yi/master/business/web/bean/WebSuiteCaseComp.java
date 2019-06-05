@@ -47,7 +47,7 @@ public class WebSuiteCaseComp implements Serializable {
 
 	public WebSuiteCaseComp() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Integer getCompId() {
