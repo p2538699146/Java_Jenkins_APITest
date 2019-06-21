@@ -186,6 +186,7 @@ public class JSONMessageParse extends MessageParse {
 					message.append(",");
 				}
 			}
+			
 						
 			message.append("]");
 			break;

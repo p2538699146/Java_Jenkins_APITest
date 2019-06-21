@@ -264,8 +264,12 @@ public abstract class MessageParse {
 		
 		//List类型，多个相同的值的话，用一个就删除一个
 		List<String> values = (List<String>) messageData.get(path);
-		String value = values.get(0);
 		
+		if (values.size() < 1) {
+			//如果已经取完，就用默认数据
+			return param.getDefaultValue();
+		}
+		String value = values.get(0);
 		values.remove(0);
 		
 		return value;
@@ -281,7 +285,22 @@ public abstract class MessageParse {
 			return "";
 		}
 		
-		return  messageData.get(path).toString();
+		if (messageData.get(path) instanceof String) {
+			return  messageData.get(path).toString();
+		}
+		
+		//List类型，多个相同的值的话，用一个就删除一个
+		List<String> values = (List<String>) messageData.get(path);
+		
+		if (values.size() < 1) {
+			//如果已经取完，就用默认数据
+			return "";
+		}
+		
+		String value = values.get(0);
+		values.remove(0);
+		
+		return  value;
 	}
 	
 	/**
@@ -341,6 +360,7 @@ public abstract class MessageParse {
             }
             
             if (obj instanceof List || obj instanceof ArrayList) {
+            	
             	ls = (ArrayList)obj;
             	for (int i = 0;i < ls.size();i++) {     		
             		selfComplexParameter = null;
