@@ -10,13 +10,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import net.sf.json.JSONObject;
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
@@ -258,8 +255,8 @@ public abstract class MessageParse {
 			return param.getDefaultValue();
 		}
 		
-		if (messageData.get(path) instanceof String) {
-			return  messageData.get(path).toString();
+		if (messageData.get(path) instanceof String ) {
+			return  StringUtils.isBlank(messageData.get(path).toString()) ? param.getDefaultValue() : messageData.get(path).toString();
 		}
 		
 		//List类型，多个相同的值的话，用一个就删除一个
@@ -272,7 +269,7 @@ public abstract class MessageParse {
 		String value = values.get(0);
 		values.remove(0);
 		
-		return value;
+		return StringUtils.isBlank(value) ? param.getDefaultValue() : value;
 		
 	}	
 	

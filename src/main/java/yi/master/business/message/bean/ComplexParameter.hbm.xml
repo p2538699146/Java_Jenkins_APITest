@@ -14,7 +14,7 @@
             <column name="self_parameter_id" />
         </many-to-one>             
         
-        <set name="childComplexParameters" cascade="all-delete-orphan" lazy="true" inverse="true">
+        <set name="childComplexParameters" cascade="all-delete-orphan" lazy="true" inverse="true" order-by="id asc">
             <key>
                 <column name="next_complex_parameter_id" />
             </key>

@@ -116,7 +116,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 		TestSet set = testSetService.get(Integer.valueOf(report.getTestMode()));
 		//如果对应的测试集存在则优先使用该测试集配置的收信人，如果对应的测试集已被删除则使用全局默认的收信人
 		String receiveAddress_s = null, copyAddress_s = null;
-		if (set != null) {
+		if (set != null && set.getConfig() != null) {
 			receiveAddress_s = set.getConfig().getMailReceiveAddress();
 			copyAddress_s = set.getConfig().getMailCopyAddress();
 		}

@@ -372,27 +372,25 @@ function getParamsData() {
 	var paramInputs = $("#select-parameters .setting-parameter-input");
 	var paramsData={};
 	$.each(paramInputs, function(i, n) {
-		if ($(n).val() != null && $(n).val() != "") {
-			for (var i = 0;i < currParams.length;i++) {
-				if (($(n).attr("name") == (currParams[i].path))
-						&& ($(n).val() == currParams[i].defaultValue)) {
-					return true;
-				}
+		for (var i = 0;i < currParams.length;i++) {
+			if (($(n).attr("name") == (currParams[i].path))
+					&& ($(n).val() == currParams[i].defaultValue)) {
+				return true;
 			}
-			if (paramsData["TopRoot." + $(n).attr("name")] != null) {
-				var indexValue = paramsData["TopRoot." + $(n).attr("name")];
-				
-				if (typeof indexValue == 'object') {
-					indexValue.push($(n).val());
-				} else {
-					paramsData["TopRoot." + $(n).attr("name")] = [];
-					paramsData["TopRoot." + $(n).attr("name")].push(indexValue);
-					paramsData["TopRoot." + $(n).attr("name")].push($(n).val());
-				}
-				
+		}
+		if (paramsData["TopRoot." + $(n).attr("name")] != null) {
+			var indexValue = paramsData["TopRoot." + $(n).attr("name")];
+			
+			if (typeof indexValue == 'object') {
+				indexValue.push($(n).val());
 			} else {
-				paramsData["TopRoot." + $(n).attr("name")] = $(n).val();
-			}								
+				paramsData["TopRoot." + $(n).attr("name")] = [];
+				paramsData["TopRoot." + $(n).attr("name")].push(indexValue);
+				paramsData["TopRoot." + $(n).attr("name")].push($(n).val());
+			}
+			
+		} else {
+			paramsData["TopRoot." + $(n).attr("name")] = $(n).val();
 		}
 	});
 	
