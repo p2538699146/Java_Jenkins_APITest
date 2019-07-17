@@ -958,6 +958,7 @@ function longTextData(dataFieldName, titleFieldName, titleName, handleObjectFun)
 	    "className":"ellipsis",
 	    "render":function(data, type, full, meta) { 
 	    	if (data != "" && data != null) {
+	    		data = data.replace(/>/g, '&gt;').replace(/</g, '&lt;');
 		    	return '<a href="javascript:;" onclick="showMark(\'' + full[titleFieldName] + '\', \'' + dataFieldName + '\', this, \'' + titleName + '\');"><span title="' + data + '">' + data + '</span></a>';
 	    	}
 	    	return "";

@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.apache.struts2.json.annotations.JSON;
 
-import yi.master.annotation.FieldNameMapper;
 import yi.master.business.user.bean.Role;
 import yi.master.business.user.bean.User;
 
