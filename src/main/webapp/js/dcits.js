@@ -1076,6 +1076,7 @@ function layer_show (title, url, w, h, type, success, cancel, end, other) {
 		shadeClose:true,
 		title: title,
 		content: url,
+		offset:'30px',
 		success:function(layero, index){
 			$(layero).find('#layerIndex').val(index);
 			success && success(layero, index);

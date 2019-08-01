@@ -1,3 +1,10 @@
+var settingLayerIndex;//当前打开的变量配置的layer窗口
+var settingMode;//0 - 编辑页面设置  1 - 单独设置、
+var settingType;//当前正在编辑的变量类型
+var settingValue;//当前正在编辑的变量配置内容
+var variableId;//当前正在编辑的变量id
+
+
 var variableTypeInfo = {
 		httpCallParameter:{
 			text:"HTTP调用参数",
@@ -121,6 +128,21 @@ var variableTypeInfo = {
 			layerHeight:"310",
 			keyIsNull:false,
 			ifCreate:true
+		},
+		dynamicInterface:{
+			text:"动态接口",
+			settingValue:{
+				sceneId:"",
+				systemId:"",
+				protocolType:"",
+				valueExpression:"",
+				sceneName:"",
+				systemName:""
+			},
+			layerHeight:"405",
+			layerWidth: "733",
+			keyIsNull:false,
+			ifCreate:true
 		}
 };
 
@@ -187,7 +209,8 @@ var templateParams = {
 				        {value:"randomNum", text:variableTypeInfo.randomNum.text},
 				        {value:"currentTimestamp", text:variableTypeInfo.currentTimestamp.text},
 				        {value:"randomString", text:variableTypeInfo.randomString.text},
-				        {value:"uuid", text:variableTypeInfo.uuid.text}]
+				        {value:"uuid", text:variableTypeInfo.uuid.text},
+				        {value:"dynamicInterface", text:variableTypeInfo.dynamicInterface.text}]
 				}]
 		},
 		{
@@ -197,6 +220,29 @@ var templateParams = {
 			input:[{	
 				name:"key",
 				placeholder:"自定义key"
+				}]
+		},
+		{
+			edit:false,
+			required:true,
+			label:"唯一性范围",  
+			reminder:"表明一些需要动态生成的变量在何在使用范围下不会再次生成而使用上一次生成的值",
+			select:[{	
+				name:"uniqueScope",
+				option:[{value:"0", text:"忽略该配置"},
+				        {value:"1", text:"同一个测试集"},
+				        {value:"2", text:"同一个组合场景"},
+				        {value:"3", text:"同一个测试场景"}]
+				}]
+		},
+		{
+			edit:false,
+			required:true,
+			label:"有效期",  
+			reminder:"表明一些需要动态生成的变量在指定的时间范围内不会再次生成而使用上一次生成的值，单位为秒",
+			input:[{	
+				name:"validityPeriod",
+				placeholder:"单位为秒,默认为0"
 				}]
 		},
 		{
@@ -237,6 +283,12 @@ var templateParams = {
 			textarea:[{
 				name:"mark"	
 			}]
+		},
+		{
+			name: "lastCreateValue"
+		},
+		{
+			name: "expiryDate"
 		}	
 		]		
 	};
@@ -296,6 +348,10 @@ var columnsSetting = [
 		   			uuid:{
 		   				status:"UUID",
 		   				btnStyle:"success"
+		   			},
+		   			dynamicInterface:{
+		   				status:"动态接口",
+		   				btnStyle:"danger"
 		   			}
 		   	};
 		   	return labelCreate(data, context);
@@ -316,7 +372,7 @@ var columnsSetting = [
 	    "data":"value",
 	    "className":"ellipsis",
 	    "render":function(data, type, full, meta ) {
-	    	if (data != "" && data != null &&　data != " ") {	    		
+	    	if (data != null && data.trim().length > 0) {	    		
 	    		if (full.variableType == "constant") {
 	    			return '<a href="javascript:;" onclick="showMark(\'' + full.variableName + '\', \'value\', this, \'value值\');"><span title="' + data + '">' + data + '</span></a>';
 	    		} else {
@@ -364,11 +420,6 @@ var columnsSetting = [
 	    	}]));	    	
 	    }}];
 
-var settingLayerIndex;//当前打开的变量配置的layer窗口
-var settingMode;//0 - 编辑页面设置  1 - 单独设置、
-var settingType;
-var settingValue;
-var variableId;
 var eventList = {
 		"#list-by-variable-type":{
 			'change':function() {
@@ -377,7 +428,7 @@ var eventList = {
 		},
 		"#add-object":function(){
 			publish.renderParams.editPage.modeFlag = 0;					
-			layer_show("添加全局变量", editHtml, "650", "450", 1);
+			layer_show("添加全局变量", editHtml, editPageWidth, editPageHeight.add, 1);
 			publish.init();
 			
 		},
@@ -389,7 +440,7 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			publish.renderParams.editPage.modeFlag = 1;	
   			publish.renderParams.editPage.objId = data.variableId;
-			layer_show("编辑全局变量信息", editHtml, "800", "550", 1);
+  			layer_show("编辑全局变量信息", editHtml, editPageWidth, editPageHeight.edit, 1);
 			publish.init();	
 		},
 		".object-del":function(){
@@ -424,9 +475,24 @@ var eventList = {
 				layer.alert('<span class="c-success">常量值：</span><br>' + data.value, {icon:1, anim:5, title:data.variableName});
 				return;
 			}
-			$.post(top.GLOBAL_VARIABLE_CREATE_VARIABLE_URL, {variableType:data.variableType, value:data.value}, function(json) {
+			$.post(top.GLOBAL_VARIABLE_CREATE_VARIABLE_URL, {variableId:data.variableId}, function(json) {
 				if (json.returnCode == 0) {
-					layer.alert('<span class="c-success">生成变量成功：</span><br>' + json.msg, {icon:1, anim:5, title:data.variableName});
+					layer.alert('<div id="create-result"><span class="c-success">生成变量成功：</span><br>' + json.msg + '</div>'
+							, {icon:1, anim:5, title:data.variableName, btn: ['强制刷新', '确定'], offset: '120px'}
+							,function(index, layero){
+								$.post(top.GLOBAL_VARIABLE_CREATE_VARIABLE_URL, {variableId:data.variableId, foreceCreate:true}, function(json){
+									if (json.returnCode == 0) {
+										$(layero).find('#create-result').html('<span class="c-success">生成变量成功：</span><br>' + json.msg);
+									} else {
+										layer.close(index);
+										layer.alert('<span class="c-danger">生成变量失败：</span><br>' + json.msg, {icon:5, anim:5, title:data.variableName, offset: '120px'});
+									}
+								});								
+							}
+							,function(index){
+								layer.close(index);
+							}	
+					);
 				} else {
 					layer.alert('<span class="c-danger">生成变量失败：</span><br>' + json.msg, {icon:5, anim:5, title:data.variableName});
 				}
@@ -489,7 +555,8 @@ var mySetting = {
 				df.resolve();
 			},
 			renderCallback:function(obj){
-				$("#variableType").trigger('change');				
+				$("#variableType").trigger('change');
+				$("#uniqueScope").trigger('change');				
 			},
 			messages:{
 				variableName:"请输入变量或者模板的名称",
@@ -500,6 +567,12 @@ var mySetting = {
 					required:true,
 					minlength:2,
 					maxlength:255
+				},
+				validityPeriod:{
+					required:true,
+					digits:true,
+					minlength:1,
+					maxlength:11
 				},
 				key:{
 					required:true,					
@@ -554,6 +627,7 @@ function changeFormByVariableType (variableType) {
 		case "webServiceCallParameter":
 		case "relatedKeyWord":
 		case "setRuntimeSetting":
+		case "dynamicInterface":
 			showOrHideInput('hidden', 'button');
 			break;
 		case "datetime":
@@ -595,9 +669,53 @@ function showSettingPage(title) {
 	if (title == null) {
 		title = variableTypeInfo[settingType]["text"];
 	}
-	layer_show( title + "-配置", templates["global-variable-setting-value"](), '680', variableTypeInfo[settingType]["layerHeight"], 1
+	layer_show( title + "-配置", templates["global-variable-setting-value"](), variableTypeInfo[settingType]["layerWidth"] || '680', variableTypeInfo[settingType]["layerHeight"], 1
 			, function(layero, index) {
-				settingLayerIndex = index;				
+				settingLayerIndex = index;	
+				
+				//该页面相关方法定义
+				//选择测试环境
+				$(layero).find('#choose-system').click(function(){
+					if (!strIsNotEmpty($(".dynamicInterface #protocolType").val())) {
+						layer.msg("请先选择接口场景!", {icon:5, time:1800});
+						return false;
+					}						
+					$.post(top.BUSINESS_SYSTEM_LIST_ALL_URL, {protocolType:$(".dynamicInterface #protocolType").val()}, function (json) {
+						if (json.returnCode == 0) {
+							if (json.data.length < 1) {
+								layer.msg('无匹配的测试环境可供选择', {icon:0, time:1800});
+								return false;
+							}
+							layerMultipleChoose({
+								title:"请选择测试环境(最多选择一个)",
+								customData:{//自定义数据，Array数组对象
+									enable:true,
+									data:json.data,
+									textItemName:["systemName", "protocolType"],
+									valueItemName:"systemId"
+								},
+								choosedValues:$(".dynamicInterface #systemId").val().split(","),//已被选择的数据合集		
+								closeLayer:true,//是否在确认之后自动关闭窗口
+								maxChooseCount:1,
+								minChooseCount:1,
+								//选择之后的回调	
+								confirmCallback:function (chooseValues, chooseObjects, index) {
+									console.log();
+									$(".dynamicInterface #systemNameText").text(chooseObjects[0]['systemName']);
+									$(".dynamicInterface #systemName").val(chooseObjects[0]['systemName']);
+									$(".dynamicInterface #systemId").val(chooseValues[0]);
+								} 					
+						});				
+						} else {
+							layer.alert(json.msg, {icon:5});
+						}
+					});	
+				});
+				
+				//选择测试场景
+				$(layero).find('#choose-scene').click(function(){
+					layer_show("选择测试场景", "../advanced/chooseMessageScene.html?callbackFun=chooseTestScene&notMultiple=true", null, null, 2);	
+				});			
 				if (strIsNotEmpty(settingValue)) {
 					$.each(JSON.parse(settingValue), function(i, n) {						
 						
@@ -613,9 +731,30 @@ function showSettingPage(title) {
 							if (i == "ORDER") {
 								$("#objectSeqText").text(n);
 							}
+							
+							//动态接口
+							if (i == "systemName" || i == "sceneName") {
+								$("#" + i + "Text").text(n);
+							}
 						}
 					});
 				}
 				$("div ." + settingType).removeClass('hide');						
 	});
+}
+
+/**
+ * 选择测试场景之后的回调
+ * @param obj
+ * @returns {Boolean}
+ */
+function chooseTestScene (sceneObj) {
+	if (sceneObj == null) {
+		return false;
+	}	
+	
+	$('.dynamicInterface #protocolType').val(sceneObj.protocolType);
+	$('.dynamicInterface #sceneId').val(sceneObj.messageSceneId);
+	$('.dynamicInterface #sceneName').val(sceneObj.interfaceName + '-' + sceneObj.messageName + '-' + sceneObj.sceneName);
+	$('.dynamicInterface #sceneNameText').text(sceneObj.interfaceName + '-' + sceneObj.messageName + '-' + sceneObj.sceneName);
 }

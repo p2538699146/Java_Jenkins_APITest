@@ -33,6 +33,8 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 	
 	private GlobalVariableService globalVariableService;
 	
+	private Boolean foreceCreate;
+	
 	@Autowired
 	public void setGlobalVariableService(
 			GlobalVariableService globalVariableService) {
@@ -50,6 +52,11 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 			//新增
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			model.setUser(new User(user.getUserId()));
+			model.setExpiryDate(new Timestamp(System.currentTimeMillis()));
+			model.setUniqueScope("0");
+			if (model.getValidityPeriod() == null) {
+				model.setValidityPeriod(0);
+			}
 		}
 		
 		//验证key的唯一性
@@ -104,16 +111,19 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 	 * @return
 	 */
 	public String createVariable() {
-		GlobalVariable variable = new GlobalVariable();
-		variable.setVariableType(model.getVariableType());
-		variable.setValue(model.getValue());
-		String str = variable.createSettingValue().toString();
+		model = globalVariableService.get(model.getVariableId());
+		if (model == null) {
+			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "该全局变量不存在！");
+			return SUCCESS;
+		}
+		
+		Object str = model.createSettingValue(foreceCreate == null ? false : foreceCreate);
 		
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		jsonMap.put("msg", str);
 		if (str == null) {
 			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			jsonMap.put("msg", variable.getCreateErrorInfo());
+			jsonMap.put("msg", model.getCreateErrorInfo());
 		}
 		
 		
@@ -132,6 +142,10 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 		if (model.getVariableId() == null) {
 			checkNameFlag = (info == null) ? "true" : "重复的key";
 		}
+	}
+	
+	public void setForeceCreate(Boolean foreceCreate) {
+		this.foreceCreate = foreceCreate;
 	}
 
 }

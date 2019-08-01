@@ -13,9 +13,12 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.opensymphony.xwork2.ActionContext;
+
 import yi.master.annotation.util.AnnotationUtil;
 import yi.master.business.base.service.BaseService;
-import com.opensymphony.xwork2.ActionContext;
+import yi.master.business.user.bean.User;
+import yi.master.constant.SystemConsts;
 
 /**
  * 框架工具类
@@ -38,6 +41,14 @@ public class FrameworkUtil {
 	private static ApplicationContext ctx;
 	
 	private static ServletContext webContext;
+	
+	/**
+	 * 获取当前登录用户
+	 * @return
+	 */
+	public static User getLoginUser() {
+		return (User) getSessionMap().get(SystemConsts.SESSION_ATTRIBUTE_LOGIN_USER);
+	}
 	
 	
 	@SuppressWarnings("unchecked")

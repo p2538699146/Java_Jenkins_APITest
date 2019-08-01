@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.json.annotations.JSON;
 
 import yi.master.annotation.FieldNameMapper;
+import yi.master.business.advanced.bean.InterfaceProbe;
+import yi.master.business.advanced.bean.PerformanceTestConfig;
 import yi.master.business.message.service.TestDataService;
 import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.constant.MessageKeys;
@@ -136,6 +138,16 @@ public class MessageScene implements Serializable, Cloneable {
      */
     private Set<BusinessSystem> businessSystems;
     
+    /**
+     * 关联的性能测试
+     */
+    private Set<PerformanceTestConfig> ptsConfigs = new HashSet<>();
+    
+    /**
+     * 关联的接口探测
+     */
+    private Set<InterfaceProbe> probes = new HashSet<>();
+    
     
     
      
@@ -161,6 +173,25 @@ public class MessageScene implements Serializable, Cloneable {
     
     
     // Property accessors   
+    @JSON(serialize = false)
+    public Set<PerformanceTestConfig> getPtsConfigs() {
+		return ptsConfigs;
+	}
+
+	public void setPtsConfigs(Set<PerformanceTestConfig> ptsConfigs) {
+		this.ptsConfigs = ptsConfigs;
+	}
+
+	@JSON(serialize = false)
+	public Set<InterfaceProbe> getProbes() {
+		return probes;
+	}
+
+
+	public void setProbes(Set<InterfaceProbe> probes) {
+		this.probes = probes;
+	}
+    
     
     public String getSystems() {
 		return systems;

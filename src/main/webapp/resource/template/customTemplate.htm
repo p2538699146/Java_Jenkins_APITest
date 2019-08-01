@@ -105,8 +105,8 @@
 	<form action="" method="post" class="form form-horizontal" id="form-edit">
 	{{#each this}}
 		{{#if label}}
-		<div class="row cl {{#if edit}}editFlag{{/if}}" {{#if edit}}style="display: none"{{/if}}>			
-			<label class="form-label col-xs-4 col-sm-3">{{#if reminder}}<a style="text-decoration: none;" href="javascript:layer.alert('{{reminder}}', {title:'提示', shadeClose:'true'});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>{{/if}}{{#if required}}<span class="c-red">*</span>{{/if}}{{{label}}}: </label>			
+		<div class="row cl {{#if edit}}editFlag{{/if}}" {{#if edit}}style="display: none"{{/if}}>	
+			<label class="form-label col-xs-4 col-sm-3">{{#if reminder}}<a style="text-decoration: none;" href="javascript:layer.alert('{{reminder}}', {title:'提示', shadeClose:'true',offset:'120px',icon:0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>{{/if}}{{#if required}}<span class="c-red">*</span>{{/if}}{{{label}}}: </label>		
 			<div class="formControls col-xs-8 col-sm-9">	
 				{{#if objText}}
 					<span id="{{objText}}"></span>
@@ -964,6 +964,39 @@
 			<input type="text" class="input-text" id="uuidSeparator">
 		</div>
 	</div>
+	<div class="row cl dynamicInterface hide">
+		<div class="formControls col-xs-9 col-sm-10 col-xs-offset-3 col-sm-offset-2">		
+			通过某一个接口的测试场景获取出参结果，通过<span class="label label-primary radius"> 出参路径 </span>或者<span class="label label-primary radius"> 关联表达式 </span>来获取指定的值。<br>
+			<span class="label label-danger radius"> 出参路径: </span>&nbsp;<span class="label label-default radius"> ROOT.target.code </span><br>
+			<span class="label label-danger radius"> 关联表达式: </span>&nbsp;<span class="label label-default radius"> {"LB":"ret_code:\"","RB":",","OFFSET":"","ORDER":"1","LENGHT":""} </span>
+		</div>
+	</div>
+	<div class="row cl dynamicInterface hide">
+		<label class="form-label col-xs-4 col-sm-3">测试场景：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="hidden" class="input-text" id="protocolType">
+			<input type="hidden" class="input-text" id="sceneId">
+			<input type="hidden" class="input-text" id="sceneName">
+			<span id="sceneNameText"></span>
+ 			<input type="button" class="btn btn-MINI btn-primary radius" id="choose-scene" value="选择">
+		</div>
+	</div>
+	<div class="row cl dynamicInterface hide">
+		<label class="form-label col-xs-4 col-sm-3">测试环境：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="hidden" class="input-text" id="systemId">
+			<input type="hidden" class="input-text" id="systemName">
+			<span id="systemNameText"></span>
+ 			<input type="button" class="btn btn-MINI btn-primary radius" id="choose-system" value="选择">
+		</div>
+	</div>
+	<div class="row cl dynamicInterface hide">
+		<label class="form-label col-xs-4 col-sm-3">出参取值：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" id="valueExpression" placeholder="ROOT.target.code">
+		</div>
+	</div>
+
 	<div class="row cl">
 		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
 			<button class="btn btn-primary radius" type="button" id="save-setting-variable-value"><i class="Hui-iconfont">&#xe632;</i>保存</button>

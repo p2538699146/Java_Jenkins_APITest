@@ -6,8 +6,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.json.annotations.JSON;
@@ -15,10 +13,14 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import net.sf.json.JSONObject;
 import yi.master.annotation.FieldRealSearch;
 import yi.master.business.message.bean.SceneValidateRule;
+import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.GlobalVariableConstant;
+import yi.master.coretest.message.test.MessageAutoTest;
+import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 
 /**
@@ -46,17 +48,54 @@ public class GlobalVariable implements Serializable {
 
 	private static final Logger LOGGER = Logger.getLogger(GlobalVariable.class);
 	
+	/**
+	 * http接口调用参数
+	 */
 	public static final String VARIABLE_TYPE_CALL_PARAMETER_HTTP = "httpCallParameter";
+	/**
+	 * socket接口调用参数
+	 */
 	public static final String VARIABLE_TYPE_CALL_PARAMETER_SOCKET = "socketCallParameter";
+	/**
+	 * webservice接口调用参数
+	 */
 	public static final String VARIABLE_TYPE_CALL_PARAMETER_WEBSERVICE = "webServiceCallParameter";
+	/**
+	 *  关联配置
+	 */
 	public static final String VARIABLE_TYPE_VALIDATE_RELATED_KEY_WORD = "relatedKeyWord";
+	/**
+	 * 测试集运行配置
+	 */
 	public static final String VARIABLE_TYPE_SET_RUNTIME_SETTING = "setRuntimeSetting";
+	/**
+	 * 常量
+	 */
 	public static final String VARIABLE_TYPE_CONSTANT = "constant";
+	/**
+	 * 时间日期
+	 */
 	public static final String VARIABLE_TYPE_DATETIME = "datetime";
+	/**
+	 * 随机数
+	 */
 	public static final String VARIABLE_TYPE_RANDOM_NUM = "randomNum";
+	/**
+	 * 当前时间戳
+	 */
 	public static final String VARIABLE_TYPE_CURRENT_TIMESTAMP = "currentTimestamp";
+	/**
+	 * 随机字符串
+	 */
 	public static final String VARIABLE_TYPE_RANDOM_STRING = "randomString";
+	/**
+	 * uuid
+	 */
 	public static final String VARIABLE_TYPE_UUID = "uuid";
+	/**
+	 * 动态接口
+	 */
+	public static final String VARIABLE_DYNAMIC_INTERFACE = "dynamicInterface";
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
@@ -74,6 +113,7 @@ public class GlobalVariable implements Serializable {
 	 * <i>webServiceCallParameter</i> 	webService调用参数模板<br>
 	 * <i>relatedKeyWord</i> 	验证规则中的关联设定模板<br>
 	 * <i>setRuntimeSetting</i> 	测试集运行时配置模板<br>
+	 * <i>dynamicInterface</i> 	动态接口<br>
 	 * 
 	 * <strong>可以使用的变量：</strong><br>
 	 * <i>constant</i>  常量<br>
@@ -84,8 +124,8 @@ public class GlobalVariable implements Serializable {
 	 * <i>uuid</i> 	uuid<br>
 	 * 
 	 */
-	@FieldRealSearch(names = {"HTTP调用参数", "Socket调用参数", "WebService调用参数", "验证关联规则", "测试集运行时配置", "常量", "日期", "随机数", "时间戳", "随机字符串"},
-			values = {"httpCallParameter", "socketCallParameter", "webServiceCallParameter", "relatedKeyWord", "setRuntimeSetting", "constant", "datetime", "randomNum", "currentTimestamp", "randomString"})
+	@FieldRealSearch(names = {"HTTP调用参数", "Socket调用参数", "WebService调用参数", "验证关联规则", "测试集运行时配置", "常量", "日期", "随机数", "时间戳", "随机字符串", "动态接口"},
+			values = {"httpCallParameter", "socketCallParameter", "webServiceCallParameter", "relatedKeyWord", "setRuntimeSetting", "constant", "datetime", "randomNum", "currentTimestamp", "randomString", "dynamicInterface"})
 	private String variableType;
 	/**
 	 * 如果这个变量可以被使用,则需要设置key值<br>
@@ -100,8 +140,9 @@ public class GlobalVariable implements Serializable {
 	 * <i>constant</i> 	任何常量内容<br>
 	 * <i>randomNum</i>  	两个数字，分别表示最小值，最大值，用逗号分隔<br>
 	 * <i>currentTimestamp</i> 	为空<br>
-	 * <i>randomString</i> 	两个数字，第一位表示字符串长度，第二位表示组成：0-只有大写字母 1-只有小写字母  2-大小写字母混合 3-数字和字母
-	 * <i>uuid</i> 间隔符
+	 * <i>randomString</i> 	两个数字，第一位表示字符串长度，第二位表示组成：0-只有大写字母 1-只有小写字母  2-大小写字母混合 3-数字和字母<br>
+	 * <i>uuid</i> 间隔符<br>
+	 * <i>dynamicInterface</i> 对应配置的JSON字符串
 	 */
 	private String value;
 	/**
@@ -116,6 +157,22 @@ public class GlobalVariable implements Serializable {
 	 * 备注
 	 */
 	private String mark;
+	/**
+	 * 该变量的有效期，在有效期内不会再动态生成
+	 */
+	private Timestamp expiryDate;
+	/**
+	 * 唯一性范围，在指定的范围内不会再动态生成，0 - 全局的，1 - 同一个测试集， 2 - 同一个组合场景， 3 - 同一个测试场景
+	 */
+	private String uniqueScope;
+	/**
+	 * 最近一次动态生成的变量值
+	 */
+	private String lastCreateValue;
+	/**
+	 * 有效期，单位秒
+	 */
+	private Integer validityPeriod;
 	
 	private String variableUseName;
 	/**
@@ -137,6 +194,40 @@ public class GlobalVariable implements Serializable {
 
 	public GlobalVariable() {
 		super();
+		
+	}
+
+	public void setValidityPeriod(Integer validityPeriod) {
+		this.validityPeriod = validityPeriod;
+	}
+	
+	public Integer getValidityPeriod() {
+		return validityPeriod;
+	}
+	
+	@JSON(format="yyyy-MM-dd HH:mm:ss")
+	public Timestamp getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Timestamp expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
+	public String getUniqueScope() {
+		return uniqueScope;
+	}
+
+	public void setUniqueScope(String uniqueScope) {
+		this.uniqueScope = uniqueScope;
+	}
+
+	public String getLastCreateValue() {
+		return lastCreateValue;
+	}
+
+	public void setLastCreateValue(String lastCreateValue) {
+		this.lastCreateValue = lastCreateValue;
 	}
 
 	public Integer getVariableId() {
@@ -226,17 +317,30 @@ public class GlobalVariable implements Serializable {
 	 * @throws JsonParseException 
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String, String> parseJsonToMap() throws JsonParseException, JsonMappingException, IOException {		
+	private Map<String, String> parseJsonToMap() throws JsonParseException, JsonMappingException, IOException {		
 		if (StringUtils.isNotBlank(this.value) && !VARIABLE_TYPE_CONSTANT.equalsIgnoreCase(this.variableType)) {
 			return mapper.readValue(this.value, Map.class);
 		}
 		return null;
 	}
+	
+	private void update() {
+		GlobalVariableService service = (GlobalVariableService) FrameworkUtil.getSpringBean(GlobalVariableService.class);
+		if (this.validityPeriod > 0) {
+			this.expiryDate = new Timestamp(System.currentTimeMillis() + this.validityPeriod * 1000);
+		}
+		service.edit(this);
+	}
+	
+	public Object createSettingValue() {
+		return createSettingValue(false);
+	}
+	
 	/**
 	 * 根据类型与规则生成指定内容返回
 	 * @return
 	 */
-	public Object createSettingValue (Object ... obj) {
+	public Object createSettingValue (boolean forceCreate) {
 		try {
 			Map<String, String> maps = parseJsonToMap();
 			switch (this.variableType) {
@@ -270,26 +374,75 @@ public class GlobalVariable implements Serializable {
 			case VARIABLE_TYPE_CONSTANT:
 				return this.value;
 			case VARIABLE_TYPE_CURRENT_TIMESTAMP:
-				return String.valueOf(System.currentTimeMillis());
+				if (this.expiryDate.getTime() > System.currentTimeMillis()
+						&& StringUtils.isNotBlank(this.lastCreateValue)
+						&& !forceCreate) {
+					return this.lastCreateValue;
+				}
+				this.lastCreateValue = String.valueOf(System.currentTimeMillis());
+				update();
+				return this.lastCreateValue;
 			case VARIABLE_TYPE_DATETIME:
-				return PracticalUtils.formatDate(parseJsonToMap().get(GlobalVariableConstant.DATETIME_FORMAT_ATTRIBUTE_NAME), new Date());
+				if (this.expiryDate.getTime() > System.currentTimeMillis() 
+						&& StringUtils.isNotBlank(this.lastCreateValue)
+						&& !forceCreate) {
+					return this.lastCreateValue;
+				}
+				this.lastCreateValue = PracticalUtils.formatDate(parseJsonToMap().get(GlobalVariableConstant.DATETIME_FORMAT_ATTRIBUTE_NAME), new Date());
+				update();
+				return this.lastCreateValue;
 			case VARIABLE_TYPE_RANDOM_NUM:
+				if (this.expiryDate.getTime() > System.currentTimeMillis() 
+						&& StringUtils.isNotBlank(this.lastCreateValue)
+						&& !forceCreate) {
+					return this.lastCreateValue;
+				}
 				int min = Integer.parseInt(maps.get(GlobalVariableConstant.RANDOM_MIN_NUM_ATTRIBUTE_NAME));
 				int max = Integer.parseInt(maps.get(GlobalVariableConstant.RANDOM_MAX_NUM_ATTRIBUTE_NAME));
 
-				return String.valueOf(PracticalUtils.getRandomNum(max, min));
+				this.lastCreateValue = String.valueOf(PracticalUtils.getRandomNum(max, min));
+				update();
+				return this.lastCreateValue;
 			case VARIABLE_TYPE_RANDOM_STRING:
-				return PracticalUtils.createRandomString(maps.get(GlobalVariableConstant.RANDOM_STRING_MODE_ATTRIBUTE_NAME)
+				if (this.expiryDate.getTime() > System.currentTimeMillis() 
+						&& StringUtils.isNotBlank(this.lastCreateValue)
+						&& !forceCreate) {
+					return this.lastCreateValue;
+				}
+				
+				this.lastCreateValue = PracticalUtils.createRandomString(maps.get(GlobalVariableConstant.RANDOM_STRING_MODE_ATTRIBUTE_NAME)
 						, Integer.parseInt(maps.get(GlobalVariableConstant.RANDOM_STRING_NUM_ATTRIBUTE_NAME)));
+				update();
+				return this.lastCreateValue;
 			case VARIABLE_TYPE_UUID:
-				return PracticalUtils.getUUID(maps.get(GlobalVariableConstant.UUID_SEPARATOR_ATTRIBUTE_NAME));
+				if (this.expiryDate.getTime() > System.currentTimeMillis() 
+						&& StringUtils.isNotBlank(this.lastCreateValue)
+						&& !forceCreate) {
+					return this.lastCreateValue;
+				}
+				
+				this.lastCreateValue = PracticalUtils.getUUID(maps.get(GlobalVariableConstant.UUID_SEPARATOR_ATTRIBUTE_NAME));
+				update();
+				return this.lastCreateValue;
+			case VARIABLE_DYNAMIC_INTERFACE:
+				if (this.expiryDate.getTime() > System.currentTimeMillis() 
+						&& StringUtils.isNotBlank(this.lastCreateValue)
+						&& !forceCreate) {
+					return this.lastCreateValue;
+				}
+				MessageAutoTest autoTest = (MessageAutoTest) FrameworkUtil.getSpringBean(MessageAutoTest.class);
+				
+				this.lastCreateValue = autoTest.dynamicInterfaceGetValue(maps.get(GlobalVariableConstant.DYNAMIC_INTERFACE_SCENE_ID), maps.get(GlobalVariableConstant.DYNAMIC_INTERFACE_SYSTEM_ID)
+						, maps.get(GlobalVariableConstant.DYNAMIC_INTERFACE_VALUE_EXPRESSION));
+				update();
+				return this.lastCreateValue;
 			default:
 				break;
 			}
-		} catch (Exception e) {
-			
+		} catch (Exception e) {			
 			LOGGER.error("获取变量" + this.variableName + "[" + this.key + "]失败：" + this.value, e);
-			createErrorInfo = e.getMessage();
+			createErrorInfo = StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : "系统异常";
+			return null;
 		}
 		
 		
@@ -320,8 +473,5 @@ public class GlobalVariable implements Serializable {
 				+ variableUseName + ", createErrorInfo=" + createErrorInfo
 				+ "]";
 	}
-	
-	
-	
 	
 }

@@ -34,6 +34,11 @@ public class SystemConsts {
 	public static final Integer PARAMETER_OBJECT_ID = 1;
 	
 	/**
+	 * sessionMap中登录用户key值
+	 */
+	public static final String SESSION_ATTRIBUTE_LOGIN_USER = "user";
+	
+	/**
 	 * 请求带上此token代表为内部自调用接口，不需要验证权限
 	 */
 	public static final String REQUEST_ALLOW_TOKEN = "ec189a1731d73dfe16d8f9df16d67187";

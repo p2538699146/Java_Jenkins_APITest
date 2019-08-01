@@ -45,6 +45,7 @@ import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.process.MessageProcess;
 import yi.master.coretest.message.protocol.TestClient;
+import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 
@@ -86,6 +87,58 @@ public class MessageAutoTest {
 	private GlobalVariableService globalVariableService;
 	@Autowired
 	private BusinessSystemService businessSystemService;
+	
+	/**
+	 * 通过接口场景动态获取指定的值
+	 * @param sceneId
+	 * @param systemId
+	 * @param valueExpression
+	 * @return
+	 * @throws Exception 
+	 */
+	public String dynamicInterfaceGetValue(String sceneId, String systemId, String valueExpression) throws Exception {
+		
+		//执行测试
+		TestConfig config = testConfigService.getConfigByUserId(FrameworkUtil.getLoginUser().getUserId());
+		if (config == null) {
+			config = testConfigService.getConfigByUserId(0);
+		}
+		MessageScene scene = messageSceneService.get(Integer.valueOf(sceneId));
+		if (scene == null) {
+			throw new Exception("指定的测试场景不存在或者已被删除,请检查!");
+		}
+		
+		BusinessSystem system = businessSystemService.get(Integer.valueOf(systemId));
+		if (system == null) {
+			throw new Exception("指定的测试环境不存在或者已被删除,请检查!");
+		}
+		
+		Set<TestMessageScene> testObjects = packageRequestObject(scene, config, system);
+		
+		if (testObjects.size() == 0) {				
+			throw new Exception("测试环境[" + system.getSystemName() + "]被禁用,请检查!");
+		}
+		TestMessageScene testObject = new ArrayList<TestMessageScene>(testObjects).get(0);
+		
+		TestResult result = singleTest(testObject, null);
+		
+		//获取出参结果
+		String v = null;
+		if (MessageKeys.MESSAGE_TYPE_JSON.equals(MessageParse.judgeType(valueExpression))) {
+			//左右边界关联
+			v = PracticalUtils.getValueByRelationKeyWord(PracticalUtils.jsonToMap(valueExpression), result.getResponseMessage());
+		} else {
+			//节点路径获取
+			MessageParse parseUtil = MessageParse.judgeMessageType(result.getResponseMessage());
+			v = parseUtil.getObjectByPath(parseUtil.parseMessageToSingleRow(result.getResponseMessage()), valueExpression);
+		}
+		
+		if (v == null) {
+			throw new Exception("出参路径或者关联配置有误，无法获取到指定的值！");
+		}
+		
+		return v;
+	}
 	
 	/**
 	 * 单场景测试

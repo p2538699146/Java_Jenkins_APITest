@@ -36,6 +36,11 @@ public class GlobalVariableConstant {
 	public static final String RELATED_KEYWORD_VALIDATE_VALUE = "validateValue";
 	public static final String RELATED_KEYWORD_VALUE_GET_METHOD = "getValueMethod";
 	
+	/*动态接口*/
+	public static final String DYNAMIC_INTERFACE_SYSTEM_ID = "systemId";
+	public static final String DYNAMIC_INTERFACE_SCENE_ID = "sceneId";
+	public static final String DYNAMIC_INTERFACE_VALUE_EXPRESSION = "valueExpression";
+	
 	//使用方式，左边界
 	public static final String USE_VARIABLE_LEFT_BOUNDARY = "${__";
 	

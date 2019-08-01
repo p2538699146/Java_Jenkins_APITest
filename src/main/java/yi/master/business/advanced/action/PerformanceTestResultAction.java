@@ -145,6 +145,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	 * 详细结果查看-从序列化文件中反序列化
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public String detailsList() {
 		model = performanceTestResultService.get(model.getPtResultId());
 		List<TestResult> results = new ArrayList<TestResult>();
@@ -152,15 +153,22 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		if (model != null && (new File(model.getDetailsResultFilePath())).exists()) {
 			FileInputStream fn = null;
+			ObjectInputStream ois = null;
 			try {
 				 fn = new FileInputStream(model.getDetailsResultFilePath());
-			     ObjectInputStream ois = new ObjectInputStream(fn);	
+				 ois = new ObjectInputStream(fn);	
 			     results = (List<TestResult>) ois.readObject();
 			} catch (Exception e) {
-				
 				LOGGER.error("反序列化失败：" + model.getDetailsResultFilePath(), e);
 				setReturnInfo(ReturnCodeConsts.SYSTEM_ERROR_CODE, "测试结果文件反序列化失败！");
 			} finally {
+				if (ois != null) {
+					try {
+						ois.close();
+					} catch (IOException e) {
+						LOGGER.warn("IOException", e);
+					}
+				}
 				if (fn != null) {
 					try {
 						fn.close();

@@ -83,12 +83,6 @@ public class PerformanceTestAnalyzeResult {
 		pressCpu = pressCpu.subList(minIndex, maxIndex + 1);
 		pressMemory = pressMemory.subList(minIndex, maxIndex + 1);
 		everyTimeDetails = everyTimeDetails.subList(minIndex, maxIndex + 1);
-		/*tps = PracticalUtils.subList(tps, minIndex, maxIndex + 1);
-		responseTime = PracticalUtils.subList(responseTime, minIndex, maxIndex + 1);
-		time = PracticalUtils.subList(time, minIndex, maxIndex + 1);
-		pressCpu = PracticalUtils.subList(pressCpu, minIndex, maxIndex + 1);
-		pressMemory = PracticalUtils.subList(pressMemory, minIndex, maxIndex + 1);
-		everyTimeDetails = PracticalUtils.subList(everyTimeDetails, minIndex, maxIndex + 1);*/
 		
 		
 		//计算整体最大/最小/平均数据
@@ -104,11 +98,6 @@ public class PerformanceTestAnalyzeResult {
 		responseTimeAvg = 0.00;
 		
 		double responseTimeTotal = 0.00;
-		
-		System.out.println(minIndex);
-		System.out.println(maxIndex);
-		System.out.println(everyTimeDetails.size());
-		System.out.println(time.size());
 		
 		for (int i = 0;i < time.size();i++) {
 			List<Integer> counts = everyTimeDetails.get(i);

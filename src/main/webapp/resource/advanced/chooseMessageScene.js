@@ -22,7 +22,7 @@ var columnsSetting = [
                       {
 				            "data":"protocolType",
 				            "render":function(data) {
-				            	return labelCreate(data.toUpperCase());
+				            	return data == null ? '' : labelCreate(data.toUpperCase());
 				            }
 				     },
                       ellipsisData("messageName"),
@@ -157,7 +157,12 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df) {
-			choosedCallBackFun = parent[GetQueryString("callbackFun")];			
+			choosedCallBackFun = parent[GetQueryString("callbackFun")];
+			//是否禁止批量选择
+			if (GetQueryString("notMultiple") == 'true') {
+				$('#batch-choose').hide();
+			}
+					
 			df.resolve();
 		},
 		listPage:{

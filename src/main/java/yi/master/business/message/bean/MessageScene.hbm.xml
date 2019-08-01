@@ -52,6 +52,20 @@
             <one-to-many class="yi.master.business.message.bean.TestResult" />
         </set>
         
+         <set name="ptsConfigs" cascade="all" lazy="true" inverse="true">
+            <key>
+                <column name="message_scene_id" />
+            </key>
+            <one-to-many class="yi.master.business.advanced.bean.PerformanceTestConfig" />
+        </set>
+        
+        <set name="probes" cascade="all" lazy="true" inverse="true">
+            <key>
+                <column name="scene_id" />
+            </key>
+            <one-to-many class="yi.master.business.advanced.bean.InterfaceProbe" />
+        </set>
+        
         <set name="rules" cascade="all" lazy="true" inverse="true">
             <key>
                 <column name="message_scene_id" />
