@@ -11,7 +11,7 @@ QQ群交流：468324085，加群验证：易大师
 [演示地址](http://www.xuwangcheng.com/yi)（账号 tester/11111111）   
 (**请勿使用随意使用接口探测和性能测试模块，垃圾服务器不行。**)
 #### 一键安装包
-百度云： https://pan.baidu.com/s/1wFke4YqF2Aore3_WY98gFw  
+百度云： https://pan.baidu.com/s/1i8siuIuPXsjlnawYFc4c6A  
 账号 admin/q708162543  
  **安装完成进入安装根目录，双击执行start.bat，弹出两个cmd窗口不要关闭，打开浏览器输入http://localhost:8080** 
 #### 主要功能  
