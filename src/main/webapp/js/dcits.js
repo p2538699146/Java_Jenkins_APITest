@@ -516,7 +516,8 @@ function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting)
     		partialRefresh:true,
     		minWidth:35,
     		liveDrag:true,
-    		disabledColumns:[0]
+    		disabledColumns:[0],
+    		resizeMode: 'flex'
     	});
     	$(".page-container").spinModal(false); 	    	
     })

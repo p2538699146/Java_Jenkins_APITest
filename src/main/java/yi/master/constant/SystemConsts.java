@@ -184,4 +184,9 @@ public class SystemConsts {
 	 * 验证码图片厨存放文件夹
 	 */
 	public static final String VERIFY_CODE_FOLDER = "code";
+
+	public static final String CUSTOM_FALSE_STRING = "false";
+	public static final String CUSTOM_TRUE_STRING = "true";
+	public static final String CUSTOM_TRUE_NUMBER = "1";
+	public static final String CUSTOM_FALSE_NUMBER = "0";
 }

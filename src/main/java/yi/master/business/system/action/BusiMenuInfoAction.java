@@ -16,9 +16,14 @@ import yi.master.business.user.bean.Role;
 import yi.master.business.user.bean.User;
 import yi.master.business.user.service.RoleService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
 
-
+/**
+ * 业务菜单信息
+ * @author xuwangcheng
+ * @date 2019/8/30 15:30
+ */
 @Controller
 @Scope("prototype")
 public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
@@ -30,6 +35,7 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 	
 	@Autowired
 	private RoleService roleService;
+
 	private BusiMenuInfoService busiMenuInfoService;
 	
 	@Autowired
@@ -54,7 +60,7 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 	 * @return
 	 */
 	public String getUserMenus() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		Role role = roleService.get(user.getRole().getRoleId());
 		//获取一级菜单信息
 		List<BusiMenuInfo> oneLevMenus = busiMenuInfoService.findAll("status='1'", "nodeLevel=0");
@@ -71,19 +77,22 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 	
 	private JSONObject formatMenuJson(List<BusiMenuInfo> oneLevMenus, List<BusiMenuInfo> userMenus) {
 		JSONObject json = new JSONObject();
-		for (BusiMenuInfo m1:oneLevMenus) { //一级节点
+		//一级节点
+		for (BusiMenuInfo m1:oneLevMenus) {
 			JSONObject jobj = new JSONObject();
 			jobj.put("name", m1.getMenuName());
 			jobj.put("icon", m1.getIconName());
 			jobj.put("menu", new JSONArray());
-			for (BusiMenuInfo m2:m1.getChilds()) { //二级节点
+			//二级节点
+			for (BusiMenuInfo m2:m1.getChilds()) {
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("id", m1.getMenuId() + "-" + m2.getMenuId());
 				jobj2.put("name", m2.getMenuName());
 				jobj2.put("icon", m2.getIconName());
 				
 				jobj2.put("childs", new JSONArray());
-				for (BusiMenuInfo m3:m2.getChilds()) { //三级节点
+				//三级节点
+				for (BusiMenuInfo m3:m2.getChilds()) {
 					for (BusiMenuInfo userM:userMenus) {
 						if (userM.getMenuId().equals(m3.getMenuId())) {
 							JSONObject jobj3 = new JSONObject();
@@ -104,8 +113,7 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 				json.put(m1.getMenuId(), jobj);
 			}
 		}	
-		
-		System.out.println(json.toString());
+
 		return json;
 	}
 

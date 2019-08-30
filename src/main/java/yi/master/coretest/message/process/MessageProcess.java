@@ -23,15 +23,17 @@ public abstract class MessageProcess {
 	public abstract String processRequestMessage(String requestMessage, String processParameter);
 	/**
 	 * 处理返回报文
-	 * @param requestMessage
-	 * @param processParameter
-	 * @return
+	 * @param responseMessage 返回保温
+	 * @param processParameter 处理参数
+	 * @return 返回仅供处理的出参报文
 	 */
 	public abstract String processResponseMessage(String responseMessage, String processParameter);
 	
 	
 	public static MessageProcess getProcessInstance(String processType) {
-		if (StringUtils.isBlank(processType)) return null;
+		if (StringUtils.isBlank(processType)) {
+			return null;
+		}
 		switch (processType) {
 		case MessageKeys.PROCESS_TYPE_SHANXI_OPEN_API:
 			return sxOpenApiProcess;

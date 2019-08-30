@@ -25,7 +25,7 @@ public class Upload {
 	
 	/**
 	 * 上传单个文件
-	 * @param Object  要上传的文件或者文件输入流
+	 * @param file  要上传的文件或者文件输入流
 	 * @param fileName  文件原名
 	 * @return 保存的文件路径
 	 */

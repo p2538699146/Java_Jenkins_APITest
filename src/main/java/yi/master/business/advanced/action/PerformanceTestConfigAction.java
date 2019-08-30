@@ -21,6 +21,11 @@ import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 import yi.master.util.jsonlib.JsonDateValueProcessor;
 
+/**
+ * 性能测试配置相关接口
+ * @author xuwangcheng
+ * @date 2019/8/30 16:00
+ */
 @Controller
 @Scope("prototype")
 public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfig> {
@@ -136,7 +141,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	}
 	
 	/**
-	 * 删除测试任务：先停止，同时不会报错测试结果数据到数据库或者文件中
+	 * 删除测试任务：先停止，同时不会保存测试结果数据到数据库或者文件中
 	 * @return
 	 */
 	public String delTest() {
