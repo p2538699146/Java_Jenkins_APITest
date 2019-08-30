@@ -2,7 +2,7 @@ var interfaceId; //当前正在编辑的interface的id
 var currIndex;//当前正在操作的layer窗口的index
 
 var templateParams = {
-		tableTheads:["名称","报文", "中文名","类型","协议","创建时间","状态","创建用户","最后修改","参数", "备注","操作"],
+		tableTheads:["名称", "中文名","类型","协议","创建时间","状态","创建用户","最后修改","报文管理", "参数管理", "备注","操作"],
 		btnTools:[{
 			type:"primary",
 			size:"M",
@@ -228,18 +228,6 @@ var columnsSetting = [
 		    "data":"interfaceName",
           	"render":CONSTANT.DATA_TABLES.COLUMNFUN.ELLIPSIS
           	},
-          	{
-                "data":"messagesNum",
-                "render":function(data, type, full, meta){
-                	var context =
-                		[{
-              			type:"default",
-              			size:"M",
-              			markClass:"show-interface-messages",
-              			name:data
-              		}];
-                    return btnTextTemplate(context);
-                }},
           {
       		"className":"ellipsis",
 		    "data":"interfaceCnName",
@@ -273,19 +261,31 @@ var columnsSetting = [
                   return labelCreate(data);
               }},
           ellipsisData("createUserName"),ellipsisData("lastModifyUser"),
-          
-          {
-              "data":"parametersNum",
-              "render":function(data, type, full, meta){
-              	var context =
-              		[{
-            			type:"secondary",
-            			size:"M",
-            			markClass:"edit-params",
-            			name:data
-            		}];
-                  return btnTextTemplate(context);
-              }},
+			{
+				"data":"messagesNum",
+				"render":function(data, type, full, meta){
+					var context =
+						[{
+							type:"primary",
+							size:"M",
+							markClass:"show-interface-messages",
+							name:data
+						}];
+					return btnTextTemplate(context);
+				}
+			},
+    		{
+			"data":"parametersNum",
+			"render":function(data, type, full, meta){
+				var context =
+					[{
+						type:"secondary",
+						size:"M",
+						markClass:"edit-params",
+						name:data
+					}];
+				return btnTextTemplate(context);
+        	}},
           {
   		    "data":"mark",
   		    "className":"ellipsis",

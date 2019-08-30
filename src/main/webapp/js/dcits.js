@@ -59,6 +59,8 @@ $(function() {
 	var r = (window.location.pathname.split("."))[0].split("/");
 	r = r[r.length-1] + ".js";
 	dynamicLoadScript(r);
+	//加载全局常量
+    dynamicLoadScript('../../js/globalConstant.js');
 });
 
 /**

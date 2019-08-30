@@ -7,7 +7,7 @@ var processJson;//报文处理类型配置json
 
 
 var templateParams = {
-		tableTheads:["接口","报文名", "类型", "创建时间", "状态", "创建用户", "最后修改", "入参报文", "场景", "操作"],
+		tableTheads:["接口","报文名", "类型", "创建时间", "状态", "创建用户", "最后修改", "场景管理", "入参报文", "操作"],
 		btnTools:[{
 			type:"primary",
 			size:"M",
@@ -232,6 +232,19 @@ var columnsSetting = [
                                 }
               		    },
               		    {"data":"user.realName"},{"data":"lastModifyUser"},
+						{
+							"data":"sceneNum",
+							"render":function(data, type, full, meta){
+								var context =
+									[{
+										type:"primary",
+										size:"M",
+										markClass:"show-scenes",
+										name:data
+									}];
+								return btnTextTemplate(context);
+							}
+						},
               		    {
                             "data":null,
                             "render":function(data, type, full, meta){
@@ -244,19 +257,6 @@ var columnsSetting = [
                           		}];
                                 return btnTextTemplate(context);
                               }
-              		    },
-              		    {
-              		    	"data":"sceneNum",
-                            "render":function(data, type, full, meta){
-                            	var context =
-                            		[{
-                          			type:"default",
-                          			size:"M",
-                          			markClass:"show-scenes",
-                          			name:data
-                          		}];
-                                return btnTextTemplate(context);
-                            }
               		    },
               		    {
                             "data":null,
