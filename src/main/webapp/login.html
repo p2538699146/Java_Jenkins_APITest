@@ -62,13 +62,14 @@
     </div>
 </div>
 <div class="footer">Copyright By MasterYi Devops@2017-2019 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1275927783'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275927783%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script></div>
+<script type="text/javascript" src="js/globalConstant.js"></script>
 <script type="text/javascript" src="libs/jquery/1.9.1/jquery.js"></script>
 <script type="text/javascript" src="libs/h-ui/js/H-ui.js"></script>
 <script>
     $(document).ready(function(){   	
     	 $("#verifyCode").siblings('img').click(function(){
-    		 let that = this;
-    		 $.get('user-createVerifyCode', function(data){
+    		 var that = this;
+    		 $.get(REQUEST_URL.LOGIN.CREATE_VERIFY_CODE, function(data){
         		 if (data.returnCode == 0) {
         			 $(that).attr('src', data.path);
         		 }
@@ -87,7 +88,7 @@
     		 
     	 });
         //判断当前是否有用户登录
-        $.post("user-judgeLogin",function(data){
+        $.post(REQUEST_URL.LOGIN.JUDGE_LOGIN,function(data){
             if(data.returnCode == 0){
                 //跳转首页
             	window.location.href="index.html";
@@ -116,7 +117,7 @@
     
     function postLogin(username, password, verifyCode,loginIdentification){
     	var tipMsg = $("#loginTip");
-    	$.post("user-toLogin",{
+    	$.post(REQUEST_URL.LOGIN.LOGIN,{
             username:username,
             password:password,
             verifyCode:verifyCode,

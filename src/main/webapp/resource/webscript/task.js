@@ -91,11 +91,11 @@ var columnsSetting = [
 var eventList = {
 		".object-batch-del":function(){
 			var checkboxList = $(".selectModule:checked");
-			batchDelObjs(checkboxList, top.WEB_SCRIPT_TASK_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.WEB_SCRIPT_TASK.DEL);
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确认要删除此测试任务吗？", top.WEB_SCRIPT_TASK_DEL_URL, data.taskId, this);			
+			delObj("确认要删除此测试任务吗？", REQUEST_URL.WEB_SCRIPT_TASK.DEL, data.taskId, this);
 		},
 		".show-web-report":function() {
 			var data = table.row( $(this).parents('tr') ).data();
@@ -108,7 +108,7 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		listPage:{
-			listUrl:top.WEB_SCRIPT_TASK_LIST_URL,
+			listUrl:REQUEST_URL.WEB_SCRIPT_TASK.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 8, 9, 10],

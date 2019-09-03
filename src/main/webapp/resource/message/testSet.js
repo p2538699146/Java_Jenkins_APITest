@@ -161,7 +161,7 @@ var eventList = {
 		},
 		"#batch-del-object":function() {
 			var checkboxList = $(".selectSet:checked");
-			batchDelObjs(checkboxList, top.SET_DEL_URL, null, null, function() {
+			batchDelObjs(checkboxList, REQUEST_URL.TEST_SET.DEL, null, null, function() {
 				parent.createNodeTree();
 			});
 		},
@@ -178,7 +178,7 @@ var eventList = {
 				+ '<input type="button" class="btn btn-primary radius" onclick="" id="show-select-box-choose" value="选择"/></div></div>';
 				
 			var index = layer_show("请选择要移动到的目录", show_html, '400', '120', 1, function() {				
-				$.get(top.SET_GET_CATEGORY_NODES_URL, function(json) {
+				$.get(REQUEST_URL.TEST_SET.GET_CATEGORY_NODES, function(json) {
 					$(".page-container").spinModal(); 
        	 			if (json.returnCode == 0) {
        	 				$.each(json.nodes, function(i, node) {
@@ -193,7 +193,7 @@ var eventList = {
 				
 				$(document).delegate("#show-select-box-choose", 'click', function() {
 					var parentId = $('#select-object option:selected').val();
-					batchOp(checkboxList, top.SET_MOVE_TO_FOLDER, "移动", table, "setId", {parentId:parentId}
+					batchOp(checkboxList, REQUEST_URL.TEST_SET.MOVE_TO_FOLDER, "移动", table, "setId", {parentId:parentId}
 							, function() {
 								layer.close(index);
 								parent.createNodeTree();
@@ -210,7 +210,7 @@ var eventList = {
 		},
 		".object-del":function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此测试集(删除测试集不会删除下属测试场景)？请慎重操作!", top.SET_DEL_URL, data.setId, this);
+			delObj("确定删除此测试集(删除测试集不会删除下属测试场景)？请慎重操作!", REQUEST_URL.TEST_SET.DEL, data.setId, this);
 		},
 		".show-scenes":function() { //打开场景页,可在此页添加删除场景
 			if (selectMode == "0") {
@@ -251,15 +251,15 @@ var mySetting = {
 			df.resolve();
 		},
 		editPage:{
-			editUrl:top.SET_EDIT_URL,
-			getUrl:top.SET_GET_URL,
+			editUrl:REQUEST_URL.TEST_SET.EDIT,
+			getUrl:REQUEST_URL.TEST_SET.GET,
 			rules:{
 				setName:{
 					required:true,
 					minlength:2,
 					maxlength:100,
 					remote:{
-						url:top.SET_NAME_CHECK_URL,
+						url:REQUEST_URL.TEST_SET.CHECK_NAME,
 						type:"post",
 						dataType: "json",
 						data: {                   
@@ -274,7 +274,7 @@ var mySetting = {
 			}
 		},		
 		listPage:{
-			listUrl:top.SET_LIST_URL,
+			listUrl:REQUEST_URL.TEST_SET.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 8],

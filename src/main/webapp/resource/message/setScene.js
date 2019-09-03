@@ -143,7 +143,7 @@ var columnsSetting = [
 
 var eventList = {
 		"#choose-business-system":function() {//测试集配置选择可执行测试环境
-			$.get(top.BUSINESS_SYSTEM_LIST_ALL_URL, function (json) {
+			$.get(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, function (json) {
 				if (json.returnCode == 0) {
 					layerMultipleChoose({
 						title:"请选择当前需要测试的测试环境(可多选)",
@@ -175,7 +175,7 @@ var eventList = {
 			if (mode == 1) {
 				opName = "添加";
 			}
-			batchDelObjs(checkboxList, top.SET_OP_SCENE_URL + "?mode=" + mode + "&setId=" + setId, table, opName)
+			batchDelObjs(checkboxList, REQUEST_URL.TEST_SET.OP_SCENE + "?mode=" + mode + "&setId=" + setId, table, opName)
 		},
 		"#setting-set-config":function() {
 			
@@ -271,7 +271,7 @@ var eventList = {
 		"#manger-scene":function() { //管理测试集 - 从测试集中删除
 			var that = this;
 			mode = 0;				
-			refreshTable(top.SET_SCENE_LIST_URL + "?mode=" + mode + "&setId=" + setId, function(json) {
+			refreshTable(REQUEST_URL.TEST_SET.SET_SCENE_LIST + "?mode=" + mode + "&setId=" + setId, function(json) {
 				$(that).addClass('btn-primary').siblings("#add-scene").removeClass('btn-primary');
 			}, null, true);	
 			$("#batch-op").children("i").removeClass("Hui-iconfont-add").addClass("Hui-iconfont-del3");
@@ -279,7 +279,7 @@ var eventList = {
 		"#add-scene":function() { //添加测试场景
 			var that = this;
 			mode = 1;			
-			refreshTable(top.SET_SCENE_LIST_URL + "?mode=" + mode + "&setId=" + setId, function(json) {
+			refreshTable(REQUEST_URL.TEST_SET.SET_SCENE_LIST + "?mode=" + mode + "&setId=" + setId, function(json) {
 				$(that).addClass('btn-primary').siblings("#manger-scene").removeClass('btn-primary');
 			}, null, true);	
 			$("#batch-op").children("i").removeClass("Hui-iconfont-del3").addClass("Hui-iconfont-add");
@@ -320,7 +320,7 @@ var eventList = {
 			var that = this;
 			layer.confirm('确定要' + tip + '此场景吗?', {icon:0, title:'警告'}, function(index) {
 				layer.close(index);
-				$.get(top.SET_OP_SCENE_URL + "?mode=" + mode + "&setId=" + setId + "&messageSceneId=" + data.messageSceneId, function(json) {
+				$.get(REQUEST_URL.TEST_SET.OP_SCENE + "?mode=" + mode + "&setId=" + setId + "&messageSceneId=" + data.messageSceneId, function(json) {
 					if (json.returnCode == 0) {
 						table.row($(that).parents('tr')).remove().draw();
 						layer.msg(tip + '成功!', {icon:1, time:1500});
@@ -338,7 +338,7 @@ var mySetting = {
 		templateCallBack:function(df){
 			setId = GetQueryString("setId");
 			
-			$.post(top.SET_GET_URL, {id:setId}, function(data) {
+			$.post(REQUEST_URL.TEST_SET.GET, {id:setId}, function(data) {
 				if (data.returnCode == 0) {
 					currentSetInfo = data.object;
 				} else {
@@ -352,7 +352,7 @@ var mySetting = {
 			if (!GetQueryString("flag")) {
 				$("#setting-set-config,#del-this-set,#show-complex-set-scene,#edit-set-info").hide();
 			}
-			publish.renderParams.listPage.listUrl = top.SET_SCENE_LIST_URL + "?mode=" + mode + "&setId=" + setId;
+			publish.renderParams.listPage.listUrl = REQUEST_URL.TEST_SET.SET_SCENE_LIST + "?mode=" + mode + "&setId=" + setId;
 			df.resolve();			   		 	
    	 	},
 		listPage:{
@@ -381,7 +381,7 @@ function viewRunSettingConfig () {
 }
 
 function settingConfig(setId, mode, callback) {
-	$.post(top.SET_RUN_SETTING_CONFIG_URL, {setId:setId, mode:mode}, function(json) {
+	$.post(REQUEST_URL.TEST_SET.SETTING_RUN_CONFIG, {setId:setId, mode:mode}, function(json) {
 		if (json.returnCode == 0) {			
 			callback(json);
 		} else {
@@ -408,7 +408,7 @@ function resetOptions () {
 //更新配置信息
 function updateTestOptions(){
 	var updateConfigData = $("#form-setting-config").serializeArray();
-	$.post(top.UPDATE_TEST_CONFIG_URL, updateConfigData, function(data){
+	$.post(REQUEST_URL.AUTO_TEST.UPDATE_TEST_CONFIG_URL, updateConfigData, function(data){
 		if(data.returnCode == 0){
 			currentSetInfo.config = data.config;
 			layer.msg('更新成功',{icon:1, time:1500});
@@ -424,7 +424,7 @@ function updateTestOptions(){
  */
 function renderSceneTestPage(flag) {
 	var index = layer.msg('加载中,请稍后...', {icon:16, time:60000, shade:0.35});
-	$.get(top.SCENE_GET_TEST_OBJECT_URL, {messageSceneId:messageSceneId}, function(data){					
+	$.get(REQUEST_URL.MESSAGE_SCENE.GET_TEST_OBJECT, {messageSceneId:messageSceneId}, function(data){
 		if(data.returnCode == 0){
 			var $F = $("#message-scene-test-view");
 			
@@ -484,7 +484,7 @@ function sceneTest() {
 	var systemId = $F.find("#select-system").val();
 	var index = layer.msg('正在进行测试...', {icon:16, time:9999999, shade:0.35});
 	
-	$.post(top.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage, systemId:systemId},function(data) {
+	$.post(REQUEST_URL.AUTO_TEST.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage, systemId:systemId},function(data) {
 		if (data.returnCode == 0) {			
 			layer.close(index);
 			renderResultViewPage(data.result, messageSceneId);			

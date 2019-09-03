@@ -60,7 +60,7 @@ var mySetting = {
 			df.resolve();
 		},
 		listPage:{
-			listUrl:top.WEB_ELEMENT_LIST_URL + "?chooseFlag=true",
+			listUrl:REQUEST_URL.WEB_ELEMENT.LIST + "?chooseFlag=true",
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 6],

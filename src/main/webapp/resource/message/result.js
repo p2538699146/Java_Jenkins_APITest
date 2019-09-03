@@ -79,7 +79,7 @@ var columnsSetting = [
 
 var eventList = {
 	'#quality-count-view':function() {//探测质量统计视图
-		$.post(top.PROBE_TASK_GET_SINGLE_REPORT_DATA_URL, {probeId:probeId}, function(json) {
+		$.post(REQUEST_URL.PROBE_TASK.GET_SINGLE_REPORT_DATA, {probeId:probeId}, function(json) {
 			if (json.returnCode == 0) {	
 				if (json.data == null) {
 					throw "数据不足!";
@@ -91,7 +91,7 @@ var eventList = {
 					minTime:json.data.startTime,
 					maxTime:json.data.lastTime,
 					changeTimeCallback:function(timeRange, echartsInstances){
-						$.post(top.PROBE_TASK_GET_SINGLE_REPORT_DATA_URL, {probeId:probeId, probeTimeRange:timeRange}, function (data) {
+						$.post(REQUEST_URL.PROBE_TASK.GET_SINGLE_REPORT_DATA, {probeId:probeId, probeTimeRange:timeRange}, function (data) {
 							if (json.returnCode == 0) {
 								var options = createEchartsOption(data.data);
 								$.each(echartsInstances, function(i, n) {
@@ -165,10 +165,10 @@ var mySetting = {
 			probeId = GetQueryString("probeId");
 			
 			if (probeId != null) {
-				publish.renderParams.listPage.listUrl = top.RESULT_LIST_URL + "?probeId=" + probeId;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.REPORT_RESULT.LIST + "?probeId=" + probeId;
 			} else {
 				$("#quality-count-view").hide();
-				publish.renderParams.listPage.listUrl = top.RESULT_LIST_URL + "?reportId=" + reportId + "&runStatus=" + runStatus;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.REPORT_RESULT.LIST + "?reportId=" + reportId + "&runStatus=" + runStatus;
 			}			
 			
 			df.resolve();			   		 	

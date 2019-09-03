@@ -9,6 +9,11 @@ package yi.master.constant;
  * @version 1.0.0.0,2017.2.13
  */
 public class SystemConsts {
+
+	/**
+	 * 当前版本号
+	 */
+	public static final String VERSION = "0.1.4beta";
 	
 	/**
 	 * 默认admin角色的roleId

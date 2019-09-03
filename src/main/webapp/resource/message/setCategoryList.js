@@ -110,8 +110,8 @@ var mySetting = {
 		renderType:"edit",
 		templateParams:templateParams,
 		editPage:{
-       	 	editUrl:top.SET_EDIT_URL,
-			getUrl:top.SET_GET_URL,
+       	 	editUrl:REQUEST_URL.TEST_SET.EDIT,
+			getUrl:REQUEST_URL.TEST_SET.GET,
 			rules:{
 				setName:{
 					required:true,
@@ -120,7 +120,7 @@ var mySetting = {
 				}				
 			},
        	 	renderCallback:function(obj){
-       	 		$.get(top.SET_GET_CATEGORY_NODES_URL, function(json) {
+       	 		$.get(REQUEST_URL.TEST_SET.GET_CATEGORY_NODES, function(json) {
        	 			if (json.returnCode == 0) {
        	 				$.each(json.nodes, function(i, node) {
        	 					createOption(node, $("#parentId"), "");
@@ -188,7 +188,7 @@ function createOption(node, selectObj, sign) {
  * 生成左侧目录树
  */
 function createNodeTree () {
-	$.get(top.SET_GET_CATEGORY_NODES_URL, function(json) {
+	$.get(REQUEST_URL.TEST_SET.GET_CATEGORY_NODES, function(json) {
 			$(".page-container").spinModal(false); 	 			
 			if (json.returnCode == 0) {
 				$("#setTree").html('');
@@ -252,7 +252,7 @@ function opSetFolder(id) {
 function delSet (tip, id, callback) {
 	layer.confirm(tip, {title:'警告', anim:5}, function(index) {	
 				$(".page-container").spinModal(); 
-				$.post(top.SET_DEL_URL, {id:id}, function(json) {
+				$.post(REQUEST_URL.TEST_SET.DEL, {id:id}, function(json) {
 					if (json.returnCode == 0) {
 						createNodeTree();
 						callback && callback(json);

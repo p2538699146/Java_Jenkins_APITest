@@ -265,7 +265,7 @@ var eventList = {
 					layer.close(index);	
 				},function(index){
 					layer.close(index);
-					batchOp($(".selectStep:checked"), top.WEB_STEP_DEL_URL, "删除", null, "stepId");
+					batchOp($(".selectStep:checked"), REQUEST_URL.WEB_STEP.DEL, "删除", null, "stepId");
 				});
 		},		
 		".object-edit":function(){
@@ -278,7 +278,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此测试步骤吗？", top.WEB_STEP_DEL_URL, {id:data.stepId}, this, "删除成功!");
+			opObj("确认要删除此测试步骤吗？", REQUEST_URL.WEB_STEP.DEL, {id:data.stepId}, this, "删除成功!");
 		},
 		".choose-data-type":function(){//选择值类型的页面
 			var that = this;
@@ -325,7 +325,7 @@ var eventList = {
 					//选择数据库
 					$.ajax({
 						type:"POST",
-						url:top.QUERY_DB_LIST_ALL_URL,
+						url:REQUEST_URL.QUERY_DB.LIST_ALL,
 						async: false,
 						success:function(data) {
 							if (data.returnCode == 0){
@@ -384,7 +384,7 @@ var eventList = {
 					});
 					var configJson = JSON.stringify(config);
 					if (!CompareJsonObj(config, JSON.parse(data.configJson))) {
-						$.post(top.WEB_STEP_UPDATE_CONFIG_URL, {stepId:$(layero).find('#stepId').val(), configJson:configJson}, function(json){
+						$.post(REQUEST_URL.WEB_STEP.UPDATE_CONFIG, {stepId:$(layero).find('#stepId').val(), configJson:configJson}, function(json){
 							if (json.returnCode == 0) {								
 								data.configJson = configJson;
 								layer.close($(layero).find('#layerIndex').val());
@@ -409,21 +409,21 @@ var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df){	
 			caseId = GetQueryString("caseId");
-			publish.renderParams.listPage.listUrl = top.WEB_STEP_LIST_URL + "?caseId=" + caseId;	
+			publish.renderParams.listPage.listUrl = REQUEST_URL.WEB_STEP.LIST + "?caseId=" + caseId;
 			$.getJSON('../../js/json/webStepParameter.json', function(json){
 				stepParameters = json;
 			});
 			df.resolve();			   		 	
    	 	},
 		listPage:{
-			listUrl:top.WEB_STEP_LIST_URL,
+			listUrl:REQUEST_URL.WEB_STEP.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 13, 14]			
 		},
 		editPage:{
-			editUrl:top.WEB_STEP_EDIT_URL,
-			getUrl:top.WEB_STEP_GET_URL,
+			editUrl:REQUEST_URL.WEB_STEP.EDIT,
+			getUrl:REQUEST_URL.WEB_STEP.GET,
 			renderCallback:function(obj){
 				var a = function(type){
 					if (type == null) {

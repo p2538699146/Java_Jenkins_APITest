@@ -105,7 +105,7 @@ var eventList = {
 	"#manage-interface":function(){
 		var that = this;
 		mode = 0;				
-		refreshTable(top.BUSINESS_SYSTEM_INTERFACE_LIST_URL + "?mode=" + mode + "&systemId=" + systemId, function(json) {
+		refreshTable(REQUEST_URL.BUSINESS_SYSTEM.INTERFACE_LIST + "?mode=" + mode + "&systemId=" + systemId, function(json) {
 			$(that).addClass('btn-primary').siblings("#add-interface").removeClass('btn-primary');
 		}, null, true);	
 		$("#batch-op").children("i").removeClass("Hui-iconfont-add").addClass("Hui-iconfont-del3");
@@ -113,7 +113,7 @@ var eventList = {
 	"#add-interface":function(){
 		var that = this;
 		mode = 1;			
-		refreshTable(top.BUSINESS_SYSTEM_INTERFACE_LIST_URL + "?mode=" + mode + "&systemId=" + systemId, function(json) {
+		refreshTable(REQUEST_URL.BUSINESS_SYSTEM.INTERFACE_LIST + "?mode=" + mode + "&systemId=" + systemId, function(json) {
 			$(that).addClass('btn-primary').siblings("#manage-interface").removeClass('btn-primary');
 		}, null, true);	
 		$("#batch-op").children("i").removeClass("Hui-iconfont-del3").addClass("Hui-iconfont-add");
@@ -124,11 +124,11 @@ var eventList = {
 		if (mode == 1) {
 			opName = "添加";
 		}
-		batchDelObjs(checkboxList, top.BUSINESS_SYSTEM_OP_INTERFACE_URL + "?mode=" + mode + "&systemId=" + systemId, table, opName);
+		batchDelObjs(checkboxList, REQUEST_URL.BUSINESS_SYSTEM.OP_INTERFACE + "?mode=" + mode + "&systemId=" + systemId, table, opName);
 	},
 	//更新接口下的报文和场景的测试环境
 	"#update-interface-system":function(){
-		batchOp($(".selectInterface:checked"), top.INTERFACE_UPDATE_CHILDREN_BUSINESS_SYSTEMS_URL, "更新", null, "interfaceId");
+		batchOp($(".selectInterface:checked"), REQUEST_URL.INTERFACE.UPDATE_CHILDREN_BUSINESS_SYSTEMS, "更新", null, "interfaceId");
 	},
 	".op-interface":function() {
 		var tip = '删除';
@@ -141,7 +141,7 @@ var eventList = {
 		var that = this;
 		layer.confirm('确定要' + tip + '此接口吗?', {icon:0, title:'警告'}, function(index) {
 			layer.close(index);
-			$.get(top.BUSINESS_SYSTEM_OP_INTERFACE_URL + "?mode=" + mode + "&systemId=" + systemId + "&interfaceId=" + data.interfaceId, function(json) {
+			$.get(REQUEST_URL.BUSINESS_SYSTEM.OP_INTERFACE + "?mode=" + mode + "&systemId=" + systemId + "&interfaceId=" + data.interfaceId, function(json) {
 				if (json.returnCode == 0) {
 					table.row($(that).parents('tr')).remove().draw();
 					layer.msg(tip + '成功!', {icon:1, time:1500});
@@ -158,7 +158,7 @@ var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df){
 			systemId = GetQueryString("systemId");
-			publish.renderParams.listPage.listUrl = top.BUSINESS_SYSTEM_INTERFACE_LIST_URL + "?mode=" + mode + "&systemId=" + systemId;
+			publish.renderParams.listPage.listUrl = REQUEST_URL.BUSINESS_SYSTEM.INTERFACE_LIST + "?mode=" + mode + "&systemId=" + systemId;
 			df.resolve();
 		},
 		listPage:{

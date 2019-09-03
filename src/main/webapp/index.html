@@ -104,14 +104,13 @@
 <div id="templates-page" style="display: none;"></div>
 <div id="children-page" style="display: none;"></div>
 <div id="menu-page" style="display: none;"></div>
+<script type="text/javascript" src="js/globalConstant.js"></script>
 <script type="text/javascript" src="libs/jquery/1.9.1/jquery.js"></script>
 <script type="text/javascript" src="libs/layer/2.1/layer.js"></script>
 <script type="text/javascript" src="libs/h-ui/js/H-ui.js"></script>
 <script type="text/javascript" src="libs/h-ui.admin/js/H-ui.admin.js"></script>
 <script type="text/javascript" src="libs/handlebars.js"></script>
 <script type="text/javascript" src="libs/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
-<script type="text/javascript" src="js/requestUrls.js"></script>
-<script type="text/javascript" src="js/globalConstant.js"></script>
 <script type="text/javascript">
 	var templates;
 	var htmls; 
@@ -172,7 +171,7 @@
     
     /********************加载菜单***************************/
     function loadMenuTemplate() {
-    	$.get('menu-getUserMenus', function(data){
+    	$.get(REQUEST_URL.MENU.GET_USER_MENUS, function(data){
     		if (data.returnCode == 0) {
     			menuJson = data.data;
     			var systemSwitchDom = $('#system-type-name').siblings('ul');
@@ -241,7 +240,7 @@
   		  title: '验证旧密码'
   		}, function(value, index, elem){
   			layer.close(index);
-  		  $.post("user-verifyPasswd", {password: value}, function (data) {
+  		  $.post(REQUEST_URL.USER.VERIFY_PASSWORD, {password: value}, function (data) {
   			 if (data.returnCode == 0) {
   				 layer.prompt({
   					  formType: 1,
@@ -251,7 +250,7 @@
   						layer.close(index1);
   						layer.confirm('确定要将密码修改为"' + value1 + '"吗？', {icon:0, title:'警告'}, function(index2) {
   							layer.close(index2);
-  				    		$.get("user-modifyPasswd",{password:value1}, function(data) {
+  				    		$.get(REQUEST_URL.USER.MODIFY_PASSWORD,{password:value1}, function(data) {
   				    			if (data.returnCode == 0) {
   				                    layer.msg('密码修改成功,设置自动登录的需要重新输入密码!', {icon:1, time:1500});
   				        		} else {
@@ -270,7 +269,7 @@
    
     /***********手动点击logout会清除登录信息cookie*********/ 
     function to_logout(){
-    	$.get("user-logout",function(data){
+    	$.get(REQUEST_URL.LOGIN.LOGOUT,function(data){
     		if(data.returnCode==0){
     			clearCookie("username");
     			clearCookie("password");
@@ -326,7 +325,7 @@
         var password = $("#password").val();
         var tipMsg = $("#loginTip");
         if(username != "" && username != null && password != "" && password != null){
-            $.post("user-toLogin",{
+            $.post(REQUEST_URL.LOGIN.LOGIN,{
                 username:username,
                 password:password
             },function(data){

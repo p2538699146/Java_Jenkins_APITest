@@ -3,8 +3,6 @@ var reportId;
 
 var currentIndex;
 
-var REPORT_GET_DETAILS_URL = "report-getReportDetail";
-
 var eventList = {
 	'tbody > tr':function() {
 		if ($(this).hasClass("fixed-complex-table")) {
@@ -76,7 +74,7 @@ var mySetting = {
 	       	 });
    	 		
    	 		reportId = GetQueryString("reportId"); 
-	   	 	$.get(REPORT_GET_DETAILS_URL + "?reportId=" + reportId, function(data){
+	   	 	$.get(REQUEST_URL.REPORT.GET_DETAILS + "?reportId=" + reportId, function(data){
 				if (data.returnCode == 0) {
 					data = JSON.parse(data.details);
 					$(".panel-heading").text(data.title);

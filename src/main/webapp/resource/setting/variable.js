@@ -423,7 +423,7 @@ var columnsSetting = [
 var eventList = {
 		"#list-by-variable-type":{
 			'change':function() {
-				table.ajax.url(top.GLOBAL_VARIABLE_LIST_URL + '?variableType=' + $(this).val()).load();
+				table.ajax.url(REQUEST_URL.GLOBAL_VARIABLE.LIST_ALL + '?variableType=' + $(this).val()).load();
 			}
 		},
 		"#add-object":function(){
@@ -434,7 +434,7 @@ var eventList = {
 		},
 		"#batch-del-object":function(){
 			var checkboxList = $(".selectVariable:checked");
-			batchDelObjs(checkboxList, top.GLOBAL_VARIABLE_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.GLOBAL_VARIABLE.DEL);
 		},
 		".object-edit":function(){
 			var data = table.row( $(this).parents('tr') ).data();
@@ -445,7 +445,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确认要删除此全局变量信息吗？", top.GLOBAL_VARIABLE_DEL_URL, data.variableId, this);
+			delObj("确认要删除此全局变量信息吗？", REQUEST_URL.GLOBAL_VARIABLE.DEL, data.variableId, this);
 		},
 		"#variableType":{
 			'change':function() {
@@ -475,12 +475,12 @@ var eventList = {
 				layer.alert('<span class="c-success">常量值：</span><br>' + data.value, {icon:1, anim:5, title:data.variableName});
 				return;
 			}
-			$.post(top.GLOBAL_VARIABLE_CREATE_VARIABLE_URL, {variableId:data.variableId}, function(json) {
+			$.post(REQUEST_URL.GLOBAL_VARIABLE.CREATE_VARIABLE, {variableId:data.variableId}, function(json) {
 				if (json.returnCode == 0) {
 					layer.alert('<div id="create-result"><span class="c-success">生成变量成功：</span><br>' + json.msg + '</div>'
 							, {icon:1, anim:5, title:data.variableName, btn: ['强制刷新', '确定'], offset: '120px'}
 							,function(index, layero){
-								$.post(top.GLOBAL_VARIABLE_CREATE_VARIABLE_URL, {variableId:data.variableId, foreceCreate:true}, function(json){
+								$.post(REQUEST_URL.GLOBAL_VARIABLE.CREATE_VARIABLE, {variableId:data.variableId, foreceCreate:true}, function(json){
 									if (json.returnCode == 0) {
 										$(layero).find('#create-result').html('<span class="c-success">生成变量成功：</span><br>' + json.msg);
 									} else {
@@ -527,7 +527,7 @@ var eventList = {
 					
 			//发送请求更新该variable的value值
 			if (settingValue != value) {
-				$.post(top.GLOBAL_VARIABLE_UPDATE_VALUE_URL, {variableId:variableId, value:value}, function(json) {
+				$.post(REQUEST_URL.GLOBAL_VARIABLE.UPDATE_VALUE, {variableId:variableId, value:value}, function(json) {
 					if (json.returnCode == 0) {								
 						refreshTable();
 						layer.msg('更新成功!', {icon:1, time:2000});
@@ -548,8 +548,8 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		editPage:{
-			editUrl:top.GLOBAL_VARIABLE_EDIT_URL,
-			getUrl:top.GLOBAL_VARIABLE_GET_URL,
+			editUrl:REQUEST_URL.GLOBAL_VARIABLE.EDIT,
+			getUrl:REQUEST_URL.GLOBAL_VARIABLE.GET,
 			beforeInit:function(df){				
 				$("#setting-variable-value").attr('type', 'hidden');
 				df.resolve();
@@ -577,7 +577,7 @@ var mySetting = {
 				key:{
 					required:true,					
 					remote:{
-						url:top.GLOBAL_VARIABLE_CHECK_NAME_URL,
+						url:REQUEST_URL.GLOBAL_VARIABLE.CHECK_NAME,
 						type:"post",
 						dataType: "json",
 						data: {                   
@@ -598,7 +598,7 @@ var mySetting = {
 			},
 		},
 		listPage:{
-			listUrl:top.GLOBAL_VARIABLE_LIST_URL,
+			listUrl:REQUEST_URL.GLOBAL_VARIABLE.LIST_ALL,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 8, 9],
@@ -680,7 +680,7 @@ function showSettingPage(title) {
 						layer.msg("请先选择接口场景!", {icon:5, time:1800});
 						return false;
 					}						
-					$.post(top.BUSINESS_SYSTEM_LIST_ALL_URL, {protocolType:$(".dynamicInterface #protocolType").val()}, function (json) {
+					$.post(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, {protocolType:$(".dynamicInterface #protocolType").val()}, function (json) {
 						if (json.returnCode == 0) {
 							if (json.data.length < 1) {
 								layer.msg('无匹配的测试环境可供选择', {icon:0, time:1800});

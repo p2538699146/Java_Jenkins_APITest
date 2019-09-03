@@ -59,8 +59,6 @@ $(function() {
 	var r = (window.location.pathname.split("."))[0].split("/");
 	r = r[r.length-1] + ".js";
 	dynamicLoadScript(r);
-	//加载全局常量
-    dynamicLoadScript('../../js/globalConstant.js');
 });
 
 /**
@@ -1287,7 +1285,7 @@ function uploadFile(setting) {
 	var loadIndex;
 	var defaultSetting = {
 		elem:'',
-		url:top.UPLOAD_FILE_URL,
+		url:REQUEST_URL.FILE.UPLOAD_FILE,
 		exts:'xlsx|xls',
 		acceptMime:"*",
 		size:'102400',
@@ -1846,7 +1844,7 @@ function renderResultViewPage(result, messageSceneId) {
 					layer.msg('没有返回报文!', {icon:5, time:1800});
 					return false;
 				}
-				$.post(top.SCENE_UPDATE_RESPONSE_EXAMPLE, {messageSceneId:messageSceneId, responseExample:result.responseMessage}, function (json) {
+				$.post(REQUEST_URL.MESSAGE_SCENE.UPDATE_RESPONSE_EXAMPLE, {messageSceneId:messageSceneId, responseExample:result.responseMessage}, function (json) {
 					if (json.returnCode == 0) {
 						layer.msg('更新成功!', {icon:1, time:1800});
 					} else {

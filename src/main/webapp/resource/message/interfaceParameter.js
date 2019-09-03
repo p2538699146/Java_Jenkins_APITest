@@ -203,7 +203,7 @@ var eventList = {
 		},
 		"#batch-del-object":function() {
 			var checkboxList = $(".selectParameter:checked");
-			batchDelObjs(checkboxList, top.PARAM_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.INTERFACE_PARAMS.DEL);
 		},
 		".object-edit":function() {
 			var data = table.row( $(this).parents('tr') ).data();
@@ -216,7 +216,7 @@ var eventList = {
 		},
 		".object-del":function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此入参吗(删除会影响该接口下的报文生成)？请慎重操作!", top.PARAM_DEL_URL, data.parameterId, this);
+			delObj("确定删除此入参吗(删除会影响该接口下的报文生成)？请慎重操作!", REQUEST_URL.INTERFACE_PARAMS.DEL, data.parameterId, this);
 		},
 		"#batch-add-object":function(){ //导入报文
 			currIndex = layer_show("导入报文", showHtml, null,406, 1);
@@ -229,7 +229,7 @@ var eventList = {
 			}
 			var messageType = $("#messageType").val();
 			var loadIndex = layer.msg("正在努力解析中...", {icon:16, time:999999, shade:0.4});
-			$.post(top.PARAM_JSON_IMPORT_URL, {interfaceId:interfaceId, paramsJson:paramsJson, messageType:messageType}, function(data){
+			$.post(REQUEST_URL.INTERFACE_PARAMS.MSG_IMPORT, {interfaceId:interfaceId, paramsJson:paramsJson, messageType:messageType}, function(data){
 				layer.close(loadIndex);
 				if(data.returnCode == 0){
 					refreshTable();
@@ -243,7 +243,7 @@ var eventList = {
 			});
 		},
 		"#choose-new-path":function() {//选择节点路径、打开节点树视图页面
-			chooseParameterNodePath(top.INTERFACE_GET_PARAMETERS_JSON_TREE_URL, {interfaceId:interfaceId}, {
+			chooseParameterNodePath(REQUEST_URL.INTERFACE.GET_PARAMETERS_JSON_TREE, {interfaceId:interfaceId}, {
 				isChoosePath:true, 
 				notChooseTypes:["String", "Number"],
 				ifChooseSelf:false,
@@ -255,7 +255,7 @@ var eventList = {
 			});
 		},		
 		"#view-structure-ztree":function() {//预览参数结构视图
-			chooseParameterNodePath(top.INTERFACE_GET_PARAMETERS_JSON_TREE_URL, {interfaceId:interfaceId});										
+			chooseParameterNodePath(REQUEST_URL.INTERFACE.GET_PARAMETERS_JSON_TREE, {interfaceId:interfaceId});
 		}
 };
 
@@ -266,8 +266,8 @@ var mySetting = {
 		},
 		templateCallBack:function(df){
 			interfaceId = GetQueryString("interfaceId");
-			publish.renderParams.listPage.listUrl = top.PARAMS_GET_URL + "?interfaceId=" + interfaceId;
-			publish.renderParams.editPage.editUrl = top.PARAM_EDIT_URL + "?interfaceId=" + interfaceId;
+			publish.renderParams.listPage.listUrl = REQUEST_URL.INTERFACE_PARAMS.LIST + "?interfaceId=" + interfaceId;
+			publish.renderParams.editPage.editUrl = REQUEST_URL.INTERFACE_PARAMS.EDIT + "?interfaceId=" + interfaceId;
 			
 			df.resolve();
 		},
@@ -287,8 +287,8 @@ var mySetting = {
        	 		$("#path").val((obj.path).substring(8));
        	 		$("#attributesText").val(parseHttpParameterJsonToString(JSON.parse($("#attributes").val())));
        	 	},
-			editUrl:top.PARAM_EDIT_URL,
-			getUrl:top.PARAM_GET_URL,
+			editUrl:REQUEST_URL.INTERFACE_PARAMS.EDIT,
+			getUrl:REQUEST_URL.INTERFACE_PARAMS.GET,
 			rules:{
 				parameterIdentify:{
 					required:true,
@@ -298,7 +298,7 @@ var mySetting = {
 			}
 		},		
 		listPage:{
-			listUrl:top.PARAMS_GET_URL,
+			listUrl:REQUEST_URL.INTERFACE_PARAMS.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 7, 8],

@@ -19,7 +19,7 @@ var templateParams = {
 			enable:true, 
 			formTitle:"性能测试结果-高级查询",
 			pageOpenSuccessCallback:function (layero, index) {
-				$.get(top.BUSINESS_SYSTEM_LIST_ALL_URL, function (json) {
+				$.get(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, function (json) {
 					if (json.returnCode == 0) {
 						$.each(json.data, function(i, n){
 							layero.find("#systemId").append('<option value="'+ n.systemId +'">' + n.systemName + '[' 
@@ -102,11 +102,11 @@ var columnsSetting = [
 }];
 var eventList = {				
 		"#batch-del":function(){
-			batchOp($(".selectPtResult:checked"), top.PERFORMANCE_TEST_RESULT_DEL_URL, "删除", null, "ptResultId");
+			batchOp($(".selectPtResult:checked"), REQUEST_URL.PERFORMANCE_RESULT.DEL, "删除", null, "ptResultId");
 		},				
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此测试结果吗？", top.PERFORMANCE_TEST_RESULT_DEL_URL, {id:data.ptResultId}, this, "删除成功!");
+			opObj("确认要删除此测试结果吗？", REQUEST_URL.PERFORMANCE_RESULT.DEL, {id:data.ptResultId}, this, "删除成功!");
 		},
 		"#download-excel":function(){ //下载汇总结果	
 			if ($(".selectPtResult:checked").length < 1) {
@@ -117,9 +117,9 @@ var eventList = {
 				ids.push(table.row( $(this).parents('tr') ).data().ptResultId);
 			});
 			
-			$.post(top.PERFORMANCE_TEST_RESULT_SUMMARIZED_URL, {ids:ids.join(",")}, function(json){
+			$.post(REQUEST_URL.PERFORMANCE_RESULT.SUMMARIZED, {ids:ids.join(",")}, function(json){
 				if (json.returnCode == 0) {
-					window.open("../../" + top.DOWNLOAD_FILE_URL + "?downloadFileName=" + json.path.replace(/\\/g,"/"));
+					window.open("../../" + REQUEST_URL.FILE.DOWNLOAD_FILE + "?downloadFileName=" + json.path.replace(/\\/g,"/"));
 				} else {
 					layer.alert(json.msg, {title:"提示"});
 				}
@@ -129,7 +129,7 @@ var eventList = {
 		".view-test":function(){//查看统计视图
 			var data = table.row( $(this).parents('tr') ).data();
 			
-			$.post(top.PERFORMANCE_TEST_RESULT_ANAYLZE_URL, {ptResultId:data.ptResultId}, function(json) {
+			$.post(REQUEST_URL.PERFORMANCE_RESULT.ANALYZE, {ptResultId:data.ptResultId}, function(json) {
 				parent.layer_show("性能测试视图", templates["performance-test-task-view"](json.object), null, null, 1, function(layero, index){
 					$(layero).find('.pt-task-btn-group:not(:eq(2))').hide();
 					$(layero).find('.pt-task-btn-group:eq(2)').show();
@@ -148,7 +148,7 @@ var eventList = {
 				layer.msg('无参数化文件!', {time:1500});
 				return;
 			}			
-			window.open("../../" + top.DOWNLOAD_FILE_URL + "?downloadFileName=" + data.parameterizedFilePath.replace(/\\/g, '/'));
+			window.open("../../" + REQUEST_URL.FILE.DOWNLOAD_FILE + "?downloadFileName=" + data.parameterizedFilePath.replace(/\\/g, '/'));
 		}		
 };
 
@@ -157,13 +157,13 @@ var mySetting = {
 		templateCallBack:function(df){
 			ptId = GetQueryString("ptId");
 			if (ptId != null) {
-				publish.renderParams.listPage.listUrl = top.PERFORMANCE_TEST_RESULT_LIST_URL + "?ptId=" + ptId;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.PERFORMANCE_RESULT.LIST + "?ptId=" + ptId;
 			}
 			df.resolve();
 			return;
 		},
 		listPage:{
-			listUrl:top.PERFORMANCE_TEST_RESULT_LIST_URL,
+			listUrl:REQUEST_URL.PERFORMANCE_RESULT.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 6, 7, 10]			

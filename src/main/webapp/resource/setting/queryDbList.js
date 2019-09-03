@@ -137,12 +137,12 @@ var eventList = {
 		},
 		".batch-del-object":function(){
 			var checkboxList = $(".selectDb:checked");
-			batchDelObjs(checkboxList, top.QUERY_DB_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.QUERY_DB.DEL);
 		},
 		".db-test":function(){
 			var data = table.row( $(this).parents('tr') ).data();
 			$('#div-table-container').spinModal();
-	  		$.get(top.QUERY_DB_LINK_TEST_URL, {id:data.dbId}, function(data){
+	  		$.get(REQUEST_URL.QUERY_DB.LINK_TEST, {id:data.dbId}, function(data){
 	  			$('#div-table-container').spinModal(false);
 	  			if (data.returnCode == 0) { 				
 	  				layer.alert("测试连接成功!", {icon: 1});
@@ -160,7 +160,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确认要删除此数据源信息吗？", top.QUERY_DB_DEL_URL, data.dbId, this);
+			delObj("确认要删除此数据源信息吗？", REQUEST_URL.QUERY_DB.DEL, data.dbId, this);
 		}
 		
 };
@@ -168,8 +168,8 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		editPage:{
-			editUrl:top.QUERY_DB_EDIT_URL,
-			getUrl:top.QUERY_DB_GET_URL,
+			editUrl:REQUEST_URL.QUERY_DB.EDIT,
+			getUrl:REQUEST_URL.QUERY_DB.GET,
 			rules:{
 				dbName:{
 					required:true,
@@ -185,7 +185,7 @@ var mySetting = {
 			},
 		},
 		listPage:{
-			listUrl:top.QUERY_DB_LIST_URL,
+			listUrl:REQUEST_URL.QUERY_DB.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 5, 7, 8]

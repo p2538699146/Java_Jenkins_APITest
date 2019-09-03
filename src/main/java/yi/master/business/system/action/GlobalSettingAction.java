@@ -91,13 +91,7 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 			globalSettingService.updateSetting(entry.getKey(), ((String[])entry.getValue())[0]);
 			CacheUtil.updateGlobalSettingValue(entry.getKey(), ((String[])entry.getValue())[0]);
 		}
-		/*List<GlobalSetting> settings = globalSettingService.findAll();
-		Map<String,GlobalSetting> globalSettingMap = new HashMap<String,GlobalSetting>();
-		//更新完成之后需要将更新的设置重新加载在session中
-		for (GlobalSetting g:settings) {
-			globalSettingMap.put(g.getSettingName(), g);
-		}
-		StrutsUtils.getApplicationMap().put("settingMap", globalSettingMap);*/
+
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		
 		return SUCCESS;
