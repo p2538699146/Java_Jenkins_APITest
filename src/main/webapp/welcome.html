@@ -88,8 +88,7 @@
     <p id="notice"></p>
 </div>
 <footer class="footer mt-20">
-    <p><span id="copyright"></span></p>
-    <p><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1275927783'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275927783%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script></p>
+    <p><span id="copyright"></span>&nbsp;&nbsp;<span style="color:blue;" id="version"></span></p>
 </footer>
 <script type="text/javascript" src="js/globalConstant.js"></script>
 <script type="text/javascript" src="libs/jquery/1.9.1/jquery.js"></script>
@@ -162,6 +161,11 @@
        			$("#siteName").html(data.siteName);
        			parent.$("#siteName").html(data.siteName);
        			parent.$("#version").text("V" + data.version);
+
+                //关于版本升级
+                if (data.newVersion != null && data.newVersion != data.version) {
+                    $("#version").html('<i class="Hui-iconfont">&#xe679;</i><a style="color:blue;" href="' + data.versionUpgradeUrl + '" target="_blank">有新版本可以升级</a>');
+                }
        		}
        	});
     }

@@ -45,6 +45,7 @@ import cn.hutool.captcha.LineCaptcha;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import yi.master.business.advanced.bean.config.probe.ProbeConfig;
+import yi.master.business.api.bean.ApiReturnInfo;
 import yi.master.business.message.bean.ComplexSceneConfig;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.bean.TestReport;
@@ -56,6 +57,7 @@ import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.testconfig.bean.GlobalVariable;
 import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.testconfig.service.GlobalVariableService;
+import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.protocol.HTTPTestClient;
@@ -696,6 +698,29 @@ public class PracticalUtils {
 				request.releaseConnection();
 			}
 		}
+	}
+
+	/**
+	 * 检查最新版本
+	 * @return
+	 */
+	public static String checkVersion() {
+		try {
+			//远程检查地址
+			String checkUrl = SystemConsts.CHECK_VERSION_UPGRADE_URL + "?token=" + SystemConsts.REQUEST_ALLOW_TOKEN;
+			String msg = doGetHttpRequest(checkUrl);
+			Map<String, Object> json = jsonToMap(msg);
+
+			if (ApiReturnInfo.SUCCESS_CODE.equals(json.get("returnCode").toString())) {
+				return json.get("data").toString();
+			}
+
+			return null;
+		} catch (Exception e) {
+			LOGGER.warn("检查版本失败！", e);
+		}
+
+		return null;
 	}
 
 	/**

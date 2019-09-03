@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import yi.master.business.api.bean.ApiReturnInfo;
 import yi.master.business.api.service.user.ApiUserService;
+import yi.master.constant.SystemConsts;
 
 /**
  * 外部api调动用户同步接口
@@ -71,7 +72,7 @@ public class ApiUserAction extends BaseApiAction {
 		returnInfo = service.createToken(userid, passwd);		
 		return SUCCESS;
 	}
-	
+
 	/*******************************************************************************/
 	public void setUserid(String userid) {
 		this.userid = userid;

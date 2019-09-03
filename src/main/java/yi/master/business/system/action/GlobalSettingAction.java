@@ -11,8 +11,10 @@ import yi.master.business.base.action.BaseAction;
 import yi.master.business.system.bean.GlobalSetting;
 import yi.master.business.system.service.GlobalSettingService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
 import yi.master.statement.AnalyzeUtil;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 
 /**
@@ -76,6 +78,9 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 		for (GlobalSetting setting:settingMap.values()) {
 			jsonMap.put(setting.getSettingName(), CacheUtil.getSettingValue(setting.getSettingName()));
 		}
+
+		jsonMap.put("newVersion", PracticalUtils.checkVersion());
+		jsonMap.put("versionUpgradeUrl", SystemConsts.VERSION_UPGRADE_URL);
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		
 		return SUCCESS;
