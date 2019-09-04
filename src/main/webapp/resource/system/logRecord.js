@@ -171,11 +171,11 @@ var columnsSetting = [
 var eventList = {
 	"#batch-del-object":function() {
 		var checkboxList = $(".selectRecord:checked");
-		batchDelObjs(checkboxList, top.LOG_RECORD_DEL_URL);
+		batchDelObjs(checkboxList, REQUEST_URL.LOG_RECORD.DEL);
 	},
 	".object-del":function() {
 		var data = table.row( $(this).parents('tr') ).data();
-		delObj("确认要删除此此条日志信息吗？", top.LOG_RECORD_DEL_URL, data.recordId, this);
+		delObj("确认要删除此条日志信息吗？", REQUEST_URL.LOG_RECORD.DEL, data.recordId, this);
 	},
 	
 	".show-log-details":function(){
@@ -187,7 +187,7 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,		
 		listPage:{
-			listUrl:top.LOG_RECORD_LIST_URL,
+			listUrl:REQUEST_URL.LOG_RECORD.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 3, 10, 11]

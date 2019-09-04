@@ -11,8 +11,10 @@ import yi.master.business.base.action.BaseAction;
 import yi.master.business.system.bean.GlobalSetting;
 import yi.master.business.system.service.GlobalSettingService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
 import yi.master.statement.AnalyzeUtil;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 
 /**
@@ -76,10 +78,23 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 		for (GlobalSetting setting:settingMap.values()) {
 			jsonMap.put(setting.getSettingName(), CacheUtil.getSettingValue(setting.getSettingName()));
 		}
+
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		
 		return SUCCESS;
-		
+	}
+
+	/**
+	 * 检查版本
+	 * @return
+	 */
+	public String checkSystemVersion () {
+		jsonMap.put("newVersion", PracticalUtils.checkVersion());
+		jsonMap.put("versionUpgradeUrl", SystemConsts.VERSION_UPGRADE_URL);
+		jsonMap.put("version", SystemConsts.VERSION);
+		setSuccessReturnInfo();
+
+		return SUCCESS;
 	}
 	
 	/**
@@ -91,13 +106,7 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 			globalSettingService.updateSetting(entry.getKey(), ((String[])entry.getValue())[0]);
 			CacheUtil.updateGlobalSettingValue(entry.getKey(), ((String[])entry.getValue())[0]);
 		}
-		/*List<GlobalSetting> settings = globalSettingService.findAll();
-		Map<String,GlobalSetting> globalSettingMap = new HashMap<String,GlobalSetting>();
-		//更新完成之后需要将更新的设置重新加载在session中
-		for (GlobalSetting g:settings) {
-			globalSettingMap.put(g.getSettingName(), g);
-		}
-		StrutsUtils.getApplicationMap().put("settingMap", globalSettingMap);*/
+
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		
 		return SUCCESS;

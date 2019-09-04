@@ -50,7 +50,6 @@ public class JSONMessageParse extends MessageParse {
 			Object obj = mapper.readValue(message, Object.class);
 		    return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
 		} catch (Exception e) {
-			
 			LOGGER.info("json串美化失败：\n" + message, e);			
 		}
 		return message;

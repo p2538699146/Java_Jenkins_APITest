@@ -205,7 +205,7 @@ var eventList = {
 			publish.init();			
 		},
 		"#batch-del":function(){
-			batchOp($(".selectPt:checked"), top.PERFORMANCE_TEST_CONFIG_DEL_URL, "删除", null, "ptId");
+			batchOp($(".selectPt:checked"), REQUEST_URL.PERFORMANCE_TEST.DEL, "删除", null, "ptId");
 		},		
 		".object-edit":function(){
 			var data = table.row( $(this).parents('tr') ).data();
@@ -217,7 +217,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此配置信息吗？", top.PERFORMANCE_TEST_CONFIG_DEL_URL, {id:data.ptId}, this, "删除成功!");
+			opObj("确认要删除此配置信息吗？", REQUEST_URL.PERFORMANCE_TEST.DEL, {id:data.ptId}, this, "删除成功!");
 		},
 		"#choose-message-scene":function(){ //选择测试场景
 			layer_show("选择测试接口场景", "chooseMessageScene.html?callbackFun=chooseScene", null, null, 2);
@@ -227,7 +227,7 @@ var eventList = {
 				layer.msg("请先选择接口场景!", {icon:5, time:1800});
 				return false;
 			}
-			$.post(top.BUSINESS_SYSTEM_LIST_ALL_URL, {protocolType:$("#protocolType").val()}, function (json) {
+			$.post(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, {protocolType:$("#protocolType").val()}, function (json) {
 				if (json.returnCode == 0) {
 					if (json.data.length < 1) {
 						layer.msg('无测试环境可供选择，请查看测试场景详细信息!', {icon:0, time:1800});
@@ -263,10 +263,10 @@ var eventList = {
 			
 			layer.confirm('确认新建一个性能测试任务吗？(你可以在 任务列表 中查看当前的所有性能测试任务。)', {title:'提示'}, function(index) {
 				loading(true, '正在初始化测试...');
-				$.post(top.PERFORMANCE_TEST_TASK_INIT_URL, {ptId:data.ptId}, function(json){
+				$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_INIT, {ptId:data.ptId}, function(json){
 					if (json.returnCode == 0) {
 						layer.confirm('初始化完成,是否需要打开测试视图页面？', {title:'提示'}, function(index){
-							$.post(top.PERFORMANCE_TEST_TASK_VIEW_URL, {objectId:json.object.objectId}, function(text){
+							$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_VIEW, {objectId:json.object.objectId}, function(text){
 								loading(false);
 								if (text.returnCode == 0) {	
 									layer_show("性能测试视图", templates["performance-test-task-view"](text.object), null, null, 1, function(layero, index){
@@ -332,7 +332,7 @@ var eventList = {
 		"#download-parameterized-file":function(){//下载参数化文件
 			var path = $(this).siblings('input[type="text"]').val();
 			if (strIsNotEmpty(path)) {
-				window.open("../../" + top.DOWNLOAD_FILE_URL + "?downloadFileName=" + path.replace(/\\/g, "/"));
+				window.open("../../" + REQUEST_URL.FILE.DOWNLOAD_FILE + "?downloadFileName=" + path.replace(/\\/g, "/"));
 			}
 		},
 		"#remove-parameterized-file":function(){
@@ -355,7 +355,7 @@ var eventList = {
 				layer.msg('测试任务正在运行...', {time:1600});
 				return;
 			}
-			$.post(top.PERFORMANCE_TEST_TASK_ACTION_URL, {objectId:currentTestObject.objectId}, function(json){
+			$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_ACTION, {objectId:currentTestObject.objectId}, function(json){
 				if (json.returnCode == 0) {
 					layer.msg('启动成功!', {icon:1, time:1500});
 				} else {
@@ -367,7 +367,7 @@ var eventList = {
 		//测试视图界面-停止测试
 		"#stop-pt-test":function(){
 			layer.confirm('确认停止该测试任务吗？', {title:'警告'}, function(index){
-				$.post(top.PERFORMANCE_TEST_TASK_STOP_URL, {objectId:currentTestObject.objectId}, function(json) {
+				$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_STOP, {objectId:currentTestObject.objectId}, function(json) {
 					if (json.returnCode == 0) {
 						layer.msg('停止成功!', {icon:1, time:1600});
 					} else {
@@ -380,7 +380,7 @@ var eventList = {
 		//测试视图界面-删除测试
 		"#del-pt-test":function(){
 			layer.confirm('确认删除该测试任务吗,<span style="color:red;"><strong>删除的测试任务将不会保存所有的测试结果</strong></span>？', {title:'警告'}, function(index){
-				$.post(top.PERFORMANCE_TEST_TASK_DEL_URL, {objectId:currentTestObject.objectId}, function(json) {
+				$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_DEL, {objectId:currentTestObject.objectId}, function(json) {
 					if (json.returnCode == 0) {
 						layer.msg('删除成功！', {icon:1, time:1800});
 					} else {
@@ -408,7 +408,7 @@ var eventList = {
 		"#update-pt-result-view":function() {
 			//重新获取视图数据
 			loading('正在重新处理数据...', true);
-			$.post(top.PERFORMANCE_TEST_RESULT_ANAYLZE_URL, {ptResultId:$("#ptResultId").val(), rangeTime:$("#rangeTime").val()}, function(json) {
+			$.post(REQUEST_URL.PERFORMANCE_RESULT.ANALYZE, {ptResultId:$("#ptResultId").val(), rangeTime:$("#rangeTime").val()}, function(json) {
 				loading(false);
 				if (json.returnCode == 0) {
 					currentTestObject = json.object;
@@ -430,7 +430,7 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		listPage:{
-			listUrl:top.PERFORMANCE_TEST_CONFIG_LIST_URL,
+			listUrl:REQUEST_URL.PERFORMANCE_TEST.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 10]			
@@ -444,8 +444,8 @@ var mySetting = {
 					+ obj.messageScene.messageName + "-" + obj.messageScene.sceneName + "&nbsp;&nbsp;</span>");
 			},
 			
-			editUrl:top.PERFORMANCE_TEST_CONFIG_EDIT_URL,
-			getUrl:top.PERFORMANCE_TEST_CONFIG_GET_URL,
+			editUrl:REQUEST_URL.PERFORMANCE_TEST.EDIT,
+			getUrl:REQUEST_URL.PERFORMANCE_TEST.GET,
 			rules:{
 				"businessSystem.systemId":{
 					required:true
@@ -513,7 +513,7 @@ function createTestView(layero, object) {
 	//设定定时更新
 	if (!object.finished) {
 		window.intervalId = setInterval(function(){
-			$.post(top.PERFORMANCE_TEST_TASK_VIEW_URL, {objectId:currentTestObject.objectId}, function(json){
+			$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_VIEW, {objectId:currentTestObject.objectId}, function(json){
 				if (json.returnCode == 0) {
 					if (!json.object.running) {
 						return;

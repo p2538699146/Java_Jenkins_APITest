@@ -251,10 +251,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 			return result;
 			
 		} catch (Exception e) {
-			
 			validateTime = Integer.valueOf(String.valueOf(System.currentTimeMillis() - beginTime));
-			
-			logger.error("系统异常,请求失败!", e);
 			logger.info("[" + timeTag + "]验证耗时：" +  validateTime + "ms.");
 			
 			mark = PracticalUtils.getExceptionAllinformation(e);

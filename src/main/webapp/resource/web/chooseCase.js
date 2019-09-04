@@ -90,16 +90,15 @@ var mySetting = {
 			choosedCallBackFun = parent[GetQueryString("callbackFun")];	
 			caseId = GetQueryString("caseId");
 			if (caseId != null) {
-				publish.renderParams.listPage.listUrl = top.WEB_CASE_LIST_URL + "?caseType=snippet&caseId=" + caseId;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.WEB_CASE.LIST + "?caseType=snippet&caseId=" + caseId;
 			}	
 			df.resolve();
 		},
 		listPage:{
-			listUrl:top.WEB_CASE_LIST_URL,
+			listUrl:REQUEST_URL.WEB_CASE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 10],
-			dblclickEdit:false,
 			exportExcel:false,
 			dtOtherSetting:{
 				"stateSave": false

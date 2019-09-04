@@ -240,7 +240,7 @@ var currentVariablesSpan;
 var eventList = {
 		"#setting-scene-order":function () {//组合场景中排序执行顺序
 			//重新获取最新的场景列表
-			$.get(top.COMPLEX_SCENE_LIST_SCENES_URL + "?id=" + complexSceneId, function (json) {
+			$.get(REQUEST_URL.COMPLEX_SCENE.LIST_SCENES + "?id=" + complexSceneId, function (json) {
 				if (json.returnCode == 0) {
 					if (json.data.length < 2) {
 						layer.msg('测试场景太少,再添加几个吧!', {time:1500});
@@ -264,7 +264,7 @@ var eventList = {
 								layer.close(index);
 								return false;
 							}
-							$.post(top.COMPLEX_SCENE_SORT_SCENES_URL, {id:complexSceneId, sequenceNums:sortObj.toArray().join(",")}, function (json) {
+							$.post(REQUEST_URL.COMPLEX_SCENE.SORT_SCENES, {id:complexSceneId, sequenceNums:sortObj.toArray().join(",")}, function (json) {
 								if (json.returnCode == 0) {
 									layer.msg("保存排序成功!", {icon:1, time:1800})
 									refreshTable();
@@ -300,7 +300,7 @@ var eventList = {
 				$("#errorExecFlag").val(data.config.errorExecFlag);
 				//显示测试环境
 				if (strIsNotEmpty($("#systemId").val())) {
-					$.post(top.BUSINESS_SYSTEM_GET_URL, {id:$("#systemId").val()}, function(json) {
+					$.post(REQUEST_URL.BUSINESS_SYSTEM.GET, {id:$("#systemId").val()}, function(json) {
 						if (json.returnCode == 0) {
 							$("#complex-choose-business-system").siblings('span').remove();
 							$("#complex-choose-business-system").before('<span>' + json.object.systemName + "[" + json.object.systemHost + ":" + json.object.systemPort + ']&nbsp;&nbsp;</span>');
@@ -328,7 +328,7 @@ var eventList = {
 				});
 				
 				if (JSON.stringify(updateConfig) != JSON.stringify(data.config)) {
-					$.post(top.COMPLEX_SCENE_UPDATE_SCENE_CONFIG_URL, {id:complexSceneId, sequenceNum:data.sequenceNum, config:JSON.stringify(updateConfig)}, function (json) {
+					$.post(REQUEST_URL.COMPLEX_SCENE.UPDATE_CONFIG_INFO, {id:complexSceneId, sequenceNum:data.sequenceNum, config:JSON.stringify(updateConfig)}, function (json) {
 						if (json.returnCode == 0) {
 							layer.msg("已更新配置信息", {icon:1, time:1800});
 							refreshTable();
@@ -342,14 +342,14 @@ var eventList = {
 		".del-from-complex-scene":function () {//从当前组合场景中删除该测试场景
 			var data = table.row( $(this).parents('tr') ).data();
 			opObj("确认从该组合场景中删除该报文场景吗？", 
-					top.COMPLEX_SCENE_DEL_SCENE_URL, {id:complexSceneId, sequenceNum:data.sequenceNum}, this, "删除成功!", function(){
+					REQUEST_URL.COMPLEX_SCENE.DEL_SCENE, {id:complexSceneId, sequenceNum:data.sequenceNum}, this, "删除成功!", function(){
 						refreshTable();
 					});
 		},
 		".add-to-complex-scene":function () {//将该测试场景添加到组合场景中
 			var data = table.row( $(this).parents('tr') ).data();
 			opObj("确认添加该报文场景到组合场景中吗？<span class=\"c-red\">(可重复添加)</span>", 
-					top.COMPLEX_SCENE_ADD_SCENE_URL, {id:complexSceneId, messageSceneId:data.messageSceneId}, null, "添加成功!");
+					REQUEST_URL.COMPLEX_SCENE.ADD_SCENE, {id:complexSceneId, messageSceneId:data.messageSceneId}, null, "添加成功!");
 		},
 		"#add-object":function() {
 			publish.renderParams.editPage.modeFlag = 0;					
@@ -359,7 +359,7 @@ var eventList = {
 		},
 		"#batch-del-object":function() {//批量删除
 			var checkboxList = $(".selectScene:checked");
-			batchDelObjs(checkboxList, top.SCENE_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.MESSAGE_SCENE.DEL);
 		},
 		".object-edit":function() {//场景信息编辑
 			var data = table.row( $(this).parents('tr') ).data();
@@ -370,7 +370,7 @@ var eventList = {
 		},
 		".object-del":function() {//删除场景
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此场景？请慎重操作!", top.SCENE_DEL_URL, data.messageSceneId, this);
+			delObj("确定删除此场景？请慎重操作!", REQUEST_URL.MESSAGE_SCENE.DEL, data.messageSceneId, this);
 		},
 		".scene-test":function() {//场景测试
 			var data = table.row( $(this).parents('tr') ).data();
@@ -401,7 +401,7 @@ var eventList = {
 			table.destroy();
 			var that = this;
 			publish.renderParams.listPage.dtOtherSetting.serverSide = true;
-			publish.renderParams.listPage.listUrl = top.SCENE_LIST_URL;
+			publish.renderParams.listPage.listUrl = REQUEST_URL.MESSAGE_SCENE.LIST;
 			publish.renderParams.renderType = "list";
 			mode = "add";
 			publish.renderParams.customCallBack = function (p) {
@@ -415,7 +415,7 @@ var eventList = {
 			table.destroy();
 			var that = this;
 			publish.renderParams.listPage.dtOtherSetting.serverSide = false;
-			publish.renderParams.listPage.listUrl = top.COMPLEX_SCENE_LIST_SCENES_URL + "?id=" + complexSceneId;
+			publish.renderParams.listPage.listUrl = REQUEST_URL.COMPLEX_SCENE.LIST_SCENES + "?id=" + complexSceneId;
 			publish.renderParams.renderType = "list";
 			publish.renderParams.customCallBack = function (p) {
 				$(that).addClass('btn-primary').siblings("#add-complex-scene").removeClass('btn-primary');
@@ -452,7 +452,7 @@ var eventList = {
 		},
 		"#choose-scene-variables-value":function(){//从上下文变量中选择参数化的内容
 			$.ajax({
-				url:top.COMPLEX_SCENE_LIST_SAVE_VARIABLES_URL,
+				url:REQUEST_URL.COMPLEX_SCENE.LIST_SAVE_VARIABLES,
 				type:"POST",
 				data: {id:complexSceneId, sequenceNum:currentScene.sequenceNum},
 				success:function (json) {
@@ -472,11 +472,11 @@ var eventList = {
 			var titleName;
 			if ($("#save-new-varibales").attr("parent-parameter-name") == "替换变量") {
 				//获取的是入参节点
-				getUrl = top.SCENE_GET_REQUEST_MSG_JSON_TREE_URL;
+				getUrl = REQUEST_URL.MESSAGE_SCENE.GET_REQUEST_MSG_JSON_TREE;
 				titleName = currentScene.interfaceName + "-" + currentScene.messageName + "-" + currentScene.sceneName + " 入参节点树";
 			} else {
 				//获取的是出参节点
-				getUrl = top.SCENE_GET_RESPONSE_MSG_JSON_TREE_URL;
+				getUrl = REQUEST_URL.MESSAGE_SCENE.GET_RESPONSE_MSG_JSON_TREE;
 				titleName = currentScene.interfaceName + "-" + currentScene.messageName + "-" + currentScene.sceneName + " 出参节点树";
 			}
 			
@@ -520,7 +520,7 @@ var eventList = {
 			$(this).remove();
 		},
 		'#choose-validate-template':function() { //创建测试场景时可以选择默认的关联模板
-			$.post(top.GLOBAL_VARIABLE_LIST_URL, {variableType:"relatedKeyWord"}, function(json) {
+			$.post(REQUEST_URL.GLOBAL_VARIABLE.LIST_ALL, {variableType:"relatedKeyWord"}, function(json) {
 				if (json.returnCode == 0) {
 					showSelectBox(json.data, "variableId", "variableName", function(variableId, globalVariable, index) {
 						$("#variableId").val(variableId);
@@ -536,7 +536,7 @@ var eventList = {
 		},
 		"#import-data-from-excel":function() {//Excel导入数据
 			createImportExcelMark("Excel导入场景信息", "../../excel/upload_scene_template.xlsx"
-					, top.UPLOAD_FILE_URL, top.SCENE_IMPORT_FROM_EXCEL + "?messageId=" + messageId);
+					, REQUEST_URL.FILE.UPLOAD_FILE, REQUEST_URL.MESSAGE_SCENE.IMPORT_FROM_EXCEL + "?messageId=" + messageId);
 		},
 		".get-responseExample":function () {//获取返回示例报文
 			var data = table.row( $(this).parents('tr') ).data();
@@ -546,7 +546,7 @@ var eventList = {
 			});	
 		},
 		"#complex-choose-business-system":function () {//选择测试环境-组合场景中给场景配置时
-			$.post(top.SCENE_GET_URL, {id:messageSceneId}, function (json) {
+			$.post(REQUEST_URL.MESSAGE_SCENE.GET, {id:messageSceneId}, function (json) {
 			if (json.returnCode == 0) {
 				layerMultipleChoose({
 					title:"请选择对应所属的测试环境",
@@ -574,7 +574,7 @@ var eventList = {
 		});		
 		},
 		"#choose-business-system":function () {//选择测试环境-编辑新增测试场景
-			$.post(top.MESSAGE_GET_URL, {id:messageId}, function (json) {
+			$.post(REQUEST_URL.MESSAGE.GET, {id:messageId}, function (json) {
 				if (json.returnCode == 0) {
 					layerMultipleChoose({
 						title:"请选择测试场景所属的测试环境(可多选,最多不超过10个)",
@@ -617,7 +617,7 @@ var mySetting = {
 			//测试集中组合场景的编辑页面
 			if (complexSceneId) {
 		
-				publish.renderParams.listPage.listUrl = top.COMPLEX_SCENE_LIST_SCENES_URL + "?id=" + complexSceneId;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.COMPLEX_SCENE.LIST_SCENES + "?id=" + complexSceneId;
 				publish.renderParams.listPage.dtOtherSetting= {serverSide:false};
 				publish.renderParams.listPage.exportExcel = false;
 				
@@ -636,7 +636,7 @@ var mySetting = {
 			//测试集中没有测试数据的场景展示
 			if (GetQueryString("addDataFlag") == "0") {
 				setId = GetQueryString("setId");
-				publish.renderParams.listPage.listUrl = top.SCENE_LIST_NO_DATA_SCENES_URL + "?setId=" + setId;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.MESSAGE_SCENE.LIST_NO_DATA_SCENES + "?setId=" + setId;
 				publish.renderParams.listPage.dtOtherSetting.serverSide = false;
 				publish.renderParams.listPage.dtOtherSetting.aaSorting = [[ 7, "asc" ]];
 				$("#btn-tools").parent("div").hide();
@@ -648,13 +648,13 @@ var mySetting = {
 			messageId = GetQueryString("messageId");
 			interfaceName = GetQueryString("interfaceName");
 			messageName = GetQueryString("messageName");				
-			publish.renderParams.listPage.listUrl = top.SCENE_LIST_URL + "?messageId=" + messageId;
+			publish.renderParams.listPage.listUrl = REQUEST_URL.MESSAGE_SCENE.LIST + "?messageId=" + messageId;
 									
 			df.resolve();			   		 	
    	 	},
 		editPage:{
-			editUrl:top.SCENE_EDIT_URL,
-			getUrl:top.SCENE_GET_URL,
+			editUrl:REQUEST_URL.MESSAGE_SCENE.EDIT,
+			getUrl:REQUEST_URL.MESSAGE_SCENE.GET,
 			rules:{
 				sceneName:{
 					required:true,
@@ -675,7 +675,7 @@ var mySetting = {
 				}	
 				
 				if (messageId != null && publish.renderParams.editPage.modeFlag == 0) {
-					$.post(top.MESSAGE_GET_URL, {id:messageId}, function (json) {
+					$.post(REQUEST_URL.MESSAGE.GET, {id:messageId}, function (json) {
 						if (json.returnCode == 0) {
 							appendSystem(json.object.businessSystems);
 						}
@@ -687,7 +687,7 @@ var mySetting = {
 
 		},		
 		listPage:{
-			listUrl:top.SCENE_LIST_URL,
+			listUrl:REQUEST_URL.MESSAGE_SCENE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 8, 11, 12],
@@ -710,7 +710,7 @@ $(function(){
  */
 function renderSceneTestPage(flag) {
 	var index = layer.msg('加载中,请稍后...', {icon:16, time:60000, shade:0.35});
-	$.get(top.SCENE_GET_TEST_OBJECT_URL, {messageSceneId:messageSceneId}, function(data){					
+	$.get(REQUEST_URL.MESSAGE_SCENE.GET_TEST_OBJECT, {messageSceneId:messageSceneId}, function(data){
 		if(data.returnCode == 0){
 			var $F = $("#message-scene-test-view");
 			
@@ -771,7 +771,7 @@ function sceneTest() {
 	var index = layer.msg('正在进行测试...', {icon:16, time:9999999, shade:0.35});
 
 	
-	$.post(top.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage, systemId:systemId},function(data) {
+	$.post(REQUEST_URL.AUTO_TEST.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage, systemId:systemId},function(data) {
 		if (data.returnCode == 0) {			
 			layer.close(index);
 			renderResultViewPage(data.result, messageSceneId);			

@@ -146,7 +146,7 @@ var columnsSetting = [{"data":null,
 
 
 var beforeEditInit = function(df){
-	$.get(top.ROLE_LIST_ALL_URL, function(result) {
+	$.get(REQUEST_URL.ROLE.LIST_ALL, function(result) {
 		if (result.returnCode == 0) {
 			var roles = result.data;
 			var optionHtml='';
@@ -170,7 +170,7 @@ var eventList = {
 			//获取当前行数据
 			var data = table.row( $(this).parents('tr') ).data();
 			layer.confirm('确定要重置该用户的密码吗？',function (index) {
-				$.get(top.USER_RESET_PASSWD_URL, {userId:data.userId}, function(data){
+				$.get(REQUEST_URL.USER.RESET_PASSWORD, {userId:data.userId}, function(data){
 					if(data.returnCode == 0){
 		                layer.msg('密码已重置为111111',{icon:1,time:1000});
 		    		}else{
@@ -207,7 +207,7 @@ var eventList = {
 		    	}   	
 		    	layer.confirm(tipMsg, function(index) {
 		    		layer.close(index);
-		        	$.get(top.USER_LOCK_URL, {userId:data.userId, username:data.username, mode:mode}, function(data) {
+		        	$.get(REQUEST_URL.USER.LOCK, {userId:data.userId, username:data.username, mode:mode}, function(data) {
 		        		if(data.returnCode == 0){
 		        			table.ajax.reload(null,false);
 		                    layer.msg(tipMsg1,{icon:1,time:1000});
@@ -226,8 +226,8 @@ var mySetting = {
 		eventList:eventList,
 		editPage:{
 			beforeInit:beforeEditInit,
-			editUrl:top.USER_EDIT_URL,
-			getUrl:top.USER_GET_URL,
+			editUrl:REQUEST_URL.USER.EDIT,
+			getUrl:REQUEST_URL.USER.GET,
 			rules:{username:{required:true, minlength:2, maxlength:20}, realName:{required:true, minlength: 2, maxlength: 20}},
 			renderCallback:function(o){
 				var statusMsg='';
@@ -236,7 +236,7 @@ var mySetting = {
 			}
 		},
 		listPage:{
-			listUrl:top.USER_LIST_URL,
+			listUrl:REQUEST_URL.USER.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 8]

@@ -247,7 +247,7 @@ var eventList = {
 			},
 		'.object-del':function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此定时任务？请慎重操作!", top.TASK_DEL_URL, data.taskId, this);
+			delObj("确定删除此定时任务？请慎重操作!", REQUEST_URL.TASK.DEL, data.taskId, this);
 		},
 		'.object-edit':function() {
 			var data = table.row( $(this).parents('tr') ).data();
@@ -266,7 +266,7 @@ var eventList = {
 			
 			layer.confirm('确认停止/启动该定时任务?', {title:'提示', icon:0}, function(index) {
 				
-				$.get(data.status == "0" ? top.TASK_STOP_TASK_URL : top.TASK_ADD_RUNABLE_TASK_URL, {taskId:data.taskId}, function(json) {
+				$.get(data.status == "0" ? REQUEST_URL.TASK.STOP_TASK : REQUEST_URL.TASK.ADD_RUNNABLE_TASK, {taskId:data.taskId}, function(json) {
 					if (json.returnCode == 0) {
 						layer.msg('操作成功!', {icon:1, time:1500});
 						refreshTable();
@@ -313,7 +313,7 @@ var eventList = {
 		'#op-quartz':function() {
 			layer.confirm('确定进行此操作?', {icon:0, title:'警告'}, function(index) {
 				layer.close(index);
-				$.get(quartzStatus == "true" ? top.TASK_STOP_QUARTZ_URL : top.TASK_START_QUARTZ_URL, function(data) {
+				$.get(quartzStatus == "true" ? REQUEST_URL.TASK.STOP_QUARTZ : REQUEST_URL.TASK.START_QUARTZ, function(data) {
 					if (data.returnCode == 0) {
 						quartzStatus = data.status;
 						changeStatusView();
@@ -338,14 +338,14 @@ var eventList = {
 						btn:['运行任务','停止任务','删除任务'],
 						btn3:function(index){
 							layer.close(index);
-							batchDelObjs($(".selectTask:checked"), top.TASK_DEL_URL);
+							batchDelObjs($(".selectTask:checked"), REQUEST_URL.TASK.DEL);
 						}
 					},function(index){ 
 						layer.close(index);
-						batchOp($(".selectTask:checked"), top.TASK_ADD_RUNABLE_TASK_URL, "运行", null, "taskId");
+						batchOp($(".selectTask:checked"), REQUEST_URL.TASK.ADD_RUNNABLE_TASK, "运行", null, "taskId");
 					},function(index){
 						layer.close(index);
-						batchOp($(".selectTask:checked"), top.TASK_STOP_TASK_URL, "停止", null, "taskId");
+						batchOp($(".selectTask:checked"), REQUEST_URL.TASK.STOP_TASK, "停止", null, "taskId");
 					});	
 		},
 		'#choose-task-set':function() {
@@ -368,7 +368,7 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		customCallBack:function(p) {
-			$.get(top.TASK_GET_QUARTZ_STATUS_URL, function(data) {
+			$.get(REQUEST_URL.TASK.GET_QUARTZ_STATUS, function(data) {
 				if (data.returnCode == 0) {
 					quartzStatus = data.status;
 					changeStatusView();
@@ -380,22 +380,22 @@ var mySetting = {
 			expressionEditHtml =  templates["quartz-expression-edit"](cronExpressionData);
 		},
 		listPage:{
-			listUrl:top.TASK_LIST_URL,
+			listUrl:REQUEST_URL.TASK.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			dblclickEdit:false,
 			columnsJson:[0, 4, 5, 12]			
 		},
 		editPage:{
-			editUrl:top.TASK_EDIT_URL,
-			getUrl:top.TASK_GET_URL,
+			editUrl:REQUEST_URL.TASK.EDIT,
+			getUrl:REQUEST_URL.TASK.GET,
 			rules:{
 				taskName:{
 					required:true,
 					minlength:1,
 					maxlength:100,
 					remote:{
-						url:top.TASK_CHECK_NAME_URL,
+						url:REQUEST_URL.TASK.CHECK_NAME,
 						type:"post",
 						dataType:"json",
 						data: {                   
@@ -493,7 +493,7 @@ function changeStatusView () {
 }
 
 function updateRuleExpression(expression, id, layerIndex) {
-	$.post(top.TASK_UPDATE_CRON_EXPRESSION_URL, {taskId:id, taskCronExpression:expression}, function(json) {
+	$.post(REQUEST_URL.TASK.UPDATE_CRON_EXPRESSION, {taskId:id, taskCronExpression:expression}, function(json) {
 		if (json.returnCode == 0) {
 			layer.msg('更新成功!', {icon:1, time:1500});
 			if (layerIndex == null) {

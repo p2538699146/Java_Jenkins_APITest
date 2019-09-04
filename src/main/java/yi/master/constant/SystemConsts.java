@@ -9,6 +9,11 @@ package yi.master.constant;
  * @version 1.0.0.0,2017.2.13
  */
 public class SystemConsts {
+
+	/**
+	 * 当前版本号
+	 */
+	public static final String VERSION = "0.1.4beta";
 	
 	/**
 	 * 默认admin角色的roleId
@@ -189,4 +194,14 @@ public class SystemConsts {
 	public static final String CUSTOM_TRUE_STRING = "true";
 	public static final String CUSTOM_TRUE_NUMBER = "1";
 	public static final String CUSTOM_FALSE_NUMBER = "0";
+	/**
+	 * 检查版本升级的网址
+	 */
+	public static final String CHECK_VERSION_UPGRADE_URL = "http://www.xuwangcheng.com/yi/api/checkVersion";
+	//public static final String CHECK_VERSION_UPGRADE_URL = "http://localhost:8080/api/checkVersion";
+
+	/**
+	 * 版本升级地址
+	 */
+	public static final String VERSION_UPGRADE_URL = "https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?sort_id=1608611&doc_id=196989";
 }

@@ -145,7 +145,7 @@ var eventList = {
 		},
 		".object-del":function () {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("警告：确认要删除此操作接口信息吗(删除的接口信息将会作为公用接口，调用时将不作校验!)？", top.OP_INTERFACE_DEL_URL, data.opId, this);
+			delObj("警告：确认要删除此操作接口信息吗(删除的接口信息将会作为公用接口，调用时将不作校验!)？", REQUEST_URL.OP_INTERFACE.DEL, data.opId, this);
 		},
 		"#add-object":function() {//添加操作接口
 			publish.renderParams.editPage.modeFlag = 0;					
@@ -157,8 +157,8 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		editPage:{
-			editUrl:top.OP_INTERFACE_EDIT_URL,
-			getUrl:top.OP_INTERFACE_GET_URL,
+			editUrl:REQUEST_URL.OP_INTERFACE.EDIT,
+			getUrl:REQUEST_URL.OP_INTERFACE.GET,
 			renderCallback:function (obj) {
 				$("#choose-parent-op").before('<span>' + obj.parentOpName + '&nbsp;&nbsp;&nbsp;</span>');
 			},
@@ -171,7 +171,7 @@ var mySetting = {
 			}
 		},
 		listPage:{
-			listUrl:top.OP_INTERFACE_LIST_URL,
+			listUrl:REQUEST_URL.OP_INTERFACE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 8],
@@ -227,7 +227,7 @@ function chooseParentOp () {
 	layer_show(nodeName + "-请双击选择操作接口父节点", '<div class="page-container"><ul id="node-tree" class="ztree"></ul></div>', 400, 450, 1, function (layero, index) {
 		layero.spinModal(false);
 		viewIndex = index;
-		$.get(top.OP_INTERFACE_LIST_URL, function(json) {			 	 			
+		$.get(REQUEST_URL.OP_INTERFACE.LIST, function(json) {
 			if (json.returnCode == 0) {				
 				$.fn.zTree.init(layero.find("#node-tree"), zTreeSetting, json.data);
 				layero.spinModal(false);

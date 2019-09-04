@@ -166,7 +166,7 @@ var mySetting = {
 			df.resolve();
 		},
 		listPage:{
-			listUrl:top.SCENE_LIST_URL,
+			listUrl:REQUEST_URL.MESSAGE_SCENE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 8, 10, 11],
@@ -191,7 +191,7 @@ $(function(){
  */
 function renderSceneTestPage(flag) {
 	var index = layer.msg('加载中,请稍后...', {icon:16, time:60000, shade:0.35});
-	$.get(top.SCENE_GET_TEST_OBJECT_URL, {messageSceneId:messageSceneId}, function(data){					
+	$.get(REQUEST_URL.MESSAGE_SCENE.GET_TEST_OBJECT, {messageSceneId:messageSceneId}, function(data){
 		if(data.returnCode == 0){
 			var $F = $("#message-scene-test-view");
 			
@@ -251,7 +251,7 @@ function sceneTest() {
 	var index = layer.msg('正在进行测试...', {icon:16, time:9999999, shade:0.35});
 
 	
-	$.post(top.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage},function(data) {
+	$.post(REQUEST_URL.AUTO_TEST.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage},function(data) {
 		if (data.returnCode == 0) {			
 			layer.close(index);
 			renderResultViewPage(data.result, messageSceneId);			

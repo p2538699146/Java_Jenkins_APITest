@@ -169,7 +169,7 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			layer.confirm('确认测试该组合场景吗？<br>组合场景的测试时间长度和包含的场景数有关,请耐心等待测试完成!', {title:'提示', icon:3}, function(index){				
 				var loadIndex = layer.msg('正在测试,请耐心等待...', {icon:16, time:9999999, shade:0.4});
-				$.post(top.TEST_COMPLEX_SCENE_URL, {id:data.id}, function(json){
+				$.post(REQUEST_URL.AUTO_TEST.TEST_COMPLEX_SCENE_URL, {id:data.id}, function(json){
 					layer.close(loadIndex);
 					if (json.returnCode == 0 && json.result != null) {
 						var results = json.result;
@@ -206,14 +206,14 @@ var eventList = {
 		},
 		".add-scene-to-set":function () {//添加该组合场景到测试集
 			var data = table.row( $(this).parents('tr') ).data();
-			opObj("确认添加该组合场景到指定测试集吗？", top.COMPLEX_SCENE_ADD_TO_SET_URL, {id:data.id, setId:setId}, this, "添加成功!");
+			opObj("确认添加该组合场景到指定测试集吗？", REQUEST_URL.COMPLEX_SCENE.ADD_TO_SET, {id:data.id, setId:setId}, this, "添加成功!");
 		},
 		".batch-del-object":function() {//批量删除组合场景或者从测试集中批量删除组合场景
 			var checkboxList = $(".selectComplexScene:checked");
 			if (setId == null) {
-				batchDelObjs(checkboxList, top.COMPLEX_SCENE_DEL_URL);
+				batchDelObjs(checkboxList, REQUEST_URL.COMPLEX_SCENE.DEL);
 			} else {
-				batchOp(checkboxList, top.COMPLEX_SCENE_DEL_FROM_SET_URL, "删除", null, null, {setId:setId});
+				batchOp(checkboxList, REQUEST_URL.COMPLEX_SCENE.DEL_FROM_SET, "删除", null, null, {setId:setId});
 			}
 			
 		},
@@ -227,9 +227,9 @@ var eventList = {
 		".object-del":function() {//删除组合场景或者从测试集中删除指定组合场景
 			var data = table.row( $(this).parents('tr') ).data();
 			if (setId == null) {
-				delObj("确定删除此组合场景？ 请慎重操作!", top.COMPLEX_SCENE_DEL_URL, data.id, this);
+				delObj("确定删除此组合场景？ 请慎重操作!", REQUEST_URL.COMPLEX_SCENE.DEL, data.id, this);
 			} else {
-				opObj("确定从当前测试集删除该组合场景中吗？", top.COMPLEX_SCENE_DEL_FROM_SET_URL, {id:data.id, setId:setId}, this, "删除成功!");
+				opObj("确定从当前测试集删除该组合场景中吗？", REQUEST_URL.COMPLEX_SCENE.DEL_FROM_SET, {id:data.id, setId:setId}, this, "删除成功!");
 			}
 			
 		},
@@ -251,7 +251,7 @@ var mySetting = {
 			setId = GetQueryString("setId");
 			addMode = GetQueryString("addMode");
 			if (setId != null && addMode == null) {
-				publish.renderParams.listPage.listUrl = top.COMPLEX_SCENE_LIST_SET_SCENES_URL + "?setId=" + setId;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.COMPLEX_SCENE.LIST_SET_SCENES + "?setId=" + setId;
 				publish.renderParams.listPage.dtOtherSetting.serverSide = false;
 			}
 			if (addMode != null) {
@@ -260,8 +260,8 @@ var mySetting = {
 			df.resolve();			   		 	
    	 	},
 		editPage:{
-			editUrl:top.COMPLEX_SCENE_EDIT_URL,
-			getUrl:top.COMPLEX_SCENE_GET_URL,
+			editUrl:REQUEST_URL.COMPLEX_SCENE.EDIT,
+			getUrl:REQUEST_URL.COMPLEX_SCENE.GET,
 			rules:{
 				complexSceneName:{
 					required:true,
@@ -271,7 +271,7 @@ var mySetting = {
 			}
 		},		
 		listPage:{
-			listUrl:top.COMPLEX_SCENE_LIST_URL,
+			listUrl:REQUEST_URL.COMPLEX_SCENE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 3, 6, 7],

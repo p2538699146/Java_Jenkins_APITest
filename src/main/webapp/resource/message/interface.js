@@ -2,7 +2,7 @@ var interfaceId; //当前正在编辑的interface的id
 var currIndex;//当前正在操作的layer窗口的index
 
 var templateParams = {
-		tableTheads:["名称","报文", "中文名","类型","协议","创建时间","状态","创建用户","最后修改","参数", "备注","操作"],
+		tableTheads:["名称", "中文名","类型","协议","创建时间","状态","创建用户","最后修改","报文管理", "参数管理", "备注","操作"],
 		btnTools:[{
 			type:"primary",
 			size:"M",
@@ -164,7 +164,7 @@ var templateParams = {
 			enable:true, 
 			formTitle:"接口信息-高级查询",
 			pageOpenSuccessCallback:function (layero, index) {
-				$.get(top.BUSINESS_SYSTEM_LIST_ALL_URL, function (json) {
+				$.get(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, function (json) {
 					if (json.returnCode == 0) {
 						$.each(json.data, function(i, n){
 							layero.find("#systemId").append('<option value="'+ n.systemId +'">' + n.systemName + '[' 
@@ -228,18 +228,6 @@ var columnsSetting = [
 		    "data":"interfaceName",
           	"render":CONSTANT.DATA_TABLES.COLUMNFUN.ELLIPSIS
           	},
-          	{
-                "data":"messagesNum",
-                "render":function(data, type, full, meta){
-                	var context =
-                		[{
-              			type:"default",
-              			size:"M",
-              			markClass:"show-interface-messages",
-              			name:data
-              		}];
-                    return btnTextTemplate(context);
-                }},
           {
       		"className":"ellipsis",
 		    "data":"interfaceCnName",
@@ -273,19 +261,31 @@ var columnsSetting = [
                   return labelCreate(data);
               }},
           ellipsisData("createUserName"),ellipsisData("lastModifyUser"),
-          
-          {
-              "data":"parametersNum",
-              "render":function(data, type, full, meta){
-              	var context =
-              		[{
-            			type:"secondary",
-            			size:"M",
-            			markClass:"edit-params",
-            			name:data
-            		}];
-                  return btnTextTemplate(context);
-              }},
+			{
+				"data":"messagesNum",
+				"render":function(data, type, full, meta){
+					var context =
+						[{
+							type:"primary",
+							size:"M",
+							markClass:"show-interface-messages",
+							name:data
+						}];
+					return btnTextTemplate(context);
+				}
+			},
+    		{
+			"data":"parametersNum",
+			"render":function(data, type, full, meta){
+				var context =
+					[{
+						type:"secondary",
+						size:"M",
+						markClass:"edit-params",
+						name:data
+					}];
+				return btnTextTemplate(context);
+        	}},
           {
   		    "data":"mark",
   		    "className":"ellipsis",
@@ -335,10 +335,10 @@ var eventList = {
 						anim:5
 					},function(index){ 
 						layer.close(index);						
-						batchOp($(".selectInterface:checked"), top.INTERFACE_UPDATE_CHILDREN_BUSINESS_SYSTEMS_URL, "更新", null, "interfaceId");
+						batchOp($(".selectInterface:checked"), REQUEST_URL.INTERFACE.UPDATE_CHILDREN_BUSINESS_SYSTEMS, "更新", null, "interfaceId");
 					},function(index){
 						layer.close(index);
-						batchDelObjs($(".selectInterface:checked"), top.INTERFACE_DEL_URL);
+						batchDelObjs($(".selectInterface:checked"), REQUEST_URL.INTERFACE.DEL);
 					});	
 		},
 		".edit-params":function(){
@@ -358,14 +358,14 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此接口？此操作同时会删除该接口下所有的报文以及场景相关数据,请谨慎操作!", top.INTERFACE_DEL_URL,data.interfaceId,this);
+			delObj("确定删除此接口？此操作同时会删除该接口下所有的报文以及场景相关数据,请谨慎操作!", REQUEST_URL.INTERFACE.DEL,data.interfaceId,this);
 		},
 		"#import-data-from-excel":function() {
 			createImportExcelMark("Excel导入接口信息", "../../excel/upload_interface_template.xlsx"
-					, top.UPLOAD_FILE_URL, top.INTERFACE_IMPORT_FROM_EXCEL_URL);
+					, REQUEST_URL.FILE.UPLOAD_FILE, REQUEST_URL.INTERFACE.IMPORT_FROM_EXCEL);
 		},
 		"#choose-business-system":function () {//选择测试环境
-			$.post(top.BUSINESS_SYSTEM_LIST_ALL_URL, {protocolType:$("#interfaceProtocol").val()}, function (json) {
+			$.post(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, {protocolType:$("#interfaceProtocol").val()}, function (json) {
 				if (json.returnCode == 0) {
 					if (json.data.length < 1) {
 						layer.msg('无此协议的测试环境可供选择，请联系管理添加!', {icon:0, time:1800});
@@ -414,7 +414,7 @@ var eventList = {
 					ids.push($(n).val());
 				});
 				
-				$.post(top.INTERFACE_EXPORT_DOCUMENT_EXCEL_URL, {ids:ids.join(",")}, function (json) {
+				$.post(REQUEST_URL.INTERFACE.EXPORT_DOCUMENT_EXCEL, {ids:ids.join(",")}, function (json) {
 					layer.close(loadindex);
 					if (json.returnCode == 0) {
 						window.open("../../" + json.path)
@@ -431,8 +431,8 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		editPage:{
-			editUrl:top.INTERFACE_EDIT_URL,
-			getUrl:top.INTERFACE_GET_URL,
+			editUrl:REQUEST_URL.INTERFACE.EDIT,
+			getUrl:REQUEST_URL.INTERFACE.GET,
 			renderCallback:function (obj) {
 				var systemIds = [];
 				$.each(obj.systems, function (i, n) {								
@@ -448,7 +448,7 @@ var mySetting = {
 					if (data.msg != null) {
 						layer.confirm(data.msg, {icon:0, btn:['确认更新', '暂不更新']}, function (index, layero) {
 							var loadIndex = layer.msg('正在更新(数据量较多请耐心等待)...', {icon:16, time:999999, shade:0.4});
-							$.post(top.INTERFACE_UPDATE_CHILDREN_BUSINESS_SYSTEMS_URL, {interfaceId:interfaceId, updateSystems:JSON.stringify(data.updateSystems)}, function (json) {
+							$.post(REQUEST_URL.INTERFACE.UPDATE_CHILDREN_BUSINESS_SYSTEMS, {interfaceId:interfaceId, updateSystems:JSON.stringify(data.updateSystems)}, function (json) {
 								layer.close(loadIndex);
 								if (json.returnCode == 0) {
 									layer.closeAll('page');
@@ -472,7 +472,7 @@ var mySetting = {
 				interfaceName:{
 					required:true,
 					remote:{
-						url:top.INTERFACE_CHECK_NAME_URL,
+						url:REQUEST_URL.INTERFACE.CHECK_NAME,
 						type:"post",
 						dataType: "json",
 						data: {                   
@@ -502,7 +502,7 @@ var mySetting = {
 
 		},		
 		listPage:{
-			listUrl:top.INTERFACE_LIST_URL,
+			listUrl:REQUEST_URL.INTERFACE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 12, 13]

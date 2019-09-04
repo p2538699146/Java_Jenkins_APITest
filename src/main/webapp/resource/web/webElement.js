@@ -207,14 +207,14 @@ var eventList = {
 					shadeClose:true,
 					btn3:function(index){
 						layer.close(index);
-						batchOp($(".selectElement:checked"), top.WEB_ELEMENT_DEL_URL, "删除", null, "elementId", {parentId:parentElementId});
+						batchOp($(".selectElement:checked"), REQUEST_URL.WEB_ELEMENT.DEL, "删除", null, "elementId", {parentId:parentElementId});
 					}
 				},function(index){ 
 					layer.close(index);
-					$.post(top.WEB_ELEMENT_LIST_ALL_URL, {copyOrMoveFlag:"true"}, function(json) {
+					$.post(REQUEST_URL.WEB_ELEMENT.LIST_ALL, {copyOrMoveFlag:"true"}, function(json) {
 						if (json.returnCode == 0) {
 							showSelectBox (json.data, "elementId", "elementPath", function(id, obj, index){
-								batchOp($(".selectElement:checked"), top.WEB_ELEMENT_COPY_URL, "复制", null, "elementId", {parentId:id});
+								batchOp($(".selectElement:checked"), REQUEST_URL.WEB_ELEMENT.COPY, "复制", null, "elementId", {parentId:id});
 								layer.close(index);
 							}, "请选择目标页面:")							
 						} else {
@@ -223,10 +223,10 @@ var eventList = {
 					});		
 				},function(index){
 					layer.close(index);
-					$.post(top.WEB_ELEMENT_LIST_ALL_URL, {copyOrMoveFlag:"true"}, function(json) {
+					$.post(REQUEST_URL.WEB_ELEMENT.LIST_ALL, {copyOrMoveFlag:"true"}, function(json) {
 						if (json.returnCode == 0) {
 							showSelectBox (json.data, "elementId", "elementPath", function(id, obj, index){
-								batchOp($(".selectElement:checked"), top.WEB_ELEMENT_MOVE_URL, "移动", null, "elementId", {parentId:id});
+								batchOp($(".selectElement:checked"), REQUEST_URL.WEB_ELEMENT.MOVE, "移动", null, "elementId", {parentId:id});
 								layer.close(index);
 							}, "请选择目标页面:")							
 						} else {
@@ -245,7 +245,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此mock接口吗？", top.WEB_ELEMENT_DEL_URL, {id:data.elementId}, this, "删除成功!");
+			opObj("确认要删除此mock接口吗？", REQUEST_URL.WEB_ELEMENT.DEL, {id:data.elementId}, this, "删除成功!");
 		}	
 };
 
@@ -255,9 +255,9 @@ var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df){
 			parentElementId = GetQueryString("elementId");				
-			publish.renderParams.listPage.listUrl = top.WEB_ELEMENT_LIST_URL + "?elementId=" + parentElementId;	
+			publish.renderParams.listPage.listUrl = REQUEST_URL.WEB_ELEMENT.LIST + "?elementId=" + parentElementId;
 			
-			$.post(top.WEB_ELEMENT_GET_URL, {id:parentElementId}, function(json) {
+			$.post(REQUEST_URL.WEB_ELEMENT.GET, {id:parentElementId}, function(json) {
 				if (json.returnCode == 0) {
 					parentElement = json.object;
 					$('.breadcrumb > i:eq(0)').after(" " + parentElement.elementPath);
@@ -267,14 +267,14 @@ var mySetting = {
 			df.resolve();			   		 	
    	 	},
 		listPage:{
-			listUrl:top.WEB_ELEMENT_LIST_URL,
+			listUrl:REQUEST_URL.WEB_ELEMENT.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 10, 11]			
 		},
 		editPage:{
-			editUrl:top.WEB_ELEMENT_EDIT_URL,
-			getUrl:top.WEB_ELEMENT_GET_URL,
+			editUrl:REQUEST_URL.WEB_ELEMENT.EDIT,
+			getUrl:REQUEST_URL.WEB_ELEMENT.GET,
 			rules:{
 				elementName:{
 					required:true,

@@ -185,7 +185,7 @@ var columnsSetting = [
 						var option = {
 	      		  			"default":{
 	      		  				btnStyle:"success",
-	      		  				status:stepParameters["opType"][data]["text"]
+	      		  				status:WEB_STEP_PARAMETER["opType"][data]["text"]
 	      		  				}};	
 						 return labelCreate(data, option);
 			  }},
@@ -265,7 +265,7 @@ var eventList = {
 					layer.close(index);	
 				},function(index){
 					layer.close(index);
-					batchOp($(".selectStep:checked"), top.WEB_STEP_DEL_URL, "删除", null, "stepId");
+					batchOp($(".selectStep:checked"), REQUEST_URL.WEB_STEP.DEL, "删除", null, "stepId");
 				});
 		},		
 		".object-edit":function(){
@@ -278,11 +278,11 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此测试步骤吗？", top.WEB_STEP_DEL_URL, {id:data.stepId}, this, "删除成功!");
+			opObj("确认要删除此测试步骤吗？", REQUEST_URL.WEB_STEP.DEL, {id:data.stepId}, this, "删除成功!");
 		},
 		".choose-data-type":function(){//选择值类型的页面
 			var that = this;
-			layer_show('选择值类型', templates['web-step-data-type'](stepParameters['dataType']), 830, 330, 1, function(layero, index){
+			layer_show('选择值类型', templates['web-step-data-type'](WEB_STEP_PARAMETER['dataType']), 830, 330, 1, function(layero, index){
 				$(layero).find('#parent-type').val($(that).siblings('input').attr('id'));
 				var value = $(that).siblings('input').val();
 				if (strIsNotEmpty(value)) {
@@ -295,7 +295,7 @@ var eventList = {
 		},
 		"#choose-op-type":function(){//打开选择操作类型的页面
 			var that = this;
-			layer_show('选择操作类型', templates['web-step-data-type'](stepParameters['opType']), 830, 330, 1, function(layero, index){
+			layer_show('选择操作类型', templates['web-step-data-type'](WEB_STEP_PARAMETER['opType']), 830, 330, 1, function(layero, index){
 				var value = $(that).siblings('input').val();
 				if (strIsNotEmpty(value)) {
 					$(layero).find('input[data-type="' + value + '"]').click();
@@ -325,7 +325,7 @@ var eventList = {
 					//选择数据库
 					$.ajax({
 						type:"POST",
-						url:top.QUERY_DB_LIST_ALL_URL,
+						url:REQUEST_URL.QUERY_DB.LIST_ALL,
 						async: false,
 						success:function(data) {
 							if (data.returnCode == 0){
@@ -384,7 +384,7 @@ var eventList = {
 					});
 					var configJson = JSON.stringify(config);
 					if (!CompareJsonObj(config, JSON.parse(data.configJson))) {
-						$.post(top.WEB_STEP_UPDATE_CONFIG_URL, {stepId:$(layero).find('#stepId').val(), configJson:configJson}, function(json){
+						$.post(REQUEST_URL.WEB_STEP.UPDATE_CONFIG, {stepId:$(layero).find('#stepId').val(), configJson:configJson}, function(json){
 							if (json.returnCode == 0) {								
 								data.configJson = configJson;
 								layer.close($(layero).find('#layerIndex').val());
@@ -402,34 +402,30 @@ var eventList = {
 		}
 };
 
-var stepParameters;
 var caseId;
 
 var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df){	
 			caseId = GetQueryString("caseId");
-			publish.renderParams.listPage.listUrl = top.WEB_STEP_LIST_URL + "?caseId=" + caseId;	
-			$.getJSON('../../js/json/webStepParameter.json', function(json){
-				stepParameters = json;
-			});
+			publish.renderParams.listPage.listUrl = REQUEST_URL.WEB_STEP.LIST + "?caseId=" + caseId;
 			df.resolve();			   		 	
    	 	},
 		listPage:{
-			listUrl:top.WEB_STEP_LIST_URL,
+			listUrl:REQUEST_URL.WEB_STEP.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 13, 14]			
 		},
 		editPage:{
-			editUrl:top.WEB_STEP_EDIT_URL,
-			getUrl:top.WEB_STEP_GET_URL,
+			editUrl:REQUEST_URL.WEB_STEP.EDIT,
+			getUrl:REQUEST_URL.WEB_STEP.GET,
 			renderCallback:function(obj){
 				var a = function(type){
 					if (type == null) {
 						return '';
 					}
-					var v = stepParameters['dataType'][type];
+					var v = WEB_STEP_PARAMETER['dataType'][type];
 					if (v) return v.text;
 					return obj.requiredDbName || '';
 					
@@ -438,7 +434,7 @@ var mySetting = {
 				$("#validateDataType").after('<span>' + a(obj['validateDataType']) + '  </span>');
 				
 				$("#snippetCase\\.caseId").after('<span>' + obj.objectName || '' + '  </span>');
-				$("#opType").after('<span>' + stepParameters['opType'][obj.opType]['text'] + '</span>');
+				$("#opType").after('<span>' + WEB_STEP_PARAMETER['opType'][obj.opType]['text'] + '</span>');
 			}, 
 			rules:{
 				stepName:{

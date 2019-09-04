@@ -137,7 +137,7 @@ var templateParams = {
 			enable:true, 
 			formTitle:"探测任务-高级查询",
 			pageOpenSuccessCallback:function (layero, index) {
-				$.get(top.BUSINESS_SYSTEM_LIST_ALL_URL, function (json) {
+				$.get(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, function (json) {
 					if (json.returnCode == 0) {
 						$.each(json.data, function(i, n){
 							layero.find("#systemId").append('<option value="'+ n.systemId +'">' + n.systemName + '[' 
@@ -363,7 +363,7 @@ var eventList = {
 			
 		},
 		"#quality-count-view":function(){//打开全局视图
-			$.post(top.PROBE_TASK_GET_PROBE_RESULT_SYSNOPSIS_VIEW_DATA_URL, {dateNum:7}, function(json){
+			$.post(REQUEST_URL.PROBE_TASK.GET_PROBE_RESULT_SYNOPSIS_VIEW_DATA, {dateNum:7}, function(json){
 				if (json.returnCode == 0) {
 					layer_show('探测任务-全局视图', '<div class="page-container" id="probes-count-view" style="height:500px;"></div>', null, 600, 1, function(layero, index) {
 						echartsObj = echarts.init(document.getElementById('probes-count-view'), 'shine');
@@ -397,13 +397,13 @@ var eventList = {
 		},
 		".start-probe-task":function() {//开启探测任务
 			var data = table.row( $(this).parents('tr') ).data();
-			opObj("确认开启该接口探测任务?", top.PROBE_TASK_START_URL, {probeId:data.probeId}, null, "已开启!", function(data){
+			opObj("确认开启该接口探测任务?", REQUEST_URL.PROBE_TASK.START, {probeId:data.probeId}, null, "已开启!", function(data){
 				refreshTable();
 			});
 		},
 		".stop-probe-task":function() {//停止探测任务
 			var data = table.row( $(this).parents('tr') ).data();
-			opObj("确认停止该接口探测任务?", top.PROBE_TASK_STOP_URL, {probeId:data.probeId}, null, "已停止!", function(data){
+			opObj("确认停止该接口探测任务?", REQUEST_URL.PROBE_TASK.STOP, {probeId:data.probeId}, null, "已停止!", function(data){
 				refreshTable();
 			});
 		},
@@ -420,7 +420,7 @@ var eventList = {
 							layero.find("#interface-probe-setting-config-form"),
 							validateConfig, 
 							{}, 
-							top.PROBE_TASK_UPDATE_CONFIG, 
+							REQUEST_URL.PROBE_TASK.UPDATE_CONFIG,
 							true, 
 							null, 
 							null
@@ -433,7 +433,7 @@ var eventList = {
 				layer.msg("请先选择接口场景!", {icon:5, time:1800});
 				return false;
 			}						
-			$.post(top.BUSINESS_SYSTEM_LIST_ALL_URL, {protocolType:$("#protocolType").val()}, function (json) {
+			$.post(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, {protocolType:$("#protocolType").val()}, function (json) {
 				if (json.returnCode == 0) {
 					if (json.data.length < 1) {
 						layer.msg('无测试环境可供选择，查看测试场景详细信息!', {icon:0, time:1800});
@@ -480,14 +480,14 @@ var eventList = {
 					btn:['运行','停止','删除'],
 					btn3:function(index){
 						layer.close(index);
-						batchOp($(".selectProbel:checked"), top.PROBE_TASK_DEL_URL, "删除", null, "probeId");
+						batchOp($(".selectProbel:checked"), REQUEST_URL.PROBE_TASK.DEL, "删除", null, "probeId");
 					}
 				},function(index){ 
 					layer.close(index);
-					batchOp($(".selectProbel:checked"), top.PROBE_TASK_START_URL, "运行", null, "probeId");
+					batchOp($(".selectProbel:checked"), REQUEST_URL.PROBE_TASK.START, "运行", null, "probeId");
 				},function(index){
 					layer.close(index);
-					batchOp($(".selectProbel:checked"), top.PROBE_TASK_STOP_URL, "停止", null, "probeId");
+					batchOp($(".selectProbel:checked"), REQUEST_URL.PROBE_TASK.STOP, "停止", null, "probeId");
 				});
 		},		
 		".object-edit":function(){
@@ -500,7 +500,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此探测任务吗？<br><span class=\"c-red\">(删除会导致该任务的历史记录被清空!)</span>？", top.PROBE_TASK_DEL_URL, {probeId:data.probeId}, this, "删除成功!");
+			opObj("确认要删除此探测任务吗？<br><span class=\"c-red\">(删除会导致该任务的历史记录被清空!)</span>？", REQUEST_URL.PROBE_TASK.DEL, {probeId:data.probeId}, this, "删除成功!");
 		}
 		
 };
@@ -515,8 +515,8 @@ var mySetting = {
 				$("#choose-probe-scene").before("<span>" + obj.scene.interfaceName + "-" 
 					+ obj.scene.messageName + "-" + obj.scene.sceneName + "&nbsp;&nbsp;</span>");
 			},
-			editUrl:top.PROBE_TASK_EDIT_URL,
-			getUrl:top.PROBE_TASK_GET_URL,
+			editUrl:REQUEST_URL.PROBE_TASK.EDIT,
+			getUrl:REQUEST_URL.PROBE_TASK.GET,
 			rules:{
 				"scene.messageSceneId":{
 					required:true
@@ -527,7 +527,7 @@ var mySetting = {
 			}
 		},
 		listPage:{
-			listUrl:top.PROBE_TASK_LIST_URL,
+			listUrl:REQUEST_URL.PROBE_TASK.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 11, 12, 13]
@@ -665,8 +665,8 @@ function chooseScene (obj) {
 	$("#scene\\.messageSceneId").val(ids[0]);
 	if (ids.length > 1) {
 		$("#sceneIds").val(ids.join(','));
-		publish.renderParams.editPage.editUrl = top.PROBE_TASK_BATCH_ADD_URL;
+		publish.renderParams.editPage.editUrl = REQUEST_URL.PROBE_TASK.BATCH_ADD;
 	} else {
-		publish.renderParams.editPage.editUrl = top.PROBE_TASK_EDIT_URL;
+		publish.renderParams.editPage.editUrl = REQUEST_URL.PROBE_TASK.EDIT;
 	}
 }

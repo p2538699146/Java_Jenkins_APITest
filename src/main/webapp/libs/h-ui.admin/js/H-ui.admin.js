@@ -93,12 +93,13 @@ function creatIframe(href,titleName){
 		$tabNavitem = topWindow.find(".acrossTab li"),
 		$tabNavmore =topWindow.find(".Hui-tabNav-more");
 	if (!$tabNav[0]){return}
-	
+
+
 	if('function' == typeof $('#min_title_list li').contextMenu){
 		$("#min_title_list li").contextMenu('Huiadminmenu', {
 			bindings: {
 				'closethis': function(t) {
-					var $t = $(t);				
+					var $t = $(t);
 					if($t.find("i")){
 						$t.find("i").trigger("click");
 					}
@@ -109,14 +110,17 @@ function creatIframe(href,titleName){
 				'closeother': function(t) {
 					var $t = $(t);
 					if($t.find("i")){
-						$t.siblings('li').find('i').trigger("click");	
-					}					
-				}
+						$t.siblings('li').find('i').trigger("click");
+					}
+				},
+                'cancel':function(t) {
+                    $('#jqContextMenu').hide();
+                }
 			}
 		});
 	}else {
-		
-	}	
+
+	}
 	
 	$tabNavitem.each(function(index, element) {
         taballwidth+=Number(parseFloat($(this).width()+60))

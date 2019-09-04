@@ -83,7 +83,7 @@ var mySetting = {
    	 		
 	   	 	$(".page-container").spinModal();
 	   	 	messageSceneId = GetQueryString("messageSceneId");
-	   	 	$.post(top.GET_SETTING_DATA_URL, {messageSceneId:messageSceneId}, function(json) {
+	   	 	$.post(REQUEST_URL.TEST_DATA.GET_SETTING_DATA, {messageSceneId:messageSceneId}, function(json) {
 	   	 		if (json.returnCode == 0) {
 	   	 			params = json.params;
 	   	 			dataMsg = json.dataMsg;
@@ -176,7 +176,7 @@ function confrimData() {
 		var info = getSortedParams();
 		var dataValues = $("textarea").val();
 		$(".page-container").spinModal();
-		$.post(top.IMPORT_DATA_VALUES_URL, {ids:info.ids, paths:info.paths, datas:dataValues, messageSceneId:messageSceneId}, function(json) {
+		$.post(REQUEST_URL.TEST_DATA.IMPORT_DATA_VALUES, {ids:info.ids, paths:info.paths, datas:dataValues, messageSceneId:messageSceneId}, function(json) {
 			if (json.returnCode == 0) {				
 				layer.alert("本次共提交数据" + json.totalCount + "条,成功" + json.successCount + "条,失败" + json.failCount + "条!"
 						,{icon:1, title:"提示"}, function(index) {

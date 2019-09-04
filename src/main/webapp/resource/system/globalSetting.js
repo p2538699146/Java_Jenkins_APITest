@@ -32,7 +32,11 @@ var eventList = {
 		".save-setting":function(){
 			if(getJsonLength(editInfo) > 0){
 				$.post(publish.renderParams.editPage.editUrl, editInfo, function(data) {
-					if(data.returnCode == 0){	
+					if(data.returnCode === 0){
+						$.each(editInfo, function(k, v){
+                            beforeSettings[k] = v;
+						});
+
 						editInfo = {};
 						layer.msg("修改成功!",{icon:1, time:1500});
 					}else{
@@ -63,8 +67,8 @@ var mySetting = {
    	 	customCallBack:function(params){
    	 		$.Huitab("#tab-system .tabBar span", "#tab-system .tabCon", "current","click", "0");
 	   	 	$.post(params.editPage.getUrl,function(data){
-				if(data.returnCode==0){
-					var o=data.data;
+				if(data.returnCode == 0){
+					var o = data.data;
 					$.each(o,function(i,n){								
 						if ($("#" + n.settingName)) {
 							$("#" + n.settingName).val((strIsNotEmpty(n.settingValue) ? n.settingValue : n.defaultValue));
@@ -84,8 +88,8 @@ var mySetting = {
 			});
    	 	},
 		editPage:{
-			editUrl:top.GLOBAL_SETTING_EDIT_URL,
-			getUrl:top.GLOBAL_SETTING_LIST_ALL_URL
+			editUrl:REQUEST_URL.GLOBAL_SETTING.EDIT,
+			getUrl:REQUEST_URL.GLOBAL_SETTING.SETTING_LIST_ALL
 		}	
 	};
 

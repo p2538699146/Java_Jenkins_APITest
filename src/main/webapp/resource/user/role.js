@@ -120,7 +120,7 @@ var columnsSetting = [
 var eventList = {
 		".batch-del-object":function(){
 			var checkboxList = $(".selectRole:checked");
-			batchDelObjs(checkboxList, top.ROLE_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.ROLE.DEL);
 		},
 		".add-object":function(){
 			publish.renderParams.editPage.modeFlag = 0;					
@@ -129,7 +129,7 @@ var eventList = {
 		},	
 		".show-role-menu":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			showRolePower(data, '角色菜单权限编辑', top.ROLE_GET_NODES_MENU_URL, 'menus', {
+			showRolePower(data, '角色菜单权限编辑', REQUEST_URL.ROLE.GET_NODES_MENU, 'menus', {
 				data: {
 					simpleData: {
 						enable:true,
@@ -146,7 +146,7 @@ var eventList = {
 		},
 		".show-role-power":function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			showRolePower(data, '角色接口权限编辑', top.ROLE_GET_NODES_INTERFACE_URL, 'interfaces', {
+			showRolePower(data, '角色接口权限编辑', REQUEST_URL.ROLE.GET_NODES_INTERFACE, 'interfaces', {
 				data: {
 					simpleData: {
 						enable:true,
@@ -162,9 +162,9 @@ var eventList = {
 			});	
 		},
 		"#save-role-power":function(){
-			var url = top.ROLE_UPDATE_POWER_URL;
+			var url = REQUEST_URL.ROLE.UPDATE_POWER;
 			if ($(this).attr('power-type') == 'menus') {
-				url = top.ROLE_UPDATE_MENU_URL;
+				url = REQUEST_URL.ROLE.UPDATE_MENU;
 			}
 			saveChange(url);
 		},
@@ -184,7 +184,7 @@ var eventList = {
 			if(data.roleName == "admin" || data.roleName == "default"){
 				layer.msg('不能删除预置管理员角色或者默认角色信息!',{time:1500});
 			}else{
-				delObj("确认要删除此角色信息吗？", top.ROLE_DEL_URL, data.roleId, this);
+				delObj("确认要删除此角色信息吗？", REQUEST_URL.ROLE.DEL, data.roleId, this);
 			}
 			
 		}
@@ -193,12 +193,12 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		editPage:{
-			editUrl:top.ROLE_EDIT_URL,
-			getUrl:top.ROLE_GET_URL,
+			editUrl:REQUEST_URL.ROLE.EDIT,
+			getUrl:REQUEST_URL.ROLE.GET,
 			rules:{roleName:{isEnglish:true,minlength:4,maxlength:20},roleGroup:{required:true}}
 		},
 		listPage:{
-			listUrl:top.ROLE_LIST_URL,
+			listUrl:REQUEST_URL.ROLE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0 ,7]

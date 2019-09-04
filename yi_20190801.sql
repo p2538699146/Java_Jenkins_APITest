@@ -181,7 +181,7 @@ DELETE FROM `at_global_setting`;
 INSERT INTO `at_global_setting` (`setting_id`, `setting_name`, `default_value`, `setting_value`, `mark`) VALUES
 	(1, 'home', '', 'http://localhost:8080/yi', '首页地址url'),
 	(2, 'notice', '欢迎使用易大师自动化测试平台！', '未做完整测试，如果出现BUG或者有任何需求请联系我<br>邮箱：xuwangcheng14@163.com<br>谢谢支持！', '公告'),
-	(3, 'version', '', '0.1.3beta', '系统版本'),
+	(3, 'version', '', '0.1.4beta', '系统版本'),
 	(4, 'status', '0', NULL, '网站状态-0为开启,1为关闭'),
 	(5, 'logSwitch', '0', '1', '系统日志记录开关'),
 	(6, 'messageEncoding', 'UTF-8', 'UTF-8', 'xml报文编码'),

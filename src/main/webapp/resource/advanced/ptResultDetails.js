@@ -120,7 +120,7 @@ var mySetting = {
 		templateCallBack:function(df){
 			ptResultId = GetQueryString("ptResultId");
 				
-			publish.renderParams.listPage.listUrl = top.PERFORMANCE_TEST_RESULT_DETAILS_LIST_ALL_URL + "?ptResultId=" + ptResultId;								
+			publish.renderParams.listPage.listUrl = REQUEST_URL.PERFORMANCE_RESULT.DETAILS_LIST_ALL + "?ptResultId=" + ptResultId;
 			df.resolve();			   		 	
    	 	},
 		listPage:{
@@ -131,8 +131,7 @@ var mySetting = {
 				"bStateSave": false,//状态保存
 				"serverSide": false
 			},
-			exportExcel:false,
-			dblclickEdit:false
+			exportExcel:false
 		},
 		templateParams:templateParams		
 	};

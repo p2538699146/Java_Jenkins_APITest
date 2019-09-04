@@ -186,7 +186,7 @@ var eventList = {
 		},
 		".batch-del-object":function(){
 			var checkboxList = $(".selectSystem:checked");
-			batchDelObjs(checkboxList, top.BUSINESS_SYSTEM_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.BUSINESS_SYSTEM.DEL);
 		},		
 		".object-edit":function(){
 			var data = table.row( $(this).parents('tr') ).data();
@@ -201,7 +201,7 @@ var eventList = {
 				layer.alert("该测试环境下尚有接口信息,请先解除关联再删除!", {icon:0, title:'警告'});
 				return false;
 			}
-			delObj("确认要删除此测试环境信息吗<br><span class=\"c-red\">(删除同时可能会导致配置在该系统下的接口测试失败)</span>？", top.BUSINESS_SYSTEM_DEL_URL, data.systemId, this);
+			delObj("确认要删除此测试环境信息吗<br><span class=\"c-red\">(删除同时可能会导致配置在该系统下的接口测试失败)</span>？", REQUEST_URL.BUSINESS_SYSTEM.DEL, data.systemId, this);
 		},
 		".view-interface-infos":function () {//打开属于该测试环境的接口信息
 			var data = table.row( $(this).parents('tr') ).data();
@@ -213,8 +213,8 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		editPage:{
-			editUrl:top.BUSINESS_SYSTEM_EDIT_URL,
-			getUrl:top.BUSINESS_SYSTEM_GET_URL,
+			editUrl:REQUEST_URL.BUSINESS_SYSTEM.EDIT,
+			getUrl:REQUEST_URL.BUSINESS_SYSTEM.GET,
 			rules:{
 				systemName:{
 					required:true,
@@ -230,7 +230,7 @@ var mySetting = {
 			}
 		},
 		listPage:{
-			listUrl:top.BUSINESS_SYSTEM_LIST_ALL_URL,
+			listUrl:REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 11, 12],

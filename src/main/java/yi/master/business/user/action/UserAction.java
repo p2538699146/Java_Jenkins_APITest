@@ -1,6 +1,7 @@
 package yi.master.business.user.action;
 
 import java.io.File;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -354,13 +355,11 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String createVerifyCode() {
-		//ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(200, 100, 4, 4);
 		LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);
-		String imgPath = SystemConsts.VERIFY_CODE_FOLDER + File.separator + UUID.fastUUID() + ".png";
-		lineCaptcha.write(FrameworkUtil.getProjectPath() + File.separator + imgPath);
-		setSuccessReturnInfo().setData("path", imgPath);
+
 		FrameworkUtil.getSessionMap().put(SystemConsts.SESSION_ATTRIBUTE_VERIFY_CODE
 				, lineCaptcha.getCode());
+		setSuccessReturnInfo().setData("img", lineCaptcha.getImageBase64());
 		return SUCCESS;
 	}	
 	

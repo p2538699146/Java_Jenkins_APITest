@@ -133,7 +133,7 @@ function addChildElement(domObj, treeId, treeNode) {
 					  value: '新节点',
 					  title: '请输入节点名称'
 					}, function(name, index3, elem){
-						$.post(top.WEB_ELEMENT_EDIT_URL, {"elementType":id, "parentId":treeNode.elementId, "elementName":name}, function(json){						
+						$.post(REQUEST_URL.WEB_ELEMENT.EDIT, {"elementType":id, "parentId":treeNode.elementId, "elementName":name}, function(json){
 							if (json.returnCode == 0) {
 								var newNode = json.object;
 								newNode["iconOpen"] = "../../img/element/" + newNode.elementType + "_open.png";
@@ -192,7 +192,7 @@ function onRename(event, treeId, treeNode, isCancel) {
 			"createUser.userId":treeNode["createUser"]["userId"],
 			elementId:treeNode.elementId			
 		};
-		$.post(top.WEB_ELEMENT_EDIT_URL, sendData, function(json){
+		$.post(REQUEST_URL.WEB_ELEMENT.EDIT, sendData, function(json){
 			if (json.returnCode == 0) {
 				layer.msg('修改成功!', {icon:1, time:1800});
 			} else {
@@ -217,7 +217,7 @@ function beforeRemove(treeId, treeNode) {
 	var flag = true;
 	if(x){
 		$.ajax({
-			url:top.WEB_ELEMENT_DEL_URL,
+			url:REQUEST_URL.WEB_ELEMENT.DEL,
 			type:"POST",
 			data:{id:treeNode.elementId},
 			async: false,
@@ -273,7 +273,7 @@ function refreshZtree() {
 		zTreeObj = null;
 	}
 
-	$.post(top.WEB_ELEMENT_LIST_ALL_URL, {nodeFlag:"true"}, function(json){
+	$.post(REQUEST_URL.WEB_ELEMENT.LIST_ALL, {nodeFlag:"true"}, function(json){
 		$("#treeDemo").spinModal(false);
 		if (json.returnCode == 0) {
 			var nodes = json.data;  	 				

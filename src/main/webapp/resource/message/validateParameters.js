@@ -236,7 +236,7 @@ var eventList = {
 				});
 				return false;
 			}
-			$.post(top.SCENE_GET_URL, {id:messageSceneId}, function(json){
+			$.post(REQUEST_URL.MESSAGE_SCENE.GET, {id:messageSceneId}, function(json){
 				if (json.returnCode == 0) {
 					if (!strIsNotEmpty(json.object.responseExample)) {
 						layer.msg('没有设置返回报文示例,请先设置!', {icon:2, time:1800});
@@ -264,7 +264,7 @@ var eventList = {
 			});
 		},
 		"#choose-response-node-path":function(){//选择返回报文入参节点
-			chooseParameterNodePath(top.SCENE_GET_RESPONSE_MSG_JSON_TREE_URL, {messageSceneId:messageSceneId}, {
+			chooseParameterNodePath(REQUEST_URL.MESSAGE_SCENE.GET_RESPONSE_MSG_JSON_TREE, {messageSceneId:messageSceneId}, {
 				titleName:"出参节点选择",
 				isChoosePath:true, 
 				notChooseTypes:["Array", "Map", "List", "Object"],
@@ -298,7 +298,7 @@ var eventList = {
 		},
 		"#batch-del-object":function() {
 			var checkboxList = $(".selectValidate:checked");
-			batchDelObjs(checkboxList, top.VALIDATE_RULE_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.VALIDATE.DEL);
 		},
 		".object-edit":function() {
 			var data = table.row( $(this).parents('tr') ).data();
@@ -316,14 +316,14 @@ var eventList = {
 		},
 		".object-del":function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此验证规则？请慎重操作!", top.VALIDATE_RULE_DEL_URL, data.validateId, this);
+			delObj("确定删除此验证规则？请慎重操作!", REQUEST_URL.VALIDATE.DEL, data.validateId, this);
 		},
 		"#select-get-value-method":function() {  //选择预期值取值方式
 			layer.confirm('请选择预期比对数据类型',{btnAlign: 'l', title:'提示',btn:['常量','入参节点','SQL语句', '全局变量', '正则表达式'],
 				btn3:function(index) {
 					$.ajax({
 						type:"POST",
-						url:top.QUERY_DB_LIST_ALL_URL,
+						url:REQUEST_URL.QUERY_DB.LIST_ALL,
 						success:function(data) {
 							if(data.returnCode == 0){
 								if(data.data.length < 1){
@@ -366,7 +366,7 @@ var eventList = {
 				});
 		},
 		'#choose-validate-template':function() {//选择关联验证模板
-			$.post(top.GLOBAL_VARIABLE_LIST_URL, {variableType:"relatedKeyWord"}, function(json) {
+			$.post(REQUEST_URL.GLOBAL_VARIABLE.LIST_ALL, {variableType:"relatedKeyWord"}, function(json) {
 				if (json.returnCode == 0) {
 					showSelectBox(json.data, "variableId", "variableName", function(variableId, globalVariable, index) {
 						$.each(JSON.parse(globalVariable["value"]), function(name, value) {
@@ -389,12 +389,12 @@ var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df){
 			messageSceneId = GetQueryString("messageSceneId");
-			publish.renderParams.listPage.listUrl = top.VALIDATE_RULE_LIST_URL + "?messageSceneId=" + messageSceneId;						
+			publish.renderParams.listPage.listUrl = REQUEST_URL.VALIDATE.LIST + "?messageSceneId=" + messageSceneId;
 			df.resolve();			   		 	
    	 	},
 		editPage:{
-			editUrl:top.VALIDATE_RULE_EDIT_URL,
-			getUrl:top.VALIDATE_RULE_GET_URL,
+			editUrl:REQUEST_URL.VALIDATE.EDIT,
+			getUrl:REQUEST_URL.VALIDATE.GET,
 			rules:{
 				parameterName:{
 					required:true,
@@ -420,7 +420,7 @@ var mySetting = {
        	 	}
 		},		
 		listPage:{
-			listUrl:top.VALIDATE_RULE_LIST_URL,
+			listUrl:REQUEST_URL.VALIDATE.LIST,
 			tableObj:".table-sort",
 			exportExcel:false,
 			columnsSetting:columnsSetting,
@@ -459,7 +459,7 @@ $(function(){
  */
 function bindChooseRequestNodePath(){
 	$("#validateValue").bind('click', function(){
-		chooseParameterNodePath(top.SCENE_GET_REQUEST_MSG_JSON_TREE_URL, {messageSceneId:messageSceneId}, {
+		chooseParameterNodePath(REQUEST_URL.MESSAGE_SCENE.GET_REQUEST_MSG_JSON_TREE, {messageSceneId:messageSceneId}, {
 			titleName:"入参节点选择",
 			isChoosePath:true, 
 			notChooseTypes:["Array", "Map", "List", "Object"],
@@ -478,7 +478,7 @@ function updateStatus(validateId, flag, obj) {
 	if(flag == true){
 		status = '0';
 	}
-	$.post(top.VALIDATE_RULE_UPDATE_STATUS, {validateId:validateId, status:status}, function(json) {
+	$.post(REQUEST_URL.VALIDATE.RULE_UPDATE_STATUS, {validateId:validateId, status:status}, function(json) {
 		if(json.returnCode != 0){
 			$(obj).click();
 			layer.alert(json.msg, {icon:5});
@@ -536,7 +536,7 @@ function showValidatRulePage(validateId) {
 	if (addValidateMethodFlag == 0) {
 		layer_show('关联验证', htmls["messageScene-validateKeyword"], '840', '490', 1, function() {
 			if (publish.renderParams.editPage.modeFlag == 1) {
-				$.get(top.VALIDATE_RULE_GET_URL, {id:validateId},function(data){
+				$.get(REQUEST_URL.VALIDATE.GET, {id:validateId},function(data){
 					if(data.returnCode == 0) {
 						data = data.object;
 						if (data.parameterName != "") {
@@ -564,7 +564,7 @@ function showValidatRulePage(validateId) {
 	//全文验证 不存在就新建  存在就编辑已存在的
 	if (addValidateMethodFlag == 2) {
 		layer_show('全文验证管理', htmls["messageScene-validateFullJson"], '800', '520', 1, function() {
-			$.get(top.VALIDATE_FULL_RULE_GET_URL, {messageSceneId:messageSceneId, validateMethodFlag:"2"},function(data){
+			$.get(REQUEST_URL.VALIDATE.FULL_RULE_GET, {messageSceneId:messageSceneId, validateMethodFlag:"2"},function(data){
 				if(data.returnCode == 0) {
 					$("#validateValue").val(data.validateValue);
 					$("#validateId").val(data.validateId);
@@ -600,7 +600,7 @@ function saveValidateJson(){
 	sendData["messageScene.messageSceneId"] = messageSceneId;
 	sendData["status"] = $("#status").val();
 	
-	$.post(top.VALIDATE_RULE_EDIT_URL, sendData, function(data){
+	$.post(REQUEST_URL.VALIDATE.EDIT, sendData, function(data){
 		if(data.returnCode == 0){
 			refreshTable();
 			layer.closeAll('page');

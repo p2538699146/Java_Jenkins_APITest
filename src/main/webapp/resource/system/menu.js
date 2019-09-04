@@ -201,7 +201,7 @@ var eventList = {
 		},
 		".object-del":function () {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("警告：确认要删除此菜单信息吗？", top.BUSI_MENU_DEL_URL, data.menuId, this);
+			delObj("警告：确认要删除此菜单信息吗？", REQUEST_URL.MENU.DEL, data.menuId, this);
 		},
 		"#add-object":function() {//添加菜单
 			publish.renderParams.editPage.modeFlag = 0;					
@@ -213,8 +213,8 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		editPage:{
-			editUrl:top.BUSI_MENU_EDIT_URL,
-			getUrl:top.BUSI_MENU_GET_URL,
+			editUrl:REQUEST_URL.MENU.EDIT,
+			getUrl:REQUEST_URL.MENU.GET,
 			renderCallback:function (obj) {
 				$("#choose-parent-menu").before('<span>' + obj.parentNodeName + '&nbsp;&nbsp;&nbsp;</span>');
 			},
@@ -240,7 +240,7 @@ var mySetting = {
 			}
 		},
 		listPage:{
-			listUrl:top.BUSI_MENU_LIST_ALL_URL,
+			listUrl:REQUEST_URL.MENU.LIST_ALL,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 11],
@@ -293,7 +293,7 @@ function chooseParentMenu () {
 	layer_show("请双击选择操作父节点", '<div class="page-container"><ul id="node-tree" class="ztree"></ul></div>', 400, 450, 1, function (layero, index) {
 		layero.spinModal(false);
 		viewIndex = index;
-		$.get(top.BUSI_MENU_LIST_ALL_URL, function(json) {			 	 			
+		$.get(REQUEST_URL.MENU.LIST_ALL, function(json) {
 			if (json.returnCode == 0) {				
 				$.fn.zTree.init(layero.find("#node-tree"), zTreeSetting, json.data);
 				layero.spinModal(false);

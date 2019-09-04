@@ -150,7 +150,7 @@ var eventList = {
 				opName = "添加";
 			}
 			//batchDelObjs(checkboxList, top.WEB_SUITE_OP_CASE_URL + "?mode=" + mode + "&suiteId=" + suiteId, table, opName);
-			batchOp (checkboxList, top.WEB_SUITE_OP_CASE_URL, opName, table, null
+			batchOp (checkboxList, REQUEST_URL.WEB_SUITE.OP_CASE, opName, table, null
 					, {mode:mode, suiteId:suiteId}, null, function(dom, params){
 						var data = table.row( $(dom).parents('tr') ).data();
 						params['caseId'] = data.caseId;
@@ -161,7 +161,7 @@ var eventList = {
 		"#manger-case":function() { //管理测试集 - 从测试集中删除
 			var that = this;
 			mode = 0;				
-			refreshTable(top.WEB_SUITE_LIST_CASE_URL + "?suiteId=" + suiteId, function(json) {
+			refreshTable(REQUEST_URL.WEB_SUITE.LIST_CASE + "?suiteId=" + suiteId, function(json) {
 				$(that).addClass('btn-primary').siblings("#add-case").removeClass('btn-primary');
 			}, null, true);	
 			$("#batch-op").children("i").removeClass("Hui-iconfont-add").addClass("Hui-iconfont-del3");
@@ -169,7 +169,7 @@ var eventList = {
 		"#add-case":function() { //添加测试用例
 			var that = this;
 			mode = 1;			
-			refreshTable(top.WEB_CASE_LIST_ALL_URL + "?caseType=common", function(json) {
+			refreshTable(REQUEST_URL.WEB_CASE.LIST_ALL + "?caseType=common", function(json) {
 				$(that).addClass('btn-primary').siblings("#manger-case").removeClass('btn-primary');
 			}, null, true);	
 			$("#batch-op").children("i").removeClass("Hui-iconfont-del3").addClass("Hui-iconfont-add");
@@ -186,7 +186,7 @@ var eventList = {
 			var that = this;
 			layer.confirm('确定要' + tip + '此用例吗?', {icon:0, title:'警告'}, function(index) {
 				layer.close(index);
-				$.get(top.WEB_SUITE_OP_CASE_URL, sendData, function(json) {
+				$.get(REQUEST_URL.WEB_SUITE.OP_CASE, sendData, function(json) {
 					if (json.returnCode == 0) {
 						if (mode == 0) {
 							table.row($(that).parents('tr')).remove().draw();
@@ -211,7 +211,7 @@ var eventList = {
 						execSeq:$(layero).find('#execSeq').val(),
 						groupName:$(layero).find('#groupName').val()
 					};
-					$.post(top.WEB_SUITE_CASE_UPDATE_SETTING_URL, sendData, function(json){
+					$.post(REQUEST_URL.WEB_SUITE.CASE_UPDATE_SETTING, sendData, function(json){
 						layer.close(index);
 						if (json.returnCode == 0) {
 							$.extend(true, data, sendData);
@@ -231,7 +231,7 @@ var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df){
 			suiteId = GetQueryString("suiteId");
-			publish.renderParams.listPage.listUrl = top.WEB_SUITE_LIST_CASE_URL + "?suiteId=" + suiteId;
+			publish.renderParams.listPage.listUrl = REQUEST_URL.WEB_SUITE.LIST_CASE + "?suiteId=" + suiteId;
 			//publish.renderParams.listPage.listUrl = top.WEB_CASE_LIST_ALL_URL + "?caseType=common";			
 			df.resolve();			   		 	
    	 	},
