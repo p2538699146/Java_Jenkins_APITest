@@ -1,13 +1,11 @@
 var interfaceId; //当前interfaceId
 var messageId; //当前正在操作的messageid
 var currIndex;//当前正在操作的layer窗口的index
-var protocolJson;//协议配置参数json
 var protocolType;//当前配置的协议类型
-var processJson;//报文处理类型配置json
 
 
 var templateParams = {
-		tableTheads:["接口","报文名", "类型", "创建时间", "状态", "创建用户", "最后修改", "入参报文", "场景", "操作"],
+		tableTheads:["接口","报文名", "类型", "创建时间", "状态", "创建用户", "最后修改", "场景管理", "入参报文", "操作"],
 		btnTools:[{
 			type:"primary",
 			size:"M",
@@ -232,6 +230,19 @@ var columnsSetting = [
                                 }
               		    },
               		    {"data":"user.realName"},{"data":"lastModifyUser"},
+						{
+							"data":"sceneNum",
+							"render":function(data, type, full, meta){
+								var context =
+									[{
+										type:"primary",
+										size:"M",
+										markClass:"show-scenes",
+										name:data
+									}];
+								return btnTextTemplate(context);
+							}
+						},
               		    {
                             "data":null,
                             "render":function(data, type, full, meta){
@@ -244,19 +255,6 @@ var columnsSetting = [
                           		}];
                                 return btnTextTemplate(context);
                               }
-              		    },
-              		    {
-              		    	"data":"sceneNum",
-                            "render":function(data, type, full, meta){
-                            	var context =
-                            		[{
-                          			type:"default",
-                          			size:"M",
-                          			markClass:"show-scenes",
-                          			name:data
-                          		}];
-                                return btnTextTemplate(context);
-                            }
               		    },
               		    {
                             "data":null,
@@ -357,7 +355,7 @@ var eventList = {
 			default:
 				break;
 			}
-			$.post(top.GLOBAL_VARIABLE_LIST_URL, {variableType:variableType}, function(json) {
+			$.post(REQUEST_URL.GLOBAL_VARIABLE.LIST_ALL, {variableType:variableType}, function(json) {
 				if (json.returnCode == 0) {
 					showSelectBox(json.data, "variableId", "variableName", function(variableId, globalVariable, index) {
 						$("#callParameter").val(globalVariable["value"]);
@@ -373,7 +371,7 @@ var eventList = {
 		'#setting-call-parameter':function() {	//配置调用参数
 			
 			if (!strIsNotEmpty($("#callParameter").val())) {
-				$("#callParameter").val(JSON.stringify(protocolJson[protocolType]));
+				$("#callParameter").val(JSON.stringify(PROTOCOL[protocolType]));
 			}
 			
 			var json = JSON.parse($("#callParameter").val());
@@ -436,11 +434,11 @@ var eventList = {
 		},
 		".batch-del-object":function() {//批量删除报文
 			var checkboxList = $(".selectMessage:checked");
-			batchDelObjs(checkboxList, top.MESSAGE_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.MESSAGE.DEL);
 		},
 		".object-del":function() {//删除单个报文
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此报文？此操作同时会删除该报文下所有的场景及相关数据,请谨慎操作!", top.MESSAGE_DEL_URL, data.messageId, this);
+			delObj("确定删除此报文？此操作同时会删除该报文下所有的场景及相关数据,请谨慎操作!", REQUEST_URL.MESSAGE.DEL, data.messageId, this);
 		},
 		".object-edit":function() {//报文信息编辑
 			var data = table.row( $(this).parents('tr') ).data();
@@ -451,7 +449,7 @@ var eventList = {
 			publish.init();	
 		},
 		"#choose-business-system":function () {//选择测试环境
-			$.post(top.INTERFACE_GET_URL, {id:interfaceId, messageId:$("#messageId").val()}, function (json) {
+			$.post(REQUEST_URL.INTERFACE.GET, {id:interfaceId, messageId:$("#messageId").val()}, function (json) {
 				if (json.returnCode == 0) {
 					layerMultipleChoose({
 						title:"请选择接口所属的测试环境(可多选,最多不超过10个)",
@@ -484,7 +482,7 @@ var eventList = {
 				layer.msg('你还没有输入任何内容',{icon:5,time:1500});
 				return false;
 			}
-			$.post(top.MESSAGE_VALIDATE_JSON_URL, {parameterJson:jsonStr,interfaceId:interfaceId, messageType:messageType, messageId:messageId},function(data){
+			$.post(REQUEST_URL.MESSAGE.VALIDATE_JSON, {parameterJson:jsonStr,interfaceId:interfaceId, messageType:messageType, messageId:messageId},function(data){
 				if(data.returnCode==0){
 					layer.msg('验证通过,请执行下一步操作',{icon:1, time:1500});
 					$("#parameterJson").val(jsonStr);
@@ -504,7 +502,7 @@ var eventList = {
 				layer.msg('你还没有输入任何内容',{icon:5,time:1500});
 				return false;
 			}
-			$.post(top.MESSAGE_FORMAT_URL, {parameterJson:jsonStr, messageType:messageType}, function(data) {
+			$.post(REQUEST_URL.MESSAGE.FORMAT, {parameterJson:jsonStr, messageType:messageType}, function(data) {
 				if(data.returnCode == 0){
 					$(".textarea").val(data.returnJson);
 				} else if(data.returnCode == 912) {
@@ -517,7 +515,7 @@ var eventList = {
 		//excel导入报文信息
 		"#import-data-from-excel":function() {
 			createImportExcelMark("Excel导入报文信息", "../../excel/upload_message_template.xlsx"
-					, top.UPLOAD_FILE_URL, top.MESSAGE_IMPORT_FROM_EXCEL + "?interfaceId=" + interfaceId 
+					, REQUEST_URL.FILE.UPLOAD_FILE, REQUEST_URL.MESSAGE.IMPORT_FROM_EXCEL + "?interfaceId=" + interfaceId
 					+ "&protocolType=" + protocolType);
 		},
 		//设定处理类型参数
@@ -528,7 +526,7 @@ var eventList = {
 				return false;
 			}
 			
-			var processParameter = JSON.parse($("#processParameter").val() || processJson[processType]) ;			
+			var processParameter = JSON.parse($("#processParameter").val() || MESSAGE_PROCESS[processType]) ;
 			window.settingLayerIndex = layer_show("报文处理参数", templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
 				$("div ." + processType).removeClass('hide');
 			});
@@ -536,7 +534,7 @@ var eventList = {
 		//保存报文处理类型的参数
 		"#save-process-parameter":function(){
 			var processType = $("#processType").val();
-			var value = $.extend({}, processJson[processType]);
+			var value = $.extend({}, MESSAGE_PROCESS[processType]);
 			$.each(value, function(settingName, settingValue) {
 				if ($("#" + settingName)) {
 					value[settingName] = $("#" + settingName).val();
@@ -555,7 +553,7 @@ var eventList = {
 		},
 		//选择报文节点
 		".choose-parameter-nodes":function(){
-			chooseParameterNodePath(top.INTERFACE_GET_PARAMETERS_JSON_TREE_URL, {interfaceId:interfaceId}, {
+			chooseParameterNodePath(REQUEST_URL.INTERFACE.GET_PARAMETERS_JSON_TREE, {interfaceId:interfaceId}, {
 				titleName:"选择该报文包含的节点",
 				isChoosePath:true, 
 				ifCheckbox:true,
@@ -578,7 +576,7 @@ var eventList = {
 								path:node.path
 						};
 					});
-					$.post(top.MESSAGE_CREATE_MESSAE_BY_NODES_URL, {messageType:$("#messageType").val(), nodes:JSON.stringify(sendNodes)}, function(json){
+					$.post(REQUEST_URL.MESSAGE.CREATE_MESSAGE_BY_NODES, {messageType:$("#messageType").val(), nodes:JSON.stringify(sendNodes)}, function(json){
 						if (json.returnCode == 0) {
 							$(".textarea").val(json.message);								
 						} else {
@@ -595,18 +593,11 @@ var mySetting = {
 		templateCallBack:function(df){
 			interfaceId = GetQueryString("interfaceId");
 			protocolType = GetQueryString("protocol");
-			$.get("../../js/json/protocol.json", function(json) {
-				protocolJson = json;
-			});
-			
-			$.get("../../js/json/messageProcess.json", function(json) {
-				processJson = json;
-			});
 			
 			if (interfaceId != null) {
-				publish.renderParams.listPage.listUrl = top.MESSAGE_LIST_URL + "?interfaceId=" + interfaceId;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.MESSAGE.LIST + "?interfaceId=" + interfaceId;
 			} else {
-				publish.renderParams.listPage.listUrl = top.MESSAGE_LIST_URL;
+				publish.renderParams.listPage.listUrl = REQUEST_URL.MESSAGE.LIST;
 				$(".add-object").hide();
 				$("#import-data-from-excel").hide();
 			}		
@@ -617,13 +608,13 @@ var mySetting = {
    		 	df.resolve();
    	 	},
 		editPage:{
-			editUrl:top.MESSAGE_EDIT_URL,
-			getUrl:top.MESSAGE_GET_URL,
+			editUrl:REQUEST_URL.MESSAGE.EDIT,
+			getUrl:REQUEST_URL.MESSAGE.GET,
 			beforeInit:function(df){
 				$("#interfaceInfo\\.interfaceId").val(interfaceId);
 				
 				if (interfaceId != null && publish.renderParams.editPage.modeFlag == 0) {
-					$.post(top.INTERFACE_GET_URL, {id:interfaceId}, function (json) {
+					$.post(REQUEST_URL.INTERFACE.GET, {id:interfaceId}, function (json) {
 						if (json.returnCode == 0) {
 							appendSystem(json.object.systems);
 						}
@@ -636,7 +627,7 @@ var mySetting = {
 			rules:{
 				messageName:{
 					required:true
-				},				
+				},
 				parameterJson:{
 					required:true
 				},
@@ -683,7 +674,7 @@ $(function(){
 
 function getParameterJson(textareaObj){
 	textareaObj.spinModal();
-	$.get(top.MESSAGE_GET_URL, {id:messageId}, function(data) {
+	$.get(REQUEST_URL.MESSAGE.GET, {id:messageId}, function(data) {
 		textareaObj.spinModal(false);
 		if (data.returnCode == 0) {						
 			textareaObj.val(data.object.parameterJson);

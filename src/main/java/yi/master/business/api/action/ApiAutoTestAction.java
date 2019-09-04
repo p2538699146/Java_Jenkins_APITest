@@ -9,6 +9,7 @@ import yi.master.business.api.bean.ApiReturnInfo;
 import yi.master.business.api.service.task.ApiTaskService;
 import yi.master.business.api.service.task.InterfaceApiTaskService;
 import yi.master.business.api.service.task.WebApiTaskService;
+import yi.master.constant.SystemConsts;
 
 
 /**
@@ -106,7 +107,17 @@ public class ApiAutoTestAction extends BaseApiAction {
 		returnInfo = service.listModule();		
 		return SUCCESS;
 	}
-	
+
+	/**
+	 * 检查版本号
+	 * @return
+	 */
+	public String checkVersion() {
+		returnInfo = new ApiReturnInfo(ApiReturnInfo.SUCCESS_CODE, "", SystemConsts.VERSION);
+		return SUCCESS;
+	}
+
+
 	/**
 	 * 验证testType参数的有效性
 	 * @return

@@ -88,14 +88,14 @@ var eventList = {
 						btn:['运行','停止','删除'],
 						btn3:function(index){
 							layer.close(index);
-							batchOp($(".selectObject:checked"), top.PERFORMANCE_TEST_TASK_DEL_URL, "删除", null, "objectId");
+							batchOp($(".selectObject:checked"), REQUEST_URL.PERFORMANCE_TEST.TASK_DEL, "删除", null, "objectId");
 						}
 					},function(index){ 
 						layer.close(index);
-						batchOp($(".selectObject:checked"), top.PERFORMANCE_TEST_TASK_ACTION_URL, "启动", null, "objectId");
+						batchOp($(".selectObject:checked"), REQUEST_URL.PERFORMANCE_TEST.TASK_ACTION, "启动", null, "objectId");
 					},function(index){
 						layer.close(index);
-						batchOp($(".selectObject:checked"), top.PERFORMANCE_TEST_TASK_STOP_URL, "停止", null, "objectId");
+						batchOp($(".selectObject:checked"), REQUEST_URL.PERFORMANCE_TEST.TASK_STOP, "停止", null, "objectId");
 					});	
 		},
 		".show-result-marks":function() {
@@ -114,7 +114,7 @@ var eventList = {
 		},
 		".view-test":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			$.post(top.PERFORMANCE_TEST_TASK_VIEW_URL, {objectId:data.objectId}, function(text){
+			$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_VIEW, {objectId:data.objectId}, function(text){
 				if (text.returnCode == 0) {	
 					parent.layer_show("性能测试视图", templates["performance-test-task-view"](text.object), null, null, 1, function(layero, index){
 						window.intervalId = parent.createTestView(layero, text.object);
@@ -130,7 +130,7 @@ var eventList = {
 		".stop-test":function(){
 			var data = table.row( $(this).parents('tr') ).data();
 			layer.confirm('确认停止该测试任务吗？', {title:'警告'}, function(index){
-				$.post(top.PERFORMANCE_TEST_TASK_STOP_URL, {objectId:data.objectId}, function(json) {
+				$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_STOP, {objectId:data.objectId}, function(json) {
 					if (json.returnCode == 0) {
 						layer.msg('停止成功,请稍后刷新列表查看!', {icon:1, time:1800});
 					} else {
@@ -144,7 +144,7 @@ var eventList = {
 			var obj = this;
 			var data = table.row( $(this).parents('tr') ).data();			
 			layer.confirm('确认删除该测试任务吗,<span style="color:red;"><strong>删除的测试任务将不会保存所有的测试结果</strong></span>？', {title:'警告'}, function(index){
-				$.post(top.PERFORMANCE_TEST_TASK_DEL_URL, {objectId:data.objectId}, function(json) {
+				$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_DEL, {objectId:data.objectId}, function(json) {
 					if (json.returnCode == 0) {
 						layer.msg('删除成功,请稍等刷新列表查看!', {icon:1, time:1800});
 						table.row($(obj).parents('tr')).remove().draw();
@@ -161,7 +161,7 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		listPage:{
-			listUrl:top.PERFORMANCE_TEST_TASK_LIST_URL,
+			listUrl:REQUEST_URL.PERFORMANCE_TEST.TASK_LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 13],

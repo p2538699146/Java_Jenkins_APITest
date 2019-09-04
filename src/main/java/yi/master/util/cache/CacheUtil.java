@@ -141,7 +141,14 @@ public class CacheUtil {
 			}
 		}
 	}
-	
+
+	/**
+	 * 保存日志记录
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:42
+	 * @param
+	 * @return {@link boolean}
+	 */
 	public static boolean saveRecord() {
 		LogRecord record = 	CacheUtil.records.poll();
 		if (record != null) {
@@ -151,45 +158,98 @@ public class CacheUtil {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * 新增一个日志对象
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:43
+	 * @param record record
+	 */
 	public static void addRecord(LogRecord record) {
 		if (record != null) {
 			CacheUtil.records.offer(record);
 		}		
 	}
-	
+
+	/**
+	 * 查询当前缓存的日志条数
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:43
+	 * @param
+	 * @return {@link int}
+	 */
 	public static int getRecordCount() {
 		return CacheUtil.records.size();
 	}
-	
+
+	/**
+	 * 设置性能测试对象
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:43
+	 * @param ptObjects ptObjects
+	 */
 	public static void setPtObjects(
 			Map<Integer, Map<Integer, PerformanceTestObject>> ptObjects) {
 		CacheUtil.ptObjects = ptObjects;
 	}
-	
+
+	/**
+	 * 获取性能测试对象集合
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:52
+	 * @param
+	 * @return {@link Map}
+	 */
 	public static Map<Integer, Map<Integer, PerformanceTestObject>> getPtObjects() {
 		return ptObjects;
 	}
-	
+
+	/**
+	 * 获取当前登陆用户的性能测试任务列表
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:53
+	 * @param userId userId
+	 * @return {@link Map}
+	 */
 	public static Map<Integer, PerformanceTestObject> getPtObjectsByUserId (Integer userId) {
 		Map<Integer, PerformanceTestObject> ptos = ptObjects.get(userId);
 		if (ptos == null) {
-			ptos = new HashMap<Integer, PerformanceTestObject>();
+			ptos = new HashMap<Integer, PerformanceTestObject>(5);
 			ptObjects.put(userId, ptos);
 		}
 		return ptos;
 	}
-	
+
+	/**
+	 * 新增性能测试任务
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:53
+	 * @param userId userId
+	 * @param ptObject ptObject
+	 */
 	public static void addPtObject (Integer userId, PerformanceTestObject ptObject) {
 		Map<Integer, PerformanceTestObject> pts = getPtObjectsByUserId(userId);
 		pts.put(ptObject.getObjectId(), ptObject);
 	}
-	
+
+	/**
+	 * 设置SocketMock服务集合
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:54
+	 * @param socketServers socketServers
+	 */
 	public static void setSocketServers(
 			Map<Integer, MockSocketServer> socketServers) {
 		CacheUtil.socketServers = socketServers;
 	}
-	
+
+	/**
+	 * 获取SocketMock服务集合
+	 * @author xuwangcheng
+	 * @date 2019/8/30 15:54
+	 * @param
+	 * @return {@link Map}
+	 */
 	public static Map<Integer, MockSocketServer> getSocketServers() {
 		return socketServers;
 	}

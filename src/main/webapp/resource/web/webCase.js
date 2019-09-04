@@ -268,12 +268,12 @@ var eventList = {
 				},function(index){ 
 					layer.close(index);
 					showSelectBox ([{id:"chrome", name:"Chrome"}, {id:"ie", name:"IE"}, {id:"firefox", name:"Firefox"}, {id:"opera", name:"Opera"}], "id", "name", function(id, obj, index){
-						batchOp($(".selectCase:checked"), top.WEB_CASE_CHANGE_BROSWER_TYPE_URL, "修改", null, "caseId", {browserType:id});
+						batchOp($(".selectCase:checked"), REQUEST_URL.WEB_CASE.CHANGE_BROWSER_TYPE, "修改", null, "caseId", {browserType:id});
 						layer.close(index);
 					}, "请选择一个浏览器类型:")		
 				},function(index){
 					layer.close(index);
-					batchOp($(".selectCase:checked"), top.WEB_CASE_DEL_URL, "删除", null, "caseId");
+					batchOp($(".selectCase:checked"), REQUEST_URL.WEB_CASE.DEL, "删除", null, "caseId");
 				});
 		},		
 		".object-edit":function(){
@@ -286,7 +286,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此测试用例吗？", top.WEB_CASE_DEL_URL, {id:data.caseId}, this, "删除成功!");
+			opObj("确认要删除此测试用例吗？", REQUEST_URL.WEB_CASE.DEL, {id:data.caseId}, this, "删除成功!");
 		},
 		".setting-config":function() {
 			var data = table.row( $(this).parents('tr') ).data();			
@@ -325,7 +325,7 @@ var eventList = {
 					configObj['caseVariables'][key] = $(this).find('input').eq(1).val();
 				}
 			});
-			$.post(top.WEB_CASE_UPDATE_CONFIG_JSON_URL, {caseId:$('#objectId').val(), configJson:JSON.stringify(configObj)}, function(json){
+			$.post(REQUEST_URL.WEB_CASE.UPDATE_CONFIG_JSON, {caseId:$('#objectId').val(), configJson:JSON.stringify(configObj)}, function(json){
 				if (json.returnCode == 0) {
 					layer.close($('#layerIndex').val());
 					refreshTable();
@@ -352,14 +352,14 @@ var mySetting = {
 			df.resolve();			   		 	
    	 	},
 		listPage:{
-			listUrl:top.WEB_CASE_LIST_URL,
+			listUrl:REQUEST_URL.WEB_CASE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 12]			
 		},
 		editPage:{
-			editUrl:top.WEB_CASE_EDIT_URL,
-			getUrl:top.WEB_CASE_GET_URL,
+			editUrl:REQUEST_URL.WEB_CASE.EDIT,
+			getUrl:REQUEST_URL.WEB_CASE.GET,
 			rules:{
 				caseName:{
 					required:true,

@@ -67,15 +67,15 @@ var columnsSetting = [
 var eventList = {
 		"#batch-del-object":function(){
 			var checkboxList = $(".selectMail:checked");
-			batchDelObjs(checkboxList, top.MAIL_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.MAIL.GET);
 		},
 		"#batch-setting-read":function(){
 			var checkboxList = $(".selectMail:checked");
-			batchOp (checkboxList, top.MAIL_CHANGE_STATUS, "处理", null, "mailId", {statusName:"readStatus", status:"0"})			
+			batchOp (checkboxList, REQUEST_URL.MAIL.CHANGE_STATUS, "处理", null, "mailId", {statusName:"readStatus", status:"0"})
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确认要删除此条信息吗？", top.MAIL_DEL_URL, data.mailId, this);			
+			delObj("确认要删除此条信息吗？", REQUEST_URL.MAIL.DEL, data.mailId, this);
 		},
 		".show-mail-info":function() {
 			var data = table.row( $(this).parents('tr') ).data();
@@ -83,7 +83,7 @@ var eventList = {
 			layer_show("来自" + data.sendUserName + "信息  &nbsp;- &nbsp;"  + data.sendTime, html, '600', '460', 1
 					, function() {
 						if (data.readStatus == "1") {
-							$.post(top.MAIL_CHANGE_STATUS, {mailId:data.mailId, statusName:"readStatus", status:"0"}, function(json) {
+							$.post(REQUEST_URL.MAIL.CHANGE_STATUS, {mailId:data.mailId, statusName:"readStatus", status:"0"}, function(json) {
 								if (json.returnCode == 0) {
 									(top['welcome']).getMailNum();
 									refreshTable();
@@ -99,7 +99,7 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		listPage:{
-			listUrl:top.MAIL_LIST_URL,
+			listUrl:REQUEST_URL.MAIL.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 3, 6],

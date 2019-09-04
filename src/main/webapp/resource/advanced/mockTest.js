@@ -186,7 +186,7 @@ var currentSettingConfig = null;
 var eventList = {
 		".setting-request-validate":function(){ //打开入参验证配置界面
 			var data = table.row( $(this).parents('tr') ).data();
-			$.get(top.INTERFACE_MOCK_GET_URL, {id:data.mockId}, function(json){
+			$.get(REQUEST_URL.INTERFACE_MOCK.GET, {id:data.mockId}, function(json){
 				if (json.returnCode == 0) {
 					currentSettingConfig = JSON.parse(json.object.requestValidate);
 					layer_show(json.object.mockUri + "  Mock入参验证设定", templates["mock-request-validate-setting"](currentSettingConfig), 840, 450, 1, function(layero, index){
@@ -259,7 +259,7 @@ var eventList = {
 				title : '请输入入参报文',
 				area : [ '500px', '300px' ]
 			}, function(value, index, elem) {
-				$.post(top.INTERFACE_MOCK_PARSE_MESSAGE_TO_CONFIG_URL, {message:value}, function(json){
+				$.post(REQUEST_URL.INTERFACE_MOCK.PARSE_MESSAGE_TO_CONFIG, {message:value}, function(json){
 					if (json.returnCode == 0) {
 						$.each(JSON.parse(json.rules), function(i, n){
 							$parent.append('<span array-id="' + currentSettingConfig['parameters'].length 
@@ -320,7 +320,7 @@ var eventList = {
 			clearNullArr(currentSettingConfig["parameters"]);
 			
 			sendData[$(this).attr("setting-type")] = JSON.stringify(currentSettingConfig);
-			$.post(top.INTERFACE_MOCK_UPDATE_SETTING_URL, sendData, function(json){
+			$.post(REQUEST_URL.INTERFACE_MOCK.UPDATE_SETTING, sendData, function(json){
 				if (json.returnCode == 0) {
 					layer.msg('更新成功!', {icon:1, time:1500});
 				} else {
@@ -330,7 +330,7 @@ var eventList = {
 		},		
 		".setting-response-mock":function(){//打开出参模拟配置页面
 			var data = table.row( $(this).parents('tr') ).data();
-			$.get(top.INTERFACE_MOCK_GET_URL, {id:data.mockId}, function(json){
+			$.get(REQUEST_URL.INTERFACE_MOCK.GET, {id:data.mockId}, function(json){
 				if (json.returnCode == 0) {
 					currentSettingConfig = JSON.parse(json.object.responseMock);
 					layer_show(json.object.mockUri + "  Mock出参模拟设定", templates["mock-response-setting"](currentSettingConfig), 900, 675, 1, function(layero, index){
@@ -352,7 +352,7 @@ var eventList = {
 				return;
 			}
 			
-			chooseParameterNodePath(top.INTERFACE_MOCK_PARSE_MESSAGE_TO_NODES_URL, {message:exampleResponseMsg}, {
+			chooseParameterNodePath(REQUEST_URL.INTERFACE_MOCK.PARSE_MESSAGE_TO_NODES, {message:exampleResponseMsg}, {
 				titleName:"选择出参模拟节点",
 				isChoosePath:true, 
 				notChooseTypes:["Array", "Map", "List", "Object"],
@@ -377,14 +377,14 @@ var eventList = {
 					shadeClose:true,
 					btn3:function(index){
 						layer.close(index);
-						batchOp($(".selectMock:checked"), top.INTERFACE_MOCK_DEL_URL, "删除", null, "mockId");
+						batchOp($(".selectMock:checked"), REQUEST_URL.INTERFACE_MOCK.DEL, "删除", null, "mockId");
 					}
 				},function(index){ 
 					layer.close(index);
-					batchOp($(".selectMock:checked"), top.INTERFACE_MOCK_UPDATE_STATUS_URL, "启用", null, "mockId", {status:"0"});
+					batchOp($(".selectMock:checked"), REQUEST_URL.INTERFACE_MOCK.UPDATE_STATUS, "启用", null, "mockId", {status:"0"});
 				},function(index){
 					layer.close(index);
-					batchOp($(".selectMock:checked"), top.INTERFACE_MOCK_UPDATE_STATUS_URL, "禁用", null, "mockId", {status:"1"});
+					batchOp($(".selectMock:checked"), REQUEST_URL.INTERFACE_MOCK.UPDATE_STATUS, "禁用", null, "mockId", {status:"1"});
 				});
 		},		
 		".object-edit":function(){
@@ -397,7 +397,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此mock接口吗？", top.INTERFACE_MOCK_DEL_URL, {id:data.mockId}, this, "删除成功!");
+			opObj("确认要删除此mock接口吗？", REQUEST_URL.INTERFACE_MOCK.DEL, {id:data.mockId}, this, "删除成功!");
 		},
 		"#mock-validate-relation-setting":function(){//设定关联规则来获取入参节点内容
 			var value = '{' + $("#path").val() + '}';
@@ -421,20 +421,20 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		listPage:{
-			listUrl:top.INTERFACE_MOCK_LIST_URL,
+			listUrl:REQUEST_URL.INTERFACE_MOCK.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 5, 6, 12]			
 		},
 		editPage:{
-			editUrl:top.INTERFACE_MOCK_EDIT_URL,
-			getUrl:top.INTERFACE_MOCK_GET_URL,
+			editUrl:REQUEST_URL.INTERFACE_MOCK.EDIT,
+			getUrl:REQUEST_URL.INTERFACE_MOCK.GET,
 			rules:{
 				mockUrl:{
 					minlength:2,
 					maxlength:2000,
 					remote:{
-						url:top.INTERFACE_MOCK_CHECK_NAME_URL,
+						url:REQUEST_URL.INTERFACE_MOCK.CHECK_NAME,
 						type:"post",
 						dataType:"json",
 						data: {                   

@@ -200,9 +200,15 @@ public class PerformanceTestObject {
 		
 		//获取请求地址
 		String requestUrl = "";
-		if (StringUtils.isNotBlank(config.getMessageScene().getRequestUrl())) requestUrl = config.getMessageScene().getRequestUrl();
-		if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) requestUrl = msg.getRequestUrl();
-		if (StringUtils.isBlank(requestUrl)) requestUrl = info.getRequestUrlReal();			
+		if (StringUtils.isNotBlank(config.getMessageScene().getRequestUrl())) {
+			requestUrl = config.getMessageScene().getRequestUrl();
+		}
+		if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) {
+			requestUrl = msg.getRequestUrl();
+		}
+		if (StringUtils.isBlank(requestUrl)) {
+			requestUrl = info.getRequestUrlReal();
+		}
 		
 		requestUrl = config.getBusinessSystem().getReuqestUrl(requestUrl, config.getBusinessSystem().getDefaultPath(), info.getInterfaceName());
 		
@@ -222,11 +228,14 @@ public class PerformanceTestObject {
 		infoMsg.add(timeTag() + "正在检查测试配置选项...");
 		//设置最大的超时时间,防止无限循环
 		if (config.getMaxTime() == null || config.getMaxTime() < 1 || config.getMaxTime() > PerformanceTestConfig.MAX_TEST_TIME) {
-			config.setMaxTime(PerformanceTestConfig.MAX_TEST_TIME);//最长时间8小时
+			//最长时间8小时
+			config.setMaxTime(PerformanceTestConfig.MAX_TEST_TIME);
 		} 
 		
 		//设置最大线程数
-		if (config.getThreadCount() == null) config.setThreadCount(1);
+		if (config.getThreadCount() == null) {
+			config.setThreadCount(1);
+		}
 		if (config.getThreadCount() > PerformanceTestConfig.MAX_THREAD_COUNT) {
 			config.setThreadCount(PerformanceTestConfig.MAX_THREAD_COUNT);
 		}
@@ -252,7 +261,9 @@ public class PerformanceTestObject {
 	 * @return
 	 */
 	public boolean action() {
-		if (!running && globalStoped) setGlobalStoped(false); 
+		if (!running && globalStoped) {
+			setGlobalStoped(false);
+		}
 		currentStatus = "正在测试中";
 		infoMsg.add(timeTag() + "正在做最后的测试准备...");
 		//切分测试数据和测试次数到每个线程中
@@ -659,7 +670,6 @@ public class PerformanceTestObject {
 				analyzeResult.getPressCpu().add((double) Math.round((PracticalUtils.sigar.getCpuPerc().getCombined() * 100) * 100) / 100);				
 				analyzeResult.getPressMemory().add((double) Math.round((PracticalUtils.sigar.getMem().getUsedPercent()) * 100) / 100);
 			} catch (Exception e) {
-				
 				logger.error("获取压力机资源消耗失败!", e);
 				errorMsg.add(timeTag() + "获取压力机的资源消耗情况失败!");
 				analyzeResult.getPressCpu().add(0.00);
@@ -674,7 +684,11 @@ public class PerformanceTestObject {
 		}	
 	}
 	
-	
+	/**
+	 * 性能测试线程
+	 * @author xuwangcheng
+	 * @date 2019/8/30 16:50
+	 */
 	class ThreadPerformanceTest implements Runnable {
 		private List<Map<String, String>> threadParameters;
 		private int maxCount;
@@ -694,7 +708,7 @@ public class PerformanceTestObject {
 			TestMessageScene threadTestScene = (TestMessageScene) testScene.clone();
 			
 			//获取一个新的测试客户端
-			Object procotolClient = TestClient.getTestClientInstance(info.getInterfaceProtocol()).getTestClient();
+			Object protocolClient = TestClient.getTestClientInstance(info.getInterfaceProtocol()).getTestClient();
 
 			//停止条件
 			int testTime = 0;
@@ -720,7 +734,8 @@ public class PerformanceTestObject {
 					//可重复还是不可重复
 					Map<String, String> replaceParameter = threadParameters.get(index);
 					if ("0".equals(config.getParameterReuse())) {
-						threadParameters.remove(index);//不可复用
+						//不可复用
+						threadParameters.remove(index);
 					} else {
 						//可复用
 						index++;
@@ -732,7 +747,7 @@ public class PerformanceTestObject {
 					threadTestScene.setRequestMessage(repalceParameter(requestMessage, replaceParameter));						
 				}
 				//开始进行测试
-				TestResult testResult = autoTest.singleTest(threadTestScene, procotolClient);
+				TestResult testResult = autoTest.singleTest(threadTestScene, protocolClient);
 				testResults.add(testResult);
 				
 				testCount++;
@@ -740,7 +755,7 @@ public class PerformanceTestObject {
 			}
 			threads.remove(Thread.currentThread().getName());			
 			
-			TestClient.getTestClientInstance(info.getInterfaceProtocol()).putBackTestClient(procotolClient);
+			TestClient.getTestClientInstance(info.getInterfaceProtocol()).putBackTestClient(protocolClient);
 			infoMsg.add(timeTag() + Thread.currentThread().getName() + " - 已停止测试!");
 		}
 		

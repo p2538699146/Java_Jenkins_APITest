@@ -11,6 +11,8 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Controller;
 
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.PracticalUtils;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -35,7 +37,7 @@ public class InterceptorAction extends ActionSupport{
 	/**
 	 * ajax调用返回给前台的map
 	 */
-	private Map<String,Object> jsonMap=new HashMap<String,Object>();
+	private Map<String,Object> jsonMap = new HashMap<String,Object>();
 	
 	/**
 	 * 用户未登录或者登录失效	
@@ -66,11 +68,21 @@ public class InterceptorAction extends ActionSupport{
 	 * @return
 	 */
 	public String error() {
+		Exception ex = (Exception)ActionContext.getContext().getValueStack().findValue("exception");
+		String exDetails = PracticalUtils.getExceptionAllinformation(ex);
+
+		logger.error("系统内部错误:\n" + exDetails);
+		jsonMap.put("exception", exDetails);
+
+		if (ex instanceof YiException) {
+			YiException yiEx = (YiException) ex;
+			jsonMap.put("returnCode", yiEx.getCode());
+			jsonMap.put("msg", yiEx.getMsg());
+			return SUCCESS;
+		}
 		
-		jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-		jsonMap.put("msg", "系统内部错误,请稍后再试！");		
-		
-	    logger.error("系统内部错误:\n" + PracticalUtils.getExceptionAllinformation((Exception)ActionContext.getContext().getValueStack().findValue("exception")));
+		jsonMap.put("returnCode", AppErrorCode.INTERNAL_SERVER_ERROR.getCode());
+		jsonMap.put("msg", AppErrorCode.INTERNAL_SERVER_ERROR.getMsg());
 
 		return SUCCESS;
 	}

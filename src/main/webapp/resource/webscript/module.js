@@ -133,11 +133,11 @@ var columnsSetting = [
 var eventList = {
 		".object-batch-del":function(){
 			var checkboxList = $(".selectModule:checked");
-			batchDelObjs(checkboxList, top.WEB_SCRIPT_MODULE_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.WEB_SCRIPT_MODULE.DEL);
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确认要删除此模块吗？", top.WEB_SCRIPT_MODULE_DEL_URL, data.moduleId, this);			
+			delObj("确认要删除此模块吗？", REQUEST_URL.WEB_SCRIPT_MODULE.DEL, data.moduleId, this);
 		},
 		".object-add":function() {
 			publish.renderParams.editPage.modeFlag = 0;					
@@ -157,15 +157,15 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		listPage:{
-			listUrl:top.WEB_SCRIPT_MODULE_LIST_URL,
+			listUrl:REQUEST_URL.WEB_SCRIPT_MODULE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 9, 10],
 			exportExcel:true
 		},
 		editPage:{
-			editUrl:top.WEB_SCRIPT_MODULE_EDIT_URL,
-			getUrl:top.WEB_SCRIPT_MODULE_GET_URL,
+			editUrl:REQUEST_URL.WEB_SCRIPT_MODULE.EDIT,
+			getUrl:REQUEST_URL.WEB_SCRIPT_MODULE.GET,
 			rules:{
 				moduleName:{
 					required:true				
@@ -180,7 +180,7 @@ var mySetting = {
 		        	maxlength:255,
 		        	minlength:1,
 		        	remote:{
-		        		url:top.WEB_SCRIPT_MODULE_CHECK_NAME_URL,
+		        		url:REQUEST_URL.WEB_SCRIPT_MODULE.CHECK_NAME,
 		        		data: {                    
 		        			moduleCode: function() {
 		        	            return $("#moduleCode").val();

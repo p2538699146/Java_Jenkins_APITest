@@ -188,12 +188,12 @@ var eventList = {
 				},function(index){ 
 					layer.close(index);
 					showSelectBox ([{id:"chrome", name:"Chrome"}, {id:"ie", name:"IE"}, {id:"firefox", name:"Firefox"}, {id:"opera", name:"Opera"}], "id", "name", function(id, obj, index){
-						batchOp($(".selectSuite:checked"), top.WEB_SUITE_CHANGE_BROSWER_TYPE_URL, "修改", null, "suiteId", {browserType:id});
+						batchOp($(".selectSuite:checked"), REQUEST_URL.WEB_SUITE.SUITE_CHANGE_BROWSER_TYPE, "修改", null, "suiteId", {browserType:id});
 						layer.close(index);
 					}, "请选择一个浏览器类型:")		
 				},function(index){
 					layer.close(index);
-					batchOp($(".selectSuite:checked"), top.WEB_SUITE_DEL_URL, "删除", null, "suiteId");
+					batchOp($(".selectSuite:checked"), REQUEST_URL.WEB_SUITE.DEL, "删除", null, "suiteId");
 				});
 		},		
 		".object-edit":function(){
@@ -206,7 +206,7 @@ var eventList = {
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();			
-			opObj("确认要删除此测试用例集吗？", top.WEB_SUITE_DEL_URL, {id:data.suiteId}, this, "删除成功!");
+			opObj("确认要删除此测试用例集吗？", REQUEST_URL.WEB_SUITE.DEL, {id:data.suiteId}, this, "删除成功!");
 		},
 		".setting-config":function() {
 			var data = table.row( $(this).parents('tr') ).data();			
@@ -223,7 +223,7 @@ var eventList = {
 					});
 					layer.close(index);
 					if (!CompareJsonObj(configObj, JSON.parse(data.configJson))) {
-						$.post(top.WEB_SUITE_UPDATE_CONFIG_JSON_URL, {suiteId:$('#objectId').val(), configJson:JSON.stringify(configObj)}, function(json){							
+						$.post(REQUEST_URL.WEB_SUITE.UPDATE_CONFIG_JSON, {suiteId:$('#objectId').val(), configJson:JSON.stringify(configObj)}, function(json){
 							if (json.returnCode == 0) {								
 								data.configJson = JSON.stringify(configObj);
 								layer.msg('更新成功!', {icon:1, time:1800});
@@ -279,7 +279,7 @@ var eventList = {
 					console.log(settingConfig);
 					console.log(data.testConfig);
 					if (!CompareJsonObj(settingConfig, data.testConfig)) {
-						$.post(top.WEB_CONFIG_EDIT_URL, settingConfig, function(json){
+						$.post(REQUEST_URL.WEB_CONFIG.EDIT, settingConfig, function(json){
 							layer.close($(layero).find('#layerIndex').val());
 							if (json.returnCode == 0) {								
 								data.testConfig = settingConfig;								
@@ -304,14 +304,14 @@ var mySetting = {
 			df.resolve();			   		 	
    	 	},
 		listPage:{
-			listUrl:top.WEB_SUITE_LIST_URL,
+			listUrl:REQUEST_URL.WEB_SUITE.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 10]			
 		},
 		editPage:{
-			editUrl:top.WEB_SUITE_EDIT_URL,
-			getUrl:top.WEB_SUITE_GET_URL,
+			editUrl:REQUEST_URL.WEB_SUITE.EDIT,
+			getUrl:REQUEST_URL.WEB_SUITE.GET,
 			rules:{
 				suiteName:{
 					required:true,

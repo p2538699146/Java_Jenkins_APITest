@@ -194,14 +194,14 @@ var eventList = {
 							showSelectBox([{status:"0", name:"可用"}, {status:"1", name:"不可用/已使用"},
 							               {status:"2", name:"可重复使用"}], "status", "name",
 							               function(status, obj, selectBoxIndex) {
-												batchOp(checkboxList, top.DATA_CHANGE_STATUS_URL, '修改', table, 'dataId', {status:status})
+												batchOp(checkboxList, REQUEST_URL.TEST_DATA.CHANGE_STATUS, '修改', table, 'dataId', {status:status})
 												layer.close(selectBoxIndex);
 								
 							});
 							layer.close(index);
 						}
 					},function(index){ 
-						batchDelObjs(checkboxList, top.DATA_DEL_URL);
+						batchDelObjs(checkboxList, REQUEST_URL.TEST_DATA.DEL);
 						layer.close(index);
 						
 					},function(index){	
@@ -226,16 +226,16 @@ var eventList = {
 		},
 		".object-del":function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此测试数据？请慎重操作!", top.DATA_DEL_URL, data.dataId, this);
+			delObj("确定删除此测试数据？请慎重操作!", REQUEST_URL.TEST_DATA.DEL, data.dataId, this);
 		},
 		".appoint":function() { //单独展示数据编辑页面
 			var data = table.row( $(this).parents('tr') ).data();
 			
-			$.post(top.GET_SETTING_DATA_URL, {messageSceneId:messageSceneId, dataId:data.dataId} ,function(json) {
+			$.post(REQUEST_URL.TEST_DATA.GET_SETTING_DATA, {messageSceneId:messageSceneId, dataId:data.dataId} ,function(json) {
 				currParams = json.params;
 				if (json.returnCode == 0) {					
 					layer_show("设置数据", templates["setting-parameter-data"](json), null, null, 1, null, function(index, layero) {
-						$.post(top.DATA_UPDATE_PARAMS_DATA_URL, {dataId:data.dataId, paramsData:getParamsData()}, function (returnJson) {
+						$.post(REQUEST_URL.TEST_DATA.UPDATE_PARAMS_DATA, {dataId:data.dataId, paramsData:getParamsData()}, function (returnJson) {
 							if (returnJson.returnCode == 0) {
 								layer.msg("更新数据内容成功!", {icon:1, time:1500});	
 								layer.close(index);
@@ -253,7 +253,7 @@ var eventList = {
 		},
 		"#view-params-data":function() {  //查看或者设置数据内容
 			//publish.renderParams.editPage.modeFlag 0 1
-			$.post(top.GET_SETTING_DATA_URL, {messageSceneId:messageSceneId, dataId:$("#dataId").val()} ,function(json) {
+			$.post(REQUEST_URL.TEST_DATA.GET_SETTING_DATA, {messageSceneId:messageSceneId, dataId:$("#dataId").val()} ,function(json) {
 				if (json.returnCode == 0) {
 					currParams = json.params;
 					layer_show("设置数据", templates["setting-parameter-data"](json), null, null, 1, null, function(index, layero) {
@@ -266,7 +266,7 @@ var eventList = {
 			});			
 		},
 		"#choose-business-system":function () {//选择测试环境,测试数据的测试环境可以不用与场景中的测试环境一致
-			$.post(top.BUSINESS_SYSTEM_LIST_ALL_URL, {protocolType:protocolType}, function (json) {
+			$.post(REQUEST_URL.BUSINESS_SYSTEM.LIST_ALL, {protocolType:protocolType}, function (json) {
 				if (json.returnCode == 0) {
 					layerMultipleChoose({
 						title:"请选择测试数据所属的测试环境(可多选,最多不超过10个)",
@@ -301,19 +301,19 @@ var mySetting = {
 			messageSceneId = GetQueryString("messageSceneId");
 			sceneName = GetQueryString("sceneName");
 			protocolType = GetQueryString("protocolType");
-			publish.renderParams.listPage.listUrl = top.DATA_LIST_URL + "?messageSceneId=" + messageSceneId;		
+			publish.renderParams.listPage.listUrl = REQUEST_URL.TEST_DATA.LIST + "?messageSceneId=" + messageSceneId;
 			df.resolve();			   		 	
    	 	},
 		editPage:{
-			editUrl:top.DATA_EDIT_URL,
-			getUrl:top.DATA_GET_URL,
+			editUrl:REQUEST_URL.TEST_DATA.EDIT,
+			getUrl:REQUEST_URL.TEST_DATA.GET,
 			rules:{
 				dataDiscr:{
 					required:true,
 					minlength:1,
 					maxlength:100,
 					remote:{
-						url:top.DATA_CHECK_NAME_URL,
+						url:REQUEST_URL.TEST_DATA.CHECK_NAME,
 						type:"post",
 						dataType: "json",
 						data: {                   
@@ -336,7 +336,7 @@ var mySetting = {
 				$("#messageScene\\.messageSceneId").val(messageSceneId);
 				
 				if (messageSceneId != null && publish.renderParams.editPage.modeFlag == 0) {
-					$.post(top.SCENE_GET_URL, {id:messageSceneId}, function (json) {
+					$.post(REQUEST_URL.MESSAGE_SCENE.GET, {id:messageSceneId}, function (json) {
 						if (json.returnCode == 0) {
 							appendSystem(json.object.businessSystems);
 						}
@@ -351,7 +351,7 @@ var mySetting = {
 
 		},		
 		listPage:{
-			listUrl:top.DATA_LIST_URL,
+			listUrl:REQUEST_URL.TEST_DATA.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 5]
@@ -407,7 +407,7 @@ function getParamsData() {
 function createDataMessage() {
 	var paramsDataStr;
 	if ((paramsDataStr =getParamsData()) == "") paramsDataStr = "{}";
-	$.post(top.CREATE_NEW_DATA_MSG_URL, {messageSceneId:messageSceneId, paramsData:paramsDataStr}, function(json) {
+	$.post(REQUEST_URL.TEST_DATA.CREATE_NEW_DATA_MSG, {messageSceneId:messageSceneId, paramsData:paramsDataStr}, function(json) {
 		if (json.returnCode == 0) {
 			layer.msg("生成报文成功!", {icon:1,time:1500});
 			$("#dataMsg > textarea").val(json.dataMsg);

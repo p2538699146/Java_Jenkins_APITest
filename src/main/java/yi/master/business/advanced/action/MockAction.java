@@ -49,6 +49,7 @@ public class MockAction extends ActionSupport {
 	
 	private String requestMsg = "";
 
+	@Override
 	public String execute() {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String homeUrl = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_HOME);
@@ -71,7 +72,6 @@ public class MockAction extends ActionSupport {
 				requestMessageB.append(line);
 			}			
 		} catch (Exception e) {
-			
 			logger.error(request.getRequestURI() + "获取请求报文失败！", e);
 		} finally {
 			if (reader != null) {
@@ -94,7 +94,7 @@ public class MockAction extends ActionSupport {
 		
 		responseMsg = config.validate(request, requestMsg);
 		MockResponseConfig mockConfig = MockResponseConfig.getInstance(mock.getResponseMock());			
-		if ("true".equals(responseMsg)) {								
+		if (SystemConsts.CUSTOM_TRUE_STRING.equals(responseMsg)) {
 			responseMsg = mockConfig.generate(response, requestMsg);			
 		} else if (StringUtils.isNotBlank(mockConfig.getExampleErrorMsg())) {
 			responseMsg = PracticalUtils.replaceGlobalVariable(mockConfig.getExampleErrorMsg().replace("${errorMsg}", responseMsg), null);
@@ -105,7 +105,6 @@ public class MockAction extends ActionSupport {
 			out.print(responseMsg);
 			out.flush();
 		} catch (Exception e) {
-			
 			logger.error("返回出参报文出错", e);
 		} finally {
 			if (out != null) {

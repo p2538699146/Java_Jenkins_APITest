@@ -7,7 +7,7 @@ var count;
 
 var eventList = {
 	'#choose-test-set':function() {
-		$.get(top.LIST_MY_SETS_URL, function(json) {
+		$.get(REQUEST_URL.TEST_SET.LIST_MY_SETS, function(json) {
 			if (json.returnCode == 0) {
 				layer_show("所有测试集", templates["show-test-set"](json.data), null, null, 1);
 			} else {
@@ -33,7 +33,7 @@ var mySetting = {
    	 	userDefaultTemplate:false,
    	 	customCallBack:function(params){
    	 		$.Huitab("#tab-system .tabBar span","#tab-system .tabCon","current","click","0");
-   	 		$.get(top.GET_TEST_CONFIG_URL, function(json) {
+   	 		$.get(REQUEST_URL.AUTO_TEST.GET_TEST_CONFIG_URL, function(json) {
    	 			if (json.returnCode == 0) {
    	 				configData = json.config;
    	 				resetOptions();
@@ -68,7 +68,7 @@ function resetOptions () {
 //更新配置信息
 function updateTestOptions(){
 	var updateConfigData=$("#form-article-add").serializeArray();
-	$.post(top.UPDATE_TEST_CONFIG_URL, updateConfigData, function(data){
+	$.post(REQUEST_URL.AUTO_TEST.UPDATE_TEST_CONFIG_URL, updateConfigData, function(data){
 		if(data.returnCode == 0){
 			configData=data.config;
 			layer.msg('更新成功',{icon:1, time:1500});
@@ -98,7 +98,7 @@ function batchTest(setId) {
 		isTesting = true;
 		$("#testTips").append('<p>正在发送测试请求...</p>');
 		$("#testTips").append('<p>正在准备测试数据...<img src="../../libs/layer/2.1/skin/default/loading-2.gif" alt="loading" /></p>');
-		$.get(top.BATCH_AUTO_TEST_URL + "?setId=" + setId, function(json) {
+		$.get(REQUEST_URL.AUTO_TEST.BATCH_AUTO_TEST_URL + "?setId=" + setId, function(json) {
 			if (json.returnCode == 0) {
 				$("img").remove();
 				$("#testTips").append('<p>开始执行测试...<img src="../../libs/layer/2.1/skin/default/loading-2.gif" alt="loading" /></p>');
@@ -121,7 +121,7 @@ function batchTest(setId) {
 	$("#testTips").html('');
 	if (configData.checkDataFlag == "0") {
 		$("#testTips").append('<p>正在检查测试数据...<img src="../../libs/layer/2.1/skin/default/loading-2.gif" alt="loading" /></p>');
-		$.get(top.CHECK_DATA_URL, {setId:setId}, function(json) {
+		$.get(REQUEST_URL.AUTO_TEST.CHECK_DATA_URL, {setId:setId}, function(json) {
 			$("img").remove();
 			if (json.returnCode == 0) {
 				if (json.count == 0) {
@@ -152,7 +152,7 @@ function batchTest(setId) {
 }
 
 function getProcessInfo(intervalID) {
-	$.get(top.REPORT_GET_URL + "?reportId=" + reportId, function(json) {
+	$.get(REQUEST_URL.REPORT.GET + "?reportId=" + reportId, function(json) {
 		if (json.returnCode == 0) {
 			
 			$("#current-complete-count").text(json.report.sceneNum);

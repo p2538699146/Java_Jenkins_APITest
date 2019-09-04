@@ -26,6 +26,11 @@ import yi.master.util.excel.ExportPerformanceTestResult;
 
 import net.sf.json.JSONObject;
 
+/**
+ * 性能测试结果查询相关接口
+ * @author xuwangcheng
+ * @date 2019/8/30 16:01
+ */
 @Controller
 @Scope("prototype")
 public class PerformanceTestResultAction extends BaseAction<PerformanceTestResult> {
@@ -119,7 +124,6 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 			setData("path", ExportPerformanceTestResult.exportDocuments(results));
 			setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		} catch (Exception e) {
-			
 			setReturnInfo(ReturnCodeConsts.SYSTEM_ERROR_CODE, "创建excel文件出错!");
 		}
 		return SUCCESS;

@@ -6,6 +6,8 @@
   <packaging>war</packaging>
   <name>MasterYi Interface Automated Test Platform</name>
   <url>http://maven.apache.org</url>
+
+
   <properties>
     <struts.version>2.3.15.3</struts.version>
     <hibernate.version>4.2.4.Final</hibernate.version>
@@ -14,6 +16,7 @@
     <httpclient.version>4.2.1</httpclient.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.struts</groupId>
@@ -453,8 +456,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>

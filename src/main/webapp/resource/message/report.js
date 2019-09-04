@@ -153,7 +153,7 @@ var columnsSetting = [
 var eventList = {		
 		'#batch-del-object':function() {
 			var checkboxList = $(".selectReport:checked");
-			batchDelObjs(checkboxList, top.REPORT_DEL_URL);
+			batchDelObjs(checkboxList, REQUEST_URL.REPORT.DEL);
 		},
 		'.send-mail':function(){ //邮件推送测试报告
 			var data = table.row( $(this).parents('tr') ).data();
@@ -163,7 +163,7 @@ var eventList = {
 	    	} 
 			layer.confirm('确定将此测试报告进行邮件推送(优先使用测试集中配置的收信地址)?', {title:'提示', icon:3}, function(index){
 				loading(true, '正在发送邮件...');
-				$.post(top.REPORT_SEND_MAIL_URL, {reportId:data.reportId}, function(json){
+				$.post(REQUEST_URL.REPORT.SEND_MAIL, {reportId:data.reportId}, function(json){
 					loading(false);
 					if (json.returnCode == 0) {
 						layer.msg('发送邮件成功,请注意查收!', {icon:1, time:1800});
@@ -211,7 +211,7 @@ var eventList = {
 		},
 		'.object-del':function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			delObj("确定删除此测试报告吗？", top.REPORT_DEL_URL, data.reportId, this);
+			delObj("确定删除此测试报告吗？", REQUEST_URL.REPORT.DEL, data.reportId, this);
 		},
 		'.download-report':function() { //下载离线报告
 			var data = table.row( $(this).parents('tr') ).data();
@@ -219,9 +219,9 @@ var eventList = {
 	    		layer.alert("当前测试报告中没有任何测试详情结果", {icon:5});
 	    		return false;
 	    	} 
-			$.post(top.REPORT_DOWNLOAD_STATIS_HTML, {reportId:data.reportId}, function(json) {
+			$.post(REQUEST_URL.REPORT.DOWNLOAD_STATIC_REPORT_HTML, {reportId:data.reportId}, function(json) {
 				if (json.returnCode == 0) {
-					window.open("../../" + top.DOWNLOAD_FILE_URL + "?downloadFileName=" + json.path);
+					window.open("../../" + REQUEST_URL.FILE.DOWNLOAD_FILE + "?downloadFileName=" + json.path);
 				} else {
 					layer.alert(json.msg,{icon:5});
 				}
@@ -232,7 +232,7 @@ var eventList = {
 var mySetting = {
 		eventList:eventList,
 		listPage:{
-			listUrl:top.REPORT_LIST_URL,
+			listUrl:REQUEST_URL.REPORT.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 4, 5, 6, 12]			

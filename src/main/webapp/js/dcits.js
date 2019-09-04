@@ -52,7 +52,6 @@ var advancedQueryFormHtml = "";//高级查询页面代码，防止重复渲染
  * }
  * 
  */
-var marks = top.explanationMarks;
 /********************************************/
 $(function() {
 	//加载对应的js文件		
@@ -198,13 +197,13 @@ var publish = {
     		 },
     		 ".explanation-mark":function() {
     			 var name = $(this).attr("mark-name");
-    			 if (marks == null || marks[name] == null) {
+    			 if (EXPLANATION_MARK == null || EXPLANATION_MARK[name] == null) {
     				 return;
     			 }
-    			 if (marks[name]['html']) {
-    				 layer_show('说明', templates[marks[name]['content']](marks[name]['parameters'] || {}), marks[name]['width'] || 460, marks[name]['height'] || 350, 1, null, null, null, {shade:0, maxmin:true});
+    			 if (EXPLANATION_MARK[name]['html']) {
+    				 layer_show('说明', templates[EXPLANATION_MARK[name]['content']](EXPLANATION_MARK[name]['parameters'] || {}), EXPLANATION_MARK[name]['width'] || 460, EXPLANATION_MARK[name]['height'] || 350, 1, null, null, null, {shade:0, maxmin:true});
     			 } else {
-    				 layer_show('说明', templates['explanation-mark-panel'](marks[name]), marks[name]['width'] || 460, marks[name]['height'] || 350, 1, null, null, null, {shade:0, maxmin:true}); 
+    				 layer_show('说明', templates['explanation-mark-panel'](EXPLANATION_MARK[name]), EXPLANATION_MARK[name]['width'] || 460, EXPLANATION_MARK[name]['height'] || 350, 1, null, null, null, {shade:0, maxmin:true});
     			 }   			 
     		 }
     	 },
@@ -221,7 +220,7 @@ var publish = {
         	 dtOtherSetting:{},
         	 dt:null,
         	 exportExcel:true,
-        	 dblclickEdit:true
+        	 dblclickEdit:false
     	 },
     	 editPage:{
     		 beforeInit:function(df) {
@@ -516,7 +515,8 @@ function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting)
     		partialRefresh:true,
     		minWidth:35,
     		liveDrag:true,
-    		disabledColumns:[0]
+    		disabledColumns:[0],
+    		resizeMode: 'flex'
     	});
     	$(".page-container").spinModal(false); 	    	
     })
@@ -1046,11 +1046,11 @@ function dynamicLoadScript (scriptPath, type) {
  * @returns index
  */
 function layer_show (title, url, w, h, type, success, cancel, end, other) {
-	
+
 	if (other == null) {
 		other = {};
 	}
-	
+
 	if (title == null || title == '') {
 		title = false;
 	};
@@ -1284,7 +1284,7 @@ function uploadFile(setting) {
 	var loadIndex;
 	var defaultSetting = {
 		elem:'',
-		url:top.UPLOAD_FILE_URL,
+		url:REQUEST_URL.FILE.UPLOAD_FILE,
 		exts:'xlsx|xls',
 		acceptMime:"*",
 		size:'102400',
@@ -1843,7 +1843,7 @@ function renderResultViewPage(result, messageSceneId) {
 					layer.msg('没有返回报文!', {icon:5, time:1800});
 					return false;
 				}
-				$.post(top.SCENE_UPDATE_RESPONSE_EXAMPLE, {messageSceneId:messageSceneId, responseExample:result.responseMessage}, function (json) {
+				$.post(REQUEST_URL.MESSAGE_SCENE.UPDATE_RESPONSE_EXAMPLE, {messageSceneId:messageSceneId, responseExample:result.responseMessage}, function (json) {
 					if (json.returnCode == 0) {
 						layer.msg('更新成功!', {icon:1, time:1800});
 					} else {

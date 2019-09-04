@@ -99,7 +99,7 @@ public class DBUtil {
     /**
      * 传入数据库连接和要执行的sql语句
      * 得到返回值,多个值只取第一个,没有值返回null
-     * @param dataDb对象
+     * @param dbInfo DataDB对象
      * @param sqlStr 需要执行的sql语句
      * @return
      * @throws SQLException 
