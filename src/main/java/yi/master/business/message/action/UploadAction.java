@@ -34,15 +34,18 @@ public class UploadAction extends ActionSupport {
 	private Map<String,Object> jsonMap = new HashMap<String,Object>();
 	
 	private File file;
-    
-    //提交过来的file的名字
-    private String fileFileName;
+
+	/**
+	 * 提交过来的file的名字
+	 */
+	private String fileFileName;
     
     private String downloadFileName;
-    
-    
-    //提交过来的file的MIME类型
-    private String fileFileContentType;
+
+	/**
+	 * 提交过来的file的MIME类型
+	 */
+	private String fileFileContentType;
     
     public String upload() {
     	int returnCode = ReturnCodeConsts.SUCCESS_CODE;
@@ -59,7 +62,7 @@ public class UploadAction extends ActionSupport {
         		msg = "上传文件失败,请重试!";
     		} else {
     			jsonMap.put("path", fps);
-        		jsonMap.put("relativePath", fps.replace(FrameworkUtil.getProjectPath() + file.separator , ""));
+        		jsonMap.put("relativePath", fps.replace(FrameworkUtil.getProjectPath() + File.separator , ""));
     		}   		
     	}
     	
@@ -70,8 +73,8 @@ public class UploadAction extends ActionSupport {
     }
     
     public InputStream getDownloadStream() throws FileNotFoundException {
-    	String filePath = FrameworkUtil.getProjectPath() + file.separator + downloadFileName;
-    	this.setFileFileName(downloadFileName.substring(downloadFileName.lastIndexOf(file.separator) + 1));
+    	String filePath = FrameworkUtil.getProjectPath() + File.separator + downloadFileName;
+    	this.setFileFileName(downloadFileName.substring(downloadFileName.lastIndexOf(File.separator) + 1));
     	InputStream is = new FileInputStream(new File(filePath)); 
     	return is;
     }

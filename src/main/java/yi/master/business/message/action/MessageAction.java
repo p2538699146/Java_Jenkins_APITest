@@ -156,16 +156,16 @@ public class MessageAction extends BaseAction<Message>{
 		if (model.getInterfaceInfo().getInterfaceId() == null) {
 			model.setInterfaceInfo((messageService.get(model.getMessageId())).getInterfaceInfo());
 		}
-		
+
 		Set<Parameter> params = (interfaceInfoService.get(model.getInterfaceInfo().getInterfaceId())).getParameters();
 		String validateFalg = parseUtil.checkParameterValidity(new ArrayList<Parameter>(params), model.getParameterJson());
-		
+
 		if (!"true".equals(validateFalg)) {
 			jsonMap.put("msg", validateFalg);
-			jsonMap.put("returnCode", ReturnCodeConsts.MESSAGE_VALIDATE_ERROR);		
+			jsonMap.put("returnCode", ReturnCodeConsts.MESSAGE_VALIDATE_ERROR);
 			return SUCCESS;
 		}
-		
+
 		User user = (User)(FrameworkUtil.getSessionMap().get("user"));
 		if (model.getMessageId() == null) {
 			//增加			
@@ -193,9 +193,9 @@ public class MessageAction extends BaseAction<Message>{
 	public String get() {
 		
 		Message msg = messageService.get(id);		
-		
+
 		MessageParse parseUtil = MessageParse.getParseInstance(msg.getMessageType());
-		
+
 		msg.setParameterJson(parseUtil.messageFormatBeautify(parseUtil.depacketizeMessageToString(msg.getComplexParameter(), null)));
 		
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);

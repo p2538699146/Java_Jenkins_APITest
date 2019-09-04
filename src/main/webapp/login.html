@@ -42,7 +42,7 @@
                 <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe613;</i></label>
                     <div class="formControls col-xs-8">             
 	                    <input id="verifyCode"  type="text" placeholder="验证码" class="input-text size-L" style="width:280px;">                 
-	                    <img src="img/code.png" style="width:80px;height:40px;cursor:pointer;"/>    
+	                    <img src="" style="width:80px;height:40px;cursor:pointer;"/>
                 	</div>
             </div>
             <div class="row cl">
@@ -71,7 +71,7 @@
     		 var that = this;
     		 $.get(REQUEST_URL.LOGIN.CREATE_VERIFY_CODE, function(data){
         		 if (data.returnCode == 0) {
-        			 $(that).attr('src', data.path);
+        			 $(that).attr('src', 'data:image/png;base64,' + data.img);
         		 }
         	 });
     	 });
@@ -105,7 +105,7 @@
     function userLogin(){
         var username = $("#username").val();
         var password = $("#password").val();
-        var verifyCode = $("#verifyCode").val();$
+        var verifyCode = $("#verifyCode").val();
         if(username != "" && username != null 
         		&& password != "" && password != null 
         		&& verifyCode != "" && verifyCode != null){

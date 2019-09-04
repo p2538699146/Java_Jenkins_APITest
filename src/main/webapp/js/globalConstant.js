@@ -1,4 +1,10 @@
-//全局常量
+//全局常量和配置
+
+//返回值
+var RETURN_CODE = {
+    SUCCESS: 0,
+    NO_LOGIN: 7
+}
 
 //请求路径
 var REQUEST_URL = {
@@ -153,7 +159,8 @@ var REQUEST_URL = {
         EDIT: "global-edit",
         SETTING_LIST_ALL: "global-listAll",
         GET_WEB_SETTINGS: "global-getWebSettings",
-        GET_STATISTICAL_QUANTITY: "global-getStatisticalQuantity"
+        GET_STATISTICAL_QUANTITY: "global-getStatisticalQuantity",
+        CHECK_SYSTEM_VERSION: "global-checkSystemVersion"
     },
     //内部接口
     OP_INTERFACE: {
@@ -350,5 +357,241 @@ var REQUEST_URL = {
         EDIT:"menu-edit",
         LIST: "menu-list",
         GET_USER_MENUS: "menu-getUserMenus"
+    }
+}
+
+//表单注释
+var EXPLANATION_MARK = {
+    "parameterizedFilePath":{
+        "title":"关于参数化文件的说明",
+        "content":"上传的参数化文件需为<span class=\"label label-primary\"> txt </span>格式。<br>第一行为参数化节点路径(路径名称大小写敏感，请与参数标识符保持一致),从第二列开始为参数化数据,<span style='color:red;'>默认数据分隔符为英文下逗号,你可以自行设定不同的分隔符。</span>"
+    },
+    "mock-validate-path":{
+        "title":"Mock入参验证节点路径的填写说明",
+        "content":"根据入参报文的格式不同，该项需要填写不同的内容:<br><span class=\"label label-primary radius\"> JSON、XML: </span> 完整的入参节点路径,例如ROOT.INFO.USERNAME;<br><span class=\"label label-primary radius\"> URL: </span> 留空;<br><span class=\"label label-primary radius\"> 不限格式: </span> 例如Socket报文，可使用关联规则来获取。<br><span style=\"color:red;\">对于URL参数和请求头，此处可忽略。</span>"
+    },
+    "settingMailStyle":{
+        "title":"自定义推送邮件的模板",
+        "content":"你可以自定义设定定时任务和探测任务的推送的邮件模板，模板类型为Html，同时可以在模板中插入相关测试结果变量。"
+    },
+    "webStepConfig":{
+        "title":"测试步骤配置",
+        "html":true,
+        "content":"explanation-mark-webstep-config",
+        "width":915,
+        "height":500
+    },
+    "webTestConfig":{
+        "title":"Web自动化运行时配置说明",
+        "content":"1、如果你的浏览器driver文件路径没有放置到环境变量下，请在此配置，<span class=\"label label-danger radius\"> 请填写全路径,注意填写的是自动化执行客户端所在机器上的driver路径 . </span><br>2、如何你的浏览器不是安装在默认路径或者安装的是绿色版，请指定各浏览器的执行bin文件的绝对路径（其他同上）。"
+    },
+    "webCustomVariableSetting":{
+        "title":"Web自动化自定义变量说明",
+        "content":"在测试用例、测试用例集、用例与用例集的关联对象中可以配置自定义的变量，变量以key-value形式保存（<span style=\"color:red;\">其中value可以使用全局变量</span>），自定义的变量可以在下属的测试步骤中使用：<br><span class=\"label label-danger radius\">优先级 </span>： <span class=\"label label-primary radius\">用例集自定义变量 </span> &gt; <span class=\"label label-primary radius\">用例与用例集关联对象自定义变量</span> &gt; <span class=\"label label-primary radius\">用例自定义变量</span>"
+    },
+    "webSuiteCaseSetting":{
+        "title":"测试集用例自定义 配置说明",
+        "content":"<span class=\"label label-danger radius\">执行顺序：</span>默认按照设定的数字大小来排序，数字越小的先执行，越大的后执行。<br><span class=\"label label-danger radius\">分组名：</span>在进行分布式执行时，会将组名相同的用例分配到同一个远程执行机执行。<br><span class=\"label label-danger radius\">跳过标记：</span>方便在不需要执行某个用例时排除而不是删除掉。"
+    }
+}
+
+
+
+//接口自动化相关
+//报文处理类型参数设置
+var MESSAGE_PROCESS = {
+    "ShanXiOpenApi":{
+    },
+    "AnhuiApp":{
+    }
+}
+
+//协议相关信息
+var MESSAGE_PROTOCOL = {
+    "HTTP":{
+        "Headers":{
+        },
+        "Querys":{
+        },
+        "Authorization":{
+        },
+        "Method":"POST",
+        "ConnectTimeOut":"",
+        "ReadTimeOut":"",
+        "RecEncType":"UTF-8",
+        "EncType":"UTF-8"
+    },
+    "HTTPS":{
+        "Headers":{
+        },
+        "Authorization":{
+        },
+        "Method":"POST",
+        "ConnectTimeOut":"",
+        "ReadTimeOut":"",
+        "RecEncType":"UTF-8",
+        "EncType":"UTF-8"
+    },
+    "Socket":{
+        "ConnectTimeOut":"",
+        "ReadTimeOut":""
+    },
+    "WebService":{
+        "ConnectTimeOut":"",
+        "Namespace":"",
+        "Method":"",
+        "Username":"",
+        "Password":""
+    }
+}
+
+
+//WEB自动化相关
+//测试步骤参数
+var WEB_STEP_PARAMETER = {
+    "dataType":{
+        "string":{
+            "dataType":true,
+            "text":"字符串常量",
+            "example":"xuwangcheng14@163.com",
+            "mark":"普通的字符串，根据操作类型不同可能代表不同含义,请根据操作类型的说明来填写."
+        },
+        "keyboard":{
+            "dataType":true,
+            "text":"键盘组合按键",
+            "example":"Keys.ENTER 模拟键盘Enter按键",
+            "mark":"模拟键盘按键,支持组合按键,常用键如下:<br>回车键 Keys.ENTER<br>删除键 Keys.BACK_SPACE<br>空格键 Keys.SPACE<br>制表键 Keys.TAB<br>回退键 Keys.ESCAPE<br>刷新键 Keys.F5<br>更多按键说明请参考说明文档!"
+        },
+        "gloablVariable":{
+            "dataType":true,
+            "text":"全局变量",
+            "example":"${__current_timestamp}",
+            "mark":"等同于字符串常量,但是需要在<span class='label label-primary radius'> 全局变量  </span>模块中提前定义."
+        },
+        "regexp":{
+            "dataType":true,
+            "text":"正则表达式",
+            "example":"[0-9]{1,3}",
+            "mark":"根据正则表达式来生成指定的字符串."
+        },
+        "attribute":{
+            "dataType":true,
+            "text":"元素属性/文本值",
+            "example":"name",
+            "mark":"获取选择的指定元素上的指定属性的值，其中text表示该元素的文本值."
+        },
+        "saveVariable":{
+            "dataType":true,
+            "text":"测试变量",
+            "example":"order_id",
+            "mark":"在本次测试中定义的、保存的上下文变量,如果有同名的变量，取值优先级如下:<br><span class='label label-success radius'>同个测试用例中不同步骤保存的变量</span> &gt; <span class='label label-success radius'>不同测试用例中步骤保存的值</span> &gt; <span class='label label-success radius'>测试集中定义的变量</span> &gt; <span class='label label-success radius'>测试用例中定义的变量</span>."
+        },
+        "dbSql":{
+            "dataType":true,
+            "text":"数据库取值",
+            "example":"select order_id from order_info where order_type='0' and user_id=&lt;user_id&gt; and op_time&gt;${__current_date};",
+            "mark":"可选择指定的数据源执行指定的SQL查询,如果返回多条记录,则只会取第一条内容,如果一条结果中包含多列也只会去第一列内容.<br>同时在SQL语句你可以使用<span class='label label-primary radius'> &lt;user_id&gt;  </span>格式来表示测试变量,同时可以使用全局变量."
+        }
+
+    },
+    "opType":{
+        "open":{
+            "opType":true,
+            "text":"打开",
+            "mark":"打开一个正确的浏览器地址",
+            "requiredData":"<span class='label label-danger radius'>可选</span> 如果填入该值，则会使用该处地址",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "check":{
+            "opType":true,
+            "text":"检查",
+            "mark":"判断获取到的内容和预期值是否匹配",
+            "requiredData":"<span class='label label-success radius'>需要</span> 该值可以为任何类型",
+            "validateData":"<span class='label label-success radius'>需要</span> 该值可以为任何类型,如果该值类型为正则表达式,则会进行正则匹配来验证"
+        },
+        "action":{
+            "opType":true,
+            "text":"执行用例片段",
+            "mark":"执行一个用例片段",
+            "requiredData":"<span class='label label-danger radius'>不需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "script":{
+            "opType":true,
+            "text":"执行js脚本",
+            "mark":"执行一段JS脚本",
+            "requiredData":"<span class='label label-danger radius'>不需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "input":{
+            "opType":true,
+            "text":"输入",
+            "mark":"向输入框输入文本内容",
+            "requiredData":"<span class='label label-danger radius'>需要</span> 该值可为任何类型",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "save":{
+            "opType":true,
+            "text":"保存值",
+            "mark":"获取内容并保存,可以获取窗口标题、当前浏览器地址、元素文本、元素属性等",
+            "requiredData":"<span class='label label-danger radius'>可选</span> 当元素类型为TAG时,如果该值为空,默认取元素的文本内容;如果该值不为空,则该值为元素的属性名称",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "click":{
+            "opType":true,
+            "text":"点击",
+            "mark":"点击元素",
+            "requiredData":"<span class='label label-danger radius'>不需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "hover":{
+            "opType":true,
+            "text":"鼠标悬停",
+            "mark":"将鼠标移动到某个元素上",
+            "requiredData":"<span class='label label-danger radius'>不需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "alertCancel":{
+            "opType":true,
+            "text":"弹出框-取消",
+            "mark":"对于系统级(非页面元素)的弹出框(包含警告框、确认框、对话框),进行取消操作",
+            "requiredData":"<span class='label label-danger radius'>不需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "alertConfirm":{
+            "opType":true,
+            "text":"弹出框-确认",
+            "mark":"对于系统级(非页面元素)的弹出框(包含确认框、对话框),进行确认操作",
+            "requiredData":"<span class='label label-danger radius'>不需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "alertClose":{
+            "opType":true,
+            "text":"弹出框-关闭",
+            "mark":"对于系统级(非页面元素)的弹出框(包含警告框、确认框、对话框),进行关闭操作",
+            "requiredData":"<span class='label label-danger radius'>不需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "alertInput":{
+            "opType":true,
+            "text":"对话框-输入",
+            "mark":"对于系统级(非页面元素)的对话框,进行输入操作，默认自动点击确认按钮",
+            "requiredData":"<span class='label label-danger radius'>需要</span>",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "upload":{
+            "opType":true,
+            "text":"上传文件",
+            "mark":"进行文件上传操作",
+            "requiredData":"<span class='label label-danger radius'>需要</span> 该值为文件的绝对路径(文件应该位于执行机中而不是服务器上)",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        },
+        "slide":{
+            "opType":true,
+            "text":"滑动",
+            "mark":"拖动元素在 x，y 方向上移动移动一段距离",
+            "requiredData":"<span class='label label-danger radius'>需要</span> 例如：x=500,y=100,代表在x/y轴上个拖动500px的距离",
+            "validateData":"<span class='label label-danger radius'>不需要</span>"
+        }
     }
 }

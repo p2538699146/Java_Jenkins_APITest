@@ -64,7 +64,6 @@ var mySetting = {
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 6],
-			dblclickEdit:false,
 			exportExcel:false,
 			dtOtherSetting:{
 				"stateSave": false

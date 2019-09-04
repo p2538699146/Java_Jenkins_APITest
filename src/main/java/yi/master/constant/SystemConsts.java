@@ -13,7 +13,7 @@ public class SystemConsts {
 	/**
 	 * 当前版本号
 	 */
-	public static final String VERSION = "0.1.3beta";
+	public static final String VERSION = "0.1.4beta";
 	
 	/**
 	 * 默认admin角色的roleId
@@ -198,8 +198,8 @@ public class SystemConsts {
 	/**
 	 * 检查版本升级的网址
 	 */
-	//public static final String CHECK_VERSION_UPGRADE_URL = "http://www.xuwangcheng.com/yi/api/checkVersion";
-	public static final String CHECK_VERSION_UPGRADE_URL = "http://localhost:8080/api/checkVersion";
+	public static final String CHECK_VERSION_UPGRADE_URL = "http://www.xuwangcheng.com/yi/api/checkVersion";
+	//public static final String CHECK_VERSION_UPGRADE_URL = "http://localhost:8080/api/checkVersion";
 
 	/**
 	 * 版本升级地址

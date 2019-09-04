@@ -1,9 +1,7 @@
 var interfaceId; //当前interfaceId
 var messageId; //当前正在操作的messageid
 var currIndex;//当前正在操作的layer窗口的index
-var protocolJson;//协议配置参数json
 var protocolType;//当前配置的协议类型
-var processJson;//报文处理类型配置json
 
 
 var templateParams = {
@@ -373,7 +371,7 @@ var eventList = {
 		'#setting-call-parameter':function() {	//配置调用参数
 			
 			if (!strIsNotEmpty($("#callParameter").val())) {
-				$("#callParameter").val(JSON.stringify(protocolJson[protocolType]));
+				$("#callParameter").val(JSON.stringify(PROTOCOL[protocolType]));
 			}
 			
 			var json = JSON.parse($("#callParameter").val());
@@ -528,7 +526,7 @@ var eventList = {
 				return false;
 			}
 			
-			var processParameter = JSON.parse($("#processParameter").val() || processJson[processType]) ;			
+			var processParameter = JSON.parse($("#processParameter").val() || MESSAGE_PROCESS[processType]) ;
 			window.settingLayerIndex = layer_show("报文处理参数", templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
 				$("div ." + processType).removeClass('hide');
 			});
@@ -536,7 +534,7 @@ var eventList = {
 		//保存报文处理类型的参数
 		"#save-process-parameter":function(){
 			var processType = $("#processType").val();
-			var value = $.extend({}, processJson[processType]);
+			var value = $.extend({}, MESSAGE_PROCESS[processType]);
 			$.each(value, function(settingName, settingValue) {
 				if ($("#" + settingName)) {
 					value[settingName] = $("#" + settingName).val();
@@ -595,13 +593,6 @@ var mySetting = {
 		templateCallBack:function(df){
 			interfaceId = GetQueryString("interfaceId");
 			protocolType = GetQueryString("protocol");
-			$.get("../../js/json/protocol.json", function(json) {
-				protocolJson = json;
-			});
-			
-			$.get("../../js/json/messageProcess.json", function(json) {
-				processJson = json;
-			});
 			
 			if (interfaceId != null) {
 				publish.renderParams.listPage.listUrl = REQUEST_URL.MESSAGE.LIST + "?interfaceId=" + interfaceId;
@@ -636,7 +627,7 @@ var mySetting = {
 			rules:{
 				messageName:{
 					required:true
-				},				
+				},
 				parameterJson:{
 					required:true
 				},

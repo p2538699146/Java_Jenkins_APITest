@@ -131,8 +131,7 @@ var mySetting = {
 				"bStateSave": false,//状态保存
 				"serverSide": false
 			},
-			exportExcel:false,
-			dblclickEdit:false
+			exportExcel:false
 		},
 		templateParams:templateParams		
 	};

@@ -96,7 +96,16 @@
 <script type="text/javascript" src="libs/h-ui/js/H-ui.js"></script>
 <script>
     $(document).ready(function(){   	
-    	getUserInfo();   
+    	getUserInfo();
+
+    	//检查版本
+        $.get(REQUEST_URL.GLOBAL_SETTING.CHECK_SYSTEM_VERSION, function(json){
+            if (json.returnCode == 0) {
+                if (json.newVersion != null && json.newVersion != json.version) {
+                    $("#version").html('<i class="Hui-iconfont">&#xe679;</i><a style="color:blue;" href="' + json.versionUpgradeUrl + '" target="_blank">有新版本可以升级</a>');
+                }
+            }
+        });
     });
     
     function getUserInfo(){
@@ -161,11 +170,6 @@
        			$("#siteName").html(data.siteName);
        			parent.$("#siteName").html(data.siteName);
        			parent.$("#version").text("V" + data.version);
-
-                //关于版本升级
-                if (data.newVersion != null && data.newVersion != data.version) {
-                    $("#version").html('<i class="Hui-iconfont">&#xe679;</i><a style="color:blue;" href="' + data.versionUpgradeUrl + '" target="_blank">有新版本可以升级</a>');
-                }
        		}
        	});
     }

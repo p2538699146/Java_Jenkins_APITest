@@ -13,8 +13,8 @@
     <script type="text/javascript" src="libs/respond.min.js"></script>
     <script type="text/javascript" src="libs/PIE_IE678.js"></script>
     <![endif]-->
-    <link rel="stylesheet" type="text/css" href="libs/h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="libs/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="libs/h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="libs/Hui-iconfont/1.0.7/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="libs/icheck/icheck.css" />
     <link rel="stylesheet" type="text/css" href="libs/h-ui.admin/skin/default/skin.css" id="skin" />
@@ -45,6 +45,7 @@
                         <ul class="dropDown-menu menu radius box-shadow">
                             <li class="redirect-to-page"><a href="javascript:" onclick="to_changePasswd();">修改密码</a></li>
                             <li class="redirect-to-page"><a href="javascript:;" onclick="to_changeUser();">切换账户</a></li>
+                            <li class="redirect-to-page"><a  target="_blank" href="https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages">操作手册</a></li>
                             <li><a href="javascript:;" onclick="to_logout()">退出</a></li>
                         </ul>
                     </li>
@@ -96,6 +97,7 @@
 		<li id="closethis">关闭当前 </li>
 		<li id="closeall">关闭全部 </li>
 		<li id="closeother">关闭其他 </li>
+        <li id="cancel">取消操作 </li>
 </ul>
 </div>
 <div id="templates-page" style="display: none;"></div>
@@ -110,8 +112,7 @@
 <script type="text/javascript" src="libs/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
 <script type="text/javascript">
 	var templates;
-	var htmls; 
-	var explanationMarks;
+	var htmls;
 	var menuJson;
     $(document).ready(function() {  
     	//初始化加载菜单
@@ -147,10 +148,6 @@
     	                          "role-power",
     	                          "viewWindow"]);
     	/*****************************************************/
-    	
-    	$.getJSON("./js/json/explanationMarks.json", function(json){
-    		explanationMarks = json;
-    	});
     });
     
     /*************预先编译子iframe中的模板***************/
@@ -290,6 +287,13 @@
 					                    '<input id="password"  type="password" placeholder="密码" class="input-text size-L">'+
 					                '</div>'+
 					            '</div>'+
+                                '<div class="row cl">' +
+                                    '<label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe613;</i></label>' +
+                                    '<div class="formControls col-xs-8"> ' +
+                                        '<input id="verifyCode"  type="text" placeholder="验证码" class="input-text size-L" style="width:200px;"> ' +
+                                        '<img src="" style="width:100px;height:40px;cursor:pointer;"/>' +
+                                    '</div>' +
+                                '</div>' +
 					            '<div class="row cl">'+
 					                '<div class="formControls col-xs-8 col-xs-offset-3">'+
 					                    '<input id="loginBtn" type="button" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">&nbsp;'+
@@ -300,31 +304,46 @@
 					        '</form>';
 					
     	var index = layer.open({
-  		  title:'切换用户',
-  		  type: 1,
-  		  area: ['500px', '280px'], 
-  		  content: loginHtml
+  		    title:'切换用户',
+  		    type: 1,
+  		    area: ['569px', '317px'],
+  		    content: loginHtml,
+            success:function(layero, index){
+                $("#loginBtn").click(userLogin);
+                //监听键盘回车事件
+                $(layero).keyup(function (event) {
+                    var keyCode = event.which;
+                    if(keyCode == 13){
+                        $("#loginBtn").click();
+                    }
+                });
+
+                $("#verifyCode").siblings('img').click(function(){
+                    var that = this;
+                    $.get(REQUEST_URL.LOGIN.CREATE_VERIFY_CODE, function(data){
+                        if (data.returnCode == 0) {
+                            $(that).attr('src', 'data:image/png;base64,' + data.img);
+                        }
+                    });
+                });
+
+                $("#username").trigger("focus").trigger("select");
+                $("#verifyCode").siblings('img').click();
+            }
   		});
-    	$("#loginBtn").click(userLogin);
-   	 		//监听键盘回车事件
-   		 $(document).keyup(function (event) {
-   		 var keycode = event.which;
-   		 if(keycode==13){
-   			 $("#loginBtn").click(); 
-   		 }  		 
-   	 });
-   		$("#username").trigger("focus").trigger("select");
     }
     
     /**切换用户时的登录页面*/
     function userLogin(){
         var username = $("#username").val();
         var password = $("#password").val();
+        var verifyCode = $("#verifyCode").val();
         var tipMsg = $("#loginTip");
-        if(username != "" && username != null && password != "" && password != null){
+        if(username != "" && username != null && password != "" && password != null && verifyCode != "" && verifyCode != null){
             $.post(REQUEST_URL.LOGIN.LOGIN,{
                 username:username,
-                password:password
+                password:password,
+                verifyCode: verifyCode
             },function(data){
                 if(data.returnCode==0){
                 	location.reload();

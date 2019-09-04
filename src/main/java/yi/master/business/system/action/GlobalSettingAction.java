@@ -79,12 +79,22 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 			jsonMap.put(setting.getSettingName(), CacheUtil.getSettingValue(setting.getSettingName()));
 		}
 
-		jsonMap.put("newVersion", PracticalUtils.checkVersion());
-		jsonMap.put("versionUpgradeUrl", SystemConsts.VERSION_UPGRADE_URL);
 		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		
 		return SUCCESS;
-		
+	}
+
+	/**
+	 * 检查版本
+	 * @return
+	 */
+	public String checkSystemVersion () {
+		jsonMap.put("newVersion", PracticalUtils.checkVersion());
+		jsonMap.put("versionUpgradeUrl", SystemConsts.VERSION_UPGRADE_URL);
+		jsonMap.put("version", SystemConsts.VERSION);
+		setSuccessReturnInfo();
+
+		return SUCCESS;
 	}
 	
 	/**

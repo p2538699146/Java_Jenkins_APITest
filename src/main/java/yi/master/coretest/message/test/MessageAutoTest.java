@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
@@ -45,6 +46,8 @@ import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.process.MessageProcess;
 import yi.master.coretest.message.protocol.TestClient;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
@@ -143,7 +146,6 @@ public class MessageAutoTest {
 	/**
 	 * 单场景测试
 	 * @param testScene 测试要素对象
-	 * @param config 当前测试配置
 	 * @return TestResult 测试结果详情
 	 */
 	public TestResult singleTest(TestMessageScene testScene, Object procotolClient) {
@@ -402,7 +404,6 @@ public class MessageAutoTest {
 	 * 批量测试
 	 * @param user
 	 * @param setId
-	 * @param autoTestFlag 是否为系统自动化测试
 	 * @return
 	 */
 	public int[] batchTest (User user, Integer setId, String testMark, String guid) {		
@@ -559,6 +560,10 @@ public class MessageAutoTest {
 		testScene.setNewClient("0".equals(complexScene.getNewClient()) ? true : false);
 		int sceneCount = 0;
 		for (MessageScene scene:complexScene.setScenes(messageSceneService)) {
+			if (StringUtils.isBlank(scene.getConfig().getSystemId())
+					|| !NumberUtil.isInteger(scene.getConfig().getSystemId())) {
+				throw new YiException(AppErrorCode.AUTO_TEST_COMPLEX_SCENE_LACK_BUSINESS_SYSTEM);
+			}
 			Set<TestMessageScene> tss = packageRequestObject(scene, config, businessSystemService.get(Integer.valueOf(scene.getConfig().getSystemId())));
 			if (tss.size() == 1) {
 				testScene.getScenes().addAll(tss);
@@ -579,7 +584,6 @@ public class MessageAutoTest {
 	 * 组装测试要素对象
 	 * @param scene 对应的测试场景
 	 * @param config 需要用到的测试配置
-	 * @param systemId 指定的测试系统,如果传入null,默认组装所有的测试环境
 	 * @return
 	 */
 	@SuppressWarnings("static-access")

@@ -20,7 +20,8 @@ var variableTypeInfo = {
 			    "RecEncType":"UTF-8",
 			    "EncType":"UTF-8" 
 			},
-			layerHeight:"540",
+            layerWidth: "706",
+			layerHeight:"700",
 			keyIsNull:false,
 			ifCreate:false
 		},
@@ -510,9 +511,9 @@ var eventList = {
 			//HTTP调用参数单独处理
 			//Content-Type:application/xml##User-agent:chrome
 			if (settingType == "httpCallParameter") {
-				value["Authorization"] = parseHttpParameterToJson(value["Authorization"], "##");
-				value["Headers"] = parseHttpParameterToJson(value["Headers"], "##");
-				value["Querys"] = parseHttpParameterToJson(value["Querys"], "##");
+				value["Authorization"] = parseHttpParameterToJson(value["Authorization"], "\n");
+				value["Headers"] = parseHttpParameterToJson(value["Headers"], "\n");
+				value["Querys"] = parseHttpParameterToJson(value["Querys"], "\n");
 			}
 			
 			value = JSON.stringify(value);
@@ -724,7 +725,7 @@ function showSettingPage(title) {
 							//HTTP调用参数单独处理
 							//Content-Type:application/xml;User-agent:chrome
 							if (i == "Authorization" || i == "Headers" || i == "Querys") {
-								n = parseHttpParameterJsonToString(n, "##");								
+								n = parseHttpParameterJsonToString(n, "\n");
 							}
 							
 							$("#" + i).val(n);

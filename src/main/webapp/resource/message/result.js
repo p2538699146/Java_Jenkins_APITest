@@ -180,8 +180,7 @@ var mySetting = {
 			dtOtherSetting:{
 				"bStateSave": false,//状态保存			
 			},
-			exportExcel:false,
-			dblclickEdit:false
+			exportExcel:false
 		},
 		templateParams:templateParams		
 	};

@@ -14,6 +14,7 @@ import com.opensymphony.xwork2.ModelDriven;
 
 import yi.master.annotation.util.AnnotationUtil;
 import yi.master.business.base.bean.PageModel;
+import yi.master.business.base.bean.ReturnJSONObject;
 import yi.master.business.base.service.BaseService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.util.FrameworkUtil;
@@ -48,7 +49,6 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * ajax调用返回的map
 	 */
 	protected Map<String,Object> jsonMap = new HashMap<String,Object>();
-
 	/**
 	 * 传入的泛型类
 	 */
