@@ -94,9 +94,7 @@ public class ComplexParameter implements Serializable {
 		}
 		
 		String parameterType = this.selfParameter.getType();
-		if (parameterType.equalsIgnoreCase(MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER)
-				 || parameterType.equalsIgnoreCase(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING)
-				 || parameterType.equalsIgnoreCase(MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA)) {
+		if (MessageKeys.MessageParameterType.isStringOrNumberType(parameterType)) {
 			params.add(this.selfParameter);
 		} else {
 			for (ComplexParameter cp:this.getChildComplexParameters()) {
@@ -122,7 +120,7 @@ public class ComplexParameter implements Serializable {
 		
 		String parameterType = this.selfParameter.getType();
 		
-		if (MessageKeys.MESSAGE_PARAMETER_TYPE_ARRAY.equalsIgnoreCase(parameterType)) {
+		if (MessageKeys.MessageParameterType.ARRAY.name().equalsIgnoreCase(parameterType)) {
 			//如果是Array类型的就获取Array下的所有可设置数据的参数
 			List<Parameter> params = new ArrayList<Parameter>();
 			getEnableSettingDataParameter(params);

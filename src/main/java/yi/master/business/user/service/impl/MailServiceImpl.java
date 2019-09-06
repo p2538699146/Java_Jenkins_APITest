@@ -57,7 +57,7 @@ public class MailServiceImpl extends BaseServiceImpl<Mail> implements MailServic
 	@Override
 	public void sendSystemMail(String title, String messageInfo, Integer receiveUserId) {
 		
-		Mail mail = new Mail(new User(SystemConsts.ADMIN_USER_ID), null, "1", messageInfo, "0", "1", new Timestamp(System.currentTimeMillis()), "", "", title);
+		Mail mail = new Mail(new User(SystemConsts.DefaultObjectId.ADMIN_USER.getId()), null, "1", messageInfo, "0", "1", new Timestamp(System.currentTimeMillis()), "", "", title);
 		edit(mail);		
 	}
 

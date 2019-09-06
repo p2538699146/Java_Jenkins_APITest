@@ -44,7 +44,7 @@ public class InterfaceApiTaskService implements ApiTaskService {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "该guid已存在,请更换", null);
 		}
 		
-		int[] result = autoTest.batchTest(userService.get(SystemConsts.ADMIN_USER_ID), setId, "外部API调用", guid);
+		int[] result = autoTest.batchTest(userService.get(SystemConsts.DefaultObjectId.ADMIN_USER.getId()), setId, "外部API调用", guid);
 		
 		if (result == null) {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "没有足够的测试场景可供测试", null);

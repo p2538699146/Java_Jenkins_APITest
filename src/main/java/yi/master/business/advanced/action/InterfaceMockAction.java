@@ -122,12 +122,10 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		Set<Parameter> parameters = parseUtil.importMessageToParameter(message, null);
 		JSONArray rules = new JSONArray();
 		for (Parameter param:parameters) {
-			if (Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER 
-					+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA
-					, param.getType().toUpperCase())) {
+			if (MessageKeys.MessageParameterType.isStringOrNumberType(param.getType())) {
 				MockValidateRuleConfig rule = new MockValidateRuleConfig();
 				rule.setName(param.getParameterIdentify());
-				rule.setPath(param.getPath().replaceAll("TopRoot\\.*", ""));
+				rule.setPath(param.getPath().replaceAll(MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH + "\\.*", ""));
 				rule.setType(param.getType());
 				rule.setValidateValue(param.getDefaultValue());
 				rules.add(rule);

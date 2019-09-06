@@ -186,7 +186,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
-				return SystemConsts.RESULT_NOT_LOGIN;
+				return SystemConsts.GlobalResultName.usernotlogin.name();
 			}
 			
 			String userTag = "[" + "用户名:" + user.getUsername() + ",ID=" + user.getUserId() + "]";
@@ -198,7 +198,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
-				return SystemConsts.RESULT_DISABLE_OP;
+				return SystemConsts.GlobalResultName.opisdisable.name();
 			}
 			
 			//判断当前用户是否拥有调用权限
@@ -227,7 +227,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
-				return SystemConsts.RESULT_NO_POWER;
+				return SystemConsts.GlobalResultName.usernotpower.name();
 			}
 			
 			long endTime = System.currentTimeMillis();

@@ -27,7 +27,7 @@ import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.testconfig.service.TestConfigService;
 import yi.master.business.user.bean.User;
 import yi.master.business.user.service.UserService;
-import yi.master.constant.MessageKeys;
+import static yi.master.constant.MessageKeys.*;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.test.MessageAutoTest;
 import yi.master.coretest.message.test.TestMessageScene;
@@ -197,7 +197,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 		TestMessageScene testObject = new TestMessageScene(scene, requestUrl, PracticalUtils.replaceGlobalVariable(requestMessage, globalVariableService)
 					, 0, false, config, PracticalUtils.jsonToMap(scene.getMessage().getCallParameter()));
 		testObject.setBusinessSystem(businessSystemService.get(systemId));
-		if ( MessageKeys.INTERFACE_TYPE_SL.equalsIgnoreCase(scene.getMessage().getInterfaceInfo().getInterfaceType())
+		if (InterfaceBusiType.SL.name().equalsIgnoreCase(scene.getMessage().getInterfaceInfo().getInterfaceType())
 					&& "0".equals(d.getStatus())) {
 			//改变预占数据			
 			CacheUtil.addLockedTestData(dataId);
@@ -227,7 +227,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 		}
 		String mark = "";
 		if (autoTestFlag != null) {
-			mark = MessageKeys.QUARTZ_AUTO_TEST_REPORT_MARK;
+			mark = QUARTZ_AUTO_TEST_REPORT_MARK;
 		}
 		
 		int[] result = autoTest.batchTest(user, setId, mark, null);

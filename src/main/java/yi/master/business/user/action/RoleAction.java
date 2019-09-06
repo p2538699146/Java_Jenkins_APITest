@@ -72,7 +72,7 @@ public class RoleAction extends BaseAction<Role> {
 	 */
 	@Override
 	public String del() {
-		if (id == SystemConsts.ADMIN_ROLE_ID || id == SystemConsts.DEFAULT_ROLE_ID) {
+		if (id == SystemConsts.DefaultObjectId.ADMIN_ROLE.getId() || id == SystemConsts.DefaultObjectId.DEFAULT_ROLE.getId()) {
 			jsonMap.put("returnCode",ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
 			jsonMap.put("msg", "不能删除超级管理员角色或者默认角色");
 			
@@ -101,7 +101,8 @@ public class RoleAction extends BaseAction<Role> {
 	 */
 	@Override
 	public String edit() {		
-		if (model.getRoleId() == SystemConsts.ADMIN_ROLE_ID || model.getRoleId() == SystemConsts.DEFAULT_ROLE_ID) {			
+		if (model.getRoleId() == SystemConsts.DefaultObjectId.ADMIN_ROLE.getId()
+				|| model.getRoleId() == SystemConsts.DefaultObjectId.DEFAULT_ROLE.getId()) {
 			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
 			jsonMap.put("msg", "不能删除预置管理员或者默认角色信息");			
 			return SUCCESS;

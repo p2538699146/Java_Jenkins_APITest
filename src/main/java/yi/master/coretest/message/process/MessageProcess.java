@@ -1,7 +1,5 @@
 package yi.master.coretest.message.process;
 
-import org.apache.commons.lang.StringUtils;
-
 import yi.master.constant.MessageKeys;
 
 /**
@@ -10,9 +8,7 @@ import yi.master.constant.MessageKeys;
  * @version 2018.4.19
  *
  */
-public abstract class MessageProcess {	
-	private static final ShanXiOpenApiMessageProcess sxOpenApiProcess = new ShanXiOpenApiMessageProcess();
-	private static final AnHuiAPPEncryptMessageProcess ahAPPEncryptProcess = new AnHuiAPPEncryptMessageProcess();
+public abstract class MessageProcess {
 	
 	/**
 	 * 处理请求报文
@@ -31,17 +27,6 @@ public abstract class MessageProcess {
 	
 	
 	public static MessageProcess getProcessInstance(String processType) {
-		if (StringUtils.isBlank(processType)) {
-			return null;
-		}
-		switch (processType) {
-		case MessageKeys.PROCESS_TYPE_SHANXI_OPEN_API:
-			return sxOpenApiProcess;
-		case MessageKeys.PROCESS_TYPE_ANHUI_APP:
-			return ahAPPEncryptProcess;
-		default:
-			break;
-		}		
-		return null;
+		return MessageKeys.MessageProcessType.getProcessorByType(processType);
 	}	
 }

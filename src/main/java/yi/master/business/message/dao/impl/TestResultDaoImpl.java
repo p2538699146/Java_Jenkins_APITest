@@ -55,9 +55,9 @@ public class TestResultDaoImpl extends BaseDaoImpl<TestResult> implements TestRe
 		Query query = getSession().createQuery(hql).setInteger("probeId", probeId).setTimestamp("startTime", startTime)
 				.setTimestamp("lastTime", lastTime);
 		Object[] counts = new Object[4];
-		counts[0] = query.setString("runStatus", MessageKeys.TEST_RUN_STATUS_SUCCESS).setCacheable(true).list();
-		counts[1] = query.setString("runStatus", MessageKeys.TEST_RUN_STATUS_FAIL).setCacheable(true).list();
-		counts[2] = query.setString("runStatus", MessageKeys.TEST_RUN_STATUS_STOP).setCacheable(true).list();
+		counts[0] = query.setString("runStatus", MessageKeys.TestRunStatus.SUCCESS.getCode()).setCacheable(true).list();
+		counts[1] = query.setString("runStatus", MessageKeys.TestRunStatus.FAIL.getCode()).setCacheable(true).list();
+		counts[2] = query.setString("runStatus", MessageKeys.TestRunStatus.STOP.getCode()).setCacheable(true).list();
 		counts[3] = getSession().createQuery(hql.replace("and t.runStatus=:runStatus", "")).setInteger("probeId", probeId).setTimestamp("startTime", startTime)
 				.setTimestamp("lastTime", lastTime).setCacheable(true).list();
 		return counts;
@@ -73,9 +73,9 @@ public class TestResultDaoImpl extends BaseDaoImpl<TestResult> implements TestRe
 		Query query = getSession().createQuery(hql).setInteger("probeId", probeId).setTimestamp("startTime", startTime)
 				.setTimestamp("lastTime", lastTime);
 		Object[] counts = new Object[4];
-		counts[0] = query.setString("runStatus", MessageKeys.TEST_RUN_STATUS_SUCCESS).setCacheable(true).list();
-		counts[1] = query.setString("runStatus", MessageKeys.TEST_RUN_STATUS_FAIL).setCacheable(true).list();
-		counts[2] = query.setString("runStatus", MessageKeys.TEST_RUN_STATUS_STOP).setCacheable(true).list();
+		counts[0] = query.setString("runStatus", MessageKeys.TestRunStatus.SUCCESS.getCode()).setCacheable(true).list();
+		counts[1] = query.setString("runStatus", MessageKeys.TestRunStatus.FAIL.getCode()).setCacheable(true).list();
+		counts[2] = query.setString("runStatus", MessageKeys.TestRunStatus.STOP.getCode()).setCacheable(true).list();
 		counts[3] = getSession().createQuery(hql.replace("and t.runStatus=:runStatus", "")).setInteger("probeId", probeId).setTimestamp("startTime", startTime)
 				.setTimestamp("lastTime", lastTime).setCacheable(true).list();
 		return counts;

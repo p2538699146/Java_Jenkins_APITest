@@ -1,25 +1,19 @@
 package yi.master.coretest.message.parse;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-
-import net.sf.json.JSONObject;
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
-import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static yi.master.constant.MessageKeys.*;
 
 /**
  * 报文解析工具类
@@ -33,12 +27,6 @@ public abstract class MessageParse {
 	
 	public static final Logger LOGGER = Logger.getLogger(MessageParse.class.getName());
 	
-	private static final JSONMessageParse jsonParse = new JSONMessageParse();
-	private static final XMLMessageParse xmlParse = new XMLMessageParse(); 
-	private static final URLMessageParse urlParse = new URLMessageParse();
-	private static final FixedMessageParse fixedParse = new FixedMessageParse(); 
-	private static final OPTMessageParse optParse = new OPTMessageParse();
-	
 	
 	/**
 	 * 判断报文格式并返回指定的解析实例
@@ -47,19 +35,19 @@ public abstract class MessageParse {
 	 */
 	public static final MessageParse judgeMessageType(String message) {
 		if (StringUtils.isEmpty(message)) {
-			return optParse;
+			return MessageType.OPT.getParseUtil();
 		}
-		if (jsonParse.messageFormatValidation(message)) {
-			return jsonParse;
+		if (MessageType.JSON.getParseUtil().messageFormatValidation(message)) {
+			return MessageType.JSON.getParseUtil();
 		}
-		if (xmlParse.messageFormatValidation(message)) {
-			return xmlParse;
+		if (MessageType.XML.getParseUtil().messageFormatValidation(message)) {
+			return MessageType.XML.getParseUtil();
 		}
-		if (urlParse.messageFormatValidation(message)) {
-			return urlParse;
+		if (MessageType.URL.getParseUtil().messageFormatValidation(message)) {
+			return MessageType.URL.getParseUtil();
 		}
 
-		return optParse;
+		return MessageType.OPT.getParseUtil();
 	}
 	
 	/**
@@ -71,14 +59,14 @@ public abstract class MessageParse {
 		if (StringUtils.isEmpty(message)) {
 			return null;
 		}
-		if (jsonParse.messageFormatValidation(message)) {
-			return MessageKeys.MESSAGE_TYPE_JSON;
+		if (MessageType.JSON.getParseUtil().messageFormatValidation(message)) {
+			return MessageType.JSON.name();
 		}
-		if (xmlParse.messageFormatValidation(message)) {
-			return MessageKeys.MESSAGE_TYPE_XML;
+		if (MessageType.XML.getParseUtil().messageFormatValidation(message)) {
+			return MessageType.XML.name();
 		}
-		if (urlParse.messageFormatValidation(message)) {
-			return MessageKeys.MESSAGE_TYPE_URL;
+		if (MessageType.URL.getParseUtil().messageFormatValidation(message)) {
+			return MessageType.URL.name();
 		}
 
 		return null;
@@ -94,11 +82,11 @@ public abstract class MessageParse {
 			return message;
 		}
 		
-		if (jsonParse.messageFormatValidation(message)) {
+		if (MessageType.JSON.getParseUtil().messageFormatValidation(message)) {
 			return JSONMessageParse.JSONMessageFormatBeautify(message);
 		}
 
-		if (xmlParse.messageFormatValidation(message)) {
+		if (MessageType.XML.getParseUtil().messageFormatValidation(message)) {
 			return XMLMessageParse.XMLMessageFormatBeautify(message);
 		}
 		
@@ -167,7 +155,7 @@ public abstract class MessageParse {
 	 */
 	public String parameterReplaceByNodePath(String message, String str) {
 		
-		String regex = MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT + "(.*?)" + MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT;
+		String regex = CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT + "(.*?)" + CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT;
 		Pattern pattern = Pattern.compile(regex);
 		List<String> regStrs = new ArrayList<String>();
 		Matcher matcher = pattern.matcher(str);
@@ -177,7 +165,7 @@ public abstract class MessageParse {
 		}
 		
 		for (String regS:regStrs) {
-			String s = MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT + regS + MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT;
+			String s = CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT + regS + CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT;
 			String replaceValue = getObjectByPath(message, regS);
 			
 			if (s != null) {
@@ -363,13 +351,14 @@ public abstract class MessageParse {
             		selfComplexParameter = null;
             		ParameterService service = (ParameterService) FrameworkUtil.getSpringBean("parameterService");
                     if (ls.get(i) instanceof LinkedHashMap) {
-                    	selfComplexParameter = new ComplexParameter(service.get(SystemConsts.PARAMETER_MAP_IN_ARRAY_ID)
+                    	selfComplexParameter = new ComplexParameter(service.get(SystemConsts.DefaultObjectId.PARAMETER_MAP_IN_ARRAY.getId())
                 				, new HashSet<ComplexParameter>(), parentComplexParameter);
                     }   
                     
                     if (ls.get(i) instanceof ArrayList) {
-                    	selfComplexParameter = new ComplexParameter(service.get(SystemConsts.PARAMETER_ARRAY_IN_ARRAY_ID)
-                				, new HashSet<ComplexParameter>(), parentComplexParameter);
+                    	selfComplexParameter = new ComplexParameter(service
+								.get(SystemConsts.DefaultObjectId.PARAMETER_ARRAY_IN_ARRAY.getId())
+									, new HashSet<ComplexParameter>(), parentComplexParameter);
                 		
                     }
                     parentComplexParameter.addChildComplexParameter(selfComplexParameter);
@@ -391,22 +380,9 @@ public abstract class MessageParse {
 	 * @return
 	 */
 	public static MessageParse getParseInstance(String type) {
-		if (StringUtils.isBlank(type)) return optParse;
-		switch (type.toUpperCase()) {
-		case MessageKeys.MESSAGE_TYPE_JSON:
-			return jsonParse;
-		case MessageKeys.MESSAGE_TYPE_XML:
-			return xmlParse;
-		case MessageKeys.MESSAGE_TYPE_URL:
-			return urlParse;
-		case MessageKeys.MESSAGE_TYPE_FIXED:
-			return fixedParse;
-		case MessageKeys.MESSAGE_TYPE_OPT:
-			return optParse;
-		default:
-			break;
-		}
-		return optParse;
+		return MessageType.getParseUtilByType(type);
 	}
+
+
 	
 }

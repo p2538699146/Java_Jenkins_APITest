@@ -94,7 +94,7 @@ public class MockAction extends ActionSupport {
 		
 		responseMsg = config.validate(request, requestMsg);
 		MockResponseConfig mockConfig = MockResponseConfig.getInstance(mock.getResponseMock());			
-		if (SystemConsts.CUSTOM_TRUE_STRING.equals(responseMsg)) {
+		if (SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(responseMsg)) {
 			responseMsg = mockConfig.generate(response, requestMsg);			
 		} else if (StringUtils.isNotBlank(mockConfig.getExampleErrorMsg())) {
 			responseMsg = PracticalUtils.replaceGlobalVariable(mockConfig.getExampleErrorMsg().replace("${errorMsg}", responseMsg), null);
