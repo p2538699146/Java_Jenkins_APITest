@@ -45,7 +45,7 @@ public class ApiUserService {
 			user.setUsername("");
 			user.setRealName(username);
 			user.setStatus("0");
-			user.setRole(new Role(SystemConsts.ADMIN_ROLE_ID));			
+			user.setRole(new Role(SystemConsts.DefaultObjectId.ADMIN_ROLE.getId()));
 			userService.edit(user);
 			return new ApiReturnInfo(ApiReturnInfo.SUCCESS_CODE, "添加用户信息成功!", null);
 		}

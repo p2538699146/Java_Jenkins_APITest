@@ -101,18 +101,18 @@ public class BusinessSystem implements Serializable {
 
 	public String getReuqestUrl(String requestPath, String defaultPath, String interfaceName) {
 				
-		if (MessageKeys.MESSAGE_PROTOCOL_HTTP.equalsIgnoreCase(this.protocolType) || 
-				MessageKeys.MESSAGE_PROTOCOL_WEBSERVICE.equalsIgnoreCase(this.protocolType) || 
-				MessageKeys.MESSAGE_PROTOCOL_HTTPS.equalsIgnoreCase(this.protocolType)) {
+		if (MessageKeys.ProtocolType.http.name().equalsIgnoreCase(this.protocolType) ||
+				MessageKeys.ProtocolType.webservice.name().equalsIgnoreCase(this.protocolType) ||
+				MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType)) {
 			if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
 				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
 						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
 			}
-			return (MessageKeys.MESSAGE_PROTOCOL_HTTPS.equalsIgnoreCase(this.protocolType) ? "https://" : "http://") 
+			return (MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType) ? "https://" : "http://")
 					+ this.systemHost + ":" + this.systemPort + requestPath;
 		}
 		
-		if (MessageKeys.MESSAGE_PROTOCOL_SOCKET.equalsIgnoreCase(this.protocolType)) {
+		if (MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(this.protocolType)) {
 			return this.systemHost + ":" + this.systemPort;
 		}
 		

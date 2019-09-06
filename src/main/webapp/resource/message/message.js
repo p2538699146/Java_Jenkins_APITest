@@ -89,10 +89,20 @@ var templateParams = {
 			label:"处理类型",
 			select:[{	
 				name:"processType",
-				option:[{
-					value:"",
-					text:"请选择一个处理类型"
-				}]
+				option:function(){
+					let options = [{
+                        value:"",
+                        text:"请选择一个处理类型"
+                    }];
+					$.each(MESSAGE_PROCESS, function(k, p) {
+                        options.push({
+                            value:k,
+                            text:'**' + k + '**'
+						});
+					});
+
+					return options;
+				}()
 				}],
 			input:[{
 					hidden:true,

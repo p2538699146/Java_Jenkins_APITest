@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Controller;
 
+import yi.master.business.base.bean.ReturnJSONObject;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
@@ -38,6 +39,8 @@ public class InterceptorAction extends ActionSupport{
 	 * ajax调用返回给前台的map
 	 */
 	private Map<String,Object> jsonMap = new HashMap<String,Object>();
+	private ReturnJSONObject jsonObject = new ReturnJSONObject();
+
 	
 	/**
 	 * 用户未登录或者登录失效	

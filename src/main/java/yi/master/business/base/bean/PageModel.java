@@ -22,7 +22,7 @@ public class PageModel<T> {
 	/**
 	 * 排序方式,默认asc
 	 */
-	private String orderType = MessageKeys.QUERY_ORDER_ASC;
+	private String orderType = MessageKeys.QueryOrderType.ASC.name();
 	
 	/**
 	 * 全局搜索条件

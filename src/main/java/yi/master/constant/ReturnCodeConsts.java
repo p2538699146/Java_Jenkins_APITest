@@ -141,17 +141,7 @@ public class ReturnCodeConsts {
 	 * '912'
 	 */
 	public static final Integer INTERFACE_ILLEGAL_TYPE_CODE = 912;
-	/**
-	 * 入参报文缺少参数 <br>
-	 * '917'
-	 */
-	public static final Integer INTERFACE_LACK_PARAMETER_CODE = 917;
-	
-	/**
-	 * 报文的入参报文对应接口的参数不匹配<br>
-	 * '914'
-	 */
-	public static final Integer INTERFACE_MESSAGE_ERROR_JSON_CODE = 914;
+
 	
 	//message相关 135
 	/**

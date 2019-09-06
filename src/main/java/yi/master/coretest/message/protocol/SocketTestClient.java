@@ -6,28 +6,25 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.constant.MessageKeys;
+import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.util.PracticalUtils;
 
 public class SocketTestClient extends TestClient {
 	
 	private static final Logger LOGGER = Logger.getLogger(SocketTestClient.class);
-	
-	protected SocketTestClient() {
-		
-	}
+
 
 	@Override
-	public Map<String, String> sendRequest(String requestUrl,
-			String requestMessage, Map<String, Object> callParameter, TestConfig config, Object client) {
-		
-		Map<String, String> returnMap = new HashMap<String, String>();
+	public ClientTestResponseObject sendRequest(String requestUrl,
+												String requestMessage, Map<String, Object> callParameter, TestConfig config, Object client) {
+
+		ClientTestResponseObject returnMap = new ClientTestResponseObject();
 		
 		int connectTimeOut = config.getConnectTimeOut();
 		int soTimeOut = config.getReadTimeOut();
@@ -49,16 +46,15 @@ public class SocketTestClient extends TestClient {
 		long endTime = System.currentTimeMillis();
 		
 		long useTime = endTime - startTime;
-		
-		returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_MESSAGE, responseMsg);
-		returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_USE_TIME, String.valueOf(useTime));
-		returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_STATUS_CODE, "200");	
-		returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_TEST_MARK, "");
+
+		returnMap.setResponseMessage(responseMsg);
+		returnMap.setUseTime(useTime);
+		returnMap.setStatusCode("200");
+		returnMap.setMark("");
 		
 		if (responseMsg.startsWith("Send")) {
-			returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_MESSAGE, "");
-			returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_TEST_MARK, responseMsg);
-			returnMap.put(MessageKeys.RESPONSE_MAP_PARAMETER_STATUS_CODE, "false");			
+			returnMap.setResponseMessage("");
+			returnMap.setMark(responseMsg);
 		}		
 		return returnMap;
 	}
@@ -69,11 +65,6 @@ public class SocketTestClient extends TestClient {
 		return false;
 	}
 
-	@Override
-	public void closeConnection() {
-		
-		
-	}	
 	
 	@Override
 	public Object getTestClient() {

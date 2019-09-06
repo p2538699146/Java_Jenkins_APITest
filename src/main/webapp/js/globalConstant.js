@@ -401,8 +401,13 @@ var EXPLANATION_MARK = {
 //报文处理类型参数设置
 var MESSAGE_PROCESS = {
     "ShanXiOpenApi":{
+        "pemFilePath":""
     },
     "AnhuiApp":{
+        "key":"",
+        "sensitiveInformation":"userIn.userPasswd,imsi,imei",
+        "publicKey":"",
+        "algorithmType":"RSA"
     }
 }
 

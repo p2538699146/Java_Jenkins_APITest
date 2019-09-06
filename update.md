@@ -1,3 +1,12 @@
+=======
+### v0.1.5beta
+#### 2019.09.05
+##### 数据库变更SQL
+- 新增：HTTP/HTTPS接口支持请求类型PUT/DELETE
+- 新增：HTTP/HTTPS接口单独处理Content-type为multipart/form-data、application/x-www-form-urlencoded的情况
+- 新增：支持Dubbo类型的接口测试
+- 修复：组合场景中如果没有单独设置测试环境则默认使用一个随机的环境测试
+- 修改： 测试客户端返回对象而不是Map
 ### v0.1.4beta
 #### 2019.09.03
 - 修改：前端代码优化，样式微调

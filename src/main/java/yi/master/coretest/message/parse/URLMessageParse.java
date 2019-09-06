@@ -28,10 +28,7 @@ import yi.master.util.FrameworkUtil;
  *
  */
 public class URLMessageParse extends MessageParse {
-	
-	protected URLMessageParse() {
-		
-	}
+
 	
 	@Override
 	public ComplexParameter parseMessageToObject(String message, List<Parameter> params) {
@@ -42,7 +39,7 @@ public class URLMessageParse extends MessageParse {
 		Map<String, String> urlParams = parseUrlToMap(message, null);
 		
 		ParameterService service = (ParameterService) FrameworkUtil.getSpringBean("parameterService");
-		ComplexParameter cp =  new ComplexParameter(service.get(SystemConsts.PARAMETER_OBJECT_ID), 
+		ComplexParameter cp =  new ComplexParameter(service.get(SystemConsts.DefaultObjectId.PARAMETER_OBJECT.getId()),
 				new HashSet<ComplexParameter>(), null);
 		for (String key:urlParams.keySet()) {
 			cp.addChildComplexParameter(new ComplexParameter(findParamter(params, key, MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH),  new HashSet<ComplexParameter>(), cp));
@@ -74,8 +71,7 @@ public class URLMessageParse extends MessageParse {
 		for (String key:urlParams.keySet()) {
 			for (Parameter p:params) {
 				if (key.equalsIgnoreCase(p.getParameterIdentify())
-						&& Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER
-						+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA, p.getType().toUpperCase())) {
+						&& MessageKeys.MessageParameterType.isStringOrNumberType(p.getType())) {
 					paramCorrectFlag = true;
 				}
 			}
@@ -195,8 +191,7 @@ public class URLMessageParse extends MessageParse {
 		for (Object key:nodes.keySet()) {
 			if ("rootId".equals(key.toString())) continue;
 			JSONObject node = nodes.getJSONObject(key.toString());
-			if (Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA 
-					+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER, node.getString("type").toUpperCase())) {				
+			if (MessageKeys.MessageParameterType.isStringOrNumberType(node.getString("type"))) {
 				if (message.length() > 0) {
 					message.append("&");
 				}

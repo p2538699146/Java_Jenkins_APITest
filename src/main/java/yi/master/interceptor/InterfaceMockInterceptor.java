@@ -64,14 +64,14 @@ public class InterfaceMockInterceptor extends AbstractInterceptor {
 			interceptStatus = "8";
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);
-			return SystemConsts.RESULT_NON_EXISTENT_MOCK_INTERFACE;
+			return SystemConsts.GlobalResultName.nonMockInterface.name();
 		}
 		
 		if ("1".equals(mock.getStatus())) {
 			interceptStatus = "5";
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);
-			return SystemConsts.RESULT_MOCK_INTERFACE_DISABLED;
+			return SystemConsts.GlobalResultName.mockInterfaceDisabled.name();
 		}
 		String result = null;
 		try {

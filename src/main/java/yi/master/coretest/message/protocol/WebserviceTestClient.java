@@ -1,6 +1,5 @@
 package yi.master.coretest.message.protocol;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -11,17 +10,14 @@ import org.apache.axis2.rpc.client.RPCServiceClient;
 
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.constant.MessageKeys;
+import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.util.PracticalUtils;
 
 public class WebserviceTestClient extends TestClient {
-	
-	protected WebserviceTestClient() {
-		
-	}
 
 	@Override
-	public Map<String, String> sendRequest(String requestUrl,
-			String requestMessage, Map<String, Object> callParameter, TestConfig config, Object client) {
+	public ClientTestResponseObject sendRequest(String requestUrl,
+												String requestMessage, Map<String, Object> callParameter, TestConfig config, Object client) {
 		
 		String username = null;
 		String password = null;
@@ -38,7 +34,7 @@ public class WebserviceTestClient extends TestClient {
 		}
 		
 		String responseMessage = "";
-		String useTime = "0";
+		Long useTime = 0L;
 		String statusCode = "200";
 		String mark = "";
 		
@@ -46,17 +42,18 @@ public class WebserviceTestClient extends TestClient {
 			long beginTime = System.currentTimeMillis();
 			responseMessage = callService(requestUrl, requestMessage, namespace, method, connectTimeOut, username, password);
 			long endTime = System.currentTimeMillis();
-			useTime = String.valueOf(endTime - beginTime);			
+			useTime = endTime - beginTime;
 		} catch (Exception e) {
 			
 			statusCode = "false";
 			mark = "Fail to call web-service url=" + requestUrl + ",namespace=" + namespace + ",method=" + method + "!";
 		}
-		Map<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("responseMessage", responseMessage);
-		returnMap.put("useTime", useTime);
-		returnMap.put("statusCode", statusCode);
-		returnMap.put("mark", mark);
+		ClientTestResponseObject returnMap = new ClientTestResponseObject();
+
+		returnMap.setMark(mark);
+		returnMap.setUseTime(useTime);
+		returnMap.setResponseMessage(responseMessage);
+		returnMap.setStatusCode(statusCode);
 		return returnMap;
 	}
 
@@ -64,11 +61,6 @@ public class WebserviceTestClient extends TestClient {
 	public boolean testInterface(String requestUrl) {
 		
 		return true;
-	}
-
-	@Override
-	public void closeConnection() {
-				
 	}
 	
 	@Override

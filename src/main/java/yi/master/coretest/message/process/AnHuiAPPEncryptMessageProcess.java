@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import net.sf.json.JSONObject;
 import yi.master.constant.MessageKeys;
 import yi.master.coretest.message.parse.URLMessageParse;
+import yi.master.coretest.message.process.config.AnHuiAppMsgProcessParameter;
 import yi.master.util.PracticalUtils;
 import yi.master.util.rsa.RSABase64Utils;
 
@@ -60,15 +61,17 @@ public class AnHuiAPPEncryptMessageProcess extends MessageProcess {
 	@Override
 	public String processRequestMessage(String requestMessage, String processParameter) {
 		
-		JSONObject parameter = JSONObject.fromObject(processParameter);
-		String key = PracticalUtils.replaceGlobalVariable(parameter.getString(MessageKeys.ANHUI_APP_ENCRYPT_KEY), null);
-		List<String> sensitiveInformationParameters = Arrays.asList(PracticalUtils.replaceGlobalVariable(parameter.getString(MessageKeys.ANHUI_APP_ENCRYPT_SENSITIVE_INFORMATION), null).split(","));
+		JSONObject obj = JSONObject.fromObject(processParameter);
+		AnHuiAppMsgProcessParameter parameter = (AnHuiAppMsgProcessParameter) JSONObject.toBean(obj, AnHuiAppMsgProcessParameter.class);
+
+		String key = PracticalUtils.replaceGlobalVariable(parameter.getKey(), null);
+		List<String> sensitiveInformationParameters = Arrays.asList(PracticalUtils.replaceGlobalVariable(parameter.getSensitiveInformation(), null).split(","));
 		SortedMap<String, String> requestParameters = new TreeMap<String, String>(URLMessageParse.parseUrlToMap(requestMessage, null));		
 		//根据配置来加密敏感字段
-		String algorithmType = PracticalUtils.replaceGlobalVariable(parameter.getString(MessageKeys.ANHUI_APP_ENCRYPT_ALGORITHM_TYPE), null);
+		String algorithmType = PracticalUtils.replaceGlobalVariable(parameter.getAlgorithmType(), null);
 		if (StringUtils.isBlank(algorithmType)) algorithmType = DEFAULT_ALGORITHM_TYPE;
 		
-		String publicKey = PracticalUtils.replaceGlobalVariable(parameter.getString(MessageKeys.ANHUI_APP_ENCRYPT_PUBLIC_KEY), null);
+		String publicKey = PracticalUtils.replaceGlobalVariable(parameter.getPublicKey(), null);
 		if (StringUtils.isBlank(publicKey)) publicKey = DEFAULT_PUBLIC_KEY;
 		
 		for (String infoKey:requestParameters.keySet()) {
