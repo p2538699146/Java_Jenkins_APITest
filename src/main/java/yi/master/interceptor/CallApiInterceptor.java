@@ -9,6 +9,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.StrutsStatics;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -17,6 +18,8 @@ import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.MD5Util;
 import yi.master.util.PracticalUtils;
 import com.opensymphony.xwork2.ActionContext;
@@ -80,11 +83,11 @@ public class CallApiInterceptor extends AbstractInterceptor {
 			try {
 				result = arg0.invoke();
 			} catch (Exception e) {
-				logger.error("系统内部错误,请求失败!", e);
 				interceptStatus = "6";
 				mark = PracticalUtils.getExceptionAllinformation(e);
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
+
 				throw e;
 			}
 			
@@ -100,7 +103,8 @@ public class CallApiInterceptor extends AbstractInterceptor {
 		interceptStatus = "4";
 		recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 				validateTime, executeTime, requestParams, responseParams, mark);
-		return "apiTokenValidateFail";
-			
+
+		throw new YiException(AppErrorCode.API_TOKEN_VALIDATE_FAIL);
+
 	}
 }

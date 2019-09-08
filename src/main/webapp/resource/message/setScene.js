@@ -410,7 +410,7 @@ function updateTestOptions(){
 	var updateConfigData = $("#form-setting-config").serializeArray();
 	$.post(REQUEST_URL.AUTO_TEST.UPDATE_TEST_CONFIG_URL, updateConfigData, function(data){
 		if(data.returnCode == 0){
-			currentSetInfo.config = data.config;
+			currentSetInfo.config = data.data;
 			layer.msg('更新成功',{icon:1, time:1500});
 		} else {
 			layer.alert("更新失败：" + data.msg, {icon:5});
@@ -487,7 +487,7 @@ function sceneTest() {
 	$.post(REQUEST_URL.AUTO_TEST.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage, systemId:systemId},function(data) {
 		if (data.returnCode == 0) {			
 			layer.close(index);
-			renderResultViewPage(data.result, messageSceneId);			
+			renderResultViewPage(data.data, messageSceneId);
 		}else{
 			layer.close(index);
 			layer.alert(data.msg, {icon:5});

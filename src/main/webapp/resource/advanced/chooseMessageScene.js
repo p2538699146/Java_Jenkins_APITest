@@ -254,7 +254,7 @@ function sceneTest() {
 	$.post(REQUEST_URL.AUTO_TEST.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage},function(data) {
 		if (data.returnCode == 0) {			
 			layer.close(index);
-			renderResultViewPage(data.result, messageSceneId);			
+			renderResultViewPage(data.data, messageSceneId);
 		}else{
 			layer.close(index);
 			layer.alert(data.msg, {icon:5});

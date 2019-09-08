@@ -70,48 +70,11 @@
 		
 		<default-interceptor-ref name="myPrepareInterceptorsStack"/>
 		
-		
-		
 		<!-- 全局处理结果,跳转到处理异常或者错误情况下的action -->
 		<global-results>
-			<!-- 用户没有登录时 -->
-			<result name="usernotlogin" type="chain">
-				noLoginJSON
-			</result>
 			<!-- 出现系统错误 -->
 			<result name="error" type="chain">
 				errorJSON
-			</result>
-			<!-- 当前操作接口被禁止调用 -->
-			<result name="opisdisable" type="chain">
-				opDisableJSON
-			</result>
-			<!-- 当前用户没有权限 -->
-			<result name="usernotpower" type="chain">
-				noPowerJSON
-			</result>
-			<!-- 未定义的接口 -->
-			<result name="opnotfound" type="chain">
-				opNotfoundJSON
-			</result>
-			<!-- 入参验证失败 -->
-			<result name="parameterValidateFail" type="chain"> 
-				parameterValidateFailJSON
-			</result>
-			<!-- api接口token验证失败 -->
-			<result name="apiTokenValidateFail" type="chain">
-				apiTokenValidateFailJSON
-			</result>
-			<!-- 不存在的mock接口 -->
-			<result name="nonMockInterface" type="chain">
-				nonMockInterfaceJSON
-			</result>
-			<!-- mock接口已被禁用 -->
-			<result name="mockInterfaceDisabled" type="chain">
-				mockInterfaceDisabledJSON
-			</result>
-			<result name="mockError" type="chain">
-				mockErrorJSON
 			</result>
 		</global-results>
 		
@@ -123,7 +86,7 @@
 		<!-- 该action主要返回各种非正常结果的json格式信息 -->
 		<action name="*JSON" class="interceptorAction" method="{1}">
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -132,7 +95,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>		
 		
@@ -141,7 +104,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -150,7 +113,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -159,7 +122,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -171,7 +134,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -183,7 +146,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -192,7 +155,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -203,7 +166,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -215,7 +178,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -224,7 +187,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -233,7 +196,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -242,7 +205,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -251,7 +214,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -260,7 +223,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -269,7 +232,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -281,7 +244,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -293,7 +256,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -302,7 +265,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -314,7 +277,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -323,7 +286,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -335,7 +298,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -345,7 +308,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -357,7 +320,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>	
 		
@@ -366,7 +329,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -375,7 +338,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -384,7 +347,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -393,7 +356,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -402,7 +365,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -411,7 +374,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -420,7 +383,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -429,7 +392,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -438,7 +401,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 		</action>
 		
@@ -447,7 +410,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -459,7 +422,7 @@
 			<interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
-				<param name="root">jsonMap</param>
+				<param name="root">jsonObject</param>
 			</result>
 			<result type="stream" name="download">
 				<param name="inputName">downloadStream</param>  

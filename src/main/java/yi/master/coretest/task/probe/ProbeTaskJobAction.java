@@ -22,6 +22,7 @@ import yi.master.business.advanced.service.InterfaceProbeService;
 import yi.master.business.message.bean.TestResult;
 import yi.master.business.message.service.TestResultService;
 import yi.master.business.user.service.MailService;
+import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
@@ -65,23 +66,24 @@ public class ProbeTaskJobAction implements Job {
 		Integer resultId = null;
 		try {
 			Map maps = new ObjectMapper().readValue(returnJson, Map.class);
-			if ("0".equals(maps.get("returnCode").toString())) {
-				resultId = Integer.valueOf(maps.get("resultId").toString());
+			if (String.valueOf(ReturnCodeConsts.SUCCESS_CODE).equals(maps.get("returnCode").toString())) {
+				resultId = Integer.valueOf(maps.get("data").toString());
 			} else {
 				task.setMark(maps.get("msg").toString());
 			}
 		} catch (Exception e) {
-			
 			LOGGER.error("[接口探测任务]探测任务执行出错:" + returnJson, e);
 		}
 		Timestamp lastCallTime = null;
 		TestResult result = null;
 		if (resultId == null) {
-			task.setStatus("3");//变更状态为“执行出错”
+			//变更状态为“执行出错”
+			task.setStatus("3");
 		} else {
 			result = testResultService.get(resultId);
 			task.setMark("");
-			if (result.getQualityLevel() == 0) {//变更状态为“缺少数据”
+			//变更状态为“缺少数据”
+			if (result.getQualityLevel() == 0) {
 				task.setStatus("2");
 			}
 			lastCallTime = result.getOpTime();

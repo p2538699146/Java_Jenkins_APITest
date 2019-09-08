@@ -315,7 +315,7 @@ var eventList = {
 				layer.close(index);
 				$.get(quartzStatus == "true" ? REQUEST_URL.TASK.STOP_QUARTZ : REQUEST_URL.TASK.START_QUARTZ, function(data) {
 					if (data.returnCode == 0) {
-						quartzStatus = data.status;
+						quartzStatus = data.data;
 						changeStatusView();
 						layer.msg("操作成功!", {icon:1, time:1500});
 					} else {
@@ -370,7 +370,7 @@ var mySetting = {
 		customCallBack:function(p) {
 			$.get(REQUEST_URL.TASK.GET_QUARTZ_STATUS, function(data) {
 				if (data.returnCode == 0) {
-					quartzStatus = data.status;
+					quartzStatus = data.data;
 					changeStatusView();
 				} else {
 					layer.alert(data.msg, {icon:5});

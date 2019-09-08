@@ -12,6 +12,17 @@ public class PageReturnJSONObject extends ReturnJSONObject {
     private Integer recordsTotal;
     private Integer recordsFiltered;
 
+    public PageReturnJSONObject () {
+        super();
+    }
+
+    public PageReturnJSONObject (Integer draw, Integer recordsTotal, Integer recordsFiltered) {
+        super();
+        this.draw = draw;
+        this.recordsTotal = recordsTotal;
+        this.recordsFiltered = recordsFiltered;
+    }
+
     public Integer getDraw() {
         return draw;
     }

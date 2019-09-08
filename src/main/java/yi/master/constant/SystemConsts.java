@@ -152,23 +152,40 @@ public interface SystemConsts {
 	public static final String QUARTZ_SCHEDULER_IS_STOP = "false";
 	
 	///////////////////////////////////全局设置指定设置名称/////////////////////////////////////////////////////////////////////
-	//通用设置
+	/**
+	 * 通用设置
+	 */
 	public static final String GLOBAL_SETTING_HOME = "home";
 	public static final String GLOBAL_SETTING_VERSION = "version";
 	public static final String GLOBAL_SETTING_LOGSWITCH = "logSwitch";
-	
-	//接口自动化测试相关全局配置
+
+	/**
+	 * 接口自动化测试相关全局配置
+	 */
 	public static final String GLOBAL_SETTING_MESSAGE_ENCODING = "messageEncoding";
 	public static final String GLOBAL_SETTING_MESSAGE_REPORT_TITLE = "messageReportTitle";
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE = "messageMailStyle";//邮件推送格式
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_PROBE_REPORT = "probe";//探测邮件
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_TASK_REPORT = "time";//定时任务邮件
-	
-	//web自动化脚本相关
+	/**
+	 * 邮件推送格式
+	 */
+	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE = "messageMailStyle";
+	/**
+	 * 探测邮件格式
+	 */
+	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_PROBE_REPORT = "probe";
+	/**
+	 * 定时任务邮件格式
+	 */
+	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_TASK_REPORT = "time";
+
+	/**
+	 * web自动化脚本相关
+	 */
 	public static final String GLOBAL_SETTING_WEB_SCRIPT_WORKPLACE = "webscriptWorkPlace";
 	public static final String GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH = "webscriptModulePath";
-	
-	//邮箱推送相关
+
+	/**
+	 * 邮箱推送相关
+	 */
 	public static final String GLOBAL_SETTING_IF_SEND_REPORT_MAIL = "sendReportMail";
 	public static final String GLOBAL_SETTING_MAIL_SERVER_HOST = "mailHost";
 	public static final String GLOBAL_SETTING_MAIL_SERVER_PORT = "mailPort";

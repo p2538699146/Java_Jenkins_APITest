@@ -14,6 +14,7 @@ import com.opensymphony.xwork2.ModelDriven;
 
 import yi.master.annotation.util.AnnotationUtil;
 import yi.master.business.base.bean.PageModel;
+import yi.master.business.base.bean.PageReturnJSONObject;
 import yi.master.business.base.bean.ReturnJSONObject;
 import yi.master.business.base.service.BaseService;
 import yi.master.constant.ReturnCodeConsts;
@@ -48,7 +49,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	/**
 	 * ajax调用返回的map
 	 */
-	protected Map<String,Object> jsonMap = new HashMap<String,Object>();
+	protected ReturnJSONObject jsonObject = new ReturnJSONObject();
 	/**
 	 * 传入的泛型类
 	 */
@@ -130,14 +131,10 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 				,(String)dt.get("orderDataName"),(String)dt.get("orderType")
 				,(String)dt.get("searchValue"),(List<List<String>>)dt.get("dataParams")
 				, ArrayUtils.addAll(prepareList(), querys));
-		
-		jsonMap.put("draw", draw);
-		jsonMap.put("data", processListData(pu.getDatas()));
-		jsonMap.put("recordsTotal", pu.getRecordCount());		
-		jsonMap.put("recordsFiltered", pu.getFilteredCount());
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+
+		jsonObject = new PageReturnJSONObject(draw, pu.getRecordCount(), pu.getFilteredCount());
+		setData(processListData(pu.getDatas()));
+
 		return SUCCESS;
 	}
 	
@@ -160,9 +157,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 */
 	public String listAll() {
 		List<T> ts = baseService.findAll(prepareList());
-		jsonMap.put("data", processListData(ts));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		setData(processListData(ts));
 		return SUCCESS;
 	}
 	
@@ -173,9 +168,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @return
 	 */
 	public String del() {		
-		baseService.delete(id);		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		baseService.delete(id);
 		return SUCCESS;
 	}
 	
@@ -185,9 +178,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @return
 	 */
 	public String get() {
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		jsonMap.put("object", baseService.get(id));
-		
+		setData(baseService.get(id));
 		return SUCCESS;
 	}
 	
@@ -197,11 +188,8 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @return
 	 */
 	public String edit() {
-				
 		baseService.edit(model);
-		jsonMap.put("object", model);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		jsonObject.setData(model);
 		return SUCCESS;
 	}
 	
@@ -211,8 +199,7 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	 * @return
 	 */
 	public String save() {
-		jsonMap.put("id", baseService.save(model));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(baseService.save(model));
 		return SUCCESS;
 	}
 	
@@ -270,33 +257,10 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 			throw new RuntimeException(e);			
 		}
 	}
-		
-	public BaseAction setData(String key, Object value) {
-		jsonMap.put(key, value);
-		return this;
-	}
-	
-	public BaseAction setReturnInfo(Integer returnCode, String returnMsg) {
-		jsonMap.put("returnCode", returnCode);
-		jsonMap.put("msg", returnMsg);
-		return this;
-	}
-	
-	public BaseAction setReturnInfo(Integer returnCode) {
-		jsonMap.put("returnCode", returnCode);
-		jsonMap.put("msg", "");
-		return this;
-	}
-	
-	public BaseAction setSuccessReturnInfo() {
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		jsonMap.put("msg", "");
-		return this;
-	}
-	
-	public BaseAction setSuccessReturnInfo(String returnMsg) {
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		jsonMap.put("msg", returnMsg);
+
+
+	public BaseAction setData(Object data) {
+		jsonObject.data(data);
 		return this;
 	}
 	/************************************GET-SET***********************************************/
@@ -322,10 +286,6 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 		
 		return model;
 	}
-	
-	public Map<String, Object> getJsonMap() {
-		return jsonMap;
-	}
 
 	public String getCheckNameFlag() {		
 		return checkNameFlag;
@@ -333,5 +293,10 @@ public class BaseAction<T> extends ActionSupport implements ModelDriven<T> {
 	
 	public void setQueryMode(String queryMode) {
 		this.queryMode = queryMode;
+	}
+
+
+	public ReturnJSONObject getJsonObject() {
+		return jsonObject;
 	}
 }

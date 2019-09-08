@@ -14,6 +14,8 @@ import yi.master.business.localize.shanxi.service.WebScriptModuleService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.cache.CacheUtil;
 
@@ -37,12 +39,10 @@ public class WebScriptModuleAction extends BaseAction<WebScriptModule> {
 
 	@Override
 	public String edit() {
-		
 		//检查是否存在指定的文件夹
 		File f = new File(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH) + File.separator + model.getFolderName());
 		if (!f.exists() || !f.isDirectory()) {
-			setReturnInfo(ReturnCodeConsts.ILLEGAL_HANDLE_CODE, "指定的模块文件夹不存在：" + f.getAbsolutePath());
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "指定的模块文件夹不存在：" + f.getAbsolutePath());
 		}
 		
 		if (StringUtils.isEmpty(model.getCreateUser())) {

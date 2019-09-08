@@ -2,7 +2,6 @@ package yi.master.business.advanced.action;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -14,14 +13,16 @@ import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.advanced.bean.config.mock.MockRequestValidateConfig;
 import yi.master.business.advanced.bean.config.mock.MockResponseConfig;
 import yi.master.business.advanced.bean.config.mock.MockValidateRuleConfig;
+import yi.master.business.base.dto.ParseMessageToNodesOutDTO;
 import yi.master.business.advanced.service.InterfaceMockService;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.user.bean.User;
 import yi.master.constant.MessageKeys;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.test.mock.MockSocketServer;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
@@ -29,6 +30,12 @@ import yi.master.util.cache.CacheUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/**
+ * 接口mock相关接口
+ * @author xuwangcheng
+ * @version 20180612
+ *
+ */
 @Controller
 @Scope("prototype")
 public class InterfaceMockAction extends BaseAction<InterfaceMock> {
@@ -54,7 +61,6 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	
 	public String updateStatus() {
 		interfaceMockService.updateStatus(model.getMockId(), model.getStatus());
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		return SUCCESS;
 	}
 	
@@ -76,7 +82,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 			server.stop();
 		}
 		
-		if (server == null && "0".equals(model.getStatus()) && "socket".equalsIgnoreCase(model.getProtocolType())) {
+		if (server == null && "0".equals(model.getStatus()) && MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType())) {
 			try {
 				new MockSocketServer(model.getMockId());
 			} catch (Exception e) {
@@ -84,9 +90,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 			}
 		}
 		
-		jsonMap.put("object", model);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-				
+		setData(model);
 		return SUCCESS;
 	}
 	
@@ -107,8 +111,10 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		}
 		interfaceMockService.updateSetting(model.getMockId(), settingType, settingValue);
 		MockSocketServer thisSocket = CacheUtil.getSocketServers().get(model.getMockId());
-		if (thisSocket != null) thisSocket.updateConfig(settingType, settingValue);
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+		if (thisSocket != null) {
+			thisSocket.updateConfig(settingType, settingValue);
+		}
+
 		return SUCCESS;
 	}
 	
@@ -131,8 +137,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 				rules.add(rule);
 			}
 		}
-		
-		setData("rules", rules.toString()).setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+		setData(rules.toString());
 		return SUCCESS;
 	}
 	
@@ -144,8 +149,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		MessageParse parseUtil = MessageParse.getParseInstance(MessageParse.judgeType(message));
 		Set<Parameter> params = parseUtil.importMessageToParameter(message, new HashSet<Parameter>());
 		if (params == null) {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "尚不支持此类型的报文格式，请检查出报文格式!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "尚不支持此类型的报文格式，请检查出报文格式!");
 		}
 		//自定义parmeterId
 		int count = 1;
@@ -156,11 +160,10 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		Object[] os = PracticalUtils.getParameterZtreeMap(params);
 		
 		if (os == null) {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "没有可用的参数,请检查!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "没有可用的参数,请检查!");
 		}
-		setData("data", os[0]).setData("rootPid", Integer.parseInt(os[1].toString())).setData("error", os[2].toString())
-			.setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+		setData(new ParseMessageToNodesOutDTO(os[0], Integer.parseInt(os[1].toString()), os[2].toString()));
+
 		return SUCCESS;
 	}
 	

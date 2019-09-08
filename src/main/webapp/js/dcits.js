@@ -726,7 +726,7 @@ function ObjectEditPage(id, ajaxUrl, callback) {
 	$(".editFlag").css("display","block");
 	$.post(ajaxUrl, {id:id}, function(data) {
 		if (data.returnCode == 0) {
-			var o = data.object;
+			var o = data.data;
 			//默认的渲染  object中同名id 控件 以及id名为 idText
 			iterObj(o);		
 			//该回调可以自行渲染默认没有渲染完整的控件
@@ -1255,10 +1255,10 @@ function createImportExcelMark(title, templatePath, uploadUrl, importUrl) {
 			    		 $.post(importUrl, {path:res.path}, function(json) {
 			    				if (json.returnCode == 0) {
 			    					$("#show-import-from-excel-content").html("");
-			    					var showResultHtml = '<p><span class="label label-primary radius">导入总数 :</span>&nbsp;&nbsp;' + json.result.totalCount + '</p>'
-			    						+ '<p><span class="label label-success radius">导入成功数 :</span>&nbsp;&nbsp;' + json.result.successCount + '</p>'
-			    						+ '<p><span class="label label-danger radius">导入失败数:</span>&nbsp;&nbsp;' + json.result.failCount + '</p>'
-			    						+ '<p><span class="label label-secondary radius">导入详情信息:</span><br>' + json.result.msg + '</p>';
+			    					var showResultHtml = '<p><span class="label label-primary radius">导入总数 :</span>&nbsp;&nbsp;' + json.data.totalCount + '</p>'
+			    						+ '<p><span class="label label-success radius">导入成功数 :</span>&nbsp;&nbsp;' + json.data.successCount + '</p>'
+			    						+ '<p><span class="label label-danger radius">导入失败数:</span>&nbsp;&nbsp;' + json.data.failCount + '</p>'
+			    						+ '<p><span class="label label-secondary radius">导入详情信息:</span><br>' + json.data.msg + '</p>';
 			    					$("#show-import-from-excel-content").html(showResultHtml);
 			    					layer.close(loadIndex);
 			    					refreshTable();
@@ -1489,9 +1489,6 @@ function chooseParameterNodePath (getPath, sendDatas, chooseOption) {
 			$("#show-parameter-info #choose-this-path").hide();
 		} else {
 			$("#show-parameter-info #choose-this-path").click(function () {
-				/*if (!strIsNotEmpty($("#show-parameter-info td[data-name='type']").text())) {			
-					return false;
-				}*/
 				
 				if (defaltChooseOption.notChooseTypes != null && (defaltChooseOption.notChooseTypes instanceof Array)) {
 					var paramType = $("#show-parameter-info td[data-name='type'] span").text();
@@ -1527,11 +1524,11 @@ function chooseParameterNodePath (getPath, sendDatas, chooseOption) {
 			$("#ztree-json-view").spinModal();
 			if (json.returnCode == 0) {
 				//初始化ztree												
-				if (strIsNotEmpty(json.error)) {
-					$("#errorInfo").html('<pre class="c-red">' + json.error + '</pre>');
+				if (strIsNotEmpty(json.data.error)) {
+					$("#errorInfo").html('<pre class="c-red">' + json.data.error + '</pre>');
 				}
-				zTreeSetting.data.simpleData.rootPId = json.rootPid;
-				var nodes = json.data;
+				zTreeSetting.data.simpleData.rootPId = json.data.rootPid;
+				var nodes = json.data.data;
 				$.each(nodes, function (i, node) {
 					if (node.type == "Map" || node.type == "Array" || node.type == "List") {
 						node["isParent"] = true;

@@ -35,7 +35,7 @@ var mySetting = {
    	 		$.Huitab("#tab-system .tabBar span","#tab-system .tabCon","current","click","0");
    	 		$.get(REQUEST_URL.AUTO_TEST.GET_TEST_CONFIG_URL, function(json) {
    	 			if (json.returnCode == 0) {
-   	 				configData = json.config;
+   	 				configData = json.data;
    	 				resetOptions();
    	 			} else {
    	 				layer.alert("获取当前用户自动化测试配置失败：" + json.msg, {icon:5});
@@ -70,7 +70,7 @@ function updateTestOptions(){
 	var updateConfigData=$("#form-article-add").serializeArray();
 	$.post(REQUEST_URL.AUTO_TEST.UPDATE_TEST_CONFIG_URL, updateConfigData, function(data){
 		if(data.returnCode == 0){
-			configData=data.config;
+			configData=data.data;
 			layer.msg('更新成功',{icon:1, time:1500});
 		} else {
 			layer.alert("更新失败：" + data.msg, {icon:5});
@@ -104,8 +104,8 @@ function batchTest(setId) {
 				$("#testTips").append('<p>开始执行测试...<img src="../../libs/layer/2.1/skin/default/loading-2.gif" alt="loading" /></p>');
 				$("#total-count").text(json.count);
 				
-				reportId = json.reportId;
-				count = json.count;
+				reportId = json.data[0];
+				count = json.data[1];
 							
 				var intervalID = setInterval(function() {
 					getProcessInfo(intervalID);
@@ -124,10 +124,10 @@ function batchTest(setId) {
 		$.get(REQUEST_URL.AUTO_TEST.CHECK_DATA_URL, {setId:setId}, function(json) {
 			$("img").remove();
 			if (json.returnCode == 0) {
-				if (json.count == 0) {
+				if (json.data == 0) {
 					sendTest();
 				} else {
-					layer.confirm('当前还有<span class="c-red"><strong>' + json.count + '</strong></span>个测试场景未有足够的测试数据进行测试<br>是否需要手动添加这些测试数据?', {title:'提示', icon:'0', btn:['手动添加', '直接测试']}
+					layer.confirm('当前还有<span class="c-red"><strong>' + json.data + '</strong></span>个测试场景未有足够的测试数据进行测试<br>是否需要手动添加这些测试数据?', {title:'提示', icon:'0', btn:['手动添加', '直接测试']}
 					, function(index) {
 						layer.close(index);
 						$(this).attr("data-title", "手动添加测试数据");

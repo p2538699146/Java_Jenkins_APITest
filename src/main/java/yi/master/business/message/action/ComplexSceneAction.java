@@ -20,10 +20,6 @@ import yi.master.constant.ReturnCodeConsts;
 @Controller
 @Scope("prototype")
 public class ComplexSceneAction extends BaseAction<ComplexScene> {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 		
 	private ComplexSceneService complexSceneService;
@@ -70,9 +66,8 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 				}
 			}
 		}
-		
-		jsonMap.put("data", variables);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(variables);
 		return SUCCESS;
 	}
 	
@@ -85,7 +80,7 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 		model.setComplexSceneConfigs();		
 		
 		if (model.getComplexSceneConfigs().get(String.valueOf(sequenceNum)) != null) {
-			JSONObject configJson = new JSONObject().fromObject(config);
+			JSONObject configJson = JSONObject.fromObject(config);
 			
 			Map<String, Class> classMap = new HashMap<String, Class>();
 			classMap.put("useVariables", Map.class);
@@ -96,8 +91,6 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 			
 			complexSceneService.updateConfigInfo(model.getId(), JSONObject.fromObject(model.getComplexSceneConfigs()).toString());
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -120,7 +113,6 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 			}
 		}
 		complexSceneService.updateConfigInfo(model.getId(), JSONObject.fromObject(configs).toString());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -132,8 +124,7 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 		model = complexSceneService.get(model.getId());
 		model.setComplexSceneConfigs();
 		
-		complexSceneService.updateConfigInfo(model.getId(), model.addScene(messageSceneId));		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		complexSceneService.updateConfigInfo(model.getId(), model.addScene(messageSceneId));
 		return SUCCESS;
 	}
 	
@@ -146,7 +137,6 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 		model.setComplexSceneConfigs();
 		
 		complexSceneService.updateConfigInfo(model.getId(), model.delScene(sequenceNum));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -155,9 +145,7 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 	 * @return
 	 */
 	public String updateConfigInfo () {
-		
 		complexSceneService.updateConfigInfo(model.getId(), model.getConfigInfo());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -168,9 +156,8 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 	public String listScenes () {
 		model = complexSceneService.get(model.getId());
 		model.setComplexSceneConfigs();				
-		
-		jsonMap.put("data", model.setScenes(messageSceneService));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(model.setScenes(messageSceneService));
 		return SUCCESS;
 	}
 	
@@ -179,9 +166,7 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 	 * @return
 	 */
 	public String listSetScenes () {
-		
-		jsonMap.put("data", complexSceneService.listComplexScenesBySetId(setId));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(complexSceneService.listComplexScenesBySetId(setId));
 		return SUCCESS;
 	}
 	
@@ -195,7 +180,6 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 		if (scene == null) {
 			complexSceneService.addToSet(model.getId(), setId);
 		}
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -205,9 +189,7 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 	 * @return
 	 */
 	public String delFromSet () {
-		
 		complexSceneService.delFromSet(model.getId(), setId);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	

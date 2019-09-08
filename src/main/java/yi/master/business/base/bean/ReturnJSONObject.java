@@ -1,6 +1,7 @@
 package yi.master.business.base.bean;
 
 
+import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 
 /**
@@ -16,6 +17,7 @@ public class ReturnJSONObject {
 
     public ReturnJSONObject () {
         this.returnCode = SUCCESS_CODE;
+        this.msg = "ok";
     }
 
     public ReturnJSONObject (int returnCode, String msg) {
@@ -27,6 +29,12 @@ public class ReturnJSONObject {
         this.returnCode = ye.getCode();
         this.msg = ye.getMsg();
     }
+
+    public ReturnJSONObject (AppErrorCode appErrorCode) {
+        this.returnCode = appErrorCode.getCode();
+        this.msg = appErrorCode.getMsg();
+    }
+
 
     private String msg;
     private Integer returnCode;

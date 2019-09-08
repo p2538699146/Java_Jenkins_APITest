@@ -31,6 +31,7 @@ public enum AppErrorCode {
     //自动化测试
     AUTO_TEST_COMPLEX_SCENE_LACK_BUSINESS_SYSTEM(100001, "测试场景没有配置独立的环境,请打开组合场景中的配置管理添加"),
     AUTO_TEST_NO_SCENE(100002, "无可测试的场景"),
+    AUTO_TEST_BUSINESS_SYSTEM_NOT_EXIST(100003, "测试环境[{}]不存在或者被禁用,请检查"),
 
 
     //用户相关
@@ -53,8 +54,11 @@ public enum AppErrorCode {
     //报文相关
     MESSAGE_VALIDATE_ERROR(330001, "入参验证失败"),
 
-
-
+    //定时任务
+    QUARTZ_SCHEDULER_IS_START(340001, "定时任务调度器已经是启动状态了"),
+    QUARTZ_HAS_BEEN_STOP(340002, "定时任务调度器已经被暂停了"),
+    QUARTZ_NEED_CRON_EXPRESSION(340003, "请先设置定时任务规则/cron表达式"),
+    QUARTZ_CRON_EXPRESSION_SETTING_ERROR(340004, "启动定时任务出错,详情：{}"),
     ;
 
     private Integer code;

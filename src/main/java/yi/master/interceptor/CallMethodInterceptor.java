@@ -19,6 +19,8 @@ import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.system.service.OperationInterfaceService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.MD5Util;
 import yi.master.util.PracticalUtils;
@@ -80,8 +82,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		try {
 			requestParams = JSONObject.fromObject(paramMap).toString();
 		} catch (Exception e) {
-			
-			
+
 		}
 		
 		
@@ -125,10 +126,14 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		}	
 		
 		String[] userHosts =  (String[]) paramMap.get("host");
-		if (userHosts != null) userHost =  userHosts[0];
+		if (userHosts != null) {
+			userHost =  userHosts[0];
+		}
 		
 		String[] browserAgents = (String[]) paramMap.get("agent");
-		if (browserAgents != null) browserAgent = browserAgents[0];		
+		if (browserAgents != null) {
+			browserAgent = browserAgents[0];
+		}
 				
 		String timeTag = MD5Util.code(String.valueOf(beginTime) + new Random().nextInt(10000));
 		try {						
@@ -164,7 +169,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 						+ "ms.执行耗时：" + executeTime + "ms.");		
 				
 				if (action != null) {
-					responseParams = action.getJsonMap().toString();
+					responseParams = JSONObject.fromObject(action.getJsonObject()).toString();
 					logger.info("[" + timeTag + "]接口" + callUrl + "出参\n" + responseParams);
 				}
 				
@@ -186,7 +191,8 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
-				return SystemConsts.GlobalResultName.usernotlogin.name();
+
+				throw new YiException(AppErrorCode.NO_LOGIN);
 			}
 			
 			String userTag = "[" + "用户名:" + user.getUsername() + ",ID=" + user.getUserId() + "]";
@@ -198,7 +204,8 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
-				return SystemConsts.GlobalResultName.opisdisable.name();
+
+				throw new YiException(AppErrorCode.OP_DISABLE);
 			}
 			
 			//判断当前用户是否拥有调用权限
@@ -227,7 +234,8 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
-				return SystemConsts.GlobalResultName.usernotpower.name();
+
+				throw new YiException(AppErrorCode.NO_PERMISSION);
 			}
 			
 			long endTime = System.currentTimeMillis();
@@ -242,7 +250,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 					+ "ms.执行耗时：" + executeTime + "ms.");	
 						
 			if (action != null) {
-				responseParams = action.getJsonMap().toString();
+				responseParams = JSONObject.fromObject(action.getJsonObject()).toString();
 				logger.info("[" + timeTag + "]接口" + callUrl + "出参\n" + responseParams);
 			}	
 			

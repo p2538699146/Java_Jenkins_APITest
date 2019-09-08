@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import yi.master.business.base.action.BaseAction;
+import yi.master.business.base.dto.ParseMessageToNodesOutDTO;
 import yi.master.business.message.bean.InterfaceInfo;
 import yi.master.business.message.bean.Message;
 import yi.master.business.message.bean.MessageScene;
@@ -107,15 +108,10 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 		Object[] os = PracticalUtils.getParameterZtreeMap(interfaceInfoService.get(model.getInterfaceId()).getParameters());
 		
 		if (os == null) {
-			jsonMap.put("msg", "没有可用的参数,请检查!");
-			jsonMap.put("returnCode", ReturnCodeConsts.NO_RESULT_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "没有可用的参数,请检查!");
 		}
-		
-		jsonMap.put("data", os[0]);
-		jsonMap.put("rootPid", Integer.parseInt(os[1].toString()));
-		jsonMap.put("error", os[2].toString());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);	
+
+		setData(new ParseMessageToNodesOutDTO(os[0], Integer.parseInt(os[1].toString()), os[2].toString()));
 		return SUCCESS;
 	}
 	
@@ -136,9 +132,7 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 		}
 		
 		if (infos.size() < 1) {
-			jsonMap.put("msg", "没有足够的数据可供导出,请刷新表格并重试!");
-			jsonMap.put("returnCode", ReturnCodeConsts.MISS_PARAM_CODE);	
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "没有足够的数据可供导出,请刷新表格并重试!");
 		}
 		
 		String path = null;
@@ -146,14 +140,10 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 		try {
 			path = ExportInterfaceInfo.exportDocuments(infos, PoiExcelUtil.XLSX);
 		} catch (Exception e) {
-			
-			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			jsonMap.put("msg", "后台写文件出错:<br>" + e.getMessage() + "<br>请联系管理员!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), "后台写文件出错:<br>" + e.getMessage() + "<br>请联系管理员!");
 		}
-		
-		jsonMap.put("path", path);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);	
+
+		setData(path);
 		return SUCCESS;
 	}
 	
@@ -162,18 +152,14 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 	 * @return
 	 */
 	public String importFromExcel () {
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		Map<String, Object> result = null;
 		try {
 			result = ImportInterfaceInfo.importToDB(path);
 		} catch (Exception e) {
-			
-			setReturnInfo(ReturnCodeConsts.PARAMETER_VALIDATE_FAIL_CODE, "读取文件内容失败!");
+			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), "读取文件内容失败!");
 		}
-				
-		jsonMap.put("result", result);
-		
-		
+
+		setData(result);
 		return SUCCESS;
 	}
 
@@ -187,10 +173,7 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 		//判断接口名是否重复
 		checkObjectName();
 		if (!checkNameFlag.equals("true")) {
-			jsonMap.put("returnCode", ReturnCodeConsts.NAME_EXIST_CODE);
-			jsonMap.put("msg", "该接口名已存在,请更换!");
-			
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NAME_EXIST);
 		}
 		if (model.getInterfaceId() == null) {
 			//新增									
@@ -211,20 +194,17 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 		model.setSystems(systems);
 		
 		interfaceInfoService.edit(model);
-		
 		/***********************************/	
 		if (model.getInterfaceId() != null) {
 			Map<String, List<Integer>> updateSystems = checkBusinessSystemUpdate();
 			if (updateSystems != null) {
-				jsonMap.put("msg", "你刚刚更新了接口的测试环境关联:<br><strong>新增关联" + updateSystems.get("addSystems").size() 
+				jsonObject.setMsg("你刚刚更新了接口的测试环境关联:<br><strong>新增关联" + updateSystems.get("addSystems").size()
 						+ "个,解除关联" + updateSystems.get("removeSystems").size() + "个。</strong><br>"
 						+ "<span class=\"c-red\">是否需要同步更新该接口下属对象的测试环境信息？</span>");
-				jsonMap.put("updateSystems", updateSystems);
+				setData(updateSystems);
 			}
 		}		
 		/*****************************************/
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
 		return SUCCESS;
 	}
 	
@@ -280,25 +260,18 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 				
 			}
 		}
-				
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
-		
 		return SUCCESS;
 	}
 	
 	@Override
 	public String get() {
-		
 		if (id == null) {
-			jsonMap.put("object", messageService.get(messageId).getInterfaceInfo());
+			setData(messageService.get(messageId).getInterfaceInfo());
 		} 
 		
 		if (id != null) {
-			jsonMap.put("object", interfaceInfoService.get(id));
+			setData(interfaceInfoService.get(id));
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
-		
 		return SUCCESS;
 	}
 
@@ -368,11 +341,9 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 				delIds.add(Integer.valueOf(idOld));
 			}			
 		}
-		
-		
+
 		returnObj.put("addSystems", addIds);
 		returnObj.put("removeSystems", delIds);
-		
 		return returnObj;
 	
 	}

@@ -251,7 +251,7 @@ public interface MessageKeys {
 	}
 
 
-	/*协议公共调用参数*/
+	/**协议公共调用参数*/
 	public static final String PUBLIC_PARAMETER_CONNECT_TIMEOUT = "ConnectTimeOut";
 	public static final String PUBLIC_PARAMETER_READ_TIMEOUT = "ReadTimeOut";
 	public static final String PUBLIC_PARAMETER_USERNAME = "Username";
@@ -259,39 +259,39 @@ public interface MessageKeys {
 	public static final String PUBLIC_PARAMETER_METHOD = "Method";
 
 
-	/*HTTP协议调用参数*/
+	/**HTTP协议调用参数*/
 	public static final String HTTP_PARAMETER_HEADER = "Headers";
 	public static final String HTTP_PARAMETER_QUERYS = "Querys";
 	public static final String HTTP_PARAMETER_AUTHORIZATION = "Authorization";
 	public static final String HTTP_PARAMETER_ENC_TYPE = "EncType";
 	public static final String HTTP_PARAMETER_REC_ENC_TYPE = "RecEncType";
 
-	/*webservice协议调用参数*/
+	/**webservice协议调用参数*/
 	public static final String WEB_SERVICE_PARAMETER_NAMESPACE = "Namespace";
 
 
-	/*默认path路径根节点*/
+	/**默认path路径根节点*/
 	public static final String MESSAGE_PARAMETER_DEFAULT_ROOT_PATH = "TopRoot";
 
 
-	/*测试环境中默认路径中的替换变量*/
+	/**测试环境中默认路径中的替换变量*/
 	public static final String BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE = "\\$\\{name\\}";
 	public static final String BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE = "\\$\\{path\\}";
 
 
-	/*
+	/**
 	 * 使用节点参数时需要再参数路径左右加上以下左右边界
 	 */
 	public static final String CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT = "#";
 	public static final String CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT = "#";
 
 
-	/*
+	/**
 	 * quartz定时任务执行的测试将会在对应的测试报告添加下面的备注
 	 */
 	public static final String QUARTZ_AUTO_TEST_REPORT_MARK = "自动化定时任务";
 
-	/*
+	/**
 	 * 缺少测试数据时测试详情中的备注
 	 */
 	public static final String NO_ENOUGH_TEST_DATA_RESULT_MARK = "缺少测试数据";
