@@ -238,11 +238,11 @@ var eventList = {
 			}
 			$.post(REQUEST_URL.MESSAGE_SCENE.GET, {id:messageSceneId}, function(json){
 				if (json.returnCode == 0) {
-					if (!strIsNotEmpty(json.object.responseExample)) {
+					if (!strIsNotEmpty(json.data.responseExample)) {
 						layer.msg('没有设置返回报文示例,请先设置!', {icon:2, time:1800});
 						return false;
 					}
-					responseExample = json.object.responseExample;
+					responseExample = json.data.responseExample;
 					createViewWindow(responseExample, {
 						title:"返回报文示例", //标题
 						copyBtn:true//是否显示复制按钮
@@ -538,7 +538,7 @@ function showValidatRulePage(validateId) {
 			if (publish.renderParams.editPage.modeFlag == 1) {
 				$.get(REQUEST_URL.VALIDATE.GET, {id:validateId},function(data){
 					if(data.returnCode == 0) {
-						data = data.object;
+						data = data.data;
 						if (data.parameterName != "") {
 							var relevanceObject = JSON.parse(data.parameterName);
 							$("#ORDER").val(relevanceObject.ORDER);

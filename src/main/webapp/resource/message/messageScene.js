@@ -303,7 +303,7 @@ var eventList = {
 					$.post(REQUEST_URL.BUSINESS_SYSTEM.GET, {id:$("#systemId").val()}, function(json) {
 						if (json.returnCode == 0) {
 							$("#complex-choose-business-system").siblings('span').remove();
-							$("#complex-choose-business-system").before('<span>' + json.object.systemName + "[" + json.object.systemHost + ":" + json.object.systemPort + ']&nbsp;&nbsp;</span>');
+							$("#complex-choose-business-system").before('<span>' + json.data.systemName + "[" + json.data.systemHost + ":" + json.data.systemPort + ']&nbsp;&nbsp;</span>');
 						} else {
 							console.log("获取测试环境信息出错:\n" + json.msg);
 						}
@@ -552,7 +552,7 @@ var eventList = {
 					title:"请选择对应所属的测试环境",
 					customData:{//自定义数据，Array数组对象
 						enable:true,
-						data:json.object.businessSystems,
+						data:json.data.businessSystems,
 						textItemName:"systemName",
 						valueItemName:"systemId"
 					},
@@ -580,7 +580,7 @@ var eventList = {
 						title:"请选择测试场景所属的测试环境(可多选,最多不超过10个)",
 						customData:{//自定义数据，Array数组对象
 							enable:true,
-							data:json.object.businessSystems,
+							data:json.data.businessSystems,
 							textItemName:"systemName",
 							valueItemName:"systemId"
 						},
@@ -677,7 +677,7 @@ var mySetting = {
 				if (messageId != null && publish.renderParams.editPage.modeFlag == 0) {
 					$.post(REQUEST_URL.MESSAGE.GET, {id:messageId}, function (json) {
 						if (json.returnCode == 0) {
-							appendSystem(json.object.businessSystems);
+							appendSystem(json.data.businessSystems);
 						}
 					});
 				}
@@ -716,14 +716,14 @@ function renderSceneTestPage(flag) {
 			
 			var $selectSystem = $F.find("#select-system");
 			
-			$.each(data.testObject, function(systemId, object) {
+			$.each(data.data, function(systemId, object) {
 				$selectSystem.append("<option value='" + systemId + "'>" + object.system.systemName + "[" 
 					+ object.system.systemHost + ":" + object.system.systemPort + "]" + "</option>");			
 			});
 			
 			$selectSystem.change(function(){
 				var systemId = $(this).val();
-				var object = data.testObject[systemId];
+				var object = data.data[systemId];
 				if (object != null) {
 					$F.find("#request-url").text(object.requestUrl);
 					$F.find("#select-data").html('');
@@ -741,7 +741,7 @@ function renderSceneTestPage(flag) {
 					$F.find("#scene-test-request-message").val('');
 					return false;
 				}
-				$F.find("#scene-test-request-message").val(data.testObject[systemId]["requestData"][$(that).val()]["dataJson"]);				
+				$F.find("#scene-test-request-message").val(data.data[systemId]["requestData"][$(that).val()]["dataJson"]);
 			});
 			$selectSystem.change();
 									

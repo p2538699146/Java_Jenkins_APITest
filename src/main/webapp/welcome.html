@@ -101,8 +101,8 @@
     	//检查版本
         $.get(REQUEST_URL.GLOBAL_SETTING.CHECK_SYSTEM_VERSION, function(json){
             if (json.returnCode == 0) {
-                if (json.newVersion != null && json.newVersion != json.version) {
-                    $("#version").html('<i class="Hui-iconfont">&#xe679;</i><a style="color:blue;" href="' + json.versionUpgradeUrl + '" target="_blank">有新版本可以升级</a>');
+                if (json.data.newVersion != null && json.data.newVersion != json.data.version) {
+                    $("#version").html('<i class="Hui-iconfont">&#xe679;</i><a style="color:blue;" href="' + json.data.versionUpgradeUrl + '" target="_blank">有新版本可以升级</a>');
                 }
             }
         });
@@ -133,8 +133,8 @@
     	
     	$.post(REQUEST_URL.LOGIN.GET_LOGIN_USER_INFO, {token:parent.$("#token").val()}, function(data) {
     		if (data.returnCode == 0) {
-    			userInfo = data.data;
-    			lastLoginTime = data.lastLoginTime;
+    			userInfo = data.data.user;
+    			lastLoginTime = data.data.lastLoginTime;
     			df.resolve();
     		} else if (data.returnCode == 7) {
     			var username = getCookie("username");
@@ -145,8 +145,8 @@
                         password:password
                     }, function(data) {
                         if (data.returnCode == 0) {
-                        	userInfo = data.data;
-                        	lastLoginTime = data.lastLoginTime;
+                        	userInfo = data.data.user;
+                        	lastLoginTime = data.data.lastLoginTime;
                         	df.resolve();
                         } else {
                         	parent.window.location.href = parent.$("#backUrl").val();
@@ -164,7 +164,8 @@
     //获取设置
     function getSetting() {
     	$.get(REQUEST_URL.GLOBAL_SETTING.GET_WEB_SETTINGS, function(data) {
-       		if(data.returnCode == 0){			
+       		if(data.returnCode == 0){
+       		    data = data.data;
        			$("#notice").html(data.notice);
        			$("#copyright").html(data.copyright);
        			$("#siteName").html(data.siteName);
@@ -177,8 +178,8 @@
 	//获取当前用户的未读邮件数量
 	function getMailNum(){
 		$.get(REQUEST_URL.MAIL.GET_NO_READ_MAIL_NUM, function(data) {
-			if (data.returnCode === 0 && data.mailNum !== 0) {
-				parent.$(".noReadMailNum").text(data.mailNum);
+			if (data.returnCode === 0 && data.data !== 0) {
+				parent.$(".noReadMailNum").text(data.data);
 			} else {
 				parent.$(".noReadMailNum").text("");
 			}
@@ -191,7 +192,7 @@
 	function getStatisticalQuantity() {
 		$.get(REQUEST_URL.GLOBAL_SETTING.GET_STATISTICAL_QUANTITY, function(data) {
 			if(data.returnCode == 0){			
-       			$.each(data.counts, function(itemName, countInfo) {
+       			$.each(data.data, function(itemName, countInfo) {
        				$("td[count-type='" + itemName + "']").eq(0).text(countInfo.totalCount);
        				$("td[count-type='" + itemName + "']").eq(1).text(countInfo.todayCount);
        				$("td[count-type='" + itemName + "']").eq(2).text(countInfo.yesterdayCount);

@@ -68,8 +68,7 @@ public class TestResultAction extends BaseAction<TestResult> {
 
 	
 	public String getCount() {
-		jsonMap.put("data", AnalyzeUtil.analyzeProbeResultSynopsisView(interfacePorbeService.listProbeBeforeResultInfo(7)));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(AnalyzeUtil.analyzeProbeResultSynopsisView(interfacePorbeService.listProbeBeforeResultInfo(7)));
 		return SUCCESS;
 	}
 

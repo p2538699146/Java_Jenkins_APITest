@@ -232,9 +232,9 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			
 			$.post(REQUEST_URL.TEST_DATA.GET_SETTING_DATA, {messageSceneId:messageSceneId, dataId:data.dataId} ,function(json) {
-				currParams = json.params;
+				currParams = json.data.params;
 				if (json.returnCode == 0) {					
-					layer_show("设置数据", templates["setting-parameter-data"](json), null, null, 1, null, function(index, layero) {
+					layer_show("设置数据", templates["setting-parameter-data"](json.data), null, null, 1, null, function(index, layero) {
 						$.post(REQUEST_URL.TEST_DATA.UPDATE_PARAMS_DATA, {dataId:data.dataId, paramsData:getParamsData()}, function (returnJson) {
 							if (returnJson.returnCode == 0) {
 								layer.msg("更新数据内容成功!", {icon:1, time:1500});	
@@ -255,8 +255,8 @@ var eventList = {
 			//publish.renderParams.editPage.modeFlag 0 1
 			$.post(REQUEST_URL.TEST_DATA.GET_SETTING_DATA, {messageSceneId:messageSceneId, dataId:$("#dataId").val()} ,function(json) {
 				if (json.returnCode == 0) {
-					currParams = json.params;
-					layer_show("设置数据", templates["setting-parameter-data"](json), null, null, 1, null, function(index, layero) {
+					currParams = json.data.params;
+					layer_show("设置数据", templates["setting-parameter-data"](json.data), null, null, 1, null, function(index, layero) {
 						$("#paramsData").val(getParamsData());
 						layer.close(index);
 					}, null, {shadeClose:false});
@@ -338,7 +338,7 @@ var mySetting = {
 				if (messageSceneId != null && publish.renderParams.editPage.modeFlag == 0) {
 					$.post(REQUEST_URL.MESSAGE_SCENE.GET, {id:messageSceneId}, function (json) {
 						if (json.returnCode == 0) {
-							appendSystem(json.object.businessSystems);
+							appendSystem(json.data.businessSystems);
 						}
 					});
 				}
@@ -410,7 +410,7 @@ function createDataMessage() {
 	$.post(REQUEST_URL.TEST_DATA.CREATE_NEW_DATA_MSG, {messageSceneId:messageSceneId, paramsData:paramsDataStr}, function(json) {
 		if (json.returnCode == 0) {
 			layer.msg("生成报文成功!", {icon:1,time:1500});
-			$("#dataMsg > textarea").val(json.dataMsg);
+			$("#dataMsg > textarea").val(json.data);
 			currParams = JSON.parse(paramsDataStr);
 		} else {
 			layer.alert(json.msg, {icon:5});

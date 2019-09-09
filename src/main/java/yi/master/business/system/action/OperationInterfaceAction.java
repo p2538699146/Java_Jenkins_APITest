@@ -45,9 +45,7 @@ public class OperationInterfaceAction extends BaseAction<OperationInterface> {
 	 * @return
 	 */
 	public String listOp() {
-		jsonMap.put("data", operationInterfaceService.findAll());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		setData(operationInterfaceService.findAll());
 		return SUCCESS;
 	}
 	

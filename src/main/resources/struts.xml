@@ -96,6 +96,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>		
 		
@@ -105,6 +106,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -114,6 +116,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -123,6 +126,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -135,6 +139,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -147,6 +152,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -156,6 +162,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -167,6 +174,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -179,6 +187,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -188,6 +197,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -197,6 +207,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -206,6 +217,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -215,6 +227,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -224,6 +237,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -233,6 +247,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -245,6 +260,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -257,6 +273,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -266,6 +283,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -278,6 +296,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -287,6 +306,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -299,6 +319,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -309,6 +330,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -321,6 +343,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>	
 		
@@ -330,6 +353,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -339,6 +363,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -348,6 +373,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -357,6 +383,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -366,6 +393,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -375,6 +403,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -384,6 +413,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -393,6 +423,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -402,6 +433,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
 		
@@ -411,6 +443,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="json" name="check">
 				<param name="root">checkNameFlag</param>
@@ -423,6 +456,7 @@
 			<interceptor-ref name="callMethodInterceptor"></interceptor-ref>
 			<result type="json">
 				<param name="root">jsonObject</param>
+				<param name="ignoreHierarchy">false</param>
 			</result>
 			<result type="stream" name="download">
 				<param name="inputName">downloadStream</param>  

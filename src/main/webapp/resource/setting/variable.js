@@ -481,7 +481,7 @@ var eventList = {
 					layer.alert('<div id="create-result"><span class="c-success">生成变量成功：</span><br>' + json.msg + '</div>'
 							, {icon:1, anim:5, title:data.variableName, btn: ['强制刷新', '确定'], offset: '120px'}
 							,function(index, layero){
-								$.post(REQUEST_URL.GLOBAL_VARIABLE.CREATE_VARIABLE, {variableId:data.variableId, foreceCreate:true}, function(json){
+								$.post(REQUEST_URL.GLOBAL_VARIABLE.CREATE_VARIABLE, {variableId:data.variableId, forceCreate:true}, function(json){
 									if (json.returnCode == 0) {
 										$(layero).find('#create-result').html('<span class="c-success">生成变量成功：</span><br>' + json.msg);
 									} else {

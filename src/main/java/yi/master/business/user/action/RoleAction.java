@@ -15,6 +15,8 @@ import yi.master.business.user.bean.Role;
 import yi.master.business.user.service.RoleService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
 /**
@@ -73,15 +75,10 @@ public class RoleAction extends BaseAction<Role> {
 	@Override
 	public String del() {
 		if (id == SystemConsts.DefaultObjectId.ADMIN_ROLE.getId() || id == SystemConsts.DefaultObjectId.DEFAULT_ROLE.getId()) {
-			jsonMap.put("returnCode",ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			jsonMap.put("msg", "不能删除超级管理员角色或者默认角色");
-			
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除超级管理员角色或者默认角色");
 		}		
 		//删除其他角色,配置该角色的用户变更成default角色
-		roleService.del(id);		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		roleService.del(id);
 		return SUCCESS;
 	}
 	
@@ -103,24 +100,19 @@ public class RoleAction extends BaseAction<Role> {
 	public String edit() {		
 		if (model.getRoleId() == SystemConsts.DefaultObjectId.ADMIN_ROLE.getId()
 				|| model.getRoleId() == SystemConsts.DefaultObjectId.DEFAULT_ROLE.getId()) {
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			jsonMap.put("msg", "不能删除预置管理员或者默认角色信息");			
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除预置管理员或者默认角色信息");
 		}		
 		checkObjectName();	
 		
 		if (!checkNameFlag.equals("true")) {
-			jsonMap.put("returnCode", ReturnCodeConsts.NAME_EXIST_CODE);
-			jsonMap.put("msg", "该角色名已存在,请更换!");			
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NAME_EXIST);
 		}
 		
 		if (model.getRoleId() != null) {
 			//修改
 			model.setOis(roleService.get(model.getRoleId()).getOis());
 		}
-		roleService.edit(model);		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
+		roleService.edit(model);
 		return SUCCESS;
 	}
 	
@@ -143,9 +135,7 @@ public class RoleAction extends BaseAction<Role> {
 				}
 			}
 		}
-				
-		jsonMap.put("interfaces", ops);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(ops);
 		return SUCCESS;
 	}
 	
@@ -166,9 +156,8 @@ public class RoleAction extends BaseAction<Role> {
 				}
 			}
 		}
-		
-		jsonMap.put("menus", menus);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(menus);
 		return SUCCESS;
 	}
 
@@ -202,8 +191,7 @@ public class RoleAction extends BaseAction<Role> {
 		}
 		role.setMenus(menus);
 		roleService.edit(role);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+
 		return SUCCESS;
 	}
 	
@@ -237,8 +225,7 @@ public class RoleAction extends BaseAction<Role> {
 		}
 		role.setOis(ops);
 		roleService.edit(role);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+
 		return SUCCESS;
 	}
 	

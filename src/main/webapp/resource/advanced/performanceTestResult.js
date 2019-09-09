@@ -130,11 +130,11 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			
 			$.post(REQUEST_URL.PERFORMANCE_RESULT.ANALYZE, {ptResultId:data.ptResultId}, function(json) {
-				parent.layer_show("性能测试视图", templates["performance-test-task-view"](json.object), null, null, 1, function(layero, index){
+				parent.layer_show("性能测试视图", templates["performance-test-task-view"](json.data), null, null, 1, function(layero, index){
 					$(layero).find('.pt-task-btn-group:not(:eq(2))').hide();
 					$(layero).find('.pt-task-btn-group:eq(2)').show();
 					$(layero).find("#ptResultId").val(data.ptResultId);
-					parent.createTestView(layero, json.object);
+					parent.createTestView(layero, json.data);
 				}, null, null, {maxmin: true});
 			});	
 		},

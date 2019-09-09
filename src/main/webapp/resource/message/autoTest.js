@@ -100,13 +100,13 @@ function batchTest(setId) {
 		$("#testTips").append('<p>正在准备测试数据...<img src="../../libs/layer/2.1/skin/default/loading-2.gif" alt="loading" /></p>');
 		$.get(REQUEST_URL.AUTO_TEST.BATCH_AUTO_TEST_URL + "?setId=" + setId, function(json) {
 			if (json.returnCode == 0) {
+                reportId = json.data[0];
+                count = json.data[1];
+
 				$("img").remove();
 				$("#testTips").append('<p>开始执行测试...<img src="../../libs/layer/2.1/skin/default/loading-2.gif" alt="loading" /></p>');
-				$("#total-count").text(json.count);
-				
-				reportId = json.data[0];
-				count = json.data[1];
-							
+				$("#total-count").text(count);
+
 				var intervalID = setInterval(function() {
 					getProcessInfo(intervalID);
 				}, 1000);
@@ -154,17 +154,16 @@ function batchTest(setId) {
 function getProcessInfo(intervalID) {
 	$.get(REQUEST_URL.REPORT.GET + "?reportId=" + reportId, function(json) {
 		if (json.returnCode == 0) {
-			
-			$("#current-complete-count").text(json.report.sceneNum);
-			$("#current-success-count").text(json.report.successNum);
-			$("#current-fail-count").text(json.report.failNum);
-			$("#current-stop-count").text(json.report.stopNum);
-			var per = ((json.report.sceneNum /  count).toFixed(2)) * 100;
+			$("#current-complete-count").text(json.data.sceneNum);
+			$("#current-success-count").text(json.data.successNum);
+			$("#current-fail-count").text(json.data.failNum);
+			$("#current-stop-count").text(json.data.stopNum);
+			var per = ((json.data.sceneNum /  count).toFixed(2)) * 100;
 			if ((600 * per) > $(".progress .progress-bar .sr-only").width()) {
 				$(".progress .progress-bar .sr-only").attr("style", "width:" + per + "%");
 			}			
 			
-			if (json.report.sceneNum == count) {
+			if (json.data.sceneNum == count) {
 				isTesting = false;
 				clearInterval(intervalID);
 				$("img").remove();

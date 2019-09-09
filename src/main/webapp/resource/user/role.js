@@ -129,7 +129,7 @@ var eventList = {
 		},	
 		".show-role-menu":function(){
 			var data = table.row( $(this).parents('tr') ).data();
-			showRolePower(data, '角色菜单权限编辑', REQUEST_URL.ROLE.GET_NODES_MENU, 'menus', {
+			showRolePower(data, '角色菜单权限编辑', REQUEST_URL.ROLE.GET_NODES_MENU, 'data', {
 				data: {
 					simpleData: {
 						enable:true,
@@ -146,7 +146,7 @@ var eventList = {
 		},
 		".show-role-power":function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			showRolePower(data, '角色接口权限编辑', REQUEST_URL.ROLE.GET_NODES_INTERFACE, 'interfaces', {
+			showRolePower(data, '角色接口权限编辑', REQUEST_URL.ROLE.GET_NODES_INTERFACE, 'data', {
 				data: {
 					simpleData: {
 						enable:true,

@@ -1,8 +1,11 @@
 package yi.master.business.base.bean;
 
 
+import org.apache.struts2.json.annotations.JSON;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
+
+import java.io.Serializable;
 
 /**
  * 通用json返回对象
@@ -11,7 +14,8 @@ import yi.master.exception.YiException;
  * @description
  * @date 2019/9/4 19:06
  */
-public class ReturnJSONObject {
+public class ReturnJSONObject implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private static final int SUCCESS_CODE = 0;
 

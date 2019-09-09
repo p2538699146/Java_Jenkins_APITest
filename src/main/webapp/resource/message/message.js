@@ -465,7 +465,7 @@ var eventList = {
 						title:"请选择接口所属的测试环境(可多选,最多不超过10个)",
 						customData:{//自定义数据，Array数组对象
 							enable:true,
-							data:json.object.systems,
+							data:json.data.systems,
 							textItemName:"systemName",
 							valueItemName:"systemId"
 						},
@@ -514,7 +514,7 @@ var eventList = {
 			}
 			$.post(REQUEST_URL.MESSAGE.FORMAT, {parameterJson:jsonStr, messageType:messageType}, function(data) {
 				if(data.returnCode == 0){
-					$(".textarea").val(data.returnJson);
+					$(".textarea").val(data.data);
 				} else if(data.returnCode == 912) {
 					layer.msg("格式化失败：不是指定的格式!",{icon:5,time:1500});
 				}else {
@@ -588,7 +588,7 @@ var eventList = {
 					});
 					$.post(REQUEST_URL.MESSAGE.CREATE_MESSAGE_BY_NODES, {messageType:$("#messageType").val(), nodes:JSON.stringify(sendNodes)}, function(json){
 						if (json.returnCode == 0) {
-							$(".textarea").val(json.message);								
+							$(".textarea").val(json.data);
 						} else {
 							layer.alert(json.msg, {icon:5});
 						}
@@ -626,7 +626,7 @@ var mySetting = {
 				if (interfaceId != null && publish.renderParams.editPage.modeFlag == 0) {
 					$.post(REQUEST_URL.INTERFACE.GET, {id:interfaceId}, function (json) {
 						if (json.returnCode == 0) {
-							appendSystem(json.object.systems);
+							appendSystem(json.data.systems);
 						}
 					});
 				}
@@ -687,8 +687,8 @@ function getParameterJson(textareaObj){
 	$.get(REQUEST_URL.MESSAGE.GET, {id:messageId}, function(data) {
 		textareaObj.spinModal(false);
 		if (data.returnCode == 0) {						
-			textareaObj.val(data.object.parameterJson);
-			if (data.object.parameterJson == null || data.object.parameterJson == "") {
+			textareaObj.val(data.data.parameterJson);
+			if (data.data.parameterJson == null || data.data.parameterJson == "") {
 				textareaObj.attr("placeholder","该报文没有设置入参内容或者对应接口入参节点发生变化,请检查并重新设置！");
 			}			
 		} else {

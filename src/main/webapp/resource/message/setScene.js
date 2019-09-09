@@ -178,14 +178,13 @@ var eventList = {
 			batchDelObjs(checkboxList, REQUEST_URL.TEST_SET.OP_SCENE + "?mode=" + mode + "&setId=" + setId, table, opName)
 		},
 		"#setting-set-config":function() {
-			
 			if (currentSetInfo == null) {
 				return false;
 			}
 			
 			if (currentSetInfo.config == null) {
 				settingConfig(currentSetInfo.setId, "0", function (json) {
-					currentSetInfo.config = json.config;
+					currentSetInfo.config = json.data;
 					viewRunSettingConfig();	
 				});
 			} else {					
@@ -340,7 +339,7 @@ var mySetting = {
 			
 			$.post(REQUEST_URL.TEST_SET.GET, {id:setId}, function(data) {
 				if (data.returnCode == 0) {
-					currentSetInfo = data.object;
+					currentSetInfo = data.data;
 				} else {
 					layer.alert(data.msg, {icon:5});
 				}
@@ -430,14 +429,14 @@ function renderSceneTestPage(flag) {
 			
 			var $selectSystem = $F.find("#select-system");
 			
-			$.each(data.testObject, function(systemId, object) {
+			$.each(data.data, function(systemId, object) {
 				$selectSystem.append("<option value='" + systemId + "'>" + object.system.systemName + "[" 
 					+ object.system.systemHost + ":" + object.system.systemPort + "]" + "</option>");			
 			});
 			
 			$selectSystem.change(function(){
 				var systemId = $(this).val();
-				var object = data.testObject[systemId];
+				var object = data.data[systemId];
 				if (object != null) {
 					$F.find("#request-url").text(object.requestUrl);
 					$F.find("#select-data").html('');
@@ -455,7 +454,7 @@ function renderSceneTestPage(flag) {
 					$F.find("#scene-test-request-message").val('');
 					return false;
 				}
-				$F.find("#scene-test-request-message").val(data.testObject[systemId]["requestData"][$(that).val()]["dataJson"]);				
+				$F.find("#scene-test-request-message").val(data.data[systemId]["requestData"][$(that).val()]["dataJson"]);
 			});
 			$selectSystem.change();
 									

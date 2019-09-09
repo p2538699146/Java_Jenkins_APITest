@@ -181,7 +181,7 @@ var eventList = {
 				$.get(REQUEST_URL.TEST_SET.GET_CATEGORY_NODES, function(json) {
 					$(".page-container").spinModal(); 
        	 			if (json.returnCode == 0) {
-       	 				$.each(json.nodes, function(i, node) {
+       	 				$.each(json.data, function(i, node) {
        	 					createOption(node, $("#select-object"), "");
        	 				});
        	 				$(".page-container").spinModal(false); 

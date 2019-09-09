@@ -122,7 +122,7 @@ var mySetting = {
        	 	renderCallback:function(obj){
        	 		$.get(REQUEST_URL.TEST_SET.GET_CATEGORY_NODES, function(json) {
        	 			if (json.returnCode == 0) {
-       	 				$.each(json.nodes, function(i, node) {
+       	 				$.each(json.data, function(i, node) {
        	 					createOption(node, $("#parentId"), "");
        	 				});
 	       	 			if (obj != null) {
@@ -138,9 +138,9 @@ var mySetting = {
        	 	},
        	 ajaxCallbackFun:function (data) {
        		 if (data.returnCode == 0) {
-       			 if (data.object.parented == 1) { //如果是测试集代表编辑的是当前测试集信息
+       			 if (data.data.parented == 1) { //如果是测试集代表编辑的是当前测试集信息
        				 //更新导航条测试集名称
-       				$("#current-set-name").html('<span class="c-gray en">&gt;</span> 当前测试集 - ' + data.object.setName);
+       				$("#current-set-name").html('<span class="c-gray en">&gt;</span> 当前测试集 - ' + data.data.setName);
        			 }
        			 createNodeTree();//更新目录树结构
        			 layer.closeAll('page');
@@ -195,7 +195,7 @@ function createNodeTree () {
 	 			layui.use('tree', function(){
 	 			  layui.tree({
 	 			  elem: '#setTree' //传入元素选择器
-	 			  ,nodes: json.nodes
+	 			  ,nodes: json.data
 	 			  ,callback:function () {
 	 				 currentSetId != null && $("#" + currentSetId) 
 	 				 	&&　 $("#" + currentSetId).parent("li").attr("style", "background-color:#C6C6C6");

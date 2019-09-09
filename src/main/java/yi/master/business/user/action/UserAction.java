@@ -21,8 +21,11 @@ import yi.master.business.user.bean.User;
 import yi.master.business.user.service.UserService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.MD5Util;
+import yi.master.util.ParameterMap;
 import yi.master.util.PracticalUtils;
 
 
@@ -73,8 +76,7 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 * @throws NoSuchAlgorithmException 
 	 */
-	public String toLogin() throws NoSuchAlgorithmException {	
-		
+	public String toLogin() throws NoSuchAlgorithmException {
 		boolean passwdLogin = false;
 		if (PracticalUtils.isNormalString(model.getLoginIdentification())) {
 			model = userService.loginByIdentification(model.getUsername(), model.getLoginIdentification());
@@ -82,47 +84,42 @@ public class UserAction extends BaseAction<User>{
 			//如果是账号密码登录，先验证验证码
 			if (StringUtils.isBlank(verifyCode) 
 					|| !verifyCode.equalsIgnoreCase(FrameworkUtil.getSessionMap().get(SystemConsts.SESSION_ATTRIBUTE_VERIFY_CODE).toString())) {
-				setReturnInfo(ReturnCodeConsts.VERIFY_CODE_ERROR, "验证码不正确");
-				return SUCCESS;
+				throw new YiException(AppErrorCode.USER_VERIFY_CODE_ERROR);
 			}
 			model = userService.login(model.getUsername(), MD5Util.code(model.getPassword()));
 			passwdLogin = true;
 		}
 		
 		User user = (User)FrameworkUtil.getSessionMap().get("user");
-		
-		int returnCode = ReturnCodeConsts.USER_ERROR_ACCOUT_CODE;
-		String msg = "账号或密码不正确,请重新输入!";
-		
-		if (model != null) {
-			if (user != null && user.getUserId() == model.getUserId()) {
-				jsonMap.put("returnCode", ReturnCodeConsts.USER_RE_LOGIN_CODE);
-				jsonMap.put("msg", "你已登录该账号,请切换至不同的账号!");
-				return SUCCESS;
-			}
-			returnCode = ReturnCodeConsts.USER_ACCOUNT_LOCK_CODE;
-			msg = "你的账号已被锁定,请联系管理员进行解锁。";
-			
-			if (model.getStatus().equals("0")) {
-				jsonMap.put("data", model);
-				jsonMap.put("lastLoginTime", PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, model.getLastLoginTime()));
-				returnCode = ReturnCodeConsts.SUCCESS_CODE;
-				msg = "";
-				//将用户信息放入session中
-				FrameworkUtil.getSessionMap().put("user", model);	
-				FrameworkUtil.getSessionMap().put("lastLoginTime", PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, model.getLastLoginTime()));
-				model.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
-				
-				if (passwdLogin == true) {
-					model.setLoginIdentification(PracticalUtils.createUserLoginIdentification(model.getPassword()));
-				}
-				
-				userService.edit(model);
-				LOGGER.info("用户" + model.getRealName() + "[ID=" + model.getUserId() + "]" + "登录成功!");				
-			}			
-		} 
-		jsonMap.put("returnCode", returnCode);
-		jsonMap.put("msg", msg);
+
+		if (model == null) {
+			throw new YiException(AppErrorCode.USER_ERROR_ACCOUNT);
+		}
+
+		if (user != null && user.getUserId() == model.getUserId()) {
+			throw new YiException(AppErrorCode.USER_RE_LOGIN);
+		}
+
+		if (!"0".equalsIgnoreCase(model.getStatus())) {
+			throw new YiException(AppErrorCode.USER_ACCOUNT_LOCK);
+		}
+
+		setData(new ParameterMap().put("user", model)
+				.put("lastLoginTime", PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, model.getLastLoginTime())));
+
+		//将用户信息放入session中
+		FrameworkUtil.getSessionMap().put("user", model);
+		FrameworkUtil.getSessionMap().put("lastLoginTime", PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, model.getLastLoginTime()));
+		model.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
+
+		if (passwdLogin == true) {
+			model.setLoginIdentification(PracticalUtils.createUserLoginIdentification(model.getPassword()));
+		}
+
+		userService.edit(model);
+		LOGGER.info("用户" + model.getRealName() + "[ID=" + model.getUserId() + "]" + "登录成功!");
+
+
 		return SUCCESS;		
 	}
 	
@@ -134,7 +131,7 @@ public class UserAction extends BaseAction<User>{
 	public String logout() {
 		LOGGER.info("用户" + ((User)FrameworkUtil.getSessionMap().get("user")).getRealName() + "已登出!");
 		((SessionMap)FrameworkUtil.getSessionMap()).invalidate();
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);			
+
 		return SUCCESS;
 	}
 	
@@ -143,10 +140,10 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String judgeLogin() {
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
-		jsonMap.put("returnCode", ReturnCodeConsts.NOT_LOGIN_CODE);
-		if (user != null) {
-			jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		User user = FrameworkUtil.getLoginUser();
+
+		if (user == null) {
+			throw new YiException(AppErrorCode.NO_LOGIN);
 		}
 		return SUCCESS;
 	}
@@ -156,8 +153,6 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String getLoginUserInfo() {
-		
-		//User user = (User)StrutsUtils.getSessionMap().get("user");				
 		User user = null;
 		
 		if (StringUtils.isNotEmpty(token)) {
@@ -175,25 +170,21 @@ public class UserAction extends BaseAction<User>{
 		}
 		
 		if (user == null ) {
-			user = (User) FrameworkUtil.getSessionMap().get("user");
+			user = FrameworkUtil.getLoginUser();
 		}
-		
-		jsonMap.put("msg", "用户未登录");
-		jsonMap.put("returnCode", ReturnCodeConsts.NOT_LOGIN_CODE);
-		
-		if (user != null) {
-			jsonMap.put("data", user);
-			jsonMap.put("lastLoginTime", FrameworkUtil.getSessionMap().get("lastLoginTime"));
-			jsonMap.put("msg", "");
-			
-			FrameworkUtil.getSessionMap().put("user", user);	
-			//StrutsUtils.getSessionMap().put("lastLoginTime", PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, user.getLastLoginTime()));
-			
-			user.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
-			userService.edit(user);
-						
-			jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		if (user == null) {
+			throw new YiException(AppErrorCode.NO_LOGIN);
 		}
+
+		setData(new ParameterMap().put("user", user)
+				.put("lastLoginTime", FrameworkUtil.getSessionMap().get("lastLoginTime")));
+
+		FrameworkUtil.getSessionMap().put("user", user);
+
+		user.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
+		userService.edit(user);
+
 		return SUCCESS;
 	}
 	
@@ -205,7 +196,7 @@ public class UserAction extends BaseAction<User>{
 		User user = (User)FrameworkUtil.getSessionMap().get("user");		
 		userService.updateRealName(model.getRealName(), user.getUserId());
 		user.setRealName(model.getRealName());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 	}
 	
@@ -214,14 +205,10 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String verifyPasswd() {
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);	
-		
+		User user = FrameworkUtil.getLoginUser();
 		try {
 			if (!user.getPassword().equals(MD5Util.code(model.getPassword()))) {
-				
-				jsonMap.put("returnCode", ReturnCodeConsts.USER_VALIDATE_ERROR_CODE);
-				jsonMap.put("msg", "密码验证失败!");		
+				throw new YiException(AppErrorCode.USER_PASSWORD_VALIDATE_ERROR);
 			}
 		} catch (NoSuchAlgorithmException e) {
 			LOGGER.error("加密失败!", e);
@@ -246,7 +233,7 @@ public class UserAction extends BaseAction<User>{
 			LOGGER.error("加密失败!", e);
 			return ERROR;
 		}		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 	}
 	
@@ -257,12 +244,10 @@ public class UserAction extends BaseAction<User>{
 	@Override
 	public String del() {
 		if (userService.get(id).getUsername().equals("admin")) {
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			jsonMap.put("msg", "不能删除预置管理员用户!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除预置管理员用户!");
 		}
 		userService.delete(id);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 	}
 	
@@ -272,12 +257,10 @@ public class UserAction extends BaseAction<User>{
 	 */
 	public String lock() {
 		if (model.getUsername().equals("admin")) {
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			jsonMap.put("msg", "不能锁定预置管理员用户!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能锁定预置管理员用户!");
 		}
 		userService.lockUser(model.getUserId(), mode);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 		
 	}
@@ -293,7 +276,7 @@ public class UserAction extends BaseAction<User>{
 		} catch (NoSuchAlgorithmException e) {
 			LOGGER.warn("NoSuchAlgorithmException", e);
 		}
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 	}
 	
@@ -306,9 +289,7 @@ public class UserAction extends BaseAction<User>{
 	public String edit() {
 		User u1 = userService.validateUsername(model.getUsername(), model.getUserId());
 		if(u1 != null){
-			jsonMap.put("returnCode", ReturnCodeConsts.NAME_EXIST_CODE);
-			jsonMap.put("msg", "用户名已存在!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NAME_EXIST.getCode(), "用户名已存在!");
 		}
 		if (model.getUserId() == null) {
 			//新增
@@ -329,7 +310,7 @@ public class UserAction extends BaseAction<User>{
 			model.setPassword(u2.getPassword());			
 		}
 		userService.edit(model);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 	}
 	
@@ -340,13 +321,11 @@ public class UserAction extends BaseAction<User>{
 	 */
 	public String filter() {
 		List<User> users = userService.findByRealName(model.getRealName());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);	
 		
 		if (users.size() == 0) {
-			jsonMap.put("returnCode", ReturnCodeConsts.NO_RESULT_CODE);
-			jsonMap.put("msg", "没有查询到指定的用户");
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "没有查询到指定的用户");
 		}
-		jsonMap.put("data",users );
+		setData(users);
 		return SUCCESS;
 	}
 	
@@ -359,7 +338,7 @@ public class UserAction extends BaseAction<User>{
 
 		FrameworkUtil.getSessionMap().put(SystemConsts.SESSION_ATTRIBUTE_VERIFY_CODE
 				, lineCaptcha.getCode());
-		setSuccessReturnInfo().setData("img", lineCaptcha.getImageBase64());
+		setData(lineCaptcha.getImageBase64());
 		return SUCCESS;
 	}	
 	

@@ -71,7 +71,7 @@
     		 var that = this;
     		 $.get(REQUEST_URL.LOGIN.CREATE_VERIFY_CODE, function(data){
         		 if (data.returnCode == 0) {
-        			 $(that).attr('src', 'data:image/png;base64,' + data.img);
+        			 $(that).attr('src', 'data:image/png;base64,' + data.data);
         		 }
         	 });
     	 });
@@ -126,7 +126,7 @@
             if(data.returnCode==0){
             	if($("#online").is(':checked') == true && loginIdentification == null){
             		setCookie("username", username, 7);
-            		setCookie("loginIdentification", data.data.loginIdentification, 7);
+            		setCookie("loginIdentification", data.data.user.loginIdentification, 7);
             	}
                 location.href="index.html";
             }else {

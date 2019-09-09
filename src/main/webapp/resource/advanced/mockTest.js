@@ -188,8 +188,8 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			$.get(REQUEST_URL.INTERFACE_MOCK.GET, {id:data.mockId}, function(json){
 				if (json.returnCode == 0) {
-					currentSettingConfig = JSON.parse(json.object.requestValidate);
-					layer_show(json.object.mockUri + "  Mock入参验证设定", templates["mock-request-validate-setting"](currentSettingConfig), 840, 450, 1, function(layero, index){
+					currentSettingConfig = JSON.parse(json.data.requestValidate);
+					layer_show(json.data.mockUri + "  Mock入参验证设定", templates["mock-request-validate-setting"](currentSettingConfig), 840, 450, 1, function(layero, index){
 						layero.find("#method").val(currentSettingConfig.method && (currentSettingConfig.method.toUpperCase()));
 						layero.find("#messageType").val(currentSettingConfig.messageType && (currentSettingConfig.messageType.toUpperCase()));
 						layero.find("#mockId").val(data.mockId);
@@ -332,8 +332,8 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			$.get(REQUEST_URL.INTERFACE_MOCK.GET, {id:data.mockId}, function(json){
 				if (json.returnCode == 0) {
-					currentSettingConfig = JSON.parse(json.object.responseMock);
-					layer_show(json.object.mockUri + "  Mock出参模拟设定", templates["mock-response-setting"](currentSettingConfig), 900, 675, 1, function(layero, index){
+					currentSettingConfig = JSON.parse(json.data.responseMock);
+					layer_show(json.data.mockUri + "  Mock出参模拟设定", templates["mock-response-setting"](currentSettingConfig), 900, 675, 1, function(layero, index){
 						layero.find("#format").val(currentSettingConfig.format);
 						layero.find("#messageType").val(currentSettingConfig.messageType && (currentSettingConfig.messageType.toUpperCase()));
 						layero.find("#mockId").val(data.mockId);

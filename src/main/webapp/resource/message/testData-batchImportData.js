@@ -85,8 +85,8 @@ var mySetting = {
 	   	 	messageSceneId = GetQueryString("messageSceneId");
 	   	 	$.post(REQUEST_URL.TEST_DATA.GET_SETTING_DATA, {messageSceneId:messageSceneId}, function(json) {
 	   	 		if (json.returnCode == 0) {
-	   	 			params = json.params;
-	   	 			dataMsg = json.dataMsg;
+	   	 			params = json.data.params;
+	   	 			dataMsg = json.data.dataMsg;
 	   	 			var param = $("#parameters");
 	   	 			$.each(params, function(i, n) {
 	   	 				param.append('<button class="btn btn-sm radius btn-success" title="' + n.path + '" id="' + n.parameterId + '">' + n.parameterIdentify + '</button>');
@@ -178,7 +178,7 @@ function confrimData() {
 		$(".page-container").spinModal();
 		$.post(REQUEST_URL.TEST_DATA.IMPORT_DATA_VALUES, {ids:info.ids, paths:info.paths, datas:dataValues, messageSceneId:messageSceneId}, function(json) {
 			if (json.returnCode == 0) {				
-				layer.alert("本次共提交数据" + json.totalCount + "条,成功" + json.successCount + "条,失败" + json.failCount + "条!"
+				layer.alert("本次共提交数据" + json.data.totalCount + "条,成功" + json.data.successCount + "条,失败" + json.data.failCount + "条!"
 						,{icon:1, title:"提示"}, function(index) {
 							layer.close(index);
 							layer.msg("提交成功,请返回查看数据或者继续提交数据!", {icon:1, time:1500});

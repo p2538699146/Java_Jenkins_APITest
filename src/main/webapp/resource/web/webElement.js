@@ -259,7 +259,7 @@ var mySetting = {
 			
 			$.post(REQUEST_URL.WEB_ELEMENT.GET, {id:parentElementId}, function(json) {
 				if (json.returnCode == 0) {
-					parentElement = json.object;
+					parentElement = json.data;
 					$('.breadcrumb > i:eq(0)').after(" " + parentElement.elementPath);
 				}
 			});

@@ -14,6 +14,8 @@ import yi.master.business.message.bean.TestSet;
 import yi.master.business.message.service.TestReportService;
 import yi.master.business.message.service.TestSetService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.notify.NotifyMail;
@@ -49,12 +51,9 @@ public class TestReportAction extends BaseAction<TestReport> {
 
 	@Override
 	public String get() {
-		
 		model = testReportService.get(model.getReportId());
 		model.countSceneNum();
-		
-		jsonMap.put("report", model);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(model);
 		return SUCCESS;
 	}
 
@@ -91,9 +90,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 			report.setDetailsJson(PracticalUtils.setReportDetails(report));
 			testReportService.edit(report);						
 		}
-		
-		jsonMap.put("details", report.getDetailsJson());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(report.getDetailsJson());
 		return SUCCESS;
 	}
 	
@@ -103,14 +100,11 @@ public class TestReportAction extends BaseAction<TestReport> {
 	 */
 	public String sendMail(){
 		TestReport report = testReportService.get(model.getReportId());
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		if (report == null) {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "不存在的测试报告,请检查!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.REPORT_INFO_NOT_EXIST);
 		}
 		if ("N".equals(report.getFinishFlag()) || report.getTrs().size() < 1) {
-			setReturnInfo(ReturnCodeConsts.ILLEGAL_HANDLE_CODE, "该项测试还未完成或者没有任何测试结果,请确认!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.REPORT_TEST_NO_DATA);
 		}
 		//发送测试报告
 		TestSet set = testSetService.get(Integer.valueOf(report.getTestMode()));
@@ -123,7 +117,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 		
 		String result = NotifyMail.sendEmail(new ReportEmailCreator(report), receiveAddress_s, copyAddress_s);
 		if (!"true".equalsIgnoreCase(result)) {
-			setReturnInfo(ReturnCodeConsts.SYSTEM_ERROR_CODE, result);
+			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), result);
 		}
 		
 		return SUCCESS;
@@ -135,13 +129,10 @@ public class TestReportAction extends BaseAction<TestReport> {
 	 */
 	public String generateStaticReportHtml() {
 		TestReport report = testReportService.get(model.getReportId());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		
 		//判断测试是否已经完成 /判断是否有测试结果
 		if ("N".equals(report.getFinishFlag()) || report.getTrs().size() < 1) {
-			jsonMap.put("msg", "该项测试还未完成或者没有任何测试结果,请确认之后再查看离线报告!");
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.REPORT_TEST_NO_DATA);
 		}
 
 		//最终生成文件： reportId_startTime.html
@@ -168,10 +159,9 @@ public class TestReportAction extends BaseAction<TestReport> {
 		}
 		
 		if (successFlag) {
-			jsonMap.put("path", report.getReportHtmlPath());
+			setData(report.getReportHtmlPath());
 		} else {
-			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			jsonMap.put("msg", msg);
+			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), msg);
 		}
 		
 		return SUCCESS;

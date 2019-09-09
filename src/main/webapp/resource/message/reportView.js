@@ -76,7 +76,7 @@ var mySetting = {
    	 		reportId = GetQueryString("reportId"); 
 	   	 	$.get(REQUEST_URL.REPORT.GET_DETAILS + "?reportId=" + reportId, function(data){
 				if (data.returnCode == 0) {
-					data = JSON.parse(data.details);
+					data = JSON.parse(data.data);
 					$(".panel-heading").text(data.title);
 			        $("#sceneNum").append(data.desc.sceneNum);
 			        $("#successNum").append(data.desc.successNum);
@@ -90,9 +90,7 @@ var mySetting = {
 			        });
 			        
 			        resultData = data.data;
-			        
 			        renderReportView();
-			         
 				} else {
 					layer.alert(data.msg,{icon:5});
 				}

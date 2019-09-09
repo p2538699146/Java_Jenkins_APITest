@@ -8,6 +8,8 @@ package yi.master.business.base.bean;
  * @date 2019/9/4 19:08
  */
 public class PageReturnJSONObject extends ReturnJSONObject {
+    private static final long serialVersionUID = 1L;
+
     private Integer draw;
     private Integer recordsTotal;
     private Integer recordsFiltered;

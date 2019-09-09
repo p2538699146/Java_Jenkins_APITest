@@ -38,32 +38,7 @@ public class SceneValidateRuleAction extends BaseAction<SceneValidateRule> {
 		super.setBaseService(sceneValidateRuleService);
 		this.sceneValidateRuleService = sceneValidateRuleService;
 	}
-	
-	/**
-	 * 获取指定测试场景的验证规则(只限全文验证和边界验证)
-	 * @return
-	 */
-	public String getValidate() {
-		String type = model.getValidateMethodFlag();
-		model = sceneValidateRuleService.getValidate(messageSceneId, type);
-		
-		if (model == null) {
-			model = new SceneValidateRule();
-			model.setValidateValue("");
-			model.setParameterName("");
-			model.setValidateMethodFlag(type);
-			model.setStatus("0");			
-			model.setMessageScene(new MessageScene(messageSceneId));
-			model.setValidateId(sceneValidateRuleService.save(model));
-		}
-		
-		jsonMap.put("validateId", model.getValidateId());
-		jsonMap.put("validateValue", model.getValidateValue());
-		jsonMap.put("parameterName", model.getParameterName());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
-		
-		return SUCCESS;
-	}
+
 	
 	/**
 	 * 全文验证规则更新
@@ -71,7 +46,6 @@ public class SceneValidateRuleAction extends BaseAction<SceneValidateRule> {
 	 */
 	public String validateFullEdit() {
 		sceneValidateRuleService.updateValidate(model.getValidateId(), model.getValidateValue(), model.getParameterName());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -82,8 +56,7 @@ public class SceneValidateRuleAction extends BaseAction<SceneValidateRule> {
 	public String getValidates() {
 		List<SceneValidateRule> rules = sceneValidateRuleService.getParameterValidate(messageSceneId);
 
-		jsonMap.put("data", rules);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(rules);
 		return SUCCESS;
 	}
 	
@@ -93,8 +66,6 @@ public class SceneValidateRuleAction extends BaseAction<SceneValidateRule> {
 	 */
 	public String updateValidateStatus() {
 		sceneValidateRuleService.updateStatus(model.getValidateId(), model.getStatus());
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	

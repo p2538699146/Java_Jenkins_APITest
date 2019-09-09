@@ -131,7 +131,6 @@ var REQUEST_URL = {
     },
     //验证规则
     VALIDATE: {
-        GET: "validate-getValidate",
         FULL_EDIT: "validate-validateFullEdit",
         DEL: "validate-del",
         GET:"validate-get",
@@ -319,7 +318,7 @@ var REQUEST_URL = {
         GET:"webcase-get",
         EDIT:"webcase-edit",
         LIST: "webcase-list",
-        CHANGE_BROWSER_TYPE: "webcase-changeBroswerType",
+        CHANGE_BROWSER_TYPE: "webcase-changeBrowserType",
         UPDATE_CONFIG_JSON: "webcase-updateConfig"
     },
     //web步骤

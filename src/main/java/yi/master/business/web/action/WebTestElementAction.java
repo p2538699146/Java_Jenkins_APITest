@@ -16,6 +16,8 @@ import yi.master.business.web.bean.WebTestElement;
 import yi.master.business.web.service.WebTestElementService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.WebTestKeys;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
 @Controller
@@ -79,8 +81,7 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 	
 	@Override
 	public String edit() {
-			
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		model.setParentElement(webTestElementService.get(model.getParentId()));
 		if (model.getElementId() == null) {
 			model.setCreateUser(user);
@@ -88,14 +89,13 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 			model.setElementId(webTestElementService.save(model));			
 		} else {
 			if (model.getElementId().equals(1) || model.getElementId().equals(2)) {
-				setReturnInfo(ReturnCodeConsts.ILLEGAL_HANDLE_CODE, "不能修改预置节点信息!");
-				return SUCCESS;
+				throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能修改预置节点信息!");
 			}
 			
 			model.logModify(user.getRealName(), webTestElementService.get(model.getElementId()));
 			webTestElementService.edit(model);
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "").setData("object", model);
+		setData(model);
 		return SUCCESS;
 	}
 	
@@ -103,8 +103,7 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 	@Override
 	public String del() {
 		if (id.equals(1) || id.equals(2)) {
-			setReturnInfo(ReturnCodeConsts.ILLEGAL_HANDLE_CODE, "不能删除预置节点!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除预置节点!");
 		}
 		return super.del();
 	}
@@ -151,11 +150,9 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 		model = webTestElementService.get(model.getElementId());
 		if (model != null && parentElement != null && parentElement.getElementType().matches(WebTestKeys.WEB_ELEMENT_TYPE_FRAME + "|" + WebTestKeys.WEB_ELEMENT_TYPE_PAGE)) {
 			targetElement = parentElement;
-			setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 			return true;
 		}
-		setReturnInfo(ReturnCodeConsts.ILLEGAL_HANDLE_CODE, "参数不正确!");
-		return false;
+		throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "参数不正确!");
 	}
 	
 	public void setNodeFlag(String nodeFlag) {

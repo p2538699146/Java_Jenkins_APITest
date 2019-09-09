@@ -20,12 +20,12 @@ public class YiException extends RuntimeException {
         this.msg = code.getMsg();
     }
 
-    public YiException(AppErrorCode code, String ...params) {
+    public YiException(AppErrorCode code, Object ...params) {
         this.code = code.getCode();
         this.msg = StrUtil.format(code.getMsg(), params);
     }
 
-    public YiException(AppErrorCode code, Throwable e, String ...params) {
+    public YiException(AppErrorCode code, Throwable e, Object ...params) {
         super(e);
         this.code = code.getCode();
         this.msg = StrUtil.format(code.getMsg(), params);

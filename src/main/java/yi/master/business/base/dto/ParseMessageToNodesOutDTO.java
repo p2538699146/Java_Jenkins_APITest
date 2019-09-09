@@ -1,7 +1,11 @@
 package yi.master.business.base.dto;
 
 
-public class ParseMessageToNodesOutDTO {
+import java.io.Serializable;
+
+public class ParseMessageToNodesOutDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Object data;
     private Integer rootPid;
     private String error;

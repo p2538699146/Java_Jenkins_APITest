@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import yi.master.business.base.action.BaseAction;
+import yi.master.business.base.dto.ParseMessageToNodesOutDTO;
 import yi.master.business.message.bean.InterfaceInfo;
 import yi.master.business.message.bean.Message;
 import yi.master.business.message.bean.MessageScene;
@@ -30,6 +31,8 @@ import yi.master.business.testconfig.bean.GlobalVariable;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.parse.MessageParse;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.PracticalUtils;
 import yi.master.util.excel.ImportMessageScene;
 
@@ -43,10 +46,6 @@ import yi.master.util.excel.ImportMessageScene;
 @Controller
 @Scope("prototype")
 public class MessageSceneAction extends BaseAction<MessageScene>{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Integer messageId;
@@ -89,9 +88,7 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 		Set<Parameter> params = parseUtil.importMessageToParameter(paramsJson, new HashSet<Parameter>());
 		
 		if (params == null) {
-			jsonMap.put("msg", "报文格式不正确，请检查出入参报文!");
-			jsonMap.put("returnCode", ReturnCodeConsts.NO_RESULT_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "报文格式不正确，请检查出入参报文!");
 		}
 		
 		//自定义parmeterId
@@ -103,15 +100,9 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 		Object[] os = PracticalUtils.getParameterZtreeMap(params);
 		
 		if (os == null) {
-			jsonMap.put("msg", "没有可用的参数,请检查!");
-			jsonMap.put("returnCode", ReturnCodeConsts.NO_RESULT_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "没有可用的参数,请检查!");
 		}
-		
-		jsonMap.put("data", os[0]);
-		jsonMap.put("rootPid", Integer.parseInt(os[1].toString()));
-		jsonMap.put("error", os[2].toString());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);	
+		setData(new ParseMessageToNodesOutDTO(os[0], Integer.parseInt(os[1].toString()), os[2].toString()));
 		return SUCCESS;
 	}
 	
@@ -123,18 +114,14 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 		String responseMsg = messageSceneService.get(model.getMessageSceneId()).getResponseExample();
 		
 		if (StringUtils.isBlank(responseMsg)) {
-			jsonMap.put("msg", "该测试场景没有返回示例报文,请先设置!");
-			jsonMap.put("returnCode", ReturnCodeConsts.NO_RESULT_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "该测试场景没有返回示例报文,请先设置!");
 		}	
 		
 		MessageParse parseUtil = MessageParse.getParseInstance(messageSceneService.get(model.getMessageSceneId()).getMessage().getMessageType());
 			
 		Set<Parameter> params = parseUtil.judgeMessageType(responseMsg).importMessageToParameter(responseMsg, new HashSet<Parameter>());
 		if (params == null) {
-			jsonMap.put("msg", "尚不支持此类型的报文格式，请检查出报文格式!");
-			jsonMap.put("returnCode", ReturnCodeConsts.NO_RESULT_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.MESSAGE_VALIDATE_ERROR.getCode(), "尚不支持此类型的报文格式，请检查出报文格式!");
 		}
 		
 		//自定义parmeterId
@@ -146,15 +133,9 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 		Object[] os = PracticalUtils.getParameterZtreeMap(params);
 		
 		if (os == null) {
-			jsonMap.put("msg", "没有可用的参数,请检查!");
-			jsonMap.put("returnCode", ReturnCodeConsts.NO_RESULT_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "没有可用的参数,请检查!");
 		}
-		
-		jsonMap.put("data", os[0]);
-		jsonMap.put("rootPid", Integer.parseInt(os[1].toString()));
-		jsonMap.put("error", os[2].toString());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);	
+		setData(new ParseMessageToNodesOutDTO(os[0], Integer.parseInt(os[1].toString()), os[2].toString()));
 		return SUCCESS;
 	}
 	
@@ -165,9 +146,7 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 	 * @return
 	 */
 	public String updateResponseExample () {
-		
 		messageSceneService.updateResponseExample(model.getMessageSceneId(), model.getResponseExample());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -185,19 +164,14 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 	 * @return
 	 */
 	public String importFromExcel () {
-		
 		Message message = messageService.get(messageId);
-		
 		if (message == null) {
-			jsonMap.put("msg", "报文信息不存在!");
-			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.MESSAGE_INFO_NOT_EXITS);
 		}
 		
 		Map<String, Object> result = ImportMessageScene.importToDB(path, message);
-		
-		jsonMap.put("result", result);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(result);
 		return SUCCESS;
 	}
 	
@@ -226,9 +200,6 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 		} else {
 			messageSceneService.edit(model);
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
 		return SUCCESS;
 	}
 	
@@ -238,7 +209,6 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 	 */
 	public String changeValidateRule() {		
 		messageSceneService.updateValidateFlag(model.getMessageSceneId(), model.getValidateRuleFlag());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -247,7 +217,6 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 	 * @return
 	 */
 	public String getTestObject () {
-		
 		model = messageSceneService.get(model.getMessageSceneId());		
 		Message msg = model.getMessage();
 		InterfaceInfo info = msg.getInterfaceInfo();
@@ -270,9 +239,7 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 		}
 		
 		if (!normal) {
-			jsonMap.put("msg", s);
-			jsonMap.put("returnCode", ReturnCodeConsts.MISS_PARAM_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.MISS_PARAM.getCode(), s);
 		}
 		
 		Map<String, Object> testObject = new HashMap<String, Object>();
@@ -297,11 +264,8 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 			object.put("system", system);
 			testObject.put(String.valueOf(system.getSystemId()), object);
 		}
-		
-		
-		jsonMap.put("testObject", testObject);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+
+		setData(testObject);
 		return SUCCESS;
 	}
 		
@@ -326,9 +290,7 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 				noDataScenes.add(ms);
 			}								
 		}	
-		
-		jsonMap.put("data", noDataScenes);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(noDataScenes);
 		return SUCCESS;
 	}
 	

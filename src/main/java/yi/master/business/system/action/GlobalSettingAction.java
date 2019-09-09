@@ -1,5 +1,6 @@
 package yi.master.business.system.action;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.statement.AnalyzeUtil;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.ParameterMap;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 
@@ -61,10 +63,7 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 	 * @return
 	 */
 	public String getStatisticalQuantity () {
-		
-		jsonMap.put("counts", AnalyzeUtil.countStatistics());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		setData(AnalyzeUtil.countStatistics());
 		return SUCCESS;
 	}
 	
@@ -74,13 +73,11 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 	 */
 	public String getWebSettings() {
 		Map<String,GlobalSetting> settingMap = CacheUtil.getGlobalSettingMap();
-		
+		Map<String, Object> map = new HashMap<>();
 		for (GlobalSetting setting:settingMap.values()) {
-			jsonMap.put(setting.getSettingName(), CacheUtil.getSettingValue(setting.getSettingName()));
+			map.put(setting.getSettingName(), CacheUtil.getSettingValue(setting.getSettingName()));
 		}
-
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		setData(map);
 		return SUCCESS;
 	}
 
@@ -89,11 +86,9 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 	 * @return
 	 */
 	public String checkSystemVersion () {
-		jsonMap.put("newVersion", PracticalUtils.checkVersion());
-		jsonMap.put("versionUpgradeUrl", SystemConsts.VERSION_UPGRADE_URL);
-		jsonMap.put("version", SystemConsts.VERSION);
-		setSuccessReturnInfo();
-
+		setData(new ParameterMap().put("newVersion", PracticalUtils.checkVersion())
+				.put("versionUpgradeUrl", SystemConsts.VERSION_UPGRADE_URL)
+				.put("version", SystemConsts.VERSION));
 		return SUCCESS;
 	}
 	
@@ -106,41 +101,9 @@ public class GlobalSettingAction extends BaseAction<GlobalSetting>{
 			globalSettingService.updateSetting(entry.getKey(), ((String[])entry.getValue())[0]);
 			CacheUtil.updateGlobalSettingValue(entry.getKey(), ((String[])entry.getValue())[0]);
 		}
-
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
 		return SUCCESS;
 	}
 	
 	/*****************************************************************************************************/
-/*	public String setRedis () {
-		List<GlobalSetting> settings = globalSettingService.findAll();
-		Map<String, String> map = null;
-		for (GlobalSetting s:settings) {
-			map = new HashMap<String, String>();
-			map.put("settingId", String.valueOf(s.getSettingId()));
-			map.put("settingName", s.getSettingName());
-			map.put("settingValue", s.getSettingValue());
-			map.put("defaultValue", s.getDefaultValue());
-			map.put("mark", s.getMark());
-			testRedisService.set("setting" + s.getSettingId(), map, -1);
-		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		return SUCCESS;
-		
-	}
-	
-	public String listRedis () {
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		return SUCCESS;
-	}
-
-	
-	public String getRedis () {
-		jsonMap.put("object", testRedisService.get("setting" + model.getSettingId()));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		return SUCCESS;
-	}*/
 
 }

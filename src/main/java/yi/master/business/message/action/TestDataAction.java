@@ -20,6 +20,9 @@ import yi.master.business.message.service.TestDataService;
 import yi.master.constant.MessageKeys;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.parse.MessageParse;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
+import yi.master.util.ParameterMap;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 import yi.master.util.message.JsonUtil;
@@ -82,8 +85,7 @@ public class TestDataAction extends BaseAction<TestData> {
 			data.setStatus(model.getStatus());
 			testDataService.edit(data);
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 	}
 	
@@ -108,14 +110,10 @@ public class TestDataAction extends BaseAction<TestData> {
 	public String updateParamsData () {
 		
 		if (CacheUtil.checkLockedTestData(model.getDataId())) {
-			
-			jsonMap.put("msg", "该条测试数据正在被使用，请稍后再更新!");
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该条测试数据正在被使用，请稍后再更新!");
 		}
 		
 		testDataService.updateParamsData(model.getDataId(), model.getParamsData());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -130,9 +128,8 @@ public class TestDataAction extends BaseAction<TestData> {
 		MessageParse parseUtil = MessageParse.getParseInstance(model.getMessageScene().getMessage().getMessageType());
 		
 		model.setDataJson(parseUtil.depacketizeMessageToString(model.getMessageScene().getMessage().getComplexParameter(), model.getParamsData()));
-		
-		jsonMap.put("object", model);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(model);
 		return SUCCESS;
 	}
 	
@@ -142,7 +139,6 @@ public class TestDataAction extends BaseAction<TestData> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getSettingData() {
-		
 		Message msg = messageSceneService.get(messageSceneId).getMessage();
 		
 		MessageParse parseUtil = MessageParse.getParseInstance(msg.getMessageType());
@@ -151,12 +147,8 @@ public class TestDataAction extends BaseAction<TestData> {
 		try {
 			params = msg.getComplexParameter().getEnableSettingDataParameter(null);
 		} catch (Exception e) {
-			
 			LOGGER.warn(msg.getInterfaceName() + "-" + msg.getMessageName() + ":" + e.getMessage(), e);
-			
-			jsonMap.put("msg", "接口参数有改动,请检查或者重新设置该场景所属报文的入参规则!");
-			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.INTERFACE_PARAMS_HAS_BEEN_CHANGE);
 		}
 		
 		
@@ -185,10 +177,8 @@ public class TestDataAction extends BaseAction<TestData> {
 		}					
 		
 		String dataMsg = parseUtil.depacketizeMessageToString(msg.getComplexParameter(), paramsData);	
-		
-		jsonMap.put("dataMsg", dataMsg);
-		jsonMap.put("params", paramsMap);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(new ParameterMap().put("dataMsg", dataMsg).put("params", paramsMap));
 		return SUCCESS;
 	}
 	
@@ -202,8 +192,7 @@ public class TestDataAction extends BaseAction<TestData> {
 		
 		String dataMsg = parseUtil.depacketizeMessageToString(msg.getComplexParameter(), model.getParamsData());
 		
-		jsonMap.put("dataMsg", dataMsg);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(dataMsg);
 		return SUCCESS;
 	}
 
@@ -278,27 +267,19 @@ public class TestDataAction extends BaseAction<TestData> {
 			successCount++;
 		}
 		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
 		if (successCount < 1) {
-			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			jsonMap.put("msg", "未能成功导入任何数据,请检查!");
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "未能成功导入任何数据,请检查!");
 		}
-		jsonMap.put("totalCount", totalCount);
-		jsonMap.put("successCount", successCount);
-		jsonMap.put("failCount", failCount);
+
+		setData(new ParameterMap().put("totalCount", totalCount).put("successCount", successCount).put("failCount", failCount));
 		return SUCCESS;
 	}	
 	
 	
 	@Override
 	public String del() {
-		
 		if (CacheUtil.checkLockedTestData(model.getDataId())) {
-			
-			jsonMap.put("msg", "该条测试数据正在被使用，请稍后再更新!");
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该条测试数据正在被使用，请稍后再更新!");
 		}
 
 		return super.del();
@@ -306,12 +287,8 @@ public class TestDataAction extends BaseAction<TestData> {
 
 	@Override
 	public String edit() {
-		
 		if (CacheUtil.checkLockedTestData(model.getDataId())) {
-			
-			jsonMap.put("msg", "该条测试数据正在被使用，请稍后再更新!");
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该条测试数据正在被使用，请稍后再更新!");
 		}
 		
 		return super.edit();

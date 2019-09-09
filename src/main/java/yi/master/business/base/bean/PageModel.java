@@ -1,5 +1,6 @@
 package yi.master.business.base.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import yi.master.constant.MessageKeys;
  * @version 1.0.0.0,2017.2.13
  * @param <T>
  */
-public class PageModel<T> {
+public class PageModel<T> implements Serializable {
 	
 	/**
 	 * 当前需要排序的列名称

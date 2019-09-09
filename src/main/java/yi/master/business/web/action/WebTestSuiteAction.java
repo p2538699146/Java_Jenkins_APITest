@@ -20,6 +20,8 @@ import yi.master.business.web.service.WebTestCaseService;
 import yi.master.business.web.service.WebTestConfigService;
 import yi.master.business.web.service.WebTestSuiteService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
 @Controller
@@ -86,8 +88,8 @@ public class WebTestSuiteAction extends BaseAction<WebTestSuite> {
 			webcase.setExecSeq(c.getExecSeq());
 			webcase.setCompId(c.getCompId());
 			cases.add(webcase);
-		}		
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "").setData("data", cases);
+		}
+		setData(cases);
 		return SUCCESS;
 	}
 	
@@ -105,8 +107,7 @@ public class WebTestSuiteAction extends BaseAction<WebTestSuite> {
 			comp.setTestSuite(model);
 			compService.edit(comp);
 		}
-		
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+
 		return SUCCESS;
 	}
 
@@ -116,14 +117,13 @@ public class WebTestSuiteAction extends BaseAction<WebTestSuite> {
 	 */
 	public String updateCaseSetting() {
 		WebSuiteCaseComp c = compService.get(compId);
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		if (c != null) {
 			c.setExecSeq(execSeq);
 			c.setSkipFlag(skipFlag);
 			c.setGroupName(groupName);
 			compService.edit(c);
 		} else {
-			setReturnInfo(ReturnCodeConsts.MISS_PARAM_CODE, "该对象不存在!");
+			throw new YiException(AppErrorCode.MISS_PARAM.getCode(), "该对象不存在!");
 		}
 		
 		return SUCCESS;
@@ -140,7 +140,7 @@ public class WebTestSuiteAction extends BaseAction<WebTestSuite> {
 			model.setBrowserType(broswerType);			
 			webTestSuiteService.edit(model);
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+
 		return SUCCESS;
 	}	
 	
@@ -155,7 +155,7 @@ public class WebTestSuiteAction extends BaseAction<WebTestSuite> {
 			model.setConfigJson(configJson);
 			webTestSuiteService.edit(model);
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+
 		return SUCCESS;
 	}
 	

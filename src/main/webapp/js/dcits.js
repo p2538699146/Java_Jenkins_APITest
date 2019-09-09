@@ -1252,7 +1252,7 @@ function createImportExcelMark(title, templatePath, uploadUrl, importUrl) {
 			    	if (res.returnCode == 0) {//上传成功
 			    		 layer.close(loadIndex);
 			    		 loadIndex = layer.msg('正在导入数据...', {icon:16, time:99999, shade:0.4});
-			    		 $.post(importUrl, {path:res.path}, function(json) {
+			    		 $.post(importUrl, {path:res.data.path}, function(json) {
 			    				if (json.returnCode == 0) {
 			    					$("#show-import-from-excel-content").html("");
 			    					var showResultHtml = '<p><span class="label label-primary radius">导入总数 :</span>&nbsp;&nbsp;' + json.data.totalCount + '</p>'
@@ -1316,7 +1316,7 @@ function uploadFile(setting) {
 		    	if (res.returnCode == 0) {//上传成功
 		    		 layer.close(loadIndex);
 		    		 if (typeof defaultSetting.done == 'function') {
-		    			 defaultSetting.done(res.path, res.relativePath);
+		    			 defaultSetting.done(res.data.path, res.data.relativePath);
 				     }
 		    	} else {
 		    		layer.close(loadIndex);

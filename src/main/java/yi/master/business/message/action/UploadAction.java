@@ -11,8 +11,10 @@ import org.apache.struts2.json.annotations.JSON;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import yi.master.business.base.bean.ReturnJSONObject;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.ParameterMap;
 import yi.master.util.upload.Upload;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -30,8 +32,8 @@ public class UploadAction extends ActionSupport {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private Map<String,Object> jsonMap = new HashMap<String,Object>();
+
+	private ReturnJSONObject jsonObject = new ReturnJSONObject();
 	
 	private File file;
 
@@ -61,14 +63,13 @@ public class UploadAction extends ActionSupport {
     			returnCode = ReturnCodeConsts.SYSTEM_ERROR_CODE;
         		msg = "上传文件失败,请重试!";
     		} else {
-    			jsonMap.put("path", fps);
-        		jsonMap.put("relativePath", fps.replace(FrameworkUtil.getProjectPath() + File.separator , ""));
+    			jsonObject.setData(new ParameterMap().put("path", fps)
+						.put("relativePath", fps.replace(FrameworkUtil.getProjectPath() + File.separator , "")));
     		}   		
     	}
     	
-    	
-    	jsonMap.put("msg", msg);
-    	jsonMap.put("returnCode", returnCode);
+    	jsonObject.setMsg(msg);
+    	jsonObject.setReturnCode(returnCode);
     	return SUCCESS;
     }
     
@@ -82,12 +83,12 @@ public class UploadAction extends ActionSupport {
     public String download() {
     	return "download";
     }
-    
-    public Map<String, Object> getJsonMap() {
-		return jsonMap;
+
+	public ReturnJSONObject getJsonObject() {
+		return jsonObject;
 	}
-    
-    public void setFile(File file) {
+
+	public void setFile(File file) {
 		this.file = file;
 	}
 	

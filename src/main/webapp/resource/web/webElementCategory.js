@@ -135,7 +135,7 @@ function addChildElement(domObj, treeId, treeNode) {
 					}, function(name, index3, elem){
 						$.post(REQUEST_URL.WEB_ELEMENT.EDIT, {"elementType":id, "parentId":treeNode.elementId, "elementName":name}, function(json){
 							if (json.returnCode == 0) {
-								var newNode = json.object;
+								var newNode = json.data;
 								newNode["iconOpen"] = "../../img/element/" + newNode.elementType + "_open.png";
 								newNode["iconClose"] = "../../img/element/" + newNode.elementType + "_close.png";
 								zTreeObj.addNodes(treeNode, newNode);								
