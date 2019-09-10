@@ -65,21 +65,18 @@ var templateParams = {
 			label:"协议类型",  	
 			select:[{	
 				name:"interfaceProtocol",
-				option:[{
-					value:"HTTP",
-					text:"HTTP",
-					selected:"selected"
-				},{
-					value:"HTTPS",
-					text:"HTTPS"					
-				},{
-					value:"WebService",
-					text:"WebService"					
-				},{
-					value:"Socket",
-					text:"Socket"					
-				}]
-				}]
+				option:function(){
+					let options = [];
+					$.each(MESSAGE_PROTOCOL, function(k, v){
+						options.push({
+                            value: k,
+							text: k
+						});
+					});
+
+					return options;
+				}()
+			}]
 		},
 		{
 			required:true,
@@ -191,7 +188,17 @@ var templateParams = {
 	                       	{label:"接口协议",
 	                       	 select:true,
 	                       	 name:"interfaceProtocol",
-	                       	 option:[{value:"HTTP", text:"HTTP"},{value:"HTTPS", text:"HTTPS"}, {value:"WebService", text:"WebService"}, {value:"Socket", text:"Socket"}]} 
+	                       	 option:function(){
+                                 let options = [];
+                                 $.each(MESSAGE_PROTOCOL, function(k, v){
+                                     options.push({
+                                         value: k,
+                                         text: k
+                                     });
+                                 });
+
+                                 return options;
+                             }()}
 	                        ], [
 	                        {label:"状态",
 	                       	 select:true,

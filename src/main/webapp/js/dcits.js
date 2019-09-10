@@ -513,10 +513,8 @@ function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting)
     	//添加动态拖拽改变列宽的插件
     	$('.table').colResizable({
     		partialRefresh:true,
-    		minWidth:35,
     		liveDrag:true,
-    		disabledColumns:[0],
-    		resizeMode: 'flex'
+    		disabledColumns:[0]
     	});
     	$(".page-container").spinModal(false); 	    	
     })
@@ -1103,7 +1101,7 @@ function showMark(itemName, markName, obj, tipName) {
 	
 	createViewWindow(data[markName], {
 		title:itemName + '-' + tipName,
-		copyBtn:true		
+		copyBtn:false
 	})
 }
 

@@ -381,7 +381,7 @@ var eventList = {
 		'#setting-call-parameter':function() {	//配置调用参数
 			
 			if (!strIsNotEmpty($("#callParameter").val())) {
-				$("#callParameter").val(JSON.stringify(PROTOCOL[protocolType]));
+				$("#callParameter").val(JSON.stringify(MESSAGE_PROTOCOL[protocolType]));
 			}
 			
 			var json = JSON.parse($("#callParameter").val());

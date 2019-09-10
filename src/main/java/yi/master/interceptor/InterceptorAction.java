@@ -1,22 +1,14 @@
 package yi.master.interceptor;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.base.bean.ReturnJSONObject;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.PracticalUtils;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * 根据跳转请求action返回前台指定的returnCode和msg
@@ -26,6 +18,7 @@ import com.opensymphony.xwork2.ActionSupport;
  */
 
 @Controller
+@Scope("prototype")
 public class InterceptorAction extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
@@ -38,7 +31,7 @@ public class InterceptorAction extends ActionSupport {
 	/**
 	 * ajax调用返回给前台的map
 	 */
-	private ReturnJSONObject jsonObject;
+	private ReturnJSONObject jsonObject = new ReturnJSONObject();
 
 	
 	/**
@@ -52,11 +45,13 @@ public class InterceptorAction extends ActionSupport {
 		logger.error("系统内部错误:\n" + exDetails);
 		if (ex instanceof YiException) {
 			YiException yiEx = (YiException) ex;
-			jsonObject = new ReturnJSONObject(yiEx);
+			jsonObject.setMsg(yiEx.getMsg());
+			jsonObject.setReturnCode(yiEx.getCode());
 			return SUCCESS;
 		}
 
-		jsonObject = new ReturnJSONObject(AppErrorCode.INTERNAL_SERVER_ERROR);
+		jsonObject.setReturnCode(AppErrorCode.INTERNAL_SERVER_ERROR.getCode());
+		jsonObject.setMsg(AppErrorCode.INTERNAL_SERVER_ERROR.getMsg());
 		jsonObject.data(exDetails);
 
 		return SUCCESS;
