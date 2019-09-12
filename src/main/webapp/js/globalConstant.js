@@ -131,12 +131,11 @@ var REQUEST_URL = {
     },
     //验证规则
     VALIDATE: {
-        GET: "validate-getValidate",
         FULL_EDIT: "validate-validateFullEdit",
         DEL: "validate-del",
         GET:"validate-get",
         EDIT:"validate-edit",
-        LIST: "complexScene-getValidates",
+        LIST: "validate-getValidates",
         FULL_RULE_GET: "validate-getValidate",
         RULE_UPDATE_STATUS: "validate-updateValidateStatus"
     },

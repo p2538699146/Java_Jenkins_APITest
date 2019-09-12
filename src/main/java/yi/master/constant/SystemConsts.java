@@ -13,7 +13,7 @@ public class SystemConsts {
 	/**
 	 * 当前版本号
 	 */
-	public static final String VERSION = "0.1.4beta";
+	public static final String VERSION = "0.1.5beta";
 	
 	/**
 	 * 默认admin角色的roleId
