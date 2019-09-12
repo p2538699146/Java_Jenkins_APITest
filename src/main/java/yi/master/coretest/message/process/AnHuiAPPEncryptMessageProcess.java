@@ -1,37 +1,25 @@
 package yi.master.coretest.message.process;
 
+import net.sf.json.JSONObject;
+import org.apache.axis.encoding.Base64;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import yi.master.coretest.message.parse.URLMessageParse;
+import yi.master.coretest.message.process.config.AnHuiAppMsgProcessParameter;
+import yi.master.util.PracticalUtils;
+import yi.master.util.rsa.RSABase64Utils;
+
+import javax.crypto.Cipher;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.crypto.Cipher;
-
-import org.apache.axis.encoding.Base64;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
-import net.sf.json.JSONObject;
-import yi.master.constant.MessageKeys;
-import yi.master.coretest.message.parse.URLMessageParse;
-import yi.master.coretest.message.process.config.AnHuiAppMsgProcessParameter;
-import yi.master.util.PracticalUtils;
-import yi.master.util.rsa.RSABase64Utils;
 
 /**
  * @author xuwangcheng
@@ -39,8 +27,20 @@ import yi.master.util.rsa.RSABase64Utils;
  *
  */
 public class AnHuiAPPEncryptMessageProcess extends MessageProcess {
-	
 	public static final Logger LOGGER = Logger.getLogger(AnHuiAPPEncryptMessageProcess.class);
+	private static AnHuiAPPEncryptMessageProcess anHuiAPPEncryptMessageProcess;
+
+	private AnHuiAPPEncryptMessageProcess () {}
+
+	public static AnHuiAPPEncryptMessageProcess getInstance () {
+		if (anHuiAPPEncryptMessageProcess == null) {
+			anHuiAPPEncryptMessageProcess = new AnHuiAPPEncryptMessageProcess();
+		}
+
+		return anHuiAPPEncryptMessageProcess;
+	}
+
+
 	/**
 	 * 默认加密类型
 	 */

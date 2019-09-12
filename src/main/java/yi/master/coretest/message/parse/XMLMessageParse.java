@@ -39,9 +39,18 @@ import net.sf.json.JSONObject;
  *
  */
 public class XMLMessageParse extends MessageParse {
-	
 	private static final Logger LOGGER = Logger.getLogger(XMLMessageParse.class);
+	private static XMLMessageParse xmlMessageParse;
 
+	private XMLMessageParse () {}
+
+	public static XMLMessageParse getInstance () {
+		if (xmlMessageParse == null) {
+			xmlMessageParse = new XMLMessageParse();
+		}
+
+		return xmlMessageParse;
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override

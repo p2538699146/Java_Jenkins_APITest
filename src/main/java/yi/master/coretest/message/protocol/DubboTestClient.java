@@ -13,6 +13,17 @@ import java.util.Map;
  * @date 2019/9/5 19:41
  */
 public class DubboTestClient extends TestClient {
+    private static DubboTestClient dubboTestClient;
+
+    private DubboTestClient () {}
+
+    public static DubboTestClient getInstance () {
+        if (dubboTestClient == null) {
+            dubboTestClient = new DubboTestClient();
+        }
+
+        return dubboTestClient;
+    }
 
     @Override
     public ClientTestResponseObject sendRequest(String requestUrl, String requestMessage,

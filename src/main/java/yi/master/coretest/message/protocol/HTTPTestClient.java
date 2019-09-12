@@ -54,7 +54,8 @@ import yi.master.util.PracticalUtils;
  *
  */
 public class HTTPTestClient extends TestClient {
-	
+	private static HTTPTestClient httpTestClient;
+
 	private static final Logger LOGGER = Logger.getLogger(HTTPTestClient.class);
 	
 	private static final Object lock = new Object();
@@ -77,7 +78,17 @@ public class HTTPTestClient extends TestClient {
 	private static final List<DefaultHttpClient> availableClientPool = new ArrayList<DefaultHttpClient>();
 	
 	private static final DefaultHttpClient defaultClient = getHttpClient();
-	
+
+	private HTTPTestClient () {}
+
+	public static HTTPTestClient getInstance () {
+		if (httpTestClient == null) {
+			httpTestClient = new HTTPTestClient();
+		}
+
+		return httpTestClient;
+	}
+
 	/**
 	 * 从HttpClient池中获取可以的客户端
 	 * @return

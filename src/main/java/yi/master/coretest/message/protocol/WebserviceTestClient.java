@@ -14,6 +14,17 @@ import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.util.PracticalUtils;
 
 public class WebserviceTestClient extends TestClient {
+	private static WebserviceTestClient webserviceTestClient;
+
+	private WebserviceTestClient () {}
+
+	public static WebserviceTestClient getInstance () {
+		if (webserviceTestClient == null) {
+			webserviceTestClient = new WebserviceTestClient();
+		}
+
+		return webserviceTestClient;
+	}
 
 	@Override
 	public ClientTestResponseObject sendRequest(String requestUrl,

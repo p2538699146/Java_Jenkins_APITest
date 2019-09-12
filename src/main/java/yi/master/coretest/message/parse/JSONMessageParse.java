@@ -25,9 +25,21 @@ import static yi.master.constant.MessageKeys.MessageParameterType;
  * @version 2017.04.11,1.0.0.0
  *
  */
-public class JSONMessageParse extends MessageParse {	
-	
+public class JSONMessageParse extends MessageParse {
 	private static ObjectMapper mapper = new ObjectMapper();
+	private static JSONMessageParse jsonMessageParse;
+
+	private JSONMessageParse () {
+
+	}
+
+	public static JSONMessageParse getInstance() {
+		if (jsonMessageParse == null) {
+			jsonMessageParse = new JSONMessageParse();
+		}
+
+		return jsonMessageParse;
+	}
 	
 	@Override
 	public String getObjectByPath(String message, String path) {

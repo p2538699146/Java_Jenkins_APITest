@@ -19,6 +19,19 @@ import java.util.Map;
  *
  */
 public class OPTMessageParse extends FixedMessageParse {
+	private static OPTMessageParse optMessageParse;
+
+	private OPTMessageParse () {
+
+	}
+
+	public static OPTMessageParse getInstance () {
+		if (optMessageParse == null) {
+			optMessageParse = new OPTMessageParse();
+		}
+
+		return optMessageParse;
+	}
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {

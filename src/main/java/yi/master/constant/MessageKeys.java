@@ -31,23 +31,23 @@ public interface MessageKeys {
 		/**
 		 * json类型
 		 */
-		JSON(new JSONMessageParse()),
+		JSON(JSONMessageParse.getInstance()),
 		/**
 		 * xml类型
 		 */
-		XML(new XMLMessageParse()),
+		XML(XMLMessageParse.getInstance()),
 		/**
 		 * url类型
 		 */
-		URL(new URLMessageParse()),
+		URL(URLMessageParse.getInstance()),
 		/**
 		 * 固定类型
 		 */
-		FIXED(new FixedMessageParse()),
+		FIXED(FixedMessageParse.getInstance()),
 		/**
 		 * 自定义类型
 		 */
-		OPT(new OPTMessageParse());
+		OPT(OPTMessageParse.getInstance());
 
 		private MessageParse parseUtil;
 
@@ -143,23 +143,27 @@ public interface MessageKeys {
 		/**
 		 * http测试
 		 */
-		http(new HTTPTestClient()),
+		http(HTTPTestClient.getInstance()),
 		/**
 		 * webservice测试
 		 */
-		webservice(new WebserviceTestClient()),
+		webservice(WebserviceTestClient.getInstance()),
 		/**
 		 * socket测试客
 		 */
-		socket(new SocketTestClient()),
+		socket(SocketTestClient.getInstance()),
 		/**
 		 * https测试
 		 */
-		https(new HTTPTestClient()),
+		https(HTTPTestClient.getInstance()),
 		/**
 		 * dubbo测试
 		 */
-		dubbo(new DubboTestClient());
+		dubbo(DubboTestClient.getInstance()),
+		/**
+		 * webSocket测试
+		 */
+		websocket(WebSocketTestClient.getInstance());
 
 		private TestClient client;
 
@@ -222,8 +226,8 @@ public interface MessageKeys {
 	 * 报文处理类型
 	 */
 	enum MessageProcessType {
-		ShanXiOpenApi(new ShanXiOpenApiMessageProcess()),
-		AnhuiApp(new AnHuiAPPEncryptMessageProcess());
+		ShanXiOpenApi(ShanXiOpenApiMessageProcess.getInstance()),
+		AnhuiApp(AnHuiAPPEncryptMessageProcess.getInstance());
 
 		private MessageProcess processor;
 

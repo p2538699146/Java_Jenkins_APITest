@@ -1,24 +1,16 @@
 package yi.master.coretest.message.parse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang3.StringUtils;
-
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
 import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
-import yi.master.util.PracticalUtils;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
+
+import java.util.*;
 
 /**
  * 接口自动化<br>
@@ -28,6 +20,19 @@ import yi.master.util.FrameworkUtil;
  *
  */
 public class URLMessageParse extends MessageParse {
+	private static URLMessageParse urlMessageParse;
+
+	private URLMessageParse () {
+
+	}
+
+	public static URLMessageParse getInstance () {
+		if (urlMessageParse == null) {
+			urlMessageParse = new URLMessageParse();
+		}
+
+		return urlMessageParse;
+	}
 
 	
 	@Override

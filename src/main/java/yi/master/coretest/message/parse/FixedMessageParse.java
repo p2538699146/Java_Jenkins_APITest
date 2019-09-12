@@ -17,10 +17,22 @@ import java.util.Set;
  *
  */
 public class FixedMessageParse extends MessageParse {
+	private static FixedMessageParse fixedMessageParse;
+
+	protected FixedMessageParse () {
+
+	}
+
+	public static FixedMessageParse getInstance () {
+		if (fixedMessageParse == null) {
+			fixedMessageParse = new FixedMessageParse();
+		}
+
+		return fixedMessageParse;
+	}
 
 	@Override
 	public boolean messageFormatValidation(String message) {
-		
 		return true;
 	}
 

@@ -16,9 +16,18 @@ import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.util.PracticalUtils;
 
 public class SocketTestClient extends TestClient {
-	
 	private static final Logger LOGGER = Logger.getLogger(SocketTestClient.class);
+	private static SocketTestClient socketTestClient;
 
+	private SocketTestClient () {}
+
+	public static SocketTestClient getInstance () {
+		if (socketTestClient == null) {
+			socketTestClient = new SocketTestClient();
+		}
+
+		return socketTestClient;
+	}
 
 	@Override
 	public ClientTestResponseObject sendRequest(String requestUrl,

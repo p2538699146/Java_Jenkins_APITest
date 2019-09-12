@@ -20,6 +20,18 @@ import com.open.common.util.StringUtil;
  */
 public class ShanXiOpenApiMessageProcess extends MessageProcess {
 	private static final Logger LOGGER = Logger.getLogger(ShanXiOpenApiMessageProcess.class);
+	private static ShanXiOpenApiMessageProcess shanXiOpenApiMessageProcess;
+
+	private ShanXiOpenApiMessageProcess () {
+	}
+
+	public static ShanXiOpenApiMessageProcess getInstance () {
+		if (shanXiOpenApiMessageProcess == null) {
+			shanXiOpenApiMessageProcess = new ShanXiOpenApiMessageProcess();
+		}
+
+		return shanXiOpenApiMessageProcess;
+	}
 
 	@Override
 	public String processRequestMessage(String requestMessage, String processParameter) {
