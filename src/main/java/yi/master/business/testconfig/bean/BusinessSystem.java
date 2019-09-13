@@ -107,14 +107,14 @@ public class BusinessSystem implements Serializable {
 	 * @return
 	 */
 	public String getReuqestUrl(String requestPath, String defaultPath, String interfaceName) {
-		if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
-			requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
-					.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
-		}
-
 		if (MessageKeys.ProtocolType.http.name().equalsIgnoreCase(this.protocolType) ||
 				MessageKeys.ProtocolType.webservice.name().equalsIgnoreCase(this.protocolType) ||
 				MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType)) {
+
+			if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
+				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
+						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
+			}
 			return (MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType) ? "https://" : "http://")
 					+ this.systemHost + ":" + this.systemPort + requestPath;
 		}
@@ -124,15 +124,21 @@ public class BusinessSystem implements Serializable {
 		}
 
 		if (MessageKeys.ProtocolType.dubbo.name().equalsIgnoreCase(this.protocolType)) {
+			if (StringUtils.isBlank(requestPath)) {
+				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
+						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
+			}
 			return this.systemHost + ":" + this.systemPort + ":" + requestPath;
 		}
 
 		if (MessageKeys.ProtocolType.websocket.name().equalsIgnoreCase(this.protocolType)) {
-			return "ws://" + this.systemHost + ":" + this.systemPort + "/" + requestPath;
+			if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
+				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
+						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
+			}
+			return "ws://" + this.systemHost + ":" + this.systemPort + requestPath;
 		}
 
-
-		
 		return "";
 	}
 	
@@ -264,18 +270,28 @@ public class BusinessSystem implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
+
 		BusinessSystem other = (BusinessSystem) obj;
 		if (systemId == null) {
-			if (other.systemId != null)
+			if (other.systemId != null) {
 				return false;
-		} else if (!systemId.equals(other.systemId))
+			}
+
+		} else if (!systemId.equals(other.systemId)) {
 			return false;
+		}
+
 		return true;
 	}
 	

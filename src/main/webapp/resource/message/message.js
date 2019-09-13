@@ -379,13 +379,12 @@ var eventList = {
 			
 		},
 		'#setting-call-parameter':function() {	//配置调用参数
-			
 			if (!strIsNotEmpty($("#callParameter").val())) {
 				$("#callParameter").val(JSON.stringify(MESSAGE_PROTOCOL[protocolType]));
 			}
 			
 			var json = JSON.parse($("#callParameter").val());
-			
+			console.log($("#callParameter").val());
 			var callParameterViewHtml = '<article class="page-container"><form action="" method="" class="form form-horizontal">';
 						
 			if (json != null && !$.isEmptyObject(json)) {
@@ -410,7 +409,7 @@ var eventList = {
 					callParameterViewHtml += '</div></div>';
 				});
 			} else {
-				layer.alert("读取协议参数失败!", {icon:5});
+				layer.msg("该协议类型无参数配置！", {time: 1600});
 				return false;
 			}
 			
@@ -455,7 +454,7 @@ var eventList = {
 			messageId = data.messageId;
 			publish.renderParams.editPage.modeFlag = 1;
 			publish.renderParams.editPage.objId = messageId;
-			layer_show("编辑报文信息", editHtml, editPageWidth, 780, 1);
+			layer_show("编辑报文信息", editHtml, editPageWidth, editPageHeight.edit, 1);
 			publish.init();	
 		},
 		"#choose-business-system":function () {//选择测试环境

@@ -1,6 +1,9 @@
 package yi.master.coretest.message.protocol;
 
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import org.apache.commons.net.telnet.TelnetClient;
+import org.apache.log4j.Logger;
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.constant.MessageKeys;
 import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
@@ -19,6 +22,7 @@ import java.util.Map;
  * @date 2019/9/5 19:41
  */
 public class DubboTestClient extends TestClient {
+    private static final Logger logger = Logger.getLogger(DubboTestClient.class);
 
     private static DubboTestClient dubboTestClient;
 
@@ -39,6 +43,8 @@ public class DubboTestClient extends TestClient {
     public ClientTestResponseObject sendRequest(String requestUrl, String requestMessage,
                                                 Map<String, Object> callParameter, TestConfig config, Object client) {
         ClientTestResponseObject responseObject = new ClientTestResponseObject();
+        responseObject.setStatusCode("false");
+
         int connectTimeOut = config.getConnectTimeOut();
         int readTimeOut = config.getReadTimeOut();
         if (callParameter != null) {
@@ -53,12 +59,24 @@ public class DubboTestClient extends TestClient {
                 LOGGER.info("报文附加参数获取出错:" + callParameter.toString(), e);
             }
         }
+        String[] urls = requestUrl.split(":");
+        if (3 != urls.length) {
+            responseObject.setMark("配置出错,请检查！");
+            return responseObject;
+        }
+
+        String host = urls[0];
+        Integer port = 20880;
+        if (NumberUtil.isInteger(urls[1])) {
+            port = Integer.valueOf(urls[1]);
+        }
+        String method = urls[2];
+
         TelnetClient telnetClient = null;
         try {
-            telnetClient = createClient(requestUrl, connectTimeOut, readTimeOut);
+            telnetClient = createClient(host, port,connectTimeOut, readTimeOut);
         } catch (IOException e) {
-            responseObject.setStatusCode("false");
-            responseObject.setMark("无法连接到:" + requestUrl);
+            responseObject.setMark("无法连接到:" + host + ":" + port);
         }
 
         if (telnetClient != null && telnetClient.isConnected()) {
@@ -67,32 +85,41 @@ public class DubboTestClient extends TestClient {
 
             try {
                 long start = System.currentTimeMillis();
-                String responseMsg = sendMsg("invoke " + requestUrl.split(":")[2] + "(" + requestMessage + ")", out, in);
+                String responseMsg = sendMsg("invoke " + method + "(" + requestMessage + ")", out, in);
                 long end = System.currentTimeMillis();
 
-                if (requestMessage != null) {
-                    int i = responseMsg.lastIndexOf("\r\n");
-                    responseMsg = responseMsg.substring(0, i);
+                if (responseMsg != null) {
+                    logger.info(StrUtil.format("[{}:{}]Dubbo请求方法{},返回内容:\n{}", host, port, method, responseMsg));
+                    if (responseMsg.indexOf("syntax error") > -1) {
+                        responseObject.setMark("请求参数格式错误(注意单个字符串请用双引号括起来)");
+                        return responseObject;
+                    }
+                    if (responseMsg.indexOf("Invalid parameters") > -1) {
+                        responseObject.setMark("缺少方法参数");
+                        return responseObject;
+                    }
+                    if (responseMsg.indexOf("No such service") > -1
+                            || responseMsg.indexOf("No such method") > -1) {
+                        responseObject.setMark("无此方法：" + method);
+                        return responseObject;
+                    }
+
+                    responseMsg = responseMsg.replaceAll("(elapsed:.*\\d+.*ms\\.)", "")
+                            .replaceAll(endingTag, "");
+
+                    //去除左右引号
+                    if (responseMsg.lastIndexOf("\"") > 0) {
+                        responseMsg = responseMsg.substring(1, responseMsg.lastIndexOf("\""));
+                    }
                 }
 
                 responseObject.setStatusCode("200");
                 responseObject.setUseTime(end - start);
                 responseObject.setResponseMessage(responseMsg);
             } catch (IOException e) {
-                responseObject.setStatusCode("false");
-                responseObject.setMark("发送请求失败:\n" + PracticalUtils.getExceptionAllinformation(e));
+                responseObject.setMark("调用方法 " + method + " 失败:\n" + PracticalUtils.getExceptionAllinformation(e));
             } finally {
-                if (out != null) {
-                    out.close();
-                }
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (telnetClient.isConnected()) {
+                if (telnetClient != null && telnetClient.isConnected()) {
                     try {
                         telnetClient.disconnect();
                     } catch (IOException e) {
@@ -150,15 +177,15 @@ public class DubboTestClient extends TestClient {
     /**
      * 创建telnet客户端
      * @param host
+     * @param port
      * @param connectTimeout
      * @param soTimeout
      * @return
      * @throws IOException
      */
-    private TelnetClient createClient (String host, int connectTimeout, int soTimeout) throws IOException {
+    private TelnetClient createClient (String host, int port, int connectTimeout, int soTimeout) throws IOException {
         TelnetClient client = new TelnetClient();
-        String[] ss = host.split(":");
-        client.connect(ss[0], Integer.valueOf(ss[1]));
+        client.connect(host, port);
         client.setConnectTimeout(connectTimeout);
         client.setSoTimeout(soTimeout);
 
