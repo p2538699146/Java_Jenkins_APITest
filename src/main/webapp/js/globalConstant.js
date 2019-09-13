@@ -446,7 +446,12 @@ var MESSAGE_PROTOCOL = {
         "Method":"",
         "Username":"",
         "Password":""
-    }
+    },
+    "WebSocket":{
+        "ConnectTimeOut":"",
+        "ReadTimeOut":""
+    },
+    "Dubbo":{}
 }
 
 

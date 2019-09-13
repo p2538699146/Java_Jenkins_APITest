@@ -121,9 +121,15 @@ var mySetting = {
 			},
        	 	renderCallback:function(obj){
        	 		$.get(REQUEST_URL.TEST_SET.GET_CATEGORY_NODES, function(json) {
+       	 			if (currentNodeType != null) {
+       	 				$('#parented').val(currentNodeType);
+					}
        	 			if (json.returnCode == 0) {
        	 				$.each(json.data, function(i, node) {
        	 					createOption(node, $("#parentId"), "");
+							if (currentFolderId != null) {
+                                $('#parentId').val(currentFolderId);
+							}
        	 				});
 	       	 			if (obj != null) {
 	       	 				$("#parented").parents(".row").hide();
@@ -160,7 +166,8 @@ $(function(){
 	publish.renderParams = $.extend(true, publish.renderParams, mySetting);
 	publish.init();
 });
-
+var currentFolderId ;
+var currentNodeType;
 /**
  * 父目录选择下拉框
  * @param node
@@ -184,6 +191,60 @@ function createOption(node, selectObj, sign) {
 	}
 }
 
+var contextMenuSetting = { //菜单样式
+    menuStyle: {
+        border: '2px solid #000'
+    }, //菜单项样式
+    itemStyle: {
+        fontFamily: 'verdana',
+        //backgroundColor: 'green',
+        //color: 'white',
+        border: 'none',
+        padding: '1px'
+    }, //菜单项鼠标放在上面样式
+    itemHoverStyle: {
+        //color: 'blue',
+        //backgroundColor: 'red',
+        border: 'none'
+    }, //事件
+    bindings: {
+        'item_1': function(t) { //添加子目录
+			var id = $(t).attr('id');
+            currentFolderId = id;
+            currentNodeType = 0;
+            publish.renderParams.editPage.modeFlag = 0;
+            var callback = publish.renderParams.editPage.renderCallback;
+            layer_show("增加目录或测试集", editHtml, editPageWidth, editPageHeight.add, 1, function() {
+                callback();
+            });
+            publish.init();
+        },
+        'item_2': function(t) { //添加测试集
+            var id = $(t).attr('id');
+            currentFolderId = id;
+            currentNodeType = 1;
+            publish.renderParams.editPage.modeFlag = 0;
+            var callback = publish.renderParams.editPage.renderCallback;
+            layer_show("增加目录或测试集", editHtml, editPageWidth, editPageHeight.add, 1, function() {
+                callback();
+            });
+            publish.init();
+        },
+        'item_3': function(t) { //编辑
+            var id = $(t).attr('id');
+            publish.renderParams.editPage.modeFlag = 1;
+            publish.renderParams.editPage.objId = id;
+            layer_show("编辑目录信息", editHtml, editPageWidth, editPageHeight.edit, 1);
+            publish.init();
+        },
+        'item_4': function(t) { //删除
+            var id = $(t).attr('id');
+            delSet('确认删除此目录吗？<br><span class="c-red">删除之后该目录下所有的测试集和子目录将会移动到被删除目录的上层目录下</span>', id);
+        }
+    }
+};
+
+
 /**
  * 生成左侧目录树
  */
@@ -196,9 +257,15 @@ function createNodeTree () {
 	 			  layui.tree({
 	 			  elem: '#setTree' //传入元素选择器
 	 			  ,nodes: json.data
-	 			  ,callback:function () {
+	 			  ,callback:function (nodes) {
 	 				 currentSetId != null && $("#" + currentSetId) 
 	 				 	&&　 $("#" + currentSetId).parent("li").attr("style", "background-color:#C6C6C6");
+	 				 $("#setTree .layui-tree-branch").parent('a').each(function(){
+                         	var objEvt = $._data($(this)[0], "events");
+                         	if (objEvt && !objEvt["contextmenu"]) {
+                                $(this).contextMenu('treeMenu', contextMenuSetting);
+                            }
+					 });
 	 			  }
 	 			  ,click: function(elem, node){//node即为当前点击的节点数据	   	 				
 		   	 		    if (!node.parented) {
@@ -208,8 +275,6 @@ function createNodeTree () {
 		   	 		    	$(elem).attr("style", "background-color:#C6C6C6");
 		   	 		    	currentSetId = node.id;
 		   	 		    	$("#current-set-name").html('<span class="c-gray en">&gt;</span> 当前测试集 - ' + node.name)
-		   	 		    } else {
-		   	 		    	opSetFolder(node.id);
 		   	 		    }
 	 			  }  
 	 			});

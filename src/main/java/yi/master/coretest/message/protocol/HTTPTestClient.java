@@ -95,7 +95,8 @@ public class HTTPTestClient extends TestClient {
 	 */
 	private static DefaultHttpClient getHttpClient () {		
 		synchronized(lock) {
-			if (availableClientPool.size() < 1) {//可用客户端不足
+			//可用客户端不足
+			if (availableClientPool.size() < 1) {
 				if (activeClientPool.size() >= MAX_DEFAULT_HTTP_CLIENT_COUNT) {
 					//等待释放
 					while (availableClientPool.size() < 1) {
@@ -134,18 +135,22 @@ public class HTTPTestClient extends TestClient {
         params.setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
 
         //使用线程安全的连接管理来创建HttpClient  
-        PoolingClientConnectionManager conMgr = new PoolingClientConnectionManager(); 
-        
-        conMgr.setMaxTotal(MAX_TOTAL_CONNECTION_COUNT);//客户端总并行连接最大数
-        conMgr.setDefaultMaxPerRoute(DEFAULT_MAX_PER_ROUTE_CONNECTION_COUNT);//单个主机的最大并行连接数
+        PoolingClientConnectionManager conMgr = new PoolingClientConnectionManager();
+		//客户端总并行连接最大数
+        conMgr.setMaxTotal(MAX_TOTAL_CONNECTION_COUNT);
+		//单个主机的最大并行连接数
+        conMgr.setDefaultMaxPerRoute(DEFAULT_MAX_PER_ROUTE_CONNECTION_COUNT);
        
         DefaultHttpClient httpClient = new DefaultHttpClient(conMgr, params);
         httpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(0, false));
 
         //设置ssl https
         X509TrustManager xtm = new X509TrustManager() {
+        	@Override
             public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+			@Override
             public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+			@Override
             public X509Certificate[] getAcceptedIssuers() {return null;}
         };
 
@@ -178,7 +183,7 @@ public class HTTPTestClient extends TestClient {
 		}
 
 		ClientTestResponseObject returnMap = new ClientTestResponseObject();
-
+		returnMap.setStatusCode("false");
 		returnMap.setMark("");
 		Map<String, String> headers = null;
 		Map<String, String> querys = null;

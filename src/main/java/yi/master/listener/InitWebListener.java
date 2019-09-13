@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -89,7 +90,7 @@ public class InitWebListener implements ServletContextListener {
 
 		//获取系统版本号，如果与数据库中的版本号不一致则更新
 		String version = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_VERSION);
-		if (version == null || !version.equals(SystemConsts.VERSION)) {
+		if (StringUtils.isBlank(version)|| !version.equals(SystemConsts.VERSION)) {
 			LOGGER.warn("当前代码版本号为：v" + SystemConsts.VERSION + ",与数据库版本v" + version + "不一致！");
 
 			settingService.updateSetting(SystemConsts.GLOBAL_SETTING_VERSION, SystemConsts.VERSION);

@@ -99,15 +99,22 @@ public class BusinessSystem implements Serializable {
 		super();
 	}
 
+	/**
+	 * 组装正确的请求地址，包含路径
+	 * @param requestPath
+	 * @param defaultPath
+	 * @param interfaceName
+	 * @return
+	 */
 	public String getReuqestUrl(String requestPath, String defaultPath, String interfaceName) {
-				
+		if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
+			requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
+					.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
+		}
+
 		if (MessageKeys.ProtocolType.http.name().equalsIgnoreCase(this.protocolType) ||
 				MessageKeys.ProtocolType.webservice.name().equalsIgnoreCase(this.protocolType) ||
 				MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType)) {
-			if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
-				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
-						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
-			}
 			return (MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType) ? "https://" : "http://")
 					+ this.systemHost + ":" + this.systemPort + requestPath;
 		}
@@ -115,7 +122,16 @@ public class BusinessSystem implements Serializable {
 		if (MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(this.protocolType)) {
 			return this.systemHost + ":" + this.systemPort;
 		}
-		
+
+		if (MessageKeys.ProtocolType.dubbo.name().equalsIgnoreCase(this.protocolType)) {
+			return this.systemHost + ":" + this.systemPort + ":" + requestPath;
+		}
+
+		if (MessageKeys.ProtocolType.websocket.name().equalsIgnoreCase(this.protocolType)) {
+			return "ws://" + this.systemHost + ":" + this.systemPort + "/" + requestPath;
+		}
+
+
 		
 		return "";
 	}

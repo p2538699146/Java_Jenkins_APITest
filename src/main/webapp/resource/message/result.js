@@ -125,35 +125,38 @@ var eventList = {
 	},
 	'.show-result-detail':function() {
 		var data = table.row( $(this).parents('tr') ).data();
-		var color = "";
-		var flag = "";
-		if (data.runStatus == "0") {
-			color = "success";
-			flag = "SUCCESS";
-		} else if (data.runStatus == "1"){
-			color = "danger";
-			flag = "FAIL";
-		} else {
-			color = "default";
-			flag = "STOP";
-		}				
-		var resultData = {
-			requestMessage:(data.requestMessage == "null") ? "" : data.requestMessage,
-			requestUrl:data.requestUrl,
-			businessSystemName:data.businessSystemName,
-			color:color,
-			flag:flag,
-			useTime:data.useTime,
-			statusCode:data.statusCode,
-			responseMessage:(data.responseMessage != "null") ? data.responseMessage : "",
-			mark:data.mark
-		};			
-		
-		layer_show('测试结果', templates["scene-test-result"](resultData), null, null, 1, null, null, null, {
-			shade: 0.35,
-			shadeClose:true,
-			skin: 'layui-layer-rim', //加上边框
-		})
+
+        renderResultViewPage(data);
+
+        // var color = "";
+        // var flag = "";
+        // if (data.runStatus == "0") {
+			// color = "success";
+			// flag = "SUCCESS";
+        // } else if (data.runStatus == "1"){
+			// color = "danger";
+			// flag = "FAIL";
+        // } else {
+			// color = "default";
+			// flag = "STOP";
+        // }
+        // var resultData = {
+			// requestMessage:(data.requestMessage == "null") ? "" : data.requestMessage,
+			// requestUrl:data.requestUrl,
+			// businessSystemName:data.businessSystemName,
+			// color:color,
+			// flag:flag,
+			// useTime:data.useTime,
+			// statusCode:data.statusCode,
+			// responseMessage:(data.responseMessage != "null") ? data.responseMessage : "",
+			// mark:data.mark
+        // };
+        //
+        // layer_show('测试结果', templates["scene-test-result"](resultData), null, null, 1, null, null, null, {
+        //     shade: 0.35,
+        //     shadeClose:true,
+        //     skin: 'layui-layer-rim', //加上边框
+        // })
 	}			
 };
 

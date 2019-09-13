@@ -54,11 +54,16 @@ var templateParams = {
 			label:"协议类型",  			
 			select:[{	
 				name:"protocolType",
-				option:[{value:"HTTP", text:"HTTP", selected:true},
-				        {value:"HTTPS", text:"HTTPS"},
-				        {value:"Socket", text:"Socket"},
-				        {value:"WebService", text:"WebService"}
-				        ]
+				option:function(){
+                    let options = [];
+                    $.each(MESSAGE_PROTOCOL, function(k, v){
+                        options.push({
+                            value: k,
+                            text: k
+                        });
+                    });
+                    return options;
+                }()
 				}]
 		},
 		{

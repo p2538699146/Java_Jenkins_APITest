@@ -25,9 +25,10 @@
 </head>
 <body>
 <div id="list-page">
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 接口自动化 <span class="c-gray en">&gt;</span> 测试集管理  <span id="current-set-name"><span class="c-gray en">&gt;</span> 测试集列表</span></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 接口自动化 <span class="c-gray en">&gt;</span> 测试集管理  <span id="current-set-name"><span class="c-gray en">&gt;</span> 测试集列表</span>
+</nav>
 <div class="page-container">
-    <div class="cl pd-5 bg-1 bk-gray mt-0"> <span class="l" id="btn-tools"></span> <a class="btn btn-success radius r" href="javascript:createNodeTree();" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></div>
+    <div class="cl pd-5 bg-1 bk-gray mt-0"> <span class="l" id="btn-tools"></span> &nbsp;&nbsp;<span style="color: red;line-height: 30px;">右键点击管理目录，点击测试集名称进入管理页面</span><a class="btn btn-success radius r" href="javascript:createNodeTree();" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></div>
     <div class="mt-5" id="div-table-container">
         <table class="table">
 			<tr>
@@ -38,6 +39,14 @@
 		</table>
     </div>
 </div>
+</div>
+<div class="contextMenu" id="treeMenu">
+    <ul>
+        <li id="item_1">添加子目录</li>
+        <li id="item_2">添加测试集</li>
+        <li id="item_3">编辑</li>
+        <li id="item_4">删除</li>
+    </ul>
 </div>
 <script type="text/javascript" src="../../js/globalConstant.js"></script>
 <script type="text/javascript" src="../../libs/jquery/1.9.1/jquery.js"></script>
@@ -52,6 +61,7 @@
 <script type="text/javascript" src="../../libs/h-ui/js/H-ui.js"></script>
 <script type="text/javascript" src="../../libs/h-ui.admin/js/H-ui.admin.js"></script>
 <script type="text/javascript" src="../../libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../libs/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
 <script type="text/javascript" src="../../js/dcits.js"></script>
 </body>
 </html>

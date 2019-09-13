@@ -24,7 +24,7 @@ public class ClientTestResponseObject {
     /**
      * 状态码，如果为false代表是测试中断了
      */
-    private String statusCode = "false";
+    private String statusCode;
     /**
      * 一般是测试失败时的备注
      */

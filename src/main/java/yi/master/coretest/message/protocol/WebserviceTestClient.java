@@ -55,7 +55,6 @@ public class WebserviceTestClient extends TestClient {
 			long endTime = System.currentTimeMillis();
 			useTime = endTime - beginTime;
 		} catch (Exception e) {
-			
 			statusCode = "false";
 			mark = "Fail to call web-service url=" + requestUrl + ",namespace=" + namespace + ",method=" + method + "!";
 		}

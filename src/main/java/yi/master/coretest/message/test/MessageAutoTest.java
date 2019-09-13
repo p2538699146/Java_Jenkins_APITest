@@ -177,7 +177,9 @@ public class MessageAutoTest {
 		
 		//是否需要进行特殊处理
 		MessageProcess processUtil = MessageProcess.getProcessInstance(msg.getProcessType());
-		if (processUtil != null) testScene.setRequestMessage(processUtil.processRequestMessage(testScene.getRequestMessage(), msg.getProcessParameter()));
+		if (processUtil != null) {
+			testScene.setRequestMessage(processUtil.processRequestMessage(testScene.getRequestMessage(), msg.getProcessParameter()));
+		}
 		
 		result.setRequestMessage(testScene.getRequestMessage());
 		//获取指定测试客户端
@@ -327,7 +329,7 @@ public class MessageAutoTest {
 						}						
 					} else {
 						//保存body体中的变量
-						str = parseUtil.judgeMessageType(result.getResponseMessage()).getObjectByPath(result.getResponseMessage(), entry.getKey());
+						str = MessageParse.judgeMessageType(result.getResponseMessage()).getObjectByPath(result.getResponseMessage(), entry.getKey());
 					}
 									
 					if (StringUtils.isNotEmpty(str)) {
@@ -339,12 +341,15 @@ public class MessageAutoTest {
 			if (!successFlag) {
 				allSuccessFlag = false;
 				switch (scene.getScene().getConfig().getErrorExecFlag()) {
-				case "0"://退出组合场景的测试
+					//退出组合场景的测试
+				case "0":
 					stopFlag = true;
 					break;
-				case "1"://继续执行下一个场景					
+					//继续执行下一个场景
+				case "1":
 					break;
-				case "2"://直接执行最后一个场景
+					//直接执行最后一个场景
+				case "2":
 					lastTestFlag = true;
 					break;
 				default:
@@ -558,7 +563,7 @@ public class MessageAutoTest {
 		TestMessageScene testScene = new TestMessageScene();
 		testScene.setComplexFlag(true);
 		testScene.setComplexScene(complexScene);
-		testScene.setNewClient("0".equals(complexScene.getNewClient()) ? true : false);
+		testScene.setNewClient("0".equals(complexScene.getNewClient()));
 		int sceneCount = 0;
 		for (MessageScene scene:complexScene.setScenes(messageSceneService)) {
 			BusinessSystem system = null;
@@ -619,9 +624,15 @@ public class MessageAutoTest {
 				
 				//获取测试地址
 				String requestUrl = "";
-				if (StringUtils.isNotBlank(scene.getRequestUrl())) requestUrl = scene.getRequestUrl();
-				if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) requestUrl = msg.getRequestUrl();
-				if (StringUtils.isBlank(requestUrl)) requestUrl = info.getRequestUrlReal();			
+				if (StringUtils.isNotBlank(scene.getRequestUrl())) {
+					requestUrl = scene.getRequestUrl();
+				}
+				if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) {
+					requestUrl = msg.getRequestUrl();
+				}
+				if (StringUtils.isBlank(requestUrl)) {
+					requestUrl = info.getRequestUrlReal();
+				}
 				
 				requestUrl = system.getReuqestUrl(requestUrl, system.getDefaultPath(), info.getInterfaceName());
 				

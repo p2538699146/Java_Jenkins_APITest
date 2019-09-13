@@ -64,6 +64,7 @@ public class SocketTestClient extends TestClient {
 		if (responseMsg.startsWith("Send")) {
 			returnMap.setResponseMessage("");
 			returnMap.setMark(responseMsg);
+			returnMap.setStatusCode("false");
 		}		
 		return returnMap;
 	}
