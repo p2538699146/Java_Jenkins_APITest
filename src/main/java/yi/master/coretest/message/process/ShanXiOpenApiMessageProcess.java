@@ -7,7 +7,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 
-import yi.master.constant.MessageKeys;
+import yi.master.coretest.message.process.config.ShanXiOpenApiMsgProcessParameter;
 import yi.master.util.PracticalUtils;
 import com.open.common.util.MD5;
 import com.open.common.util.RSAUtils;
@@ -20,15 +20,27 @@ import com.open.common.util.StringUtil;
  */
 public class ShanXiOpenApiMessageProcess extends MessageProcess {
 	private static final Logger LOGGER = Logger.getLogger(ShanXiOpenApiMessageProcess.class);
-	
-	protected ShanXiOpenApiMessageProcess() {
+	private static ShanXiOpenApiMessageProcess shanXiOpenApiMessageProcess;
+
+	private ShanXiOpenApiMessageProcess () {
+	}
+
+	public static ShanXiOpenApiMessageProcess getInstance () {
+		if (shanXiOpenApiMessageProcess == null) {
+			shanXiOpenApiMessageProcess = new ShanXiOpenApiMessageProcess();
+		}
+
+		return shanXiOpenApiMessageProcess;
 	}
 
 	@Override
 	public String processRequestMessage(String requestMessage, String processParameter) {
 		try {
 			JSONObject obj = JSONObject.fromObject(processParameter);
-			PrivateKey skPrivateKey = RSAUtils.fileToPrivateKey(PracticalUtils.replaceGlobalVariable(obj.getString(MessageKeys.SHANXI_OPEN_API_PARAMETER_PEM_FILE_PATH), null));	
+			ShanXiOpenApiMsgProcessParameter parameter = (ShanXiOpenApiMsgProcessParameter) JSONObject.toBean(obj, ShanXiOpenApiMsgProcessParameter.class);
+
+			PrivateKey skPrivateKey = RSAUtils.fileToPrivateKey(PracticalUtils.replaceGlobalVariable(parameter.getPemFilePath(), null));
+
 			String sign = StringUtil.sortOrginReqStr(requestMessage);
 			String md5str = MD5.ToMD5(URLEncoder.encode(sign, "utf-8"));
 			

@@ -9,6 +9,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 
 import yi.master.business.message.bean.AutoTask;
+import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
@@ -47,13 +48,12 @@ public class TimeTaskJobAction implements Job {
 		LOGGER.info("[自动化定时任务]请求返回内容：" + returnJson);
 		try {
 			Map maps = new ObjectMapper().readValue(returnJson, Map.class);
-			if ("0".equals(maps.get("returnCode").toString())) {
-				result[0] = maps.get("reportId").toString();
+			if (String.valueOf(ReturnCodeConsts.SUCCESS_CODE).equals(maps.get("returnCode").toString())) {
+				result[0] = String.valueOf(((int[])maps.get("data"))[0]);
 			} else {
 				result[1] = returnJson;
 			}
 		} catch (Exception e) {
-			
 			LOGGER.error("[自动化定时任务]自动化测试出错:" + returnJson, e);
 			result[1] = returnJson;
 		}

@@ -14,6 +14,9 @@ import yi.master.business.testconfig.bean.GlobalVariable;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
 /**
@@ -33,7 +36,7 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 	
 	private GlobalVariableService globalVariableService;
 	
-	private Boolean foreceCreate;
+	private Boolean forceCreate;
 	
 	@Autowired
 	public void setGlobalVariableService(
@@ -47,7 +50,7 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 	public String edit() {
 		
 		
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		if (model.getVariableId() == null) {
 			//新增
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
@@ -62,18 +65,12 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 		//验证key的唯一性
 		if (GlobalVariable.ifHasKey(model.getVariableType())) {
 			checkObjectName();
-			if (StringUtils.isBlank(model.getKey()) || !"true".equals(checkNameFlag)) {
-				
-				jsonMap.put("msg", "无效或者" + checkNameFlag + ",请重试!");
-				jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-				
-				return SUCCESS;
+			if (StringUtils.isBlank(model.getKey()) || !SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(checkNameFlag)) {
+				throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), "无效或者" + checkNameFlag + ",请重试!");
 			}
 		}
 		
-		globalVariableService.edit(model);		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+		globalVariableService.edit(model);
 		return SUCCESS;
 	}
 
@@ -86,10 +83,8 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 		} else {
 			variables = globalVariableService.findByVariableType(model.getVariableType());
 		}
-		
-		jsonMap.put("data", variables);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
+
+		setData(variables);
 		return SUCCESS;
 	}
 	
@@ -98,10 +93,7 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 	 * @return
 	 */
 	public String updateValue() {
-		
 		globalVariableService.updateValue(model.getVariableId(), model.getValue());
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
 		return SUCCESS;
 	}
 	
@@ -112,21 +104,17 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 	 */
 	public String createVariable() {
 		model = globalVariableService.get(model.getVariableId());
-		if (model == null) {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "该全局变量不存在！");
-			return SUCCESS;
+		if (model == null) {;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "该全局变量不存在！");
 		}
 		
-		Object str = model.createSettingValue(foreceCreate == null ? false : foreceCreate);
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		jsonMap.put("msg", str);
+		Object str = model.createSettingValue(forceCreate == null ? false : forceCreate);
+
 		if (str == null) {
-			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			jsonMap.put("msg", model.getCreateErrorInfo());
+			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), model.getCreateErrorInfo());
 		}
 		
-		
+		jsonObject.setMsg(str.toString());
 		return SUCCESS;
 	}
 	
@@ -143,9 +131,8 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 			checkNameFlag = (info == null) ? "true" : "重复的key";
 		}
 	}
-	
-	public void setForeceCreate(Boolean foreceCreate) {
-		this.foreceCreate = foreceCreate;
-	}
 
+	public void setForceCreate(Boolean forceCreate) {
+		this.forceCreate = forceCreate;
+	}
 }

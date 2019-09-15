@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import yi.master.business.advanced.bean.InterfaceProbe;
+import yi.master.business.advanced.enums.InterfaceProbeStatus;
 import yi.master.business.advanced.service.InterfaceProbeService;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.MessageScene;
@@ -17,6 +18,8 @@ import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.parse.URLMessageParse;
 import yi.master.coretest.task.JobManager;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.statement.AnalyzeUtil;
 import yi.master.util.FrameworkUtil;
 
@@ -58,8 +61,8 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		if (dateNum == null || dateNum < 1) {
 			dateNum = 7;
 		}
-		jsonMap.put("data", AnalyzeUtil.analyzeProbeResultSynopsisView(interfaceProbeService.listProbeBeforeResultInfo(dateNum)));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(AnalyzeUtil.analyzeProbeResultSynopsisView(interfaceProbeService.listProbeBeforeResultInfo(dateNum)));
 		return SUCCESS;
 	}
 	
@@ -75,9 +78,7 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 			model.setLastCallTime(Timestamp.valueOf(times[1].trim()));
 		}		
 		//分析数据生成报表所需内容
-		
-		jsonMap.put("data", AnalyzeUtil.analyzeProbeResults(model));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(AnalyzeUtil.analyzeProbeResults(model));
 		return SUCCESS;
 		
 	}
@@ -93,7 +94,6 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		if (model.getProbeId() != null) {
 			interfaceProbeService.updateConfig(model.getProbeId(), model.setProbeConfigJson());
 		}
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -107,8 +107,6 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		if (model != null) {
 			jobManager.addProbeTask(model);
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
 		return SUCCESS;
 	}
 	
@@ -122,8 +120,7 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		if (model != null) {
 			jobManager.stopProbeTask(model);
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
+
 		return SUCCESS;
 	}
 	
@@ -139,8 +136,8 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 			if (StringUtils.isBlank(configJson)) {
 				model.setProbeConfigJson();
 			}
-			model.setUser((User)FrameworkUtil.getSessionMap().get("user"));
-			model.setStatus("0");
+			model.setUser(FrameworkUtil.getLoginUser());
+			model.setStatus(InterfaceProbeStatus.STOPPED.getStatus());
 		} else {
 			//修改
 			//修改不会变更测试场景
@@ -158,8 +155,6 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		}
 		
 		interfaceProbeService.edit(model);
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
 		return SUCCESS;
 	}
 
@@ -176,8 +171,8 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		} else {
 			model.setProbeConfigJson(JSONObject.fromObject(URLMessageParse.parseUrlToMap(configJson, new String[]{"probeId"})).toString());
 		}
-		model.setUser((User)FrameworkUtil.getSessionMap().get("user"));
-		model.setStatus("0");
+		model.setUser(FrameworkUtil.getLoginUser());
+		model.setStatus(InterfaceProbeStatus.STOPPED.getStatus());
 		
 		InterfaceProbe probe = null;
 		for (String id:ids) {
@@ -186,18 +181,14 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 				probe.setScene(new MessageScene(Integer.valueOf(id)));
 				interfaceProbeService.edit(probe);
 			} catch (Exception e) {
-				
 				LOGGER.error("The interfaceProbe clone fail！", e);
 			}						
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
 		return SUCCESS;
 	}
 	
 	@Override
 	public String del() {
-		
 		if (!leadValidation()) {						
 			return SUCCESS;
 		}
@@ -208,14 +199,11 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 
 	@Override
 	public boolean leadValidation() {
-		
 		if (model.getProbeId() != null) {
 			//验证是否处理停止状态
 			InterfaceProbe probe = interfaceProbeService.get(model.getProbeId());
-			if (probe != null && !"0".equals(probe.getStatus())) {
-				jsonMap.put("msg", "该任务处于运行状态,请先停止!");
-				jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-				return false;
+			if (probe != null && !InterfaceProbeStatus.STOPPED.getStatus().equals(probe.getStatus())) {
+				throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该任务处于运行状态,请先停止!");
 			}
 		}
 		return super.leadValidation();

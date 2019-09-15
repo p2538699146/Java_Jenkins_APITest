@@ -1,17 +1,8 @@
 package yi.master.coretest.message.parse;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
@@ -22,7 +13,10 @@ import yi.master.util.PracticalUtils;
 import yi.master.util.message.JsonUtil;
 import yi.master.util.message.JsonUtil.TypeEnum;
 
-import net.sf.json.JSONObject;
+import java.math.BigDecimal;
+import java.util.*;
+
+import static yi.master.constant.MessageKeys.MessageParameterType;
 
 /**
  * 接口自动化<br>
@@ -31,12 +25,21 @@ import net.sf.json.JSONObject;
  * @version 2017.04.11,1.0.0.0
  *
  */
-public class JSONMessageParse extends MessageParse {	
-	
+public class JSONMessageParse extends MessageParse {
 	private static ObjectMapper mapper = new ObjectMapper();
-	
-	protected JSONMessageParse() {
-	} 
+	private static JSONMessageParse jsonMessageParse;
+
+	private JSONMessageParse () {
+
+	}
+
+	public static JSONMessageParse getInstance() {
+		if (jsonMessageParse == null) {
+			jsonMessageParse = new JSONMessageParse();
+		}
+
+		return jsonMessageParse;
+	}
 	
 	@Override
 	public String getObjectByPath(String message, String path) {
@@ -65,7 +68,7 @@ public class JSONMessageParse extends MessageParse {
 			return null;
 		}
 		ParameterService service = (ParameterService) FrameworkUtil.getSpringBean("parameterService");
-		return parseObjectToComplexParameter(maps, new ComplexParameter(service.get(SystemConsts.PARAMETER_OBJECT_ID), 
+		return parseObjectToComplexParameter(maps, new ComplexParameter(service.get(SystemConsts.DefaultObjectId.PARAMETER_OBJECT.getId()),
 				new HashSet<ComplexParameter>(), null), params, new StringBuilder(MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH));
 	}
 
@@ -118,7 +121,7 @@ public class JSONMessageParse extends MessageParse {
 			return returnMsg + "未在接口参数中定义或者类型/路径不匹配,请检查!";
 		} 
 		
-		return "true";
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	
@@ -127,81 +130,64 @@ public class JSONMessageParse extends MessageParse {
 		
 		Parameter param = parameter.getSelfParameter();
 		
-		if (param == null) {
-			return null;
+		if (param == null || param.getType() == null) {
+			return message;
 		}
-		
+
+		String parameterType = param.getType().toUpperCase();
+
 		List<ComplexParameter> childParams = new ArrayList<ComplexParameter>();
 		if (parameter.getChildComplexParameters() != null) {
 			childParams.addAll(parameter.getChildComplexParameters());
 		}
 				
-		String parameterType = param.getType();
-		
-		if (parameterType == null) {
-			parameterType = "";
+
+		if (!parameterType.matches(MessageParameterType.ARRAY_ARRAY.name() + "|" + MessageParameterType.ARRAY_MAP.name()
+				+ "|" + MessageParameterType.OBJECT.name())) {
+			message.append("\"" + param.getParameterIdentify()).append("\":");
 		}
-		
-		if (!MessageKeys.MESSAGE_PARAMETER_TYPE_ARRAY_IN_ARRAY.equalsIgnoreCase(parameterType) 
-				&& !MessageKeys.MESSAGE_PARAMETER_TYPE_MAP_IN_ARRAY.equalsIgnoreCase(parameterType)
-				&& !MessageKeys.MESSAGE_PARAMETER_TYPE_OBJECT.equalsIgnoreCase(parameterType)) {
-			message.append("\"" + param.getParameterIdentify()).append("\":");			
-		}		
-		
-		switch (parameterType.toUpperCase()) {
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_OBJECT:;
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_MAP_IN_ARRAY:;
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_MAP:
+
+		if (MessageParameterType.isObjectType(parameterType)) {
 			message.append("{");
-			
 			for (int i = 0; i < childParams.size(); i++) {
-				
 				if (childParams.get(i).getSelfParameter() == null) {
 					continue;
 				}
-				
 				paraseJsonMessage(childParams.get(i), message, messageData);
-				
 				if (i < childParams.size() - 1) {
 					message.append(",");
 				}
 			}
-			
 			message.append("}");
-			break;
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_LIST:;
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_ARRAY_IN_ARRAY:;
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_ARRAY:
+		}
+
+		if (MessageParameterType.isArrayType(parameterType)) {
 			message.append("[");
-			
 			for (int i = 0; i < childParams.size(); i++) {
 				if (childParams.get(i).getSelfParameter() == null) {
 					continue;
 				}
-				
 				paraseJsonMessage(childParams.get(i), message, messageData);
-				
 				if (i < childParams.size() - 1) {
 					message.append(",");
 				}
 			}
-			
-						
 			message.append("]");
-			break;
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA:
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_STRING:						
-			message.append("\"" + findParameterValue(param, messageData) + "\"");
-			break;
-		case MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER:
-			message.append(findParameterValue(param, messageData));
-			break;
-		default:
-			break;
 		}
+
+		if (MessageParameterType.STRING.name().equals(parameterType)
+				|| MessageParameterType.CDATA.name().equals(parameterType)) {
+			message.append("\"" + findParameterValue(param, messageData) + "\"");
+		}
+
+		if (MessageParameterType.NUMBER.name().equals(parameterType)) {
+			message.append(findParameterValue(param, messageData));
+		}
+
 		
 		return message;
-	}	
+	}
+
 	
 	@Override
 	public boolean messageFormatValidation(String message) {
@@ -254,10 +240,9 @@ public class JSONMessageParse extends MessageParse {
 		for (Object key:nodes.keySet()) {
 			if ("rootId".equals(key.toString())) continue;
 			JSONObject node = nodes.getJSONObject(key.toString());
-			if (Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA 
-					+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER, node.getString("type").toUpperCase())) {
+			if (MessageParameterType.isStringOrNumberType(node.getString("type"))) {
 				Object value = node.getString("defaultValue");
-				if (MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER.equals(node.getString("type").toUpperCase())) {
+				if (MessageParameterType.NUMBER.name().equals(node.getString("type").toUpperCase())) {
 					value = (value == null || StringUtils.isBlank(value.toString())) ? 0 : new BigDecimal(value.toString());
 				}
 				createMessageNode(node.getString("path"), message).put(node.getString("parameterIdentify"), value);
@@ -270,7 +255,9 @@ public class JSONMessageParse extends MessageParse {
 		String[] pathNames = path.split("\\.");
 		Map<String, Object> nodeObj = message;
 		for (String nodePath:pathNames) {
-			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(nodePath)) continue;
+			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(nodePath)) {
+				continue;
+			}
 			Object nodeObj_l = nodeObj.get(nodePath);
 			if (nodeObj_l == null) {
 				nodeObj_l = new HashMap<String, Object>();

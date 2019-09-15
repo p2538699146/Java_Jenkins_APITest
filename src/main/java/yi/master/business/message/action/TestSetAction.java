@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.base.bean.PageModel;
+import yi.master.business.base.bean.PageReturnJSONObject;
 import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.TestSet;
 import yi.master.business.message.service.TestSetService;
@@ -68,14 +69,9 @@ public class TestSetAction extends BaseAction<TestSet> {
 	
 	@Override
 	public String[] prepareList() {
-		
 		List<String> conditions = new ArrayList<String>();
 		conditions.add("parented=1");
-		
-		/*User user = (User) FrameworkUtil.getSessionMap().get("user");
-		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
-			conditions.add("user.userId=" + user.getUserId());
-		}*/
+
 		this.filterCondition = conditions.toArray(new String[0]);
 		return this.filterCondition;
 	}
@@ -91,18 +87,17 @@ public class TestSetAction extends BaseAction<TestSet> {
 		for (TestSet set:rootSets) {
 			sets.add(set.getNodesMap(testSetService));
 		}
-		jsonMap.put("nodes", sets);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(sets);
 		return SUCCESS;
 	}
 
 
 	@Override
 	public String edit() {
-				
 		if (model.getSetId() == null) {
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
-			model.setUser((User)(FrameworkUtil.getSessionMap().get("user")));	
+			model.setUser(FrameworkUtil.getLoginUser());
 			if ("1".equals(model.getParented())) {
 				//创建测试配置
 				TestConfig config = (TestConfig) testConfigService.getConfigByUserId(0).clone();
@@ -118,9 +113,8 @@ public class TestSetAction extends BaseAction<TestSet> {
 			model.setParentSet(new TestSet(parentId));
 		}		
 		testSetService.edit(model);
-		
-		jsonMap.put("object", model);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		setData(model);
 		return SUCCESS;
 	}
 	
@@ -135,13 +129,9 @@ public class TestSetAction extends BaseAction<TestSet> {
 		PageModel<MessageScene> pm = testSetService.listSetMessageScene(model.getSetId(), start, length 
 				,(String)dt.get("orderDataName"),(String)dt.get("orderType")
 				,(String)dt.get("searchValue"),(List<List<String>>)dt.get("dataParams"), Integer.parseInt(mode));
-		
-		jsonMap.put("draw", draw);
-		jsonMap.put("data", processListData(pm.getDatas()));
-		jsonMap.put("recordsTotal", pm.getRecordCount());		
-		jsonMap.put("recordsFiltered", pm.getFilteredCount());
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		jsonObject = new PageReturnJSONObject(draw, pm.getRecordCount(), pm.getFilteredCount());
+		jsonObject.data(processListData(pm.getDatas()));
 		return SUCCESS;
 	}
 	
@@ -150,9 +140,7 @@ public class TestSetAction extends BaseAction<TestSet> {
 	 * @return
 	 */
 	public String moveFolder () {
-		
 		testSetService.moveFolder(model.getSetId(), parentId);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -170,9 +158,6 @@ public class TestSetAction extends BaseAction<TestSet> {
 		if ("0".equals(mode)) {
 			testSetService.delSceneToSet(model.getSetId(), messageSceneId == null ? id : messageSceneId);
 		}
-		
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 	
@@ -180,9 +165,8 @@ public class TestSetAction extends BaseAction<TestSet> {
 	 * 获取当前用户拥有的测试集
 	 * @return
 	 */
-	public String getMySet () {			
-		jsonMap.put("data", testSetService.findAll("parented=1"));
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+	public String getMySet () {
+		setData(testSetService.findAll("parented=1"));
 		return SUCCESS;
 	}
 	
@@ -218,9 +202,7 @@ public class TestSetAction extends BaseAction<TestSet> {
 		}
 		
 		testSetService.edit(model);
-		
-		jsonMap.put("config", config);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(config);
 		return SUCCESS;
 	}
 	

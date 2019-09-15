@@ -28,6 +28,8 @@ import yi.master.business.message.bean.TestData;
 import yi.master.business.message.bean.TestReport;
 import yi.master.business.message.bean.TestResult;
 import yi.master.business.message.bean.TestSet;
+import yi.master.business.message.enums.ComplexSceneSuccessFlag;
+import yi.master.business.message.enums.ComplexSceneTestClientType;
 import yi.master.business.message.service.ComplexSceneService;
 import yi.master.business.message.service.MessageSceneService;
 import yi.master.business.message.service.TestDataService;
@@ -36,6 +38,7 @@ import yi.master.business.message.service.TestResultService;
 import yi.master.business.message.service.TestSetService;
 import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.testconfig.bean.TestConfig;
+import yi.master.business.testconfig.enums.TestRunType;
 import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.testconfig.service.TestConfigService;
@@ -45,6 +48,7 @@ import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.process.MessageProcess;
+import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.coretest.message.protocol.TestClient;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
@@ -127,7 +131,7 @@ public class MessageAutoTest {
 		
 		//获取出参结果
 		String v = null;
-		if (MessageKeys.MESSAGE_TYPE_JSON.equals(MessageParse.judgeType(valueExpression))) {
+		if (MessageKeys.MessageType.JSON.name().equals(MessageParse.judgeType(valueExpression))) {
 			//左右边界关联
 			v = PracticalUtils.getValueByRelationKeyWord(PracticalUtils.jsonToMap(valueExpression), result.getResponseMessage());
 		} else {
@@ -170,34 +174,39 @@ public class MessageAutoTest {
 			result.setMark(MessageKeys.NO_ENOUGH_TEST_DATA_RESULT_MARK);
 			result.setUseTime(0);
 			result.setStatusCode("000");
-			result.setRunStatus(MessageKeys.TEST_RUN_STATUS_STOP);
+			result.setRunStatus(MessageKeys.TestRunStatus.STOP.getCode());
 			return result;
 		}
 		
 		//是否需要进行特殊处理
 		MessageProcess processUtil = MessageProcess.getProcessInstance(msg.getProcessType());
-		if (processUtil != null) testScene.setRequestMessage(processUtil.processRequestMessage(testScene.getRequestMessage(), msg.getProcessParameter()));
+		if (processUtil != null) {
+			testScene.setRequestMessage(processUtil.processRequestMessage(testScene.getRequestMessage(), msg.getProcessParameter()));
+		}
 		
 		result.setRequestMessage(testScene.getRequestMessage());
 		//获取指定测试客户端
 		TestClient client = TestClient.getTestClientInstance(info.getInterfaceProtocol().trim().toLowerCase());
 		
-		Map<String, String> responseMap = client.sendRequest(testScene, procotolClient);		
+		ClientTestResponseObject responseMap = client.sendRequest(testScene, procotolClient);
+
+		String responseMessage = responseMap.getResponseMessage();
+		if (processUtil != null) {
+			responseMessage = processUtil.processResponseMessage(responseMessage, msg.getProcessParameter());
+		}
 		
-		String responseMessage = responseMap.get(MessageKeys.RESPONSE_MAP_PARAMETER_MESSAGE);
-		if (processUtil != null) responseMessage = processUtil.processResponseMessage(responseMessage, msg.getProcessParameter());
-		
-		result.setUseTime(Integer.parseInt(responseMap.get(MessageKeys.RESPONSE_MAP_PARAMETER_USE_TIME)));
-		result.setHeaders(responseMap.get(MessageKeys.RESPONSE_MAP_PARAMETER_HEADERS));
+		result.setUseTime((int)responseMap.getUseTime());
+		result.setHeaders(responseMap.getHeaders());
 		
 		MessageParse parseUtil = MessageParse.getParseInstance(msg.getMessageType());
 		
 		result.setResponseMessage(parseUtil.messageFormatBeautify(responseMessage));		
-		result.setStatusCode(responseMap.get(MessageKeys.RESPONSE_MAP_PARAMETER_STATUS_CODE));
+		result.setStatusCode(responseMap.getStatusCode());
 		
-		if ("false".equals(result.getStatusCode()) || !PracticalUtils.isNormalString(result.getResponseMessage())) {
-			result.setRunStatus(MessageKeys.TEST_RUN_STATUS_STOP);						
-			result.setMark(responseMap.get(MessageKeys.RESPONSE_MAP_PARAMETER_TEST_MARK));
+		if (SystemConsts.DefaultBooleanIdentify.FALSE.getString().equals(result.getStatusCode())
+				|| !PracticalUtils.isNormalString(result.getResponseMessage())) {
+			result.setRunStatus(MessageKeys.TestRunStatus.STOP.getCode());
+			result.setMark(responseMap.getMark());
 			//解除数据预占
 			CacheUtil.removeLockedTestData(testScene.getDataId());
 			return result;
@@ -207,13 +216,13 @@ public class MessageAutoTest {
 		Map<String,String> map = validateUtil.validate(result.getResponseMessage(), testScene.getRequestMessage(), scene, msg.getMessageType());
 		
 		//变更数据状态
-		if ("0".equals(map.get(MessageValidateResponse.VALIDATE_MAP_STATUS_KEY))) {
-			result.setRunStatus(MessageKeys.TEST_RUN_STATUS_SUCCESS);	
+		if (MessageValidateResponse.VALIDATE_SUCCESS_FLAG.equals(map.get(MessageValidateResponse.VALIDATE_MAP_STATUS_KEY))) {
+			result.setRunStatus(MessageKeys.TestRunStatus.SUCCESS.getCode());
 			if (testScene.getDataId() != 0) {				
 				testDataService.updateDataValue(testScene.getDataId(), "status", "1");
 			}
 		} else {
-			result.setRunStatus(MessageKeys.TEST_RUN_STATUS_FAIL);
+			result.setRunStatus(MessageKeys.TestRunStatus.FAIL.getCode());
 		}
 		
 		//解除数据预占
@@ -241,8 +250,10 @@ public class MessageAutoTest {
 		StringBuilder complexMark = new StringBuilder();
 				
 		MessageParse parseUtil = null;
-		boolean stopFlag = false; //停止标记
-		boolean lastTestFlag = false;//测试最后一个的标记
+		//停止标记
+		boolean stopFlag = false;
+		//测试最后一个的标记
+		boolean lastTestFlag = false;
 		boolean allSuccessFlag = true;
 		
 		int lastSeqNum = 1;
@@ -275,7 +286,9 @@ public class MessageAutoTest {
 					scene.setCallParameter(new HashMap<String, Object>());
 					scene.getCallParameter().put(MessageKeys.HTTP_PARAMETER_HEADER, new HashMap<String, String>());										
 				}
-				if (scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_QUERYS) == null) scene.getCallParameter().put(MessageKeys.HTTP_PARAMETER_QUERYS, new HashMap<String, String>());
+				if (scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_QUERYS) == null) {
+					scene.getCallParameter().put(MessageKeys.HTTP_PARAMETER_QUERYS, new HashMap<String, String>());
+				}
 				
 				//根据变量名来判断是替换请求头还是请求体还是query参数
 				if (entry.getKey().startsWith("RequestHeader.")) {
@@ -299,7 +312,7 @@ public class MessageAutoTest {
 				result = singleTest(scene, procotolClient);
 				
 				//如果场景测试成功
-				if (MessageKeys.TEST_RUN_STATUS_SUCCESS.equals(result.getRunStatus())) {
+				if (MessageKeys.TestRunStatus.SUCCESS.getCode().equals(result.getRunStatus())) {
 					successFlag = true;
 					continue;
 				}
@@ -326,7 +339,7 @@ public class MessageAutoTest {
 						}						
 					} else {
 						//保存body体中的变量
-						str = parseUtil.judgeMessageType(result.getResponseMessage()).getObjectByPath(result.getResponseMessage(), entry.getKey());
+						str = MessageParse.judgeMessageType(result.getResponseMessage()).getObjectByPath(result.getResponseMessage(), entry.getKey());
 					}
 									
 					if (StringUtils.isNotEmpty(str)) {
@@ -338,12 +351,15 @@ public class MessageAutoTest {
 			if (!successFlag) {
 				allSuccessFlag = false;
 				switch (scene.getScene().getConfig().getErrorExecFlag()) {
-				case "0"://退出组合场景的测试
+					//退出组合场景的测试
+				case "0":
 					stopFlag = true;
 					break;
-				case "1"://继续执行下一个场景					
+					//继续执行下一个场景
+				case "1":
 					break;
-				case "2"://直接执行最后一个场景
+					//直接执行最后一个场景
+				case "2":
 					lastTestFlag = true;
 					break;
 				default:
@@ -361,7 +377,9 @@ public class MessageAutoTest {
 			}									
 		}	
 		
-		if(testScene.getTestClient() != null) testScene.getTestClient().putBackTestClient(procotolClient);
+		if(testScene.getTestClient() != null) {
+			testScene.getTestClient().putBackTestClient(procotolClient);
+		}
 		
 		//如果缺少场景(结果和场景数量不等)，表明有某些场景设定的测试环境在原本的测试场景中已经被删除了或者直接执行了最好一个场景，此时，组合场景必须为测试失败状态并添加备注
 		if (results.size() != testScene.getScenes().size()) {
@@ -370,7 +388,7 @@ public class MessageAutoTest {
 		
 		//SuccessFlag=0代表要求所有场景必须测试成功	
 		//SuccessFlag=2代表将每一个测试场景作单独处理
-		if ("0".equals(testScene.getComplexScene().getSuccessFlag())) {
+		if (ComplexSceneSuccessFlag.ALL_SUCCESS_FLAG.getFlag().equals(testScene.getComplexScene().getSuccessFlag())) {
 			TestResult complexResult = new TestResult();
 			complexResult.setMessageInfo(testScene.getComplexScene().getComplexSceneName() + ",组合场景,组合场景");
 			complexResult.setTestReport(report);
@@ -379,7 +397,7 @@ public class MessageAutoTest {
 			complexResult.setUseTime(0);
 			complexResult.setProtocolType("FIXED");
 			complexResult.setStatusCode("000");			
-			complexResult.setRunStatus(allSuccessFlag ? MessageKeys.TEST_RUN_STATUS_SUCCESS : MessageKeys.TEST_RUN_STATUS_FAIL);
+			complexResult.setRunStatus(allSuccessFlag ? MessageKeys.TestRunStatus.SUCCESS.getCode() : MessageKeys.TestRunStatus.FAIL.getCode());
 			complexResult.setComplexSceneResults(new TreeSet<TestResult>(results));
 			complexResult.setRequestUrl("");
 			complexResult.setRequestMessage("");
@@ -389,7 +407,7 @@ public class MessageAutoTest {
 			return complexResult;
 		}
 		
-		if ("2".equals(testScene.getComplexScene().getSuccessFlag())) {
+		if (ComplexSceneSuccessFlag.SEPARATE_STATISTICS_RESULT.getFlag().equals(testScene.getComplexScene().getSuccessFlag())) {
 			for (TestResult result:results) {
 				result.setTestReport(report);				
 				testResultService.save(result);
@@ -440,7 +458,7 @@ public class MessageAutoTest {
 		//测试报告
 		final TestReport report = new TestReport();
 		report.setUser(user);
-		report.setFinishFlag("N");
+		report.setFinishFlag(SystemConsts.FinishedFlag.N.name());
 		report.setTestMode(String.valueOf(setId));
 		report.setCreateTime(new Timestamp(System.currentTimeMillis()));		
 		report.setMark(testMark);
@@ -523,7 +541,7 @@ public class MessageAutoTest {
 					};
 					testThread.start();
 					try {
-						if (testSceneT.getPriority() > 0|| "1".equals(config.getRunType())) {
+						if (testSceneT.getPriority() > 0|| TestRunType.SERIAL.getType().equals(config.getRunType())) {
 							testThread.join();
 						}
 					} catch (Exception e) {
@@ -557,25 +575,28 @@ public class MessageAutoTest {
 		TestMessageScene testScene = new TestMessageScene();
 		testScene.setComplexFlag(true);
 		testScene.setComplexScene(complexScene);
-		testScene.setNewClient("0".equals(complexScene.getNewClient()) ? true : false);
+		testScene.setNewClient(ComplexSceneTestClientType.NEW_CLIENT.getClientType().equals(complexScene.getNewClient()));
 		int sceneCount = 0;
 		for (MessageScene scene:complexScene.setScenes(messageSceneService)) {
-			if (StringUtils.isBlank(scene.getConfig().getSystemId())
-					|| !NumberUtil.isInteger(scene.getConfig().getSystemId())) {
-				throw new YiException(AppErrorCode.AUTO_TEST_COMPLEX_SCENE_LACK_BUSINESS_SYSTEM);
+			BusinessSystem system = null;
+			if (StringUtils.isNotBlank(scene.getConfig().getSystemId())
+					&& NumberUtil.isInteger(scene.getConfig().getSystemId())) {
+				system = businessSystemService.get(Integer.valueOf(scene.getConfig().getSystemId()));
 			}
-			Set<TestMessageScene> tss = packageRequestObject(scene, config, businessSystemService.get(Integer.valueOf(scene.getConfig().getSystemId())));
-			if (tss.size() == 1) {
-				testScene.getScenes().addAll(tss);
-				if ("2".equals(complexScene.getSuccessFlag())) {
+			Set<TestMessageScene> tss = packageRequestObject(scene, config, system);
+			if (tss.size() >= 1) {
+				testScene.getScenes().add(new ArrayList<TestMessageScene>(tss).get(0));
+				if (ComplexSceneSuccessFlag.SEPARATE_STATISTICS_RESULT.getFlag().equals(complexScene.getSuccessFlag())) {
 					sceneCount++;
 				}
 			} else {
 				testScene.getScenes().add(null);
 			}
 		}	
-		if(testScene.getScenes().size() > 0) testScene.setTestClient(testScene.getScenes().get(0).getTestClient());
-		testScene.setTestCount("2".equals(complexScene.getSuccessFlag()) ? sceneCount : 1);
+		if(testScene.getScenes().size() > 0) {
+			testScene.setTestClient(testScene.getScenes().get(0).getTestClient());
+		}
+		testScene.setTestCount(ComplexSceneSuccessFlag.SEPARATE_STATISTICS_RESULT.getFlag().equals(complexScene.getSuccessFlag()) ? sceneCount : 1);
 		return testScene;		
 	}
 	
@@ -587,7 +608,7 @@ public class MessageAutoTest {
 	 * @return
 	 */
 	@SuppressWarnings("static-access")
-	public Set<TestMessageScene> packageRequestObject (MessageScene scene, TestConfig config, BusinessSystem singleSystem) {				
+	public Set<TestMessageScene> packageRequestObject (MessageScene scene, TestConfig config, BusinessSystem singleSystem) {
 		InterfaceInfo info = messageSceneService.getInterfaceOfScene(scene.getMessageSceneId());
 		Message msg = messageSceneService.getMessageOfScene(scene.getMessageSceneId());
 		
@@ -617,9 +638,15 @@ public class MessageAutoTest {
 				
 				//获取测试地址
 				String requestUrl = "";
-				if (StringUtils.isNotBlank(scene.getRequestUrl())) requestUrl = scene.getRequestUrl();
-				if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) requestUrl = msg.getRequestUrl();
-				if (StringUtils.isBlank(requestUrl)) requestUrl = info.getRequestUrlReal();			
+				if (StringUtils.isNotBlank(scene.getRequestUrl())) {
+					requestUrl = scene.getRequestUrl();
+				}
+				if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) {
+					requestUrl = msg.getRequestUrl();
+				}
+				if (StringUtils.isBlank(requestUrl)) {
+					requestUrl = info.getRequestUrlReal();
+				}
 				
 				requestUrl = system.getReuqestUrl(requestUrl, system.getDefaultPath(), info.getInterfaceName());
 				
@@ -632,13 +659,13 @@ public class MessageAutoTest {
 					d = datas.get(0);
 				}
 				if (d != null && !CacheUtil.checkLockedTestData(d.getDataId())) {				
-					if (info.getInterfaceType().equalsIgnoreCase(MessageKeys.INTERFACE_TYPE_SL) && d.getStatus().equals("0")) {
+					if (info.getInterfaceType().equalsIgnoreCase(MessageKeys.InterfaceBusiType.SL.name()) && d.getStatus().equals("0")) {
 						//预占测试数据
 						CacheUtil.addLockedTestData(d.getDataId());
 						testScene.setDataId(d.getDataId());
 					}
 					
-					JSONObject paramsData = new JSONObject().fromObject(StringUtils.isNotBlank(d.getParamsData()) ? d.getParamsData() : "{}");
+					JSONObject paramsData = JSONObject.fromObject(StringUtils.isNotBlank(d.getParamsData()) ? d.getParamsData() : "{}");
 					//有单独的测试配置说明是组合场景下的场景
 					if (scene.getConfig() != null) {
 						for (Map.Entry<String, String> entry:scene.getConfig().getUseVariables().entrySet()) {

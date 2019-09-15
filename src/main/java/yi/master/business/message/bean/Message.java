@@ -68,12 +68,7 @@ public class Message implements Serializable{
 	private String parameterJson;
 
 	/**
-	 * 调用参数<br>
-	 * 用json串保存，不同的协议有不同的参数<br>
-	 * 
-	 * HTTP协议默认:<br>
-	 * {"Headers":{},Authorization:{},Method:"post"}
-	 * 
+	 * 调用参数
 	 */
 	private String callParameter;
 	

@@ -9,9 +9,12 @@ import org.apache.struts2.json.annotations.JSON;
 
 import yi.master.annotation.CustomConditionSetting;
 import yi.master.annotation.FieldNameMapper;
+import yi.master.business.advanced.enums.PtKeepAlive;
+import yi.master.business.advanced.enums.PtParameterGetType;
 import yi.master.business.message.bean.MessageScene;
 import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.user.bean.User;
+import yi.master.constant.SystemConsts;
 
 /**
  * 接口性能测试配置
@@ -20,7 +23,11 @@ import yi.master.business.user.bean.User;
  *
  */
 public class PerformanceTestConfig implements Serializable {
-	
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 默认分隔符
+	 */
+	public static final String DEFAULT_FORMAT_CHARACTER = ",";
 	/**
 	 * 100
 	 */
@@ -30,7 +37,7 @@ public class PerformanceTestConfig implements Serializable {
 	 */
 	public static final Integer MAX_TEST_TIME = 28800;
 	
-	private static final long serialVersionUID = 1L;
+
 	private Integer ptId;
 	/**
 	 * 名称：默认为 场景名_测试环境名_线程数
@@ -50,7 +57,7 @@ public class PerformanceTestConfig implements Serializable {
 	 * 1 - 保持长连接<br>
 	 * 默认为 保持长连接
 	 */
-	private String keepAlive = "1";
+	private String keepAlive = PtKeepAlive.KEEP_ALIVE.getCode();
 	/**
 	 * 测试线程数<br>
 	 * 范围1 - 99（防止线程太大出现不可控情况,后期改进测试核心代码再解除限制）<br>
@@ -68,18 +75,18 @@ public class PerformanceTestConfig implements Serializable {
 	 * 0 - 不可复用<br>
 	 * 默认为可复用
 	 */
-	private String parameterReuse = "1";
+	private String parameterReuse = SystemConsts.DefaultBooleanIdentify.TRUE.getNumber();
 	/**
 	 * 参数取值规则<br>
 	 * 0 - 按顺序取值<br>
 	 * 1 - 随机取值<br>
 	 * 默认为按顺序取值
 	 */
-	private String parameterPickType = "0";
+	private String parameterPickType = PtParameterGetType.SEQUENCE.getType();
 	/**
 	 * 参数化文件格式化分隔符,默认为英文下的逗号
 	 */
-	private String formatCharacter = ",";
+	private String formatCharacter = DEFAULT_FORMAT_CHARACTER;
 	/**
 	 * 最大请求次数，多线程测试将会平分这个值
 	 */

@@ -318,7 +318,7 @@ var REQUEST_URL = {
         GET:"webcase-get",
         EDIT:"webcase-edit",
         LIST: "webcase-list",
-        CHANGE_BROWSER_TYPE: "webcase-changeBroswerType",
+        CHANGE_BROWSER_TYPE: "webcase-changeBrowserType",
         UPDATE_CONFIG_JSON: "webcase-updateConfig"
     },
     //web步骤
@@ -400,12 +400,17 @@ var EXPLANATION_MARK = {
 //报文处理类型参数设置
 var MESSAGE_PROCESS = {
     "ShanXiOpenApi":{
+        "pemFilePath":""
     },
     "AnhuiApp":{
+        "key":"",
+        "sensitiveInformation":"userIn.userPasswd,imsi,imei",
+        "publicKey":"",
+        "algorithmType":"RSA"
     }
 }
 
-//协议相关信息
+//接口协议-调用参数配置信息
 var MESSAGE_PROTOCOL = {
     "HTTP":{
         "Headers":{
@@ -441,8 +446,15 @@ var MESSAGE_PROTOCOL = {
         "Method":"",
         "Username":"",
         "Password":""
-    }
+    },
+    "WebSocket":{
+        "ConnectTimeOut":"",
+        "ReadTimeOut":""
+    },
+    "Dubbo":{}
 }
+
+
 
 
 //WEB自动化相关
@@ -461,7 +473,7 @@ var WEB_STEP_PARAMETER = {
             "example":"Keys.ENTER 模拟键盘Enter按键",
             "mark":"模拟键盘按键,支持组合按键,常用键如下:<br>回车键 Keys.ENTER<br>删除键 Keys.BACK_SPACE<br>空格键 Keys.SPACE<br>制表键 Keys.TAB<br>回退键 Keys.ESCAPE<br>刷新键 Keys.F5<br>更多按键说明请参考说明文档!"
         },
-        "gloablVariable":{
+        "globalVariable":{
             "dataType":true,
             "text":"全局变量",
             "example":"${__current_timestamp}",

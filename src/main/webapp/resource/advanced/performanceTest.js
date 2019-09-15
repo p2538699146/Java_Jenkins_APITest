@@ -266,7 +266,7 @@ var eventList = {
 				$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_INIT, {ptId:data.ptId}, function(json){
 					if (json.returnCode == 0) {
 						layer.confirm('初始化完成,是否需要打开测试视图页面？', {title:'提示'}, function(index){
-							$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_VIEW, {objectId:json.object.objectId}, function(text){
+							$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_VIEW, {objectId:json.data.objectId}, function(text){
 								loading(false);
 								if (text.returnCode == 0) {	
 									layer_show("性能测试视图", templates["performance-test-task-view"](text.object), null, null, 1, function(layero, index){
@@ -346,7 +346,6 @@ var eventList = {
 			}
 			createViewWindow(currentTestObject[type].reverse().join("\n"), {
 				title:"测试信息查看", //标题
-				copyBtn:true//是否显示复制按钮
 			});
 		},
 		//测试视图界面-执行测试
@@ -411,7 +410,7 @@ var eventList = {
 			$.post(REQUEST_URL.PERFORMANCE_RESULT.ANALYZE, {ptResultId:$("#ptResultId").val(), rangeTime:$("#rangeTime").val()}, function(json) {
 				loading(false);
 				if (json.returnCode == 0) {
-					currentTestObject = json.object;
+					currentTestObject = json.data;
 					updateViewDataInterval(window.layero);
 					layer.close($("#layerIndex").val());
 					layer.msg('视图刷新成功!', {icon:1, time:1600}); 
@@ -515,14 +514,14 @@ function createTestView(layero, object) {
 		window.intervalId = setInterval(function(){
 			$.post(REQUEST_URL.PERFORMANCE_TEST.TASK_VIEW, {objectId:currentTestObject.objectId}, function(json){
 				if (json.returnCode == 0) {
-					if (!json.object.running) {
+					if (!json.data.running) {
 						return;
 					}
-					if (currentTestObject.time[currentTestObject.time.length - 1] === json.object.time[json.object.time.length - 1]) {
+					if (currentTestObject.time[currentTestObject.time.length - 1] === json.data.time[json.data.time.length - 1]) {
 						return;
 					}
 					//更新页面
-					currentTestObject = json.object;
+					currentTestObject = json.data;
 					updateViewDataInterval(layero);			
 				} else {
 					layer.msg('获取数据失败:' + json.msg, {time:1500});

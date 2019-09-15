@@ -17,6 +17,8 @@ import yi.master.business.user.bean.User;
 import yi.master.business.user.service.RoleService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
 /**
@@ -50,7 +52,7 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 			model.setParentNode(new BusiMenuInfo(model.getParentNodeId2()));
 		}
 		if (model.getMenuId() == null) {
-			model.setCreateUser((User) FrameworkUtil.getSessionMap().get("user"));
+			model.setCreateUser(FrameworkUtil.getLoginUser());
 		}		
 		return super.edit();
 	}
@@ -61,6 +63,9 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 	 */
 	public String getUserMenus() {
 		User user = FrameworkUtil.getLoginUser();
+		if (user == null) {
+			throw new YiException(AppErrorCode.NO_LOGIN);
+		}
 		Role role = roleService.get(user.getRole().getRoleId());
 		//获取一级菜单信息
 		List<BusiMenuInfo> oneLevMenus = busiMenuInfoService.findAll("status='1'", "nodeLevel=0");
@@ -69,8 +74,7 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 		
 		//组装菜单格式
 		JSONObject json = formatMenuJson(oneLevMenus, userMenus);
-		
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "").setData("data", json);
+		setData(json);
 		return SUCCESS;
 	}
 	

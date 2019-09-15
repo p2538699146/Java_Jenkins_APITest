@@ -24,6 +24,8 @@ import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.excel.ImportMessage;
 
@@ -69,11 +71,7 @@ public class MessageAction extends BaseAction<Message>{
 		List<String> conditions = new ArrayList<String>();
 		if (this.interfaceId != null) {
 			conditions.add("interfaceInfo.interfaceId=" + interfaceId);
-		}		
-		/*User user = (User) FrameworkUtil.getSessionMap().get("user");
-		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
-			conditions.add("user.userId=" + user.getUserId());
-		}*/
+		}
 		this.filterCondition = conditions.toArray(new String[0]);
 		return this.filterCondition;
 	}
@@ -87,15 +85,12 @@ public class MessageAction extends BaseAction<Message>{
 		InterfaceInfo info = interfaceInfoService.get(interfaceId);
 		
 		if (info == null) {
-			jsonMap.put("msg", "接口信息不存在!");
-			jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), "接口信息不存在");
 		}
 		
 		Map<String, Object> result = ImportMessage.importToDB(path, info);
 		
-		jsonMap.put("result", result);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+		setData(result);
 		return SUCCESS;
 	}
 
@@ -107,13 +102,12 @@ public class MessageAction extends BaseAction<Message>{
 		MessageParse parseUtil = MessageParse.getParseInstance(model.getMessageType());		
 		
 		String returnJson = parseUtil.messageFormatBeautify(model.getParameterJson());
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.INTERFACE_ILLEGAL_TYPE_CODE);
-		if (returnJson != null) {
-			jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-			jsonMap.put("returnJson", returnJson);
+
+		if (returnJson == null) {
+			throw new YiException(AppErrorCode.INTERFACE_ILLEGAL_TYPE);
 		}	
-		
+
+		setData(returnJson);
 		return SUCCESS;
 	}
 	
@@ -134,14 +128,12 @@ public class MessageAction extends BaseAction<Message>{
 		List<Parameter> interfaceParams = parameterService.findByInterfaceId(interfaceId);
 		
 		String resultFlag = parseUtil.checkParameterValidity(interfaceParams, model.getParameterJson());
-		
-		if ("true".equals(resultFlag)) {
-			jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);//验证通过
-			return SUCCESS;
+
+		if (!SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(resultFlag)) {
+			throw new YiException(AppErrorCode.MESSAGE_VALIDATE_ERROR.getCode(), resultFlag);
 		}
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.MESSAGE_VALIDATE_ERROR);//验证不通过		
-		jsonMap.put("msg", resultFlag);
+
+		jsonObject.setMsg(resultFlag);
 		return SUCCESS;		
 	}
 	
@@ -158,15 +150,13 @@ public class MessageAction extends BaseAction<Message>{
 		}
 
 		Set<Parameter> params = (interfaceInfoService.get(model.getInterfaceInfo().getInterfaceId())).getParameters();
-		String validateFalg = parseUtil.checkParameterValidity(new ArrayList<Parameter>(params), model.getParameterJson());
+		String validateFlag = parseUtil.checkParameterValidity(new ArrayList<Parameter>(params), model.getParameterJson());
 
-		if (!"true".equals(validateFalg)) {
-			jsonMap.put("msg", validateFalg);
-			jsonMap.put("returnCode", ReturnCodeConsts.MESSAGE_VALIDATE_ERROR);
-			return SUCCESS;
+		if (!SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(validateFlag)) {
+			throw new YiException(AppErrorCode.MESSAGE_VALIDATE_ERROR.getCode(), validateFlag);
 		}
 
-		User user = (User)(FrameworkUtil.getSessionMap().get("user"));
+		User user = FrameworkUtil.getLoginUser();
 		if (model.getMessageId() == null) {
 			//增加			
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
@@ -183,7 +173,6 @@ public class MessageAction extends BaseAction<Message>{
 		model.setParameterJson(parseUtil.messageFormatBeautify(model.getParameterJson()));
 		model.setComplexParameter(parseUtil.parseMessageToObject(model.getParameterJson(), new ArrayList<Parameter>(params)));
 		messageService.edit(model);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
 		return SUCCESS;
 	}
 	
@@ -191,16 +180,13 @@ public class MessageAction extends BaseAction<Message>{
 	
 	@Override
 	public String get() {
-		
 		Message msg = messageService.get(id);		
 
 		MessageParse parseUtil = MessageParse.getParseInstance(msg.getMessageType());
 
 		msg.setParameterJson(parseUtil.messageFormatBeautify(parseUtil.depacketizeMessageToString(msg.getComplexParameter(), null)));
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		jsonMap.put("object", msg);
-		
+
+		setData(msg);
 		return SUCCESS;
 	}
 	
@@ -210,9 +196,7 @@ public class MessageAction extends BaseAction<Message>{
 	 */
 	public String createMessage() {
 		MessageParse parseUtil = MessageParse.getParseInstance(model.getMessageType());
-		
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
-		setData("message", parseUtil.createMessageByNodes(JSONObject.fromObject(nodes)));
+		setData(parseUtil.createMessageByNodes(JSONObject.fromObject(nodes)));
 		return SUCCESS;
 	}
 	

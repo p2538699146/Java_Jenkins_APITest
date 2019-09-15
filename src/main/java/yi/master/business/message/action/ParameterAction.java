@@ -16,6 +16,8 @@ import yi.master.business.message.service.ParameterService;
 import yi.master.constant.MessageKeys;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.parse.MessageParse;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 
 /**
  * 接口自动化
@@ -61,11 +63,8 @@ public class ParameterAction extends BaseAction<Parameter> {
 	 * @return
 	 */
 	public String getParams() {
-		List<Parameter> ps = parameterService.findByInterfaceId(interfaceId);		
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		jsonMap.put("data", ps);
-		
+		List<Parameter> ps = parameterService.findByInterfaceId(interfaceId);
+		setData(ps);
 		return SUCCESS;
 	}
 	
@@ -75,24 +74,8 @@ public class ParameterAction extends BaseAction<Parameter> {
 	 */
 	public String delInterfaceParams() {
 		parameterService.delByInterfaceId(interfaceId);
-				
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
-	
-/*	*//**
-	 * 根据传入的参数属性名称和属性值来更新指定参数的指定属性
-	 *//*
-	@Override
-	public String edit() {
-		parameterService.editProperty(id, attrName, attrValue);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-		
-		return SUCCESS;
-	}*/
-	
-	
-	
 	
 	/**
 	 * 根据传入的接口入参报文批量处理导入参数
@@ -102,34 +85,25 @@ public class ParameterAction extends BaseAction<Parameter> {
 		InterfaceInfo info = interfaceInfoService.get(interfaceId);	
 		
 		if (info == null) {
-			jsonMap.put("msg", "不存在的接口信息，可能已被删除!");
-			jsonMap.put("returnCode", ReturnCodeConsts.MISS_PARAM_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.INTERFACE_INFO_NOT_EXIST);
 		}
 		
 		MessageParse parseUtil = MessageParse.getParseInstance(messageType);
-		
 		if (parseUtil == null) {
-			jsonMap.put("msg", "无法解析此格式报文!");
-			jsonMap.put("returnCode", ReturnCodeConsts.MISS_PARAM_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.MESSAGE_PARSE_ERROR);
 		}
 		
 		Set<Parameter> params = parseUtil.importMessageToParameter(paramsJson, info.getParameters());
 		
 		if (params == null) {
-			jsonMap.put("returnCode", ReturnCodeConsts.INTERFACE_ILLEGAL_TYPE_CODE);
-			jsonMap.put("msg", "不是指定格式的合法报文!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.INTERFACE_ILLEGAL_TYPE.getCode(), "不是指定格式的合法报文!");
 		}		
 
 		for (Parameter p:params) {
 			p.setInterfaceInfo(info);
 			parameterService.edit(p);
 		}
-		
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
 		return SUCCESS;
 	}
 	
@@ -144,9 +118,7 @@ public class ParameterAction extends BaseAction<Parameter> {
 				: MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH + "." + model.getPath());
 		if (parameterService.checkRepeatParameter(model.getParameterId(), model.getParameterIdentify(), model.getPath(), 
 				model.getType(), model.getInterfaceInfo().getInterfaceId()) != null) {
-			jsonMap.put("msg", "该参数已存在!");
-			jsonMap.put("returnCode", ReturnCodeConsts.NAME_EXIST_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NAME_EXIST);
 		}
 
 		return super.edit();

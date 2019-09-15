@@ -9,11 +9,14 @@ import org.springframework.stereotype.Controller;
 
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.base.bean.PageModel;
+import yi.master.business.base.bean.PageReturnJSONObject;
 import yi.master.business.message.bean.InterfaceInfo;
 import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
 @Controller
@@ -41,12 +44,9 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 
 	@Override
 	public String listAll() {
-		
 		if (model.getProtocolType() != null) {
 			List<BusinessSystem> ts = businessSystemService.findAll("protocolType='" + model.getProtocolType() + "'");
-			jsonMap.put("data", processListData(ts));
-			jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
-			
+			setData(processListData(ts));
 			return SUCCESS;
 		}
 		return super.listAll();
@@ -54,24 +54,18 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 
 	@Override
 	public String edit() {
-		
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		model.setLastModifyUser(user.getRealName());
 		businessSystemService.edit(model);
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 		return SUCCESS;
 	}
 
 
 	@Override
 	public String del() {
-		
 		model = businessSystemService.get(id);
 		if (model.getInfoCount() > 0) {
-			jsonMap.put("msg", "该测试环境尚有接口信息,请先解除关联!");
-			jsonMap.put("returnCode", ReturnCodeConsts.ILLEGAL_HANDLE_CODE);
-			return SUCCESS;
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该测试环境尚有接口信息,请先解除关联!");
 		}
 		return super.del();
 	}
@@ -90,7 +84,6 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 		if ("0".equals(mode)) {
 			businessSystemService.delInterfaceFromSystem(model.getSystemId(), interfaceId == null ? id : interfaceId);
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		return SUCCESS;
 	}
 	
@@ -104,13 +97,10 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 		PageModel<InterfaceInfo> pm = businessSystemService.listSystemInterface(model.getSystemId(), start, length 
 				,(String)dt.get("orderDataName"),(String)dt.get("orderType")
 				,(String)dt.get("searchValue"),(List<List<String>>)dt.get("dataParams"),Integer.parseInt(mode),  model.getProtocolType());
-		
-		jsonMap.put("draw", draw);
-		jsonMap.put("data", processListData(pm.getDatas()));
-		jsonMap.put("recordsTotal", pm.getRecordCount());		
-		jsonMap.put("recordsFiltered", pm.getFilteredCount());
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
+
+		jsonObject = new PageReturnJSONObject(draw, pm.getRecordCount(), pm.getFilteredCount());
+		jsonObject.data(processListData(pm.getDatas()));
+
 		return SUCCESS;
 	}
 	

@@ -1,15 +1,15 @@
 package yi.master.coretest.message.parse;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
-
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
+import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -20,15 +20,23 @@ import yi.master.util.PracticalUtils;
  *
  */
 public class OPTMessageParse extends FixedMessageParse {
-	
-	protected OPTMessageParse() {
-		
+	private static OPTMessageParse optMessageParse;
+
+	private OPTMessageParse () {
+
+	}
+
+	public static OPTMessageParse getInstance () {
+		if (optMessageParse == null) {
+			optMessageParse = new OPTMessageParse();
+		}
+
+		return optMessageParse;
 	}
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		
-		return "true";
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	@Override

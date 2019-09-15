@@ -89,10 +89,20 @@ var templateParams = {
 			label:"处理类型",
 			select:[{	
 				name:"processType",
-				option:[{
-					value:"",
-					text:"请选择一个处理类型"
-				}]
+				option:function(){
+					let options = [{
+                        value:"",
+                        text:"请选择一个处理类型"
+                    }];
+					$.each(MESSAGE_PROCESS, function(k, p) {
+                        options.push({
+                            value:k,
+                            text:'**' + k + '**'
+						});
+					});
+
+					return options;
+				}()
 				}],
 			input:[{
 					hidden:true,
@@ -369,13 +379,11 @@ var eventList = {
 			
 		},
 		'#setting-call-parameter':function() {	//配置调用参数
-			
 			if (!strIsNotEmpty($("#callParameter").val())) {
 				$("#callParameter").val(JSON.stringify(MESSAGE_PROTOCOL[protocolType]));
 			}
 			
 			var json = JSON.parse($("#callParameter").val());
-			
 			var callParameterViewHtml = '<article class="page-container"><form action="" method="" class="form form-horizontal">';
 						
 			if (json != null && !$.isEmptyObject(json)) {
@@ -400,7 +408,7 @@ var eventList = {
 					callParameterViewHtml += '</div></div>';
 				});
 			} else {
-				layer.alert("读取协议参数失败!", {icon:5});
+				layer.msg("该协议类型无参数配置！", {time: 1600});
 				return false;
 			}
 			
@@ -416,7 +424,6 @@ var eventList = {
 			messageId = data.messageId
 			createViewWindow(getParameterJson, {
 				title:data.interfaceName + "-" + data.messageName + "-[入参报文]",
-				copyBtn:true,
 				refreshBtn:true
 			});				
 		},
@@ -445,7 +452,7 @@ var eventList = {
 			messageId = data.messageId;
 			publish.renderParams.editPage.modeFlag = 1;
 			publish.renderParams.editPage.objId = messageId;
-			layer_show("编辑报文信息", editHtml, editPageWidth, 780, 1);
+			layer_show("编辑报文信息", editHtml, editPageWidth, editPageHeight.edit, 1);
 			publish.init();	
 		},
 		"#choose-business-system":function () {//选择测试环境
@@ -455,7 +462,7 @@ var eventList = {
 						title:"请选择接口所属的测试环境(可多选,最多不超过10个)",
 						customData:{//自定义数据，Array数组对象
 							enable:true,
-							data:json.object.systems,
+							data:json.data.systems,
 							textItemName:"systemName",
 							valueItemName:"systemId"
 						},
@@ -504,7 +511,7 @@ var eventList = {
 			}
 			$.post(REQUEST_URL.MESSAGE.FORMAT, {parameterJson:jsonStr, messageType:messageType}, function(data) {
 				if(data.returnCode == 0){
-					$(".textarea").val(data.returnJson);
+					$(".textarea").val(data.data);
 				} else if(data.returnCode == 912) {
 					layer.msg("格式化失败：不是指定的格式!",{icon:5,time:1500});
 				}else {
@@ -525,10 +532,9 @@ var eventList = {
 				layer.msg('请先选择一个处理类型!', {icon:5, time:1600});
 				return false;
 			}
-			
 			var processParameter = JSON.parse($("#processParameter").val() || MESSAGE_PROCESS[processType]) ;
-			window.settingLayerIndex = layer_show("报文处理参数", templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
-				$("div ." + processType).removeClass('hide');
+			window.settingLayerIndex = layer_show("报文处理参数"
+				, templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
 			});
 		},
 		//保存报文处理类型的参数
@@ -548,7 +554,7 @@ var eventList = {
 		"#processType":{
 			"change":function(){
 				var processType = $(this).val();
-				$("#processParameter").val(strIsNotEmpty(processType) ? JSON.stringify(processJson[processType]) : '');
+				$("#processParameter").val(strIsNotEmpty(processType) ? JSON.stringify(MESSAGE_PROCESS[processType]) : '');
 			}
 		},
 		//选择报文节点
@@ -578,7 +584,7 @@ var eventList = {
 					});
 					$.post(REQUEST_URL.MESSAGE.CREATE_MESSAGE_BY_NODES, {messageType:$("#messageType").val(), nodes:JSON.stringify(sendNodes)}, function(json){
 						if (json.returnCode == 0) {
-							$(".textarea").val(json.message);								
+							$(".textarea").val(json.data);
 						} else {
 							layer.alert(json.msg, {icon:5});
 						}
@@ -603,8 +609,8 @@ var mySetting = {
 			}		
 			
 			//编辑页面高度重设
-			editPageHeight.add = (editPageHeight.add + 60);
-			editPageHeight.edit =(editPageHeight.edit + 60);
+			editPageHeight.add != null && (editPageHeight.add += 60);
+			editPageHeight.edit != null && (editPageHeight.edit += 60);
    		 	df.resolve();
    	 	},
 		editPage:{
@@ -616,7 +622,7 @@ var mySetting = {
 				if (interfaceId != null && publish.renderParams.editPage.modeFlag == 0) {
 					$.post(REQUEST_URL.INTERFACE.GET, {id:interfaceId}, function (json) {
 						if (json.returnCode == 0) {
-							appendSystem(json.object.systems);
+							appendSystem(json.data.systems);
 						}
 					});
 				}
@@ -677,8 +683,8 @@ function getParameterJson(textareaObj){
 	$.get(REQUEST_URL.MESSAGE.GET, {id:messageId}, function(data) {
 		textareaObj.spinModal(false);
 		if (data.returnCode == 0) {						
-			textareaObj.val(data.object.parameterJson);
-			if (data.object.parameterJson == null || data.object.parameterJson == "") {
+			textareaObj.val(data.data.parameterJson);
+			if (data.data.parameterJson == null || data.data.parameterJson == "") {
 				textareaObj.attr("placeholder","该报文没有设置入参内容或者对应接口入参节点发生变化,请检查并重新设置！");
 			}			
 		} else {

@@ -45,7 +45,7 @@ public class SceneValidateRule implements Serializable {
 	 * 0-左右边界取关键字验证<br>
 	 * 1-节点参数验证<br>
 	 */
-	@FieldRealSearch(names = {"关联验证", "节点验证", "全文验证"}, values = {"0", "1", "2"})
+	@FieldRealSearch(names = {"关联验证", "节点验证"}, values = {"0", "1"})
 	private String validateMethodFlag;
 	
 	/**
@@ -64,9 +64,7 @@ public class SceneValidateRule implements Serializable {
 	private String status;
 	private String mark;
 	
-		
-	
-	
+
 	public SceneValidateRule(Integer validateId, MessageScene messageScene,
 			String parameterName, String validateValue, String getValueMethod,
 			String validateMethodFlag, String complexFlag, String status,

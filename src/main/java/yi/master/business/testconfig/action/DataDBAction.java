@@ -13,6 +13,8 @@ import yi.master.business.base.action.BaseAction;
 import yi.master.business.testconfig.bean.DataDB;
 import yi.master.business.testconfig.service.DataDBService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.DBUtil;
 import yi.master.util.cache.CacheUtil;
 
@@ -55,7 +57,6 @@ public class DataDBAction extends BaseAction<DataDB> {
 		}
 		dataDBService.edit(model);
 		CacheUtil.updateQueryDBMap(model, null);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);	
 		return SUCCESS;
 	}
 	
@@ -63,7 +64,6 @@ public class DataDBAction extends BaseAction<DataDB> {
 	public String del() {
 		dataDBService.delete(id);
 		CacheUtil.updateQueryDBMap(null, id);
-		jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);		
 		return SUCCESS;
 	}
 
@@ -85,15 +85,13 @@ public class DataDBAction extends BaseAction<DataDB> {
 		}
 		
 		if (conn!=null) {
-			jsonMap.put("returnCode", ReturnCodeConsts.SUCCESS_CODE);
 			try {
 				DBUtil.close(conn);
 			} catch (SQLException e) {
 				LOGGER.warn("SQLException", e);
 			}
 		} else {
-			jsonMap.put("returnCode", ReturnCodeConsts.DB_CONNECT_FAIL_CODE);
-			jsonMap.put("msg", "尝试连接数据库失败,请检查配置!");
+			throw new YiException(AppErrorCode.DB_CONNECT_FAIL);
 		}
 		
 		return SUCCESS;

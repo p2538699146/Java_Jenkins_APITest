@@ -21,8 +21,10 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
 import yi.master.business.advanced.bean.InterfaceProbe;
+import yi.master.business.advanced.enums.InterfaceProbeStatus;
 import yi.master.business.advanced.service.InterfaceProbeService;
 import yi.master.business.message.bean.AutoTask;
+import yi.master.business.message.enums.AutoTaskStatus;
 import yi.master.business.message.service.AutoTaskService;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.constant.SystemConsts;
@@ -97,7 +99,7 @@ public class JobManager {
 			flag = true;
 			//更新任务状态
 			task.setMark("");
-			task.setStatus("1");
+			task.setStatus(InterfaceProbeStatus.RUNNING.getStatus());
 			task.setCallCount(0);
 			task.setFirstCallTime(null);
 			task.setLastCallTime(null);
@@ -128,7 +130,7 @@ public class JobManager {
         	}
         	flag = true;
         	//更新状态
-        	task.setStatus("0");
+        	task.setStatus(InterfaceProbeStatus.STOPPED.getStatus());
 			interfaceProbeService.edit(task);
 		} catch (Exception e) {
 			
@@ -144,7 +146,6 @@ public class JobManager {
     /**
      * 添加一个定时任务
      * @param task   任务详情
-     * @param classz 执行任务的详细job
      * @throws SchedulerException 
      */
 	public boolean addTimeTask(AutoTask task) {
@@ -179,7 +180,7 @@ public class JobManager {
         	flag = true;
         	
         	//更新task状态
-        	task.setStatus("0");
+        	task.setStatus(AutoTaskStatus.RUNNING.getStatus());
         	task.setLastFinishTime(null);
         	task.setRunCount(0);
         	taskService.edit(task);

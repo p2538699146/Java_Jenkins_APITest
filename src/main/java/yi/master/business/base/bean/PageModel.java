@@ -1,5 +1,6 @@
 package yi.master.business.base.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import yi.master.constant.MessageKeys;
  * @version 1.0.0.0,2017.2.13
  * @param <T>
  */
-public class PageModel<T> {
+public class PageModel<T> implements Serializable {
 	
 	/**
 	 * 当前需要排序的列名称
@@ -22,7 +23,7 @@ public class PageModel<T> {
 	/**
 	 * 排序方式,默认asc
 	 */
-	private String orderType = MessageKeys.QUERY_ORDER_ASC;
+	private String orderType = MessageKeys.QueryOrderType.ASC.name();
 	
 	/**
 	 * 全局搜索条件

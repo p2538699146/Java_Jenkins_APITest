@@ -15,6 +15,8 @@ import yi.master.business.user.bean.User;
 import yi.master.business.web.bean.WebTestStep;
 import yi.master.business.web.service.WebTestStepService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
 @Controller
@@ -59,20 +61,18 @@ public class WebTestStepAction extends BaseAction<WebTestStep> {
 		model = webTestStepService.get(model.getStepId());
 		
 		if (model == null && StringUtils.isBlank(configJson)) {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "入参不完整或者不正确,请检查!");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "入参不完整或者不正确,请检查!");
 		} 
 		
 		model.setConfigJson(configJson);
 		webTestStepService.edit(model);
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
 		return SUCCESS;
 	}
 	
 	
 	@Override
 	public String edit() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		if (model.getElement().getElementId() == null) model.setElement(null);
 		if (model.getSnippetCase().getCaseId() == null) model.setSnippetCase(null);
 		if (model.getStepId() == null) {

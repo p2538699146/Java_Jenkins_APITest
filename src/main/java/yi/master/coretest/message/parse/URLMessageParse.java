@@ -1,24 +1,16 @@
 package yi.master.coretest.message.parse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang3.StringUtils;
-
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
 import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
-import yi.master.util.PracticalUtils;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
+
+import java.util.*;
 
 /**
  * 接口自动化<br>
@@ -28,10 +20,20 @@ import yi.master.util.FrameworkUtil;
  *
  */
 public class URLMessageParse extends MessageParse {
-	
-	protected URLMessageParse() {
-		
+	private static URLMessageParse urlMessageParse;
+
+	private URLMessageParse () {
+
 	}
+
+	public static URLMessageParse getInstance () {
+		if (urlMessageParse == null) {
+			urlMessageParse = new URLMessageParse();
+		}
+
+		return urlMessageParse;
+	}
+
 	
 	@Override
 	public ComplexParameter parseMessageToObject(String message, List<Parameter> params) {
@@ -42,7 +44,7 @@ public class URLMessageParse extends MessageParse {
 		Map<String, String> urlParams = parseUrlToMap(message, null);
 		
 		ParameterService service = (ParameterService) FrameworkUtil.getSpringBean("parameterService");
-		ComplexParameter cp =  new ComplexParameter(service.get(SystemConsts.PARAMETER_OBJECT_ID), 
+		ComplexParameter cp =  new ComplexParameter(service.get(SystemConsts.DefaultObjectId.PARAMETER_OBJECT.getId()),
 				new HashSet<ComplexParameter>(), null);
 		for (String key:urlParams.keySet()) {
 			cp.addChildComplexParameter(new ComplexParameter(findParamter(params, key, MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH),  new HashSet<ComplexParameter>(), cp));
@@ -74,8 +76,7 @@ public class URLMessageParse extends MessageParse {
 		for (String key:urlParams.keySet()) {
 			for (Parameter p:params) {
 				if (key.equalsIgnoreCase(p.getParameterIdentify())
-						&& Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER
-						+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA, p.getType().toUpperCase())) {
+						&& MessageKeys.MessageParameterType.isStringOrNumberType(p.getType())) {
 					paramCorrectFlag = true;
 				}
 			}
@@ -90,9 +91,9 @@ public class URLMessageParse extends MessageParse {
 		
 		if (!allCorrectFlag) {
 			return returnMsg + "未在接口参数中定义或者类型不匹配,请检查!";
-		} 
-		
-		return "true";
+		}
+
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	private StringBuilder paraseUrlMessage(ComplexParameter parameter, StringBuilder message, Map<String, Object> messageData) {
@@ -195,8 +196,7 @@ public class URLMessageParse extends MessageParse {
 		for (Object key:nodes.keySet()) {
 			if ("rootId".equals(key.toString())) continue;
 			JSONObject node = nodes.getJSONObject(key.toString());
-			if (Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA 
-					+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER, node.getString("type").toUpperCase())) {				
+			if (MessageKeys.MessageParameterType.isStringOrNumberType(node.getString("type"))) {
 				if (message.length() > 0) {
 					message.append("&");
 				}

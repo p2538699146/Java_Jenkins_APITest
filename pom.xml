@@ -427,7 +427,23 @@
 	    <artifactId>hutool-captcha</artifactId>
 	    <version>4.5.0</version>
 	</dependency>
-		 	
+
+
+      <!--websocket测试-->
+      <dependency>
+          <groupId>org.java-websocket</groupId>
+          <artifactId>Java-WebSocket</artifactId>
+          <version>1.4.0</version>
+      </dependency>
+
+      <!--Telent客户端-->
+      <dependency>
+          <groupId>commons-net</groupId>
+          <artifactId>commons-net</artifactId>
+          <version>3.6</version>
+      </dependency>
+
+
   </dependencies>
 <!--   <repositories>
     <repository>

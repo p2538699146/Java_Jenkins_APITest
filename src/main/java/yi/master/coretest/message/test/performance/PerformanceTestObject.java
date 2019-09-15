@@ -38,6 +38,7 @@ import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.business.testconfig.service.TestConfigService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.MessageKeys;
+import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.protocol.TestClient;
 import yi.master.coretest.message.test.MessageAutoTest;
@@ -213,7 +214,7 @@ public class PerformanceTestObject {
 		requestUrl = config.getBusinessSystem().getReuqestUrl(requestUrl, config.getBusinessSystem().getDefaultPath(), info.getInterfaceName());
 		
 		//手动组装场景测试对象
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		TestConfigService testConfigService = (TestConfigService) FrameworkUtil.getSpringBean("testConfigService");
 		TestConfig testConfig = testConfigService.getConfigByUserId(user.getUserId());
 		if (testConfig == null) {
@@ -243,7 +244,7 @@ public class PerformanceTestObject {
 		
 		//创建结果对象		
 		result.setCreateTime(new Timestamp(System.currentTimeMillis()));
-		result.setFinishFlag("N");
+		result.setFinishFlag(SystemConsts.FinishedFlag.N.name());
 		result.setInterfaceName(info.getInterfaceName() + "-" + msg.getMessageName() + "-" + config.getMessageScene().getSceneName());
 		result.setParameterizedFilePath(config.getParameterizedFilePath());
 		result.setPerformanceTestConfig(config);
@@ -283,7 +284,9 @@ public class PerformanceTestObject {
 			maxCount = Integer.MAX_VALUE;
 		} else {
 			maxCount = config.getMaxCount() / config.getThreadCount();
-			if (maxCount == 0) maxCount = 1; 
+			if (maxCount == 0) {
+				maxCount = 1;
+			}
 		}
 		result.setStartTime(new Timestamp(System.currentTimeMillis()));
 		for (int i = 0;i < config.getThreadCount();i++) {
@@ -336,7 +339,7 @@ public class PerformanceTestObject {
 				}
 			}
 			infoMsg.add(timeTag() + "正在保存结果到数据库...");
-			result.setFinishFlag("Y");
+			result.setFinishFlag(SystemConsts.FinishedFlag.Y.name());
 			result.setFinishTime(new Timestamp(System.currentTimeMillis()));
 			result.setRequestCount(analyzeResult.getTotalCount());
 			result.setTestTime(STATISTICS_TIME_INTERVAL * analyzeResult.getTime().size());
@@ -547,7 +550,9 @@ public class PerformanceTestObject {
                 	continue;               	                	 
                  }
                  for (int cellNum = 0; cellNum <= xssfRow.getLastCellNum(); cellNum++) {
-                	 if (xssfRow.getCell(cellNum) == null) continue;
+                	 if (xssfRow.getCell(cellNum) == null) {
+                	 	continue;
+					 }
                 	 if (rowNum == 0) {
                 		 //获取title
                 		 titles[cellNum] = PoiExcelUtil.getValue(xssfRow.getCell(cellNum));
@@ -618,7 +623,9 @@ public class PerformanceTestObject {
 			int failCount = 0;
 			int totalCount = 0;
 			for (TestResult r:thisTestResults) {
-				if (r == null) continue; 
+				if (r == null) {
+					continue;
+				}
 				//计算请求总数,成功数，失败数
 				totalCount++;
 				switch (r.getRunStatus()) {

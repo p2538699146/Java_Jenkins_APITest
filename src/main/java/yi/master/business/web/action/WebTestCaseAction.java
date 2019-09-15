@@ -57,7 +57,7 @@ public class WebTestCaseAction extends BaseAction<WebTestCase> {
 		if (model.getCaseId() == null) {
 			model.getCaseConfig();
 			model.updateConfigJson();
-			model.setCreateUser((User) FrameworkUtil.getSessionMap().get("user"));
+			model.setCreateUser(FrameworkUtil.getLoginUser());
 		}		
 		super.edit();
 		return SUCCESS;
@@ -67,14 +67,14 @@ public class WebTestCaseAction extends BaseAction<WebTestCase> {
 	 * 变更浏览器类型
 	 * @return
 	 */
-	public String changeBroswerType() {
-		String broswerType = model.getBrowserType();
+	public String changeBrowserType() {
+		String browserType = model.getBrowserType();
 		model = webTestCaseService.get(id);
-		if (model != null && !StringUtils.equalsIgnoreCase(broswerType, model.getBrowserType())) {
-			model.setBrowserType(broswerType);
+		if (model != null && !StringUtils.equalsIgnoreCase(browserType, model.getBrowserType())) {
+			model.setBrowserType(browserType);
 			webTestCaseService.edit(model);
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+
 		return SUCCESS;
 	}	
 	
@@ -89,7 +89,7 @@ public class WebTestCaseAction extends BaseAction<WebTestCase> {
 			model.setConfigJson(configJson);
 			webTestCaseService.edit(model);
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+
 		return SUCCESS;
 	}
 }

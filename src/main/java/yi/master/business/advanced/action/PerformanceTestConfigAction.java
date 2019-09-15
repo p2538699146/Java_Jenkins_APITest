@@ -16,6 +16,8 @@ import yi.master.business.base.action.BaseAction;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.test.performance.PerformanceTestObject;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
@@ -49,7 +51,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	@Override
 	public String edit() {
 		if (model.getPtId() == null || model.getUser() == null) {
-			User user = (User) FrameworkUtil.getSessionMap().get("user");
+			User user = FrameworkUtil.getLoginUser();
 			model.setUser(user);
 		}
 		
@@ -62,13 +64,12 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 */
 	public String initTest() {
 		model = performanceTestConfigService.get(model.getPtId());
-		PerformanceTestObject pto = new PerformanceTestObject(model, (User) FrameworkUtil.getSessionMap().get("user"));
+		PerformanceTestObject pto = new PerformanceTestObject(model, FrameworkUtil.getLoginUser());
 		boolean flag = pto.init();
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+		setData(pto);
 		if (!flag) {
-			setReturnInfo(ReturnCodeConsts.USER_OPERATION_FAIL_CODE, "初始化测试任务失败,请查看错误信息!");			
-		}		
-		setData("object", pto);
+			throw new YiException(AppErrorCode.OPERATION_FAIL.getCode(), "初始化测试任务失败,请查看错误信息!");
+		}
 		return SUCCESS;
 	}
 	
@@ -77,22 +78,20 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String actionTest() {
-		User user  = (User) FrameworkUtil.getSessionMap().get("user");
+		User user  = FrameworkUtil.getLoginUser();
 		PerformanceTestObject pto = CacheUtil.getPtObjectsByUserId(user.getUserId()).get(objectId);
 		
 		if (pto == null) {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "性能测试任务不存在或者已结束,请查看测试结果列表!");
-			return SUCCESS;
-		}	
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "性能测试任务不存在或者已结束,请查看测试结果列表!");
+		}
 		
 		if (!pto.isRunning()) {
 			boolean flag = pto.action();
-			if (!flag) {		
-				setReturnInfo(ReturnCodeConsts.USER_OPERATION_FAIL_CODE, "启动测试任务失败,请查看错误信息!");	
+			if (!flag) {
+				throw new YiException(AppErrorCode.OPERATION_FAIL.getCode(), "启动测试任务失败,请查看错误信息!");
 			}			
 		}
-		setData("object", pto);		
+		setData(pto);
 		return SUCCESS;
 	}
 	
@@ -101,7 +100,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String viewTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		Map<Integer, PerformanceTestObject>  ptos = CacheUtil.getPtObjectsByUserId(user.getUserId());
 		JSONObject obj = new JSONObject();
 		obj.put("running", false);
@@ -120,9 +119,8 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 			obj.put("infoMsg", pto.getInfoMsg());
 			obj.put("errorMsg", pto.getErrorMsg());
 			obj.put("resultMark", pto.getResultMarkMsg());
-		}		
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
-		setData("object", obj);
+		}
+		setData(obj);
 		return SUCCESS;
 	}
 	
@@ -131,12 +129,12 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String stopTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		PerformanceTestObject pto = CacheUtil.getPtObjectsByUserId(user.getUserId()).get(objectId);
 		if (pto != null && pto.isRunning()) {
 			pto.setGlobalStoped(true);			
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "停止成功,请等待。");
+		jsonObject.setMsg("停止成功,请等待。");
 		return SUCCESS;
 	}
 	
@@ -145,7 +143,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String delTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		PerformanceTestObject pto = CacheUtil.getPtObjectsByUserId(user.getUserId()).get(objectId);
 		if (pto != null) {
 			if (pto.isRunning()) {
@@ -156,7 +154,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 			}
 			
 		}
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "删除任务成功,请等待!");
+		jsonObject.setMsg("删除任务成功,请等待!");
 		return SUCCESS;
 	}
 	
@@ -165,7 +163,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String listTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		Map<Integer, PerformanceTestObject>  ptos = CacheUtil.getPtObjectsByUserId(user.getUserId());
 		
 		JSONArray ptosArray = new JSONArray();
@@ -175,8 +173,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 			}
 		}
 		
-		setData("data", ptosArray);
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+		setData(ptosArray);
 		return SUCCESS;
 	}
 	

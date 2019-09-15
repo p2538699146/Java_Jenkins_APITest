@@ -20,6 +20,9 @@ import yi.master.business.advanced.service.PerformanceTestResultService;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.TestResult;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.excel.ExportPerformanceTestResult;
@@ -73,9 +76,8 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	 * @return
 	 */
 	public String anaylzeView() {
-		model = performanceTestResultService.get(model.getPtResultId());		
-			
-		if (model != null && "Y".equals(model.getFinishFlag())) {
+		model = performanceTestResultService.get(model.getPtResultId());
+		if (model != null && SystemConsts.FinishedFlag.Y.name().equals(model.getFinishFlag())) {
 			Date maxTime = null;
 			Date minTime = null;
 			if (StringUtils.isNotBlank(rangeTime)) {
@@ -93,10 +95,9 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 			obj.put("systemName", model.getSystemName());
 			obj.put("startTime", PracticalUtils.formatDate("yyyy-MM-dd HH:mm:ss", model.getStartTime()));
 			obj.put("currentStatus", "测试已完成");
-			setData("object", obj);
-			setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+			setData(obj);
 		} else {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "无此结果或者测试未完成!");
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "无此结果或者测试未完成!");
 		}					
 		return SUCCESS;
 	}
@@ -107,8 +108,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	 */
 	public String summarizedView() {
 		if (StringUtils.isBlank(ids)) {
-			setReturnInfo(ReturnCodeConsts.MISS_PARAM_CODE, "缺少入参");
-			return SUCCESS;
+			throw new YiException(AppErrorCode.MISS_PARAM);
 		}
 		
 		List<PerformanceTestResult> results = new ArrayList<PerformanceTestResult>();
@@ -121,10 +121,9 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 		}
 		
 		try {
-			setData("path", ExportPerformanceTestResult.exportDocuments(results));
-			setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+			setData(ExportPerformanceTestResult.exportDocuments(results));
 		} catch (Exception e) {
-			setReturnInfo(ReturnCodeConsts.SYSTEM_ERROR_CODE, "创建excel文件出错!");
+			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), "创建excel文件出错!");
 		}
 		return SUCCESS;
 	}
@@ -134,7 +133,6 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	 */
 	@Override
 	public String del() {
-		
 		model = performanceTestResultService.get(id);
 		if (model != null) {
 			FileUtils.deleteQuietly(new File(model.getDetailsResultFilePath()));
@@ -153,8 +151,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	public String detailsList() {
 		model = performanceTestResultService.get(model.getPtResultId());
 		List<TestResult> results = new ArrayList<TestResult>();
-		
-		setReturnInfo(ReturnCodeConsts.SUCCESS_CODE, "");
+
 		if (model != null && (new File(model.getDetailsResultFilePath())).exists()) {
 			FileInputStream fn = null;
 			ObjectInputStream ois = null;
@@ -164,7 +161,7 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 			     results = (List<TestResult>) ois.readObject();
 			} catch (Exception e) {
 				LOGGER.error("反序列化失败：" + model.getDetailsResultFilePath(), e);
-				setReturnInfo(ReturnCodeConsts.SYSTEM_ERROR_CODE, "测试结果文件反序列化失败！");
+				throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR, "测试结果文件反序列化失败！");
 			} finally {
 				if (ois != null) {
 					try {
@@ -182,11 +179,10 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 				}
 			}			
 		} else {
-			setReturnInfo(ReturnCodeConsts.NO_RESULT_CODE, "测试结果文件已被删除,请确认!");
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "测试结果文件已被删除,请确认!");
 		}
 		
-		setData("data", results);	
-		
+		setData(results);
 		return SUCCESS;
 	}
 	

@@ -146,7 +146,7 @@ var eventList = {
 		},
 		".show-role-power":function() {
 			var data = table.row( $(this).parents('tr') ).data();
-			showRolePower(data, '角色接口权限编辑', REQUEST_URL.ROLE.GET_NODES_INTERFACE, 'interfaces', {
+			showRolePower(data, '角色接口权限编辑', REQUEST_URL.ROLE.GET_NODES_INTERFACE, 'data', {
 				data: {
 					simpleData: {
 						enable:true,
@@ -270,7 +270,7 @@ function zTreeOnCheck (event, treeId, treeNode) {
 	}	
 }
 
-function showRolePower(data, title, url, nodesName, ztreeOptions) {	
+function showRolePower(data, title, url, nodesName, ztreeOptions) {
 	$.extend(true, zTreeSetting, ztreeOptions);	
 	initCheckOpId = [];
 	currDelCheckOpId = [];
@@ -283,7 +283,7 @@ function showRolePower(data, title, url, nodesName, ztreeOptions) {
 		$(layero).find("#roleTable").spinModal();
 		$.get(url + "?roleId=" + roleId, function(data) {
 			if (data.returnCode == 0) {
-				var nodes = data[nodesName];						
+				var nodes = data.data;
 				$.each(nodes, function(i,n) {
 					if(n.isParent == "true" || n.isParent == true){
 						n["open"] = "true";

@@ -65,21 +65,18 @@ var templateParams = {
 			label:"协议类型",  	
 			select:[{	
 				name:"interfaceProtocol",
-				option:[{
-					value:"HTTP",
-					text:"HTTP",
-					selected:"selected"
-				},{
-					value:"HTTPS",
-					text:"HTTPS"					
-				},{
-					value:"WebService",
-					text:"WebService"					
-				},{
-					value:"Socket",
-					text:"Socket"					
-				}]
-				}]
+				option:function(){
+					let options = [];
+					$.each(MESSAGE_PROTOCOL, function(k, v){
+						options.push({
+                            value: k,
+							text: k
+						});
+					});
+
+					return options;
+				}()
+			}]
 		},
 		{
 			required:true,
@@ -191,7 +188,17 @@ var templateParams = {
 	                       	{label:"接口协议",
 	                       	 select:true,
 	                       	 name:"interfaceProtocol",
-	                       	 option:[{value:"HTTP", text:"HTTP"},{value:"HTTPS", text:"HTTPS"}, {value:"WebService", text:"WebService"}, {value:"Socket", text:"Socket"}]} 
+	                       	 option:function(){
+                                 let options = [];
+                                 $.each(MESSAGE_PROTOCOL, function(k, v){
+                                     options.push({
+                                         value: k,
+                                         text: k
+                                     });
+                                 });
+
+                                 return options;
+                             }()}
 	                        ], [
 	                        {label:"状态",
 	                       	 select:true,
@@ -417,7 +424,7 @@ var eventList = {
 				$.post(REQUEST_URL.INTERFACE.EXPORT_DOCUMENT_EXCEL, {ids:ids.join(",")}, function (json) {
 					layer.close(loadindex);
 					if (json.returnCode == 0) {
-						window.open("../../" + json.path)
+						window.open("../../" + json.data)
 					} else {
 						layer.alert(json.msg, {icon:5});
 					}
@@ -445,10 +452,10 @@ var mySetting = {
 			ajaxCallbackFun:function (data) {
 				if (data.returnCode == 0) {	
 					refreshTable();
-					if (data.msg != null) {
+					if (data.msg != 'ok') {
 						layer.confirm(data.msg, {icon:0, btn:['确认更新', '暂不更新']}, function (index, layero) {
 							var loadIndex = layer.msg('正在更新(数据量较多请耐心等待)...', {icon:16, time:999999, shade:0.4});
-							$.post(REQUEST_URL.INTERFACE.UPDATE_CHILDREN_BUSINESS_SYSTEMS, {interfaceId:interfaceId, updateSystems:JSON.stringify(data.updateSystems)}, function (json) {
+							$.post(REQUEST_URL.INTERFACE.UPDATE_CHILDREN_BUSINESS_SYSTEMS, {interfaceId:interfaceId, updateSystems:JSON.stringify(data.data)}, function (json) {
 								layer.close(loadIndex);
 								if (json.returnCode == 0) {
 									layer.closeAll('page');

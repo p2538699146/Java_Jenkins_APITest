@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.SceneValidateRule;
+import yi.master.business.message.enums.CommonStatus;
+import yi.master.business.message.enums.SceneValidateType;
+import yi.master.business.message.enums.SceneValidateValueGetMethod;
 import yi.master.business.message.service.SceneValidateRuleService;
 import yi.master.business.testconfig.bean.DataDB;
 import yi.master.business.testconfig.service.GlobalVariableService;
@@ -43,6 +46,9 @@ public class MessageValidateResponse {
 	
 	public static final String VALIDATE_MAP_STATUS_KEY = "status";
 	public static final String VALIDATE_MAP_MSG_KEY = "msg";
+
+	public static final String VALIDATE_SUCCESS_FLAG = "0";
+	public static final String VALIDATE_FAIL_FLAG = "1";
 	@Autowired
 	private GlobalVariableService globalVariableService;
 	
@@ -56,22 +62,18 @@ public class MessageValidateResponse {
 	 * msg 备注信息 
 	 */
 	public Map<String,String> validate(String responseMessage, String requestMessage, MessageScene scene, String messageType) {
-		
-		//String validateType = scene.getValidateRuleFlag();
 		List<SceneValidateRule> rules = validateRuleService.getParameterValidate(scene.getMessageSceneId());
-		
-		//List<SceneValidateRule> vRules = getRule(rules, validateType);
 		
 		if (rules.size() < 1) {
 			Map<String,String> map = new HashMap<String, String>();
-			map.put(VALIDATE_MAP_STATUS_KEY, "0");
+			map.put(VALIDATE_MAP_STATUS_KEY, VALIDATE_SUCCESS_FLAG);
 			map.put(VALIDATE_MAP_MSG_KEY, "没有找到需要验证的规则条目,默认测试成功!");
 			return map;
 		}
 		
 		MessageParse parseUtil = MessageParse.getParseInstance(messageType);
 		
-		String passFlag = "0";
+		String passFlag = VALIDATE_SUCCESS_FLAG;
 		Map<String, String> validateMap = new HashMap<String, String>();
 		StringBuilder msg = new StringBuilder();
 		
@@ -81,20 +83,21 @@ public class MessageValidateResponse {
 		
 		for (SceneValidateRule rule:rules) {			
 			//状态为0可验证
-			if (!"0".equals(rule.getStatus())) {
+			if (!CommonStatus.ENABLED.getStatus().equals(rule.getStatus())) {
 				continue;
 			}
 			totalCount ++;
 			Map<String, String> resultMap = null;
 			//关键字匹配验证,通过左右边界
-			if ("0".equals(rule.getValidateMethodFlag())) {
+			if (SceneValidateType.ASSOCIATED_VALIDATION.getType().equals(rule.getValidateMethodFlag())) {
 				resultMap = relateKeyValidate(responseMessage, requestMessage, rule, parseUtil);
-			} else {//节点参数验证，复杂验证
+				//节点参数验证，复杂验证
+			} else if (SceneValidateType.NODE_VALIDATION.getType().equals(rule.getValidateMethodFlag())) {
 				resultMap = nodeParameterValidate(responseMessage, requestMessage, rule, parseUtil);
 			}
 			
 			msg.append(resultMap.get(VALIDATE_MAP_MSG_KEY) + "\n");
-			if (!"0".equals(resultMap.get(VALIDATE_MAP_STATUS_KEY))) {
+			if (!VALIDATE_SUCCESS_FLAG.equals(resultMap.get(VALIDATE_MAP_STATUS_KEY))) {
 				passFlag = "1";
 				failCount ++;
 			} else {
@@ -125,14 +128,14 @@ public class MessageValidateResponse {
 		}
 		
 		if (maps == null) {
-			map.put(VALIDATE_MAP_STATUS_KEY, "1");
+			map.put(VALIDATE_MAP_STATUS_KEY, VALIDATE_FAIL_FLAG);
 			map.put(VALIDATE_MAP_MSG_KEY, "关联验证配置出错，请检查或者重新设置!");
 			return map;
 		}
 		
 		String getValue = PracticalUtils.getValueByRelationKeyWord(maps, responseMessage);
 		if (getValue == null) {
-			map.put(VALIDATE_MAP_STATUS_KEY, "1");
+			map.put(VALIDATE_MAP_STATUS_KEY, VALIDATE_FAIL_FLAG);
 			map.put(VALIDATE_MAP_MSG_KEY, "根据指定的左右边界等参数无法在出参报文中匹配到相应的内容,请检查!");
 			return map;
 		}
@@ -142,12 +145,13 @@ public class MessageValidateResponse {
 		
 		
 		//字符串
-		if ("0".equals(rule.getGetValueMethod()) || StringUtils.isBlank(rule.getGetValueMethod())) {
+		if (SceneValidateValueGetMethod.CONSTANT.getMethod().equals(rule.getGetValueMethod())
+				|| StringUtils.isBlank(rule.getGetValueMethod())) {
 			validateValue = PracticalUtils.replaceGlobalVariable(rule.getValidateValue(), globalVariableService);
 		}
 		
 		//入参节点获取
-		if ("1".equals(rule.getGetValueMethod())) {
+		if (SceneValidateValueGetMethod.REQUEST_PARAMS_NODE.getMethod().equals(rule.getGetValueMethod())) {
 			validateValue = parseUtil.getObjectByPath(requestMessage, rule.getValidateValue());
 			
 			if (validateValue == null) {
@@ -157,14 +161,14 @@ public class MessageValidateResponse {
 		} 
 		
 		//全局变量
-		if ("3".equals(rule.getGetValueMethod())) {
+		if (SceneValidateValueGetMethod.GLOBAL_VARIABLE.getMethod().equals(rule.getGetValueMethod())) {
 			validateValue = PracticalUtils.replaceGlobalVariable(rule.getValidateValue(), globalVariableService);
 		}
 		msg.append("预期结果为 [" + validateValue + "] ,与实际结果 [" + getValue + "] ");
 		
 		boolean flag = false;
 		
-		if ("4".equals(rule.getGetValueMethod())) {
+		if (SceneValidateValueGetMethod.REGULAR_EXPRESSION.getMethod().equals(rule.getGetValueMethod())) {
 			flag = Pattern.matches(rule.getValidateValue(), getValue);
 		} else {
 			flag = getValue.equals(validateValue);
@@ -175,7 +179,7 @@ public class MessageValidateResponse {
 			return map;				
 		}	
 	
-		map.put(VALIDATE_MAP_STATUS_KEY, "0");
+		map.put(VALIDATE_MAP_STATUS_KEY, VALIDATE_SUCCESS_FLAG);
 		map.put(VALIDATE_MAP_MSG_KEY,msg.append("验证一致,验证成功!").toString());
 		return map;
 	}
@@ -185,20 +189,17 @@ public class MessageValidateResponse {
 	 * 出错则停止验证并返回失败标记
 	 * @param responseMessage
 	 * @param requestMessage
-	 * @param rules
+	 * @param rule
 	 * @param parseUtil
 	 * @return
 	 */
 	private Map<String, String> nodeParameterValidate(String responseMessage, String requestMessage, SceneValidateRule rule, MessageParse parseUtil) {
 		Map<String,String> map = new HashMap<String, String>();
-		map.put(VALIDATE_MAP_STATUS_KEY, "1");
+		map.put(VALIDATE_MAP_STATUS_KEY, VALIDATE_FAIL_FLAG);
 		StringBuilder msg = new StringBuilder();		
 		//不是指定的格式，不能用此方式验证
-		MessageParse responseMessageParseUtil = parseUtil.judgeMessageType(responseMessage);
-		/*if (!parseUtil.messageFormatValidation(responseMessage)) {			
-			map.put(VALIDATE_MAP_MSG_KEY, "【节点验证】返回报文不是指定的格式,无法进行节点验证");
-			return map;
-		}*/
+		MessageParse responseMessageParseUtil = MessageParse.judgeMessageType(responseMessage);
+
 		
 		msg.append("【节点验证】在验证出参节点路径为 " + rule.getParameterName() + " 时: ");
 		
@@ -212,12 +213,12 @@ public class MessageValidateResponse {
 		String validateValue = rule.getValidateValue();
 		
 		//字符串
-		if (rule.getGetValueMethod().equals("0")) {
+		if (rule.getGetValueMethod().equals(SceneValidateValueGetMethod.CONSTANT.getMethod())) {
 			validateValue = PracticalUtils.replaceGlobalVariable(rule.getValidateValue(), globalVariableService);
 		}
 		
 		//入参节点获取
-		if (rule.getGetValueMethod().equals("1")) {
+		if (rule.getGetValueMethod().equals(SceneValidateValueGetMethod.REQUEST_PARAMS_NODE.getMethod())) {
 			validateValue = parseUtil.getObjectByPath(requestMessage, rule.getValidateValue());
 			
 			if (validateValue == null) {
@@ -227,13 +228,12 @@ public class MessageValidateResponse {
 		} 
 		
 		//全局变量
-		if (rule.getGetValueMethod().equals("3")) {
+		if (rule.getGetValueMethod().equals(SceneValidateValueGetMethod.GLOBAL_VARIABLE.getMethod())) {
 			validateValue = PracticalUtils.replaceGlobalVariable(rule.getValidateValue(), globalVariableService);
 		}
 		
 		//数据库获取
-		if (rule.getGetValueMethod().startsWith("999999")) {
-			
+		if (rule.getGetValueMethod().startsWith(SceneValidateValueGetMethod.QUERY_SQL.getMethod())) {
 			DataDB db = CacheUtil.getQueryDBById(rule.getGetValueMethod());
 			
 			if (db == null) {
@@ -255,7 +255,7 @@ public class MessageValidateResponse {
 		
 		boolean flag = false;
 		
-		if (rule.getGetValueMethod().equals("4")) {
+		if (rule.getGetValueMethod().equals(SceneValidateValueGetMethod.REGULAR_EXPRESSION.getMethod())) {
 			flag = Pattern.matches(rule.getValidateValue(), vaildateStr);
 		} else {
 			flag = vaildateStr.equals(validateValue);
@@ -266,7 +266,7 @@ public class MessageValidateResponse {
 			return map;				
 		}	
 	
-		map.put(VALIDATE_MAP_STATUS_KEY, "0");
+		map.put(VALIDATE_MAP_STATUS_KEY, VALIDATE_SUCCESS_FLAG);
 		map.put(VALIDATE_MAP_MSG_KEY,msg.append("验证一致,验证成功!").toString());
 		return map;
 	}

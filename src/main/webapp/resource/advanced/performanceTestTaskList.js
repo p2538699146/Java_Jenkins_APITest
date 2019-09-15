@@ -102,14 +102,13 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data().resultMark;
 			createViewWindow(data.join("\n"), {
 				title:"查看失败详细信息", //标题
-				copyBtn:true//是否显示复制按钮
+				copyBtn:false//是否显示复制按钮
 			});
 		},
 		".show-error-messages":function() {
 			var data = table.row( $(this).parents('tr') ).data().errorMsg;
 			createViewWindow(data.join("\n"), {
 				title:"查看错误信息", //标题
-				copyBtn:true//是否显示复制按钮
 			});
 		},
 		".view-test":function(){

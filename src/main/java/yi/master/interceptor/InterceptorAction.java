@@ -1,21 +1,14 @@
 package yi.master.interceptor;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
-import yi.master.constant.ReturnCodeConsts;
+import yi.master.business.base.bean.ReturnJSONObject;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.PracticalUtils;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * 根据跳转请求action返回前台指定的returnCode和msg
@@ -25,7 +18,8 @@ import com.opensymphony.xwork2.ActionSupport;
  */
 
 @Controller
-public class InterceptorAction extends ActionSupport{
+@Scope("prototype")
+public class InterceptorAction extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -37,150 +31,33 @@ public class InterceptorAction extends ActionSupport{
 	/**
 	 * ajax调用返回给前台的map
 	 */
-	private Map<String,Object> jsonMap = new HashMap<String,Object>();
-	
-	/**
-	 * 用户未登录或者登录失效	
-	 * @return
-	 */
-	public String noLogin() {
-		jsonMap.put("returnCode", ReturnCodeConsts.NOT_LOGIN_CODE);
-		jsonMap.put("msg", "你还没有登录或者登录已失效,请重新登录");
-		
-		return SUCCESS;
-		
-	}
-	
-	/**
-	 * 权限不够
-	 * @return
-	 */
-	public String noPower() {
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.NO_POWER_CODE);
-		jsonMap.put("msg", "你没有权限进行此操作");
+	private ReturnJSONObject jsonObject = new ReturnJSONObject();
 
-		return SUCCESS;
-	}
 	
 	/**
-	 * 系统错误
+	 * 全局异常处理
 	 * @return
 	 */
 	public String error() {
 		Exception ex = (Exception)ActionContext.getContext().getValueStack().findValue("exception");
 		String exDetails = PracticalUtils.getExceptionAllinformation(ex);
 
-		logger.error("系统内部错误:\n" + exDetails);
-		jsonMap.put("exception", exDetails);
-
 		if (ex instanceof YiException) {
 			YiException yiEx = (YiException) ex;
-			jsonMap.put("returnCode", yiEx.getCode());
-			jsonMap.put("msg", yiEx.getMsg());
+			jsonObject.setMsg(yiEx.getMsg());
+			jsonObject.setReturnCode(yiEx.getCode());
 			return SUCCESS;
 		}
-		
-		jsonMap.put("returnCode", AppErrorCode.INTERNAL_SERVER_ERROR.getCode());
-		jsonMap.put("msg", AppErrorCode.INTERNAL_SERVER_ERROR.getMsg());
+
+		logger.error("系统内部错误:\n" + exDetails);
+		jsonObject.setReturnCode(AppErrorCode.INTERNAL_SERVER_ERROR.getCode());
+		jsonObject.setMsg(AppErrorCode.INTERNAL_SERVER_ERROR.getMsg());
+		jsonObject.data(exDetails);
 
 		return SUCCESS;
 	}
-	
-	/**
-	 * 操作接口已被禁用
-	 * @return
-	 */
-	public String opDisable() {
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.OP_DISABLE_CODE);
-		jsonMap.put("msg", "该操作接口已被设置禁止调用!");
 
-		return SUCCESS;
+	public ReturnJSONObject getJsonObject() {
+		return jsonObject;
 	}
-	
-	/**
-	 * 未找到的操作接口
-	 * @return
-	 */
-	public String opNotfound() {
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.OP_NOTFOUND_CODE);
-		jsonMap.put("msg", "未定义的操作接口");
-		
-		logger.info("未定义的操作接口");
-		
-		return SUCCESS;
-	}
-	
-	/**
-	 * 参数验证失败
-	 * @return
-	 */
-	public String parameterValidateFail() {
-		
-		jsonMap.put("returnCode", ReturnCodeConsts.PARAMETER_VALIDATE_FAIL_CODE);
-		jsonMap.put("msg", "请求参数不正确,请检查!");
-		
-		logger.info("请求参数不正确");
-		
-		return SUCCESS;
-	}
-	
-	/**
-	 * 调用api接口时token验证不正确
-	 * @return
-	 */
-	public String apiTokenValidateFail() {
-		jsonMap.put("returnCode", ReturnCodeConsts.PARAMETER_VALIDATE_FAIL_CODE);
-		jsonMap.put("msg", "token不正确!");
-		
-		logger.info("token不正确!");
-		
-		return SUCCESS;
-	}
-	
-	/**
-	 * 不存在的mock接口
-	 * @return
-	 */
-	public String nonMockInterface() {
-		jsonMap.put("returnCode", ReturnCodeConsts.OP_NOTFOUND_CODE);
-		jsonMap.put("msg", "未定义的mock接口");
-		
-		logger.info("未定义的mock接口");
-		
-		return SUCCESS;
-	}
-	
-	
-	/**
-	 * mock接口被禁止调用
-	 * @return
-	 */
-	public String mockInterfaceDisabled() {
-		jsonMap.put("returnCode", ReturnCodeConsts.OP_DISABLE_CODE);
-		jsonMap.put("msg", "禁止调用该mock接口");
-		
-		logger.info("mock接口被禁止调用");
-		
-		return SUCCESS;
-	}
-	
-	/**
-	 * 接口mock出错
-	 * @return
-	 */
-	public String mockError() {
-		jsonMap.put("returnCode", ReturnCodeConsts.SYSTEM_ERROR_CODE);
-		jsonMap.put("msg", "接口mock出错,请联系接口自动化测试平台!");
-		
-		logger.info("接口mock出错,请联系接口自动化测试平台!");
-		
-		return SUCCESS;
-	}
-	
-	public Map<String, Object> getJsonMap() {		
-		return jsonMap;
-	}	
 }

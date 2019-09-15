@@ -8,40 +8,128 @@ package yi.master.constant;
  * @author xuwangcheng
  * @version 1.0.0.0,2017.2.13
  */
-public class SystemConsts {
-
+public interface SystemConsts {
 	/**
 	 * 当前版本号
 	 */
-	public static final String VERSION = "0.1.5beta";
-	
+	public static final String VERSION = "0.2.0beta";
 	/**
-	 * 默认admin角色的roleId
+	 * 完成标志
 	 */
-	public static final Integer ADMIN_ROLE_ID = 1;
-	
+	enum FinishedFlag {
+		N,Y;
+	}
+
 	/**
-	 * 默认default角色的roleId
+	 * boolean定义
 	 */
-	public static final Integer DEFAULT_ROLE_ID = 3;
-	
+	enum DefaultBooleanIdentify  {
+		/**
+		 * true、1
+		 */
+		TRUE("true", "1"),
+		/**
+		 * false、0
+		 */
+		FALSE("false", "0");
+
+		private String string;
+		private String number;
+
+		private DefaultBooleanIdentify (String string, String number) {
+			this.string = string;
+			this.number = number;
+		}
+
+		public void setNumber(String number) {
+			this.number = number;
+		}
+
+		public void setString(String string) {
+			this.string = string;
+		}
+
+		public String getNumber() {
+			return number;
+		}
+
+		public String getString() {
+			return string;
+		}
+	}
+
 	/**
-	 * 默认ADMIN账户的用户ID
+	 * 默认全局的result
 	 */
-	public static final Integer ADMIN_USER_ID = 1;
-	
-	//特殊参数的id
-	//数组中的数组参数对象
-	public static final Integer PARAMETER_ARRAY_IN_ARRAY_ID = 2;
-	//数组中的Map参数对象
-	public static final Integer PARAMETER_MAP_IN_ARRAY_ID = 3;
-	//Object对象 对应外层
-	public static final Integer PARAMETER_OBJECT_ID = 1;
-	
+	enum GlobalResultName {
+		/**
+		 * 用户未登录
+		 */
+		usernotlogin,
+		/**
+		 * 操作接口不可用
+		 */
+		opisdisable,
+		/**
+		 * 没有权限
+		 */
+		usernotpower,
+		/**
+		 * mock接口不存在
+		 */
+		nonMockInterface,
+		/**
+		 * mock接口已被禁用
+		 */
+		mockInterfaceDisabled;
+
+	}
+
 	/**
-	 * sessionMap中登录用户key值
+	 * 一些默认的数据库对象ID
 	 */
-	public static final String SESSION_ATTRIBUTE_LOGIN_USER = "user";
+	enum DefaultObjectId {
+		/**
+		 * 默认admin角色的roleId
+		 */
+		ADMIN_ROLE(1),
+		/**
+		 * 默认default角色的roleId
+		 */
+		DEFAULT_ROLE(3),
+		/**
+		 * 默认ADMIN账户的用户ID
+		 */
+		ADMIN_USER(1),
+		/**
+		 * 特殊参数的id:数组中的数组参数对象
+		 */
+		PARAMETER_ARRAY_IN_ARRAY(2),
+		/**
+		 * 特殊参数的id:数组中的Map参数对象
+		 */
+		PARAMETER_MAP_IN_ARRAY(3),
+		/**
+		 * 特殊参数的id:Object对象 对应外层
+		 */
+		PARAMETER_OBJECT(1);
+
+		private int id;
+
+		private DefaultObjectId (int id) {
+			this.id = id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		public int getId() {
+			return id;
+		}
+	}
+
+	public static final String DEFAULT_USER_PASSWORD = "111111";
 	
 	/**
 	 * 请求带上此token代表为内部自调用接口，不需要验证权限
@@ -50,51 +138,19 @@ public class SystemConsts {
 	
 	
 	/**
-	 * 管理角色名
+	 * 管理员角色名和用户名
 	 * 
 	 */
 	public static final String SYSTEM_ADMINISTRATOR_ROLE_NAME = "admin";
-	
-	//指定result name
+
+	public static final String API_TOKEN_ATTRIBUTE_NAME = "token";
+
 	/**
-	 * 用户未登录
+	 * sessionMap中登录用户key值
 	 */
-	public static final String RESULT_NOT_LOGIN = "usernotlogin";
-	
-	/**
-	 * 操作接口不可用
-	 */
-	public static final String RESULT_DISABLE_OP = "opisdisable";
-	
-	/**
-	 * 没有权限
-	 */
-	public static final String RESULT_NO_POWER = "usernotpower";
-	
-	/**
-	 * 不存在的请求接口
-	 */
-	public static final String RESULT_NON_EXISTENT_OP = "opnotfound"; 	
-	
-	/**
-	 * 入参验证失败
-	 */
-	public static final String RESULT_PARAMETER_VALIDATE_FAIL = "parameterValidateFail";
-	
-	/**
-	 * mock接口不存在
-	 */
-	public static final String RESULT_NON_EXISTENT_MOCK_INTERFACE = "nonMockInterface";
-	
-	/**
-	 * mock接口已被禁用
-	 */
-	public static final String RESULT_MOCK_INTERFACE_DISABLED = "mockInterfaceDisabled";
-	
-	
-	//ApplicationMap中指定属性名	
-	public static final String APPLICATION_ATTRIBUTE_QUERY_DB = "queryDb";	
-	public static final String APPLICATION_ATTRIBUTE_WEB_SETTING = "settingMap";	
+	public static final String SESSION_ATTRIBUTE_LOGIN_USER = "user";
+
+	//ApplicationMap中指定属性名
 	public static final String APPLICATION_ATTRIBUTE_OPERATION_INTERFACE = "ops";
 	
 	//SessionMap中指定属性名
@@ -108,28 +164,40 @@ public class SystemConsts {
 	public static final String QUARTZ_SCHEDULER_IS_STOP = "false";
 	
 	///////////////////////////////////全局设置指定设置名称/////////////////////////////////////////////////////////////////////
-	//通用设置
-	public static final String GLOBAL_SETTING_HOME = "home";	
-	public static final String GLOBAL_SETTING_NOTICE = "notice";	
-	public static final String GLOBAL_SETTING_VERSION = "version";	
-	public static final String GLOBAL_SETTING_STATUS = "status";	
-	public static final String GLOBAL_SETTING_LOGSWITCH = "logSwitch";	
-	public static final String GLOBAL_SETTING_COPY_RIGHT = "copyright";
-	public static final String GLOBAL_SETTING_SITE_NAME = "siteName";
-	
-	//接口自动化测试相关全局配置
+	/**
+	 * 通用设置
+	 */
+	public static final String GLOBAL_SETTING_HOME = "home";
+	public static final String GLOBAL_SETTING_VERSION = "version";
+	public static final String GLOBAL_SETTING_LOGSWITCH = "logSwitch";
+
+	/**
+	 * 接口自动化测试相关全局配置
+	 */
 	public static final String GLOBAL_SETTING_MESSAGE_ENCODING = "messageEncoding";
 	public static final String GLOBAL_SETTING_MESSAGE_REPORT_TITLE = "messageReportTitle";
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE = "messageMailStyle";//邮件推送格式
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_PROBE_REPORT = "probe";//探测邮件
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_TASK_REPORT = "time";//定时任务邮件
-	
-	//web自动化脚本相关
+	/**
+	 * 邮件推送格式
+	 */
+	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE = "messageMailStyle";
+	/**
+	 * 探测邮件格式
+	 */
+	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_PROBE_REPORT = "probe";
+	/**
+	 * 定时任务邮件格式
+	 */
+	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_TASK_REPORT = "time";
+
+	/**
+	 * web自动化脚本相关
+	 */
 	public static final String GLOBAL_SETTING_WEB_SCRIPT_WORKPLACE = "webscriptWorkPlace";
 	public static final String GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH = "webscriptModulePath";
-	public static final String GLOBAL_SETTING_WEB_SCRIPT_EXECUTOR_HOST = "webscriptExecutorHost";
-	
-	//邮箱推送相关
+
+	/**
+	 * 邮箱推送相关
+	 */
 	public static final String GLOBAL_SETTING_IF_SEND_REPORT_MAIL = "sendReportMail";
 	public static final String GLOBAL_SETTING_MAIL_SERVER_HOST = "mailHost";
 	public static final String GLOBAL_SETTING_MAIL_SERVER_PORT = "mailPort";
@@ -160,10 +228,6 @@ public class SystemConsts {
 	/**
 	 * 静态报告模板
 	 */
-	public static final String REPORT_VIEW_HTML_FIXED_HTML = "viewTemplate.xml";
-	/**
-	 * 静态报告模板
-	 */
 	public static final String REPORT_VIEW_HTML_FIXED_HTML_NEW = "offlineReportTemplateNew.xml";
 	/**
 	 * 测试集测试请求地址
@@ -184,16 +248,8 @@ public class SystemConsts {
 	 * 上传或者下载 excel保存的文件夹
 	 */
 	public static final String EXCEL_FILE_FOLDER = "excel";
-	
-	/**
-	 * 验证码图片厨存放文件夹
-	 */
-	public static final String VERIFY_CODE_FOLDER = "code";
 
-	public static final String CUSTOM_FALSE_STRING = "false";
-	public static final String CUSTOM_TRUE_STRING = "true";
-	public static final String CUSTOM_TRUE_NUMBER = "1";
-	public static final String CUSTOM_FALSE_NUMBER = "0";
+
 	/**
 	 * 检查版本升级的网址
 	 */

@@ -471,7 +471,7 @@ public class MessageScene implements Serializable, Cloneable {
     		}
     		for (TestData data:this.enabledTestDatas) {
     			if (data.checkSystem(String.valueOf(sys.getSystemId())) && !hasUse.contains(data.getDataId())) {
-    				if (MessageKeys.INTERFACE_TYPE_SL.equalsIgnoreCase(this.getMessage().getInterfaceInfo().getInterfaceType())
+    				if (MessageKeys.InterfaceBusiType.SL.name().equalsIgnoreCase(this.getMessage().getInterfaceInfo().getInterfaceType())
     							&& "0".equals(data.getStatus())) {
     					hasUse.add(data.getDataId());
     				}  				

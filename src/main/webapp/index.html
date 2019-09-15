@@ -322,7 +322,7 @@
                     var that = this;
                     $.get(REQUEST_URL.LOGIN.CREATE_VERIFY_CODE, function(data){
                         if (data.returnCode == 0) {
-                            $(that).attr('src', 'data:image/png;base64,' + data.img);
+                            $(that).attr('src', 'data:image/png;base64,' + data.data);
                         }
                     });
                 });

@@ -21,6 +21,7 @@ import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
 import yi.master.constant.MessageKeys;
+import static yi.master.constant.MessageKeys.MessageParameterType;
 import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
@@ -38,12 +39,17 @@ import net.sf.json.JSONObject;
  *
  */
 public class XMLMessageParse extends MessageParse {
-	
 	private static final Logger LOGGER = Logger.getLogger(XMLMessageParse.class);
-	
-	
-	protected XMLMessageParse() {
-		
+	private static XMLMessageParse xmlMessageParse;
+
+	private XMLMessageParse () {}
+
+	public static XMLMessageParse getInstance () {
+		if (xmlMessageParse == null) {
+			xmlMessageParse = new XMLMessageParse();
+		}
+
+		return xmlMessageParse;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -63,14 +69,12 @@ public class XMLMessageParse extends MessageParse {
 			return null;
 		}
 		ParameterService service = (ParameterService) FrameworkUtil.getSpringBean("parameterService");
-		return parseObjectToComplexParameter(maps, new ComplexParameter(service.get(SystemConsts.PARAMETER_OBJECT_ID), 
+		return parseObjectToComplexParameter(maps, new ComplexParameter(service.get(SystemConsts.DefaultObjectId.PARAMETER_OBJECT.getId()),
 				new HashSet<ComplexParameter>(), null), params, new StringBuilder(MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH));
 	}
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter, String paramsData) {
-		
-		//return MessageKeys.XML_MESSAGE_HEAD_STRING + parseXmlMessage(complexParameter, new StringBuilder(""), messageData).toString();
 		return messageFormatBeautify(parseXmlMessage(complexParameter, new StringBuilder(""), PracticalUtils.jsonToMap(paramsData)).toString());
 	}
 
@@ -100,7 +104,8 @@ public class XMLMessageParse extends MessageParse {
 		
 		for (int i = 0; i < paramNames.size(); i++) {
 			for (Parameter p:params) {
-				if (paramNames.get(i).equalsIgnoreCase(p.getParameterIdentify()) && paramPaths.get(i).equalsIgnoreCase(p.getPath())) {
+				if (paramNames.get(i).equalsIgnoreCase(p.getParameterIdentify())
+						&& paramPaths.get(i).equalsIgnoreCase(p.getPath())) {
 					paramCorrectFlag = true;
 				}				
 			}
@@ -116,7 +121,7 @@ public class XMLMessageParse extends MessageParse {
 			return returnMsg + "未在接口参数中定义或者类型/路径不匹配,请检查!";
 		} 
 		
-		return "true";
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -128,8 +133,8 @@ public class XMLMessageParse extends MessageParse {
 		
 		String parameterType = parameter.getSelfParameter().getType().toUpperCase();
 		String nodeName = findValidParameterIdentify(parameter);
-		boolean flag = Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_ARRAY_IN_ARRAY + "|" 
-				+ MessageKeys.MESSAGE_PARAMETER_TYPE_ARRAY + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_OBJECT, parameterType)
+		boolean flag = Pattern.matches(MessageParameterType.ARRAY_ARRAY.name() + "|"
+				+ MessageParameterType.ARRAY.name() + "|" + MessageParameterType.OBJECT.name(), parameterType)
 				|| (nodeName == null);
 		
 		if (!flag) {
@@ -157,11 +162,13 @@ public class XMLMessageParse extends MessageParse {
 			message.append(">");
 		}
 				
-		if (Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" 
-				+ MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER, parameterType)) {	
-			message.append(findParameterValue(parameter.getSelfParameter(), messageData));							
-		} else if (MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA.equals(parameterType)) {
+		if (Pattern.matches(MessageParameterType.STRING.name() + "|"
+				+ MessageParameterType.NUMBER.name(), parameterType)) {
+			message.append(findParameterValue(parameter.getSelfParameter(), messageData));
+
+		} else if (MessageParameterType.CDATA.name().equals(parameterType)) {
 			message.append("<![CDATA[" + findParameterValue(parameter.getSelfParameter(), messageData) + "]]>");
+
 		} else {
 			for (ComplexParameter p:parameter.getChildComplexParameters()) {
 				if (p.getSelfParameter() == null) {
@@ -184,7 +191,7 @@ public class XMLMessageParse extends MessageParse {
 			return parameter.getSelfParameter().getParameterIdentify();
 		}
 		
-		if (parameter.getSelfParameter().getType().equalsIgnoreCase(MessageKeys.MESSAGE_PARAMETER_TYPE_OBJECT) 
+		if (MessageParameterType.OBJECT.name().equalsIgnoreCase(parameter.getSelfParameter().getType())
 				&& parameter.getParentComplexParameter() == null) {
 			//return Keys.XML_MESSAGE_DEFAULT_ROOT_NODE;
 			return null;
@@ -287,12 +294,14 @@ public class XMLMessageParse extends MessageParse {
 		String rootName = nodes.getJSONObject(nodes.getString("rootId")).getString("parameterIdentify");
 		Element message = document.addElement(rootName);
 		for (Object key:nodes.keySet()) {
-			if ("rootId".equals(key.toString())) continue;
+			if ("rootId".equals(key.toString())) {
+				continue;
+			}
 			JSONObject node = nodes.getJSONObject(key.toString());
-			if (Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA 
-					+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER, node.getString("type").toUpperCase())) {
+			if (Pattern.matches(MessageParameterType.STRING.name() + "|" + MessageParameterType.CDATA.name()
+					+ "|" + MessageParameterType.NUMBER.name(), node.getString("type").toUpperCase())) {
 				String value = node.getString("defaultValue");
-				if (MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA.equals(node.getString("type").toUpperCase())) {
+				if (MessageParameterType.CDATA.name().equals(node.getString("type").toUpperCase())) {
 					value = "<![CDATA[" + value + " ]]>";
 				}
 				createMessageElement(node.getString("path"), message).addElement(node.getString("parameterIdentify")).setText(value);
@@ -307,7 +316,9 @@ public class XMLMessageParse extends MessageParse {
 		String[] pathNames = path.split("\\.");
 		Element nodeObj = message;
 		for (int i = 2;i < pathNames.length;i++) {
-			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(pathNames[i])) continue;
+			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(pathNames[i])) {
+				continue;
+			}
 			Element nodeObj_l = nodeObj.element(pathNames[i]);
 			if (nodeObj_l == null) {
 				nodeObj_l = nodeObj.addElement(pathNames[i]);

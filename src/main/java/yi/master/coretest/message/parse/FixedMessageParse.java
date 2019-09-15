@@ -1,15 +1,14 @@
 package yi.master.coretest.message.parse;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
-
+import net.sf.json.JSONObject;
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.constant.MessageKeys;
+import yi.master.constant.SystemConsts;
 
-import net.sf.json.JSONObject;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 固定报文
@@ -19,13 +18,22 @@ import net.sf.json.JSONObject;
  *
  */
 public class FixedMessageParse extends MessageParse {
-	
-	protected FixedMessageParse() {
+	private static FixedMessageParse fixedMessageParse;
+
+	protected FixedMessageParse () {
+
+	}
+
+	public static FixedMessageParse getInstance () {
+		if (fixedMessageParse == null) {
+			fixedMessageParse = new FixedMessageParse();
+		}
+
+		return fixedMessageParse;
 	}
 
 	@Override
 	public boolean messageFormatValidation(String message) {
-		
 		return true;
 	}
 
@@ -62,7 +70,7 @@ public class FixedMessageParse extends MessageParse {
 		
 		for (Parameter p:params) {
 			if (message.equals(p.getParameterIdentify())) {
-				return "true";
+				return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 			}
 		}
 		
@@ -77,12 +85,12 @@ public class FixedMessageParse extends MessageParse {
 
 	@Override
 	public String createMessageByNodes(JSONObject nodes) {
-		
 		for (Object key:nodes.keySet()) {
-			if ("rootId".equals(key.toString())) continue;
+			if ("rootId".equals(key.toString())) {
+				continue;
+			}
 			JSONObject node = nodes.getJSONObject(key.toString());
-			if (Pattern.matches(MessageKeys.MESSAGE_PARAMETER_TYPE_STRING + "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_CDATA 
-					+ "|" + MessageKeys.MESSAGE_PARAMETER_TYPE_NUMBER, node.getString("type").toUpperCase())) {				
+			if (MessageKeys.MessageParameterType.isStringOrNumberType(node.getString("type"))) {
 				return node.getString("defaultValue");
 			}
 		}

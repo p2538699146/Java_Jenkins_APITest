@@ -12,6 +12,7 @@ import org.apache.struts2.json.annotations.JSON;
 
 import yi.master.annotation.FieldNameMapper;
 import yi.master.business.user.bean.User;
+import yi.master.constant.SystemConsts;
 import yi.master.constant.WebTestKeys;
 import yi.master.util.LogModifyUtil;
 import yi.master.util.PracticalUtils;
@@ -141,11 +142,13 @@ public class WebTestElement implements Serializable, LogModifyUtil, Cloneable {
 	}
 	
 	public String getIsParent() {
-		if (StringUtils.isBlank(elementType)) return null;
-		if (elementType.matches(WebTestKeys.WEB_ELEMENT_TYPE_URL + "|" + WebTestKeys.WEB_ELEMENT_TYPE_TAG)) {
-			return "false";
+		if (StringUtils.isBlank(elementType)) {
+			return null;
 		}
-		return "true";
+		if (elementType.matches(WebTestKeys.ElementType.url.name() + "|" + WebTestKeys.ElementType.tag.name())) {
+			return SystemConsts.DefaultBooleanIdentify.FALSE.getString();
+		}
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	public String getModifyLogText() {

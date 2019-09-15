@@ -257,7 +257,9 @@ public class TestMessageScene implements Cloneable {
 		}
 		return o;
 	}
- 
+
+
+
 	
 	@Override
 	public String toString() {

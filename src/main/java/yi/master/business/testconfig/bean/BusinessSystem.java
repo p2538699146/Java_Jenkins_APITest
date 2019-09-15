@@ -99,24 +99,46 @@ public class BusinessSystem implements Serializable {
 		super();
 	}
 
+	/**
+	 * 组装正确的请求地址，包含路径
+	 * @param requestPath
+	 * @param defaultPath
+	 * @param interfaceName
+	 * @return
+	 */
 	public String getReuqestUrl(String requestPath, String defaultPath, String interfaceName) {
-				
-		if (MessageKeys.MESSAGE_PROTOCOL_HTTP.equalsIgnoreCase(this.protocolType) || 
-				MessageKeys.MESSAGE_PROTOCOL_WEBSERVICE.equalsIgnoreCase(this.protocolType) || 
-				MessageKeys.MESSAGE_PROTOCOL_HTTPS.equalsIgnoreCase(this.protocolType)) {
+		if (MessageKeys.ProtocolType.http.name().equalsIgnoreCase(this.protocolType) ||
+				MessageKeys.ProtocolType.webservice.name().equalsIgnoreCase(this.protocolType) ||
+				MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType)) {
+
 			if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
 				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
 						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
 			}
-			return (MessageKeys.MESSAGE_PROTOCOL_HTTPS.equalsIgnoreCase(this.protocolType) ? "https://" : "http://") 
+			return (MessageKeys.ProtocolType.https.name().equalsIgnoreCase(this.protocolType) ? "https://" : "http://")
 					+ this.systemHost + ":" + this.systemPort + requestPath;
 		}
 		
-		if (MessageKeys.MESSAGE_PROTOCOL_SOCKET.equalsIgnoreCase(this.protocolType)) {
+		if (MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(this.protocolType)) {
 			return this.systemHost + ":" + this.systemPort;
 		}
-		
-		
+
+		if (MessageKeys.ProtocolType.dubbo.name().equalsIgnoreCase(this.protocolType)) {
+			if (StringUtils.isBlank(requestPath)) {
+				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
+						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
+			}
+			return this.systemHost + ":" + this.systemPort + ":" + requestPath;
+		}
+
+		if (MessageKeys.ProtocolType.websocket.name().equalsIgnoreCase(this.protocolType)) {
+			if (StringUtils.isBlank(requestPath) || requestPath.indexOf("/") != 0) {
+				requestPath = defaultPath.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE, interfaceName)
+						.replaceAll(MessageKeys.BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE, requestPath);
+			}
+			return "ws://" + this.systemHost + ":" + this.systemPort + requestPath;
+		}
+
 		return "";
 	}
 	
@@ -248,18 +270,28 @@ public class BusinessSystem implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
+
 		BusinessSystem other = (BusinessSystem) obj;
 		if (systemId == null) {
-			if (other.systemId != null)
+			if (other.systemId != null) {
 				return false;
-		} else if (!systemId.equals(other.systemId))
+			}
+
+		} else if (!systemId.equals(other.systemId)) {
 			return false;
+		}
+
 		return true;
 	}
 	

@@ -93,7 +93,7 @@ public class MockSocketServer {
 				String requestMessage = readMessageFromClient(connection.getInputStream());
 				logger.debug("MockSocketServer " + getMockUrl() + " 接收到数据：" + requestMessage);
 				String responseMsg = validateConfig.validate(null, requestMessage);
-				if ("true".equals(responseMsg)) {								
+				if (SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(responseMsg)) {
 					responseMsg = mockConfig.generate(null, requestMessage);			
 				} else if (StringUtils.isNotBlank(mockConfig.getExampleErrorMsg())) {
 					responseMsg = PracticalUtils.replaceGlobalVariable(mockConfig.getExampleErrorMsg().replace("${errorMsg}", responseMsg), null);

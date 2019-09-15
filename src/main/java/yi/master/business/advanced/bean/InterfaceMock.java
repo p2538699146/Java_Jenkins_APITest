@@ -8,6 +8,7 @@ import org.apache.struts2.json.annotations.JSON;
 import yi.master.annotation.FieldNameMapper;
 import yi.master.annotation.FieldRealSearch;
 import yi.master.business.user.bean.User;
+import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.test.mock.MockSocketServer;
 import yi.master.util.cache.CacheUtil;
@@ -125,11 +126,11 @@ public class InterfaceMock implements Serializable {
 	}
 	
 	public String getMockUri() {
-		if ("http".equalsIgnoreCase(this.protocolType)) {
+		if (MessageKeys.ProtocolType.http.name().equalsIgnoreCase(this.protocolType)) {
 			return CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_HOME)  + "/mock" + this.mockUrl;
 		}
 		
-		if ("socket".equalsIgnoreCase(this.protocolType)) {
+		if (MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(this.protocolType)) {
 			MockSocketServer mockServer = CacheUtil.getSocketServers().get(this.mockId);
 			
 			if (mockServer != null) {

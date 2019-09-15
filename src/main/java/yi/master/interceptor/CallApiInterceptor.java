@@ -9,14 +9,19 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.StrutsStatics;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import yi.master.business.api.action.BaseApiAction;
+import yi.master.business.log.enums.LogCallType;
+import yi.master.business.log.enums.LogInterceptStatus;
 import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
+import yi.master.exception.AppErrorCode;
+import yi.master.exception.YiException;
 import yi.master.util.MD5Util;
 import yi.master.util.PracticalUtils;
 import com.opensymphony.xwork2.ActionContext;
@@ -52,8 +57,8 @@ public class CallApiInterceptor extends AbstractInterceptor {
 		User user = null;
 		OperationInterface opInterface = null;
 		String callUrl = null; 
-		String interceptStatus = "0";
-		String callType = "1";
+		String interceptStatus = LogInterceptStatus.SUCCESS.getStatus();
+		String callType = LogCallType.THIRD_PARTY_CALLED.getType();
 		String userHost = null; 
 		String browserAgent = null;
 		int validateTime = 0;
@@ -74,17 +79,17 @@ public class CallApiInterceptor extends AbstractInterceptor {
 		requestParams = JSONObject.fromObject(paramMap).toString();
 		logger.info("[" + timeTag + "]调用API接口" + callUrl + "\n入参：" + requestParams);
 		
-		String[] tokens = (String[]) paramMap.get("token");
+		String[] tokens = (String[]) paramMap.get(SystemConsts.API_TOKEN_ATTRIBUTE_NAME);
 		if (tokens != null && SystemConsts.REQUEST_ALLOW_TOKEN.equals(tokens[0])) {	
 			String result = "";
 			try {
 				result = arg0.invoke();
 			} catch (Exception e) {
-				logger.error("系统内部错误,请求失败!", e);
-				interceptStatus = "6";
+				interceptStatus = LogInterceptStatus.SYSTEM_ERROR.getStatus();
 				mark = PracticalUtils.getExceptionAllinformation(e);
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
+
 				throw e;
 			}
 			
@@ -97,10 +102,11 @@ public class CallApiInterceptor extends AbstractInterceptor {
 		}
 		
 		logger.info("[" + timeTag + "]token不存在或者不正确,调用api接口" + callUrl + "失败...");
-		interceptStatus = "4";
+		interceptStatus = LogInterceptStatus.TOKEN_INCORRECT.getStatus();
 		recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 				validateTime, executeTime, requestParams, responseParams, mark);
-		return "apiTokenValidateFail";
-			
+
+		throw new YiException(AppErrorCode.API_TOKEN_VALIDATE_FAIL);
+
 	}
 }

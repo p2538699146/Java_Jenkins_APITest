@@ -14,34 +14,41 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import yi.master.business.message.enums.CommonStatus;
 import yi.master.constant.SystemConsts;
 import yi.master.util.cache.CacheUtil;
 
+/**
+ * 邮件停止工具
+ * @author xuwangcheng14@163.com
+ * @date 2017.2
+ */
 public class NotifyMail {
 	
 	private static final Logger LOGGER = Logger.getLogger(NotifyMail.class);
 	
 	/**
 	 * 发送邮件入口
-	 * @param message
-	 * @return
+	 * @param emailCreator
+	 * @param receiveAddress_s
+	 * @param copyAddress_s
+	 * @return 正常返回字符串true,否则返回报错信息
 	 */
 	public static String sendEmail (EmailCreator emailCreator, String receiveAddress_s, String copyAddress_s) {
-		String sendSuccess = "true";
+		String sendSuccess = SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 		Properties props = new Properties(); 
 		
 		final String smtpPort = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_MAIL_SERVER_PORT);
-		
-		props.setProperty("mail.transport.protocol", "smtp");   // 使用的协议（JavaMail规范要求）
-        props.setProperty("mail.smtp.host", CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_MAIL_SERVER_HOST));   // 发件人的邮箱的 SMTP 服务器地址
-        props.setProperty("mail.smtp.auth", "true");            // 需要请求认证
+		// 使用的协议（JavaMail规范要求）
+		props.setProperty("mail.transport.protocol", "smtp");
+		// 发件人的邮箱的 SMTP 服务器地址
+        props.setProperty("mail.smtp.host", CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_MAIL_SERVER_HOST));
+		// 需要请求认证
+        props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.smtp.port", smtpPort);
         
-        /**
-         * SSL连接
-         */
-		
-        if ("0".equals(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_MAIL_SSL_FLAG))) {       	
+     	//SSL连接
+        if (CommonStatus.ENABLED.getStatus().equals(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_MAIL_SSL_FLAG))) {
             props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             props.setProperty("mail.smtp.socketFactory.fallback", "false");
             props.setProperty("mail.smtp.socketFactory.port", smtpPort);

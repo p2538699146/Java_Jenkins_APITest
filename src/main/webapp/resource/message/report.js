@@ -221,7 +221,7 @@ var eventList = {
 	    	} 
 			$.post(REQUEST_URL.REPORT.DOWNLOAD_STATIC_REPORT_HTML, {reportId:data.reportId}, function(json) {
 				if (json.returnCode == 0) {
-					window.open("../../" + REQUEST_URL.FILE.DOWNLOAD_FILE + "?downloadFileName=" + json.path);
+					window.open("../../" + REQUEST_URL.FILE.DOWNLOAD_FILE + "?downloadFileName=" + json.data);
 				} else {
 					layer.alert(json.msg,{icon:5});
 				}

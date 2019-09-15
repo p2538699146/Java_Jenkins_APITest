@@ -148,7 +148,6 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			createViewWindow(data.responseExample, {
 				title:data.sceneName + "-[出参示例]",
-				copyBtn:true
 			});	
 		}
 };
@@ -197,14 +196,14 @@ function renderSceneTestPage(flag) {
 			
 			var $selectSystem = $F.find("#select-system");
 			
-			$.each(data.testObject, function(systemId, object) {
+			$.each(data.data, function(systemId, object) {
 				$selectSystem.append("<option value='" + systemId + "'>" + object.system.systemName + "[" 
 					+ object.system.systemHost + ":" + object.system.systemPort + "]" + "</option>");			
 			});
 			
 			$selectSystem.change(function(){
 				var systemId = $(this).val();
-				var object = data.testObject[systemId];
+				var object = data.data[systemId];
 				if (object != null) {
 					$F.find("#request-url").text(object.requestUrl);
 					$F.find("#select-data").html('');
@@ -222,7 +221,7 @@ function renderSceneTestPage(flag) {
 					$F.find("#scene-test-request-message").val('');
 					return false;
 				}
-				$F.find("#scene-test-request-message").val(data.testObject[systemId]["requestData"][$(that).val()]["dataJson"]);				
+				$F.find("#scene-test-request-message").val(data.data[systemId]["requestData"][$(that).val()]["dataJson"]);
 			});
 			$selectSystem.change();
 									
@@ -254,7 +253,7 @@ function sceneTest() {
 	$.post(REQUEST_URL.AUTO_TEST.TEST_SCENE_URL, {messageSceneId:messageSceneId, dataId:dataId, requestUrl:requestUrl, requestMessage:requestMessage},function(data) {
 		if (data.returnCode == 0) {			
 			layer.close(index);
-			renderResultViewPage(data.result, messageSceneId);			
+			renderResultViewPage(data.data, messageSceneId);
 		}else{
 			layer.close(index);
 			layer.alert(data.msg, {icon:5});

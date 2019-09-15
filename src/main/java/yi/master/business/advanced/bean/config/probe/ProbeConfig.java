@@ -70,11 +70,11 @@ public class ProbeConfig implements Serializable {
 		}
 		
 		//判断是否验证正确?
-		if (MessageKeys.TEST_RUN_STATUS_SUCCESS.equals(result.getRunStatus())) {
+		if (MessageKeys.TestRunStatus.SUCCESS.getCode().equals(result.getRunStatus())) {
 			return (result.getUseTime() > this.maxResponseTime) ? PROBE_NORMAL_LEVEL : PROBE_EXCELLENT_LEVEL;
 		} 
 		
-		if (MessageKeys.TEST_RUN_STATUS_FAIL.equals(result.getRunStatus())) {
+		if (MessageKeys.TestRunStatus.FAIL.getCode().equals(result.getRunStatus())) {
 			return PROBE_PROBLEMATIC_LEVEL;
 		}
 		
