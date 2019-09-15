@@ -54,7 +54,7 @@ public class BusinessSystemAction extends BaseAction<BusinessSystem> {
 
 	@Override
 	public String edit() {
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		model.setLastModifyUser(user.getRealName());
 		businessSystemService.edit(model);
 		return SUCCESS;

@@ -57,7 +57,7 @@ public class WebTestCaseAction extends BaseAction<WebTestCase> {
 		if (model.getCaseId() == null) {
 			model.getCaseConfig();
 			model.updateConfigJson();
-			model.setCreateUser((User) FrameworkUtil.getSessionMap().get("user"));
+			model.setCreateUser(FrameworkUtil.getLoginUser());
 		}		
 		super.edit();
 		return SUCCESS;

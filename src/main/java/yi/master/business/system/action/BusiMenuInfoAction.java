@@ -52,7 +52,7 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 			model.setParentNode(new BusiMenuInfo(model.getParentNodeId2()));
 		}
 		if (model.getMenuId() == null) {
-			model.setCreateUser((User) FrameworkUtil.getSessionMap().get("user"));
+			model.setCreateUser(FrameworkUtil.getLoginUser());
 		}		
 		return super.edit();
 	}

@@ -16,10 +16,6 @@ import yi.master.business.user.bean.User;
  * @version 2018.12.27
  */
 public class BusiMenuInfo implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Integer menuId;

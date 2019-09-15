@@ -61,12 +61,7 @@ public class InterfaceInfo implements Serializable {
 	 * 请求路径
 	 */
 	private String requestUrlReal;
-	
-	/**
-	 * 接口类型
-	 * CX 查询类
-	 * SL 受理类
-	 */
+
 	@FieldRealSearch(names = {"查询类", "受理类"}, values = {"CX", "SL"})
 	@CustomConditionSetting(operator="=")
 	private String interfaceType;
@@ -132,10 +127,22 @@ public class InterfaceInfo implements Serializable {
 	
 	
 	/******特殊成员变量，某些情况下使用-excel导入报文信息*********/
-	private String requestMsg; //入参报文
-	private String createMessage;//是否创建默认报文
-	private String createScene;//是否创建默认场景
-	private String MessageType;//报文格式类型	
+	/**
+	 * 入参报文
+	 */
+	private String requestMsg;
+	/**
+	 * 是否创建默认报文
+	 */
+	private String createMessage;
+	/**
+	 * 是否创建默认场景
+	 */
+	private String createScene;
+	/**
+	 * 报文格式类型
+	 */
+	private String MessageType;
 	/**************************/
 	
     /** default constructor */

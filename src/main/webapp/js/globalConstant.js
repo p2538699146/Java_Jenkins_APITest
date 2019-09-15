@@ -135,7 +135,7 @@ var REQUEST_URL = {
         DEL: "validate-del",
         GET:"validate-get",
         EDIT:"validate-edit",
-        LIST: "complexScene-getValidates",
+        LIST: "validate-getValidates",
         FULL_RULE_GET: "validate-getValidate",
         RULE_UPDATE_STATUS: "validate-updateValidateStatus"
     },
@@ -410,7 +410,7 @@ var MESSAGE_PROCESS = {
     }
 }
 
-//协议相关信息
+//接口协议-调用参数配置信息
 var MESSAGE_PROTOCOL = {
     "HTTP":{
         "Headers":{
@@ -455,6 +455,8 @@ var MESSAGE_PROTOCOL = {
 }
 
 
+
+
 //WEB自动化相关
 //测试步骤参数
 var WEB_STEP_PARAMETER = {
@@ -471,7 +473,7 @@ var WEB_STEP_PARAMETER = {
             "example":"Keys.ENTER 模拟键盘Enter按键",
             "mark":"模拟键盘按键,支持组合按键,常用键如下:<br>回车键 Keys.ENTER<br>删除键 Keys.BACK_SPACE<br>空格键 Keys.SPACE<br>制表键 Keys.TAB<br>回退键 Keys.ESCAPE<br>刷新键 Keys.F5<br>更多按键说明请参考说明文档!"
         },
-        "gloablVariable":{
+        "globalVariable":{
             "dataType":true,
             "text":"全局变量",
             "example":"${__current_timestamp}",

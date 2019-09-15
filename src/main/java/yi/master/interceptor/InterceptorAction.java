@@ -42,7 +42,6 @@ public class InterceptorAction extends ActionSupport {
 		Exception ex = (Exception)ActionContext.getContext().getValueStack().findValue("exception");
 		String exDetails = PracticalUtils.getExceptionAllinformation(ex);
 
-		logger.error("系统内部错误:\n" + exDetails);
 		if (ex instanceof YiException) {
 			YiException yiEx = (YiException) ex;
 			jsonObject.setMsg(yiEx.getMsg());
@@ -50,6 +49,7 @@ public class InterceptorAction extends ActionSupport {
 			return SUCCESS;
 		}
 
+		logger.error("系统内部错误:\n" + exDetails);
 		jsonObject.setReturnCode(AppErrorCode.INTERNAL_SERVER_ERROR.getCode());
 		jsonObject.setMsg(AppErrorCode.INTERNAL_SERVER_ERROR.getMsg());
 		jsonObject.data(exDetails);

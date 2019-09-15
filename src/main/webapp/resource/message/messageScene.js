@@ -542,7 +542,6 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			createViewWindow(data.responseExample, {
 				title:data.sceneName + "-[出参示例]",
-				copyBtn:true
 			});	
 		},
 		"#complex-choose-business-system":function () {//选择测试环境-组合场景中给场景配置时

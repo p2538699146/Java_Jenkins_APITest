@@ -14,6 +14,7 @@ import yi.master.business.testconfig.bean.GlobalVariable;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
@@ -49,7 +50,7 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 	public String edit() {
 		
 		
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		if (model.getVariableId() == null) {
 			//新增
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
@@ -64,7 +65,7 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 		//验证key的唯一性
 		if (GlobalVariable.ifHasKey(model.getVariableType())) {
 			checkObjectName();
-			if (StringUtils.isBlank(model.getKey()) || !"true".equals(checkNameFlag)) {
+			if (StringUtils.isBlank(model.getKey()) || !SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(checkNameFlag)) {
 				throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), "无效或者" + checkNameFlag + ",请重试!");
 			}
 		}

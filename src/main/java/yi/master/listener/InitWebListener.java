@@ -113,6 +113,7 @@ public class InitWebListener implements ServletContextListener {
 		JobManager jobManager = (JobManager) FrameworkUtil.getSpringBean("jobManager");
 		jobManager.startTasks();
 		context.setAttribute(SystemConsts.QUARTZ_SCHEDULER_START_FLAG, SystemConsts.QUARTZ_SCHEDULER_IS_START);
+
 		
 		//启动操作日志异步入库线程
 		//日志信息异步入库

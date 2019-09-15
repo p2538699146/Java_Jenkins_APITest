@@ -26,8 +26,8 @@ import static yi.master.constant.MessageKeys.*;
 public abstract class MessageParse {
 	
 	public static final Logger LOGGER = Logger.getLogger(MessageParse.class.getName());
-	
-	
+	public static Pattern p = Pattern.compile("\t|\r|\n");
+
 	/**
 	 * 判断报文格式并返回指定的解析实例
 	 * @param message
@@ -193,8 +193,7 @@ public abstract class MessageParse {
 	 * @return
 	 */
 	public String parseMessageToSingleRow(String message) {
-		 if(message!=null && !"".equals(message)) {      
-	           Pattern p = Pattern.compile("\t|\r|\n");      
+		 if(message!=null && !"".equals(message)) {
 	           Matcher m = p.matcher(message);      
 	           String strNoBlank = m.replaceAll("");      
 	           return strNoBlank;      

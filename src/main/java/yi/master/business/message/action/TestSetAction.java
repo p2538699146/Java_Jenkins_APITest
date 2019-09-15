@@ -69,14 +69,9 @@ public class TestSetAction extends BaseAction<TestSet> {
 	
 	@Override
 	public String[] prepareList() {
-		
 		List<String> conditions = new ArrayList<String>();
 		conditions.add("parented=1");
-		
-		/*User user = (User) FrameworkUtil.getSessionMap().get("user");
-		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
-			conditions.add("user.userId=" + user.getUserId());
-		}*/
+
 		this.filterCondition = conditions.toArray(new String[0]);
 		return this.filterCondition;
 	}
@@ -102,7 +97,7 @@ public class TestSetAction extends BaseAction<TestSet> {
 	public String edit() {
 		if (model.getSetId() == null) {
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
-			model.setUser((User)(FrameworkUtil.getSessionMap().get("user")));	
+			model.setUser(FrameworkUtil.getLoginUser());
 			if ("1".equals(model.getParented())) {
 				//创建测试配置
 				TestConfig config = (TestConfig) testConfigService.getConfigByUserId(0).clone();

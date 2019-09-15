@@ -121,7 +121,7 @@ public class JSONMessageParse extends MessageParse {
 			return returnMsg + "未在接口参数中定义或者类型/路径不匹配,请检查!";
 		} 
 		
-		return "true";
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	
@@ -255,7 +255,9 @@ public class JSONMessageParse extends MessageParse {
 		String[] pathNames = path.split("\\.");
 		Map<String, Object> nodeObj = message;
 		for (String nodePath:pathNames) {
-			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(nodePath)) continue;
+			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(nodePath)) {
+				continue;
+			}
 			Object nodeObj_l = nodeObj.get(nodePath);
 			if (nodeObj_l == null) {
 				nodeObj_l = new HashMap<String, Object>();

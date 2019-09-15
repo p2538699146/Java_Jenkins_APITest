@@ -16,12 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import yi.master.business.message.bean.AutoTask;
 import yi.master.business.message.bean.TestReport;
 import yi.master.business.message.bean.TestResult;
+import yi.master.business.message.enums.CommonStatus;
+import yi.master.business.message.enums.TestType;
 import yi.master.business.message.service.AutoTaskService;
 import yi.master.business.message.service.TestReportService;
 import yi.master.business.message.service.TestResultService;
 import yi.master.business.message.service.TestSetService;
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.business.user.service.MailService;
+import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
@@ -86,10 +89,9 @@ public class TimeTaskJobListener implements JobListener {
 			return;
 		}
 		
-		if ("0".equals(task.getTaskType())) {
-			String finishFlag = "N";
-			
-			while ("N".equalsIgnoreCase(finishFlag)) {
+		if (TestType.INTERFACE.getType().equals(task.getTaskType())) {
+			String finishFlag = SystemConsts.FinishedFlag.N.name();
+			while (SystemConsts.FinishedFlag.N.name().equalsIgnoreCase(finishFlag)) {
 				finishFlag = reportService.isFinished(Integer.parseInt(result[0]));	
 				try {
 					Thread.sleep(2000);
@@ -110,14 +112,15 @@ public class TimeTaskJobListener implements JobListener {
 		taskService.edit(task);
 		
 		//发送推送邮件
-		if ("0".equals(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_IF_SEND_REPORT_MAIL)) && "1".equals(task.getMailNotify())) {
+		if (CommonStatus.ENABLED.getStatus().equals(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_IF_SEND_REPORT_MAIL))
+				&& SystemConsts.DefaultBooleanIdentify.TRUE.getNumber().equals(task.getMailNotify())) {
 			String createReportUrl = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_HOME) + "/" 
 					+ SystemConsts.CREATE_STATIC_REPORT_HTML_RMI_URL + "?reportId=" + result[0] 
 					+ "&token=" + SystemConsts.REQUEST_ALLOW_TOKEN;
 			String returnJson = PracticalUtils.doGetHttpRequest(createReportUrl);
 			try {
 				Map maps = new ObjectMapper().readValue(returnJson, Map.class);
-				if (!"0".equals(maps.get("returnCode").toString())) {
+				if (!ReturnCodeConsts.SUCCESS_CODE.toString().equals(maps.get("returnCode").toString())) {
 					throw new Exception(returnJson);
 				}
 				
@@ -127,7 +130,7 @@ public class TimeTaskJobListener implements JobListener {
 				TestConfig config = testSetService.get(task.getRelatedId()).getConfig();
 				String sendMailSuccessFlag = NotifyMail.sendEmail(new ReportEmailCreator(report), config.getMailReceiveAddress(), config.getMailCopyAddress());
 				
-				if ("true".equalsIgnoreCase(sendMailSuccessFlag)) {
+				if (SystemConsts.DefaultBooleanIdentify.TRUE.getString().equalsIgnoreCase(sendMailSuccessFlag)) {
 					tip.append("<p class=\"c-green\">本次测试结果及报告已通过邮件推送!</p>");
 				} else {
 					tip.append("<p class=\"c-red\">发送推送邮件失败,原因：</p><p>" + sendMailSuccessFlag + "</p>");
@@ -148,19 +151,19 @@ public class TimeTaskJobListener implements JobListener {
 	
 	@Override
 	public void jobExecutionVetoed(JobExecutionContext context) {
-		
-		
 	}
 	
 	private static String getTaskType (String type) {
-		switch (type) {
-		case "0":
+		if (TestType.INTERFACE.getType().equals(type)) {
 			return "接口自动化";
-		case "1":
-			return "Web自动化";
-		default:
-			return "未知类型";
 		}
+		if (TestType.WEB_UI.getType().equals(type)) {
+			return "Web自动化";
+		}
+		if (TestType.APP_UI.getType().equals(type)) {
+			return "App自动化";
+		}
+		return "未知类型";
 	}
 
 }

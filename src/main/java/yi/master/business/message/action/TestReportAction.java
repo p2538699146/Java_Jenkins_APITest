@@ -14,6 +14,7 @@ import yi.master.business.message.bean.TestSet;
 import yi.master.business.message.service.TestReportService;
 import yi.master.business.message.service.TestSetService;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
@@ -103,7 +104,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 		if (report == null) {
 			throw new YiException(AppErrorCode.REPORT_INFO_NOT_EXIST);
 		}
-		if ("N".equals(report.getFinishFlag()) || report.getTrs().size() < 1) {
+		if (SystemConsts.FinishedFlag.N.name().equals(report.getFinishFlag()) || report.getTrs().size() < 1) {
 			throw new YiException(AppErrorCode.REPORT_TEST_NO_DATA);
 		}
 		//发送测试报告
@@ -116,7 +117,7 @@ public class TestReportAction extends BaseAction<TestReport> {
 		}
 		
 		String result = NotifyMail.sendEmail(new ReportEmailCreator(report), receiveAddress_s, copyAddress_s);
-		if (!"true".equalsIgnoreCase(result)) {
+		if (!SystemConsts.DefaultBooleanIdentify.TRUE.getString().equalsIgnoreCase(result)) {
 			throw new YiException(AppErrorCode.INTERNAL_SERVER_ERROR.getCode(), result);
 		}
 		

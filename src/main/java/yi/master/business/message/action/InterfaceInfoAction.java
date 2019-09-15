@@ -32,6 +32,7 @@ import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
@@ -91,10 +92,7 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 			conditions.add("exists (select 1 from InterfaceInfo o join o.systems s where s.systemId=" + systemId 
 					+ " and o.interfaceId=t.interfaceId)");
 		}
-//		User user = (User) FrameworkUtil.getSessionMap().get("user");
-//		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
-//			conditions.add("user.userId=" + user.getUserId());
-//		}
+
 		this.filterCondition = conditions.toArray(new String[0]);
 		return this.filterCondition;
 	}
@@ -169,10 +167,10 @@ public class InterfaceInfoAction extends BaseAction<InterfaceInfo> {
 	 */
 	@Override
 	public String edit() {
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		//判断接口名是否重复
 		checkObjectName();
-		if (!checkNameFlag.equals("true")) {
+		if (!checkNameFlag.equals(SystemConsts.DefaultBooleanIdentify.TRUE.getString())) {
 			throw new YiException(AppErrorCode.NAME_EXIST);
 		}
 		if (model.getInterfaceId() == null) {

@@ -148,7 +148,6 @@ var eventList = {
 			var data = table.row( $(this).parents('tr') ).data();
 			createViewWindow(data.responseExample, {
 				title:data.sceneName + "-[出参示例]",
-				copyBtn:true
 			});	
 		}
 };

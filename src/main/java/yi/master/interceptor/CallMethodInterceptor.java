@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import yi.master.business.base.action.BaseAction;
+import yi.master.business.log.enums.LogCallType;
+import yi.master.business.log.enums.LogInterceptStatus;
 import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.system.service.OperationInterfaceService;
@@ -60,8 +62,8 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		User user = null;
 		OperationInterface opInterface = null;
 		String callUrl = null; 
-		String interceptStatus = "0";
-		String callType = "0";
+		String interceptStatus = LogInterceptStatus.SUCCESS.getStatus();
+		String callType = LogCallType.USER_CALLED.getType();
 		String userHost = null; 
 		String browserAgent = null;
 		int validateTime = 0;
@@ -93,9 +95,9 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		}
 		
 		//内部调用带上指定的token直接通过
-		String[] tokens = (String[]) paramMap.get("token");
+		String[] tokens = (String[]) paramMap.get(SystemConsts.API_TOKEN_ATTRIBUTE_NAME);
 		if (tokens != null && SystemConsts.REQUEST_ALLOW_TOKEN.equals(tokens[0])) {		
-			callType = "2";
+			callType = LogCallType.SELF_CALLED.getType();
 			String result = null;
 			
 			try {
@@ -112,14 +114,14 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				logger.error("系统异常,请求失败!", e);
 				
 				mark = PracticalUtils.getExceptionAllinformation(e);
-				interceptStatus = "6";
+				interceptStatus = LogInterceptStatus.SYSTEM_ERROR.getStatus();
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
 				throw e;
 			}
 			
-			interceptStatus = "0";
+			interceptStatus = LogInterceptStatus.SUCCESS.getStatus();
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);
 			return result;
@@ -173,7 +175,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 					logger.info("[" + timeTag + "]接口" + callUrl + "出参\n" + responseParams);
 				}
 				
-				interceptStatus = "3";
+				interceptStatus = LogInterceptStatus.PERMIT_THROUGH.getStatus();
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
@@ -183,11 +185,11 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 			
 			//判断用户是否登录
 			//获取当前登录用户
-			user = (User) FrameworkUtil.getSessionMap().get("user");
+			user = FrameworkUtil.getLoginUser();
 			
 			if (user == null) {
 				logger.info("[" + timeTag + "]" + "用户未登录,调用接口" + callUrl + "失败!\n验证耗时：" +  (System.currentTimeMillis() - beginTime) + "ms.");
-				interceptStatus = "2";
+				interceptStatus = LogInterceptStatus.NO_LOGIN.getStatus();
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
@@ -200,7 +202,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 			if (!opInterface.getStatus().equals("0")) {
 				validateTime = Integer.valueOf(String.valueOf(System.currentTimeMillis() - beginTime));
 				logger.info("[" + timeTag + "]" + userTag + "当前接口" + callUrl + "已被禁用!\n验证耗时：" +  validateTime + "ms.");
-				interceptStatus = "5";
+				interceptStatus = LogInterceptStatus.INTERFACE_DISABLED.getStatus();
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
@@ -230,7 +232,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 				validateTime = Integer.valueOf(String.valueOf(System.currentTimeMillis() - beginTime));
 				logger.info("[" + timeTag + "]" + userTag + "用户没有调用接口" + callUrl + "的权限,调用失败!\n验证耗时：" +  validateTime + "ms.");
 				
-				interceptStatus = "1";
+				interceptStatus = LogInterceptStatus.NO_PERMISSION.getStatus();
 				
 				recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 						validateTime, executeTime, requestParams, responseParams, mark);
@@ -261,9 +263,11 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		} catch (Exception e) {
 			validateTime = Integer.valueOf(String.valueOf(System.currentTimeMillis() - beginTime));
 			logger.info("[" + timeTag + "]验证耗时：" +  validateTime + "ms.");
-			
-			mark = PracticalUtils.getExceptionAllinformation(e);
-			interceptStatus = "6";
+
+			if (!(e instanceof YiException)) {
+				interceptStatus = LogInterceptStatus.SYSTEM_ERROR.getStatus();
+				mark = PracticalUtils.getExceptionAllinformation(e);
+			}
 			
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);

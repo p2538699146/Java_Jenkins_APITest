@@ -232,7 +232,6 @@ var eventList = {
 			if (responseExample != null) {
 				createViewWindow(responseExample, {
 					title:"返回报文示例", //标题
-					copyBtn:true//是否显示复制按钮
 				});
 				return false;
 			}
@@ -245,7 +244,6 @@ var eventList = {
 					responseExample = json.data.responseExample;
 					createViewWindow(responseExample, {
 						title:"返回报文示例", //标题
-						copyBtn:true//是否显示复制按钮
 					});
 				} else {
 					layer.alert(json.msg, {icon:5});

@@ -13,6 +13,7 @@ import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.advanced.bean.config.mock.MockRequestValidateConfig;
 import yi.master.business.advanced.bean.config.mock.MockResponseConfig;
 import yi.master.business.advanced.bean.config.mock.MockValidateRuleConfig;
+import yi.master.business.advanced.enums.InterfaceMockStatus;
 import yi.master.business.base.dto.ParseMessageToNodesOutDTO;
 import yi.master.business.advanced.service.InterfaceMockService;
 import yi.master.business.base.action.BaseAction;
@@ -67,7 +68,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	@Override
 	public String edit(){
 		if (model.getMockId() == null) {
-			model.setUser((User)FrameworkUtil.getSessionMap().get("user"));
+			model.setUser(FrameworkUtil.getLoginUser());
 			model.setRequestValidate(JSONObject.fromObject(new MockRequestValidateConfig()).toString());
 			model.setResponseMock(JSONObject.fromObject(new MockResponseConfig()).toString());
 			model.setMockId(interfaceMockService.save(model));
@@ -78,11 +79,13 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		//开启Socket模拟服务
 		MockSocketServer server = CacheUtil.getSocketServers().get(model.getMockId());
 		
-		if (server != null && ("1".equals(model.getStatus()) || !"socket".equalsIgnoreCase(model.getProtocolType()))) {
+		if (server != null && (InterfaceMockStatus.DISABLED.getStatus().equals(model.getStatus())
+				|| !MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType()))) {
 			server.stop();
 		}
 		
-		if (server == null && "0".equals(model.getStatus()) && MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType())) {
+		if (server == null && InterfaceMockStatus.ENABLED.getStatus().equals(model.getStatus())
+				&& MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType())) {
 			try {
 				new MockSocketServer(model.getMockId());
 			} catch (Exception e) {

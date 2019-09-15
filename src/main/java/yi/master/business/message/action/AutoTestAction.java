@@ -17,6 +17,7 @@ import yi.master.business.message.bean.ComplexScene;
 import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.TestData;
 import yi.master.business.message.bean.TestResult;
+import yi.master.business.message.enums.TestDataStatus;
 import yi.master.business.message.service.ComplexSceneService;
 import yi.master.business.message.service.MessageSceneService;
 import yi.master.business.message.service.TestDataService;
@@ -167,12 +168,12 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该条测试数据正在被使用，请稍后再操作");
 		}
 		
-		if (d == null || "1".equals(d.getStatus())) {
+		if (d == null || TestDataStatus.USED.getStatus().equals(d.getStatus())) {
 			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "测试数据不可用,请更换");
 		}
 		
 		
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		
 		MessageScene scene = messageSceneService.get(messageSceneId);
 		
@@ -186,7 +187,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 					, 0, false, config, PracticalUtils.jsonToMap(scene.getMessage().getCallParameter()));
 		testObject.setBusinessSystem(businessSystemService.get(systemId));
 		if (InterfaceBusiType.SL.name().equalsIgnoreCase(scene.getMessage().getInterfaceInfo().getInterfaceType())
-					&& "0".equals(d.getStatus())) {
+					&& TestDataStatus.AVAILABLE.getStatus().equals(d.getStatus())) {
 			//改变预占数据			
 			CacheUtil.addLockedTestData(dataId);
 			testObject.setDataId(dataId);
@@ -205,7 +206,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 	 * @return
 	 */
 	public String scenesTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		if (user == null) {
 			user = userService.get(config.getUserId());
 		}
@@ -230,7 +231,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 	 * @return
 	 */
 	public String getConfig () {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		TestConfig config = testConfigService.getConfigByUserId(user.getUserId());
 		
 		if (config == null) {

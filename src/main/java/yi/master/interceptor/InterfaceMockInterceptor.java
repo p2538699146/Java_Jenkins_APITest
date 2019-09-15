@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import yi.master.business.advanced.action.MockAction;
 import yi.master.business.advanced.bean.InterfaceMock;
+import yi.master.business.advanced.enums.InterfaceMockStatus;
 import yi.master.business.advanced.service.InterfaceMockService;
+import yi.master.business.log.enums.LogCallType;
+import yi.master.business.log.enums.LogInterceptStatus;
 import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
@@ -42,8 +45,8 @@ public class InterfaceMockInterceptor extends AbstractInterceptor {
 		User user = null;
 		OperationInterface opInterface = null;
 		String callUrl = null; 
-		String interceptStatus = "0";
-		String callType = "3";
+		String interceptStatus = LogInterceptStatus.SUCCESS.getStatus();
+		String callType = LogCallType.MOCK.getType();
 		String userHost = null; 
 		String browserAgent = null;
 		int validateTime = 0;
@@ -63,15 +66,15 @@ public class InterfaceMockInterceptor extends AbstractInterceptor {
 		
 		InterfaceMock mock = interfaceMockService.findByMockUrl(callUrl);
 		if (mock == null) {
-			interceptStatus = "8";
+			interceptStatus = LogInterceptStatus.MOCK_NOT_EXIST.getStatus();
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);
 
 			throw new YiException(AppErrorCode.MOCK_INTERFACE_NOT_EXIST);
 		}
 		
-		if ("1".equals(mock.getStatus())) {
-			interceptStatus = "5";
+		if (InterfaceMockStatus.DISABLED.getStatus().equals(mock.getStatus())) {
+			interceptStatus = LogInterceptStatus.INTERFACE_DISABLED.getStatus();
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);
 
@@ -87,7 +90,7 @@ public class InterfaceMockInterceptor extends AbstractInterceptor {
 					validateTime, executeTime, requestParams, responseParams, mark);
 		} catch (Exception e) {
 			logger.error(request.getRequestURI() + " 接口mock出错!", e);
-			interceptStatus = "7";
+			interceptStatus =  LogInterceptStatus.MOCK_ERROR.getStatus();
 			mark = PracticalUtils.getExceptionAllinformation(e);
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,
 					validateTime, executeTime, requestParams, responseParams, mark);

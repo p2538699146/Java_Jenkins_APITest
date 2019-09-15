@@ -384,7 +384,6 @@ var eventList = {
 			}
 			
 			var json = JSON.parse($("#callParameter").val());
-			console.log($("#callParameter").val());
 			var callParameterViewHtml = '<article class="page-container"><form action="" method="" class="form form-horizontal">';
 						
 			if (json != null && !$.isEmptyObject(json)) {
@@ -425,7 +424,6 @@ var eventList = {
 			messageId = data.messageId
 			createViewWindow(getParameterJson, {
 				title:data.interfaceName + "-" + data.messageName + "-[入参报文]",
-				copyBtn:true,
 				refreshBtn:true
 			});				
 		},
@@ -534,10 +532,9 @@ var eventList = {
 				layer.msg('请先选择一个处理类型!', {icon:5, time:1600});
 				return false;
 			}
-			
 			var processParameter = JSON.parse($("#processParameter").val() || MESSAGE_PROCESS[processType]) ;
-			window.settingLayerIndex = layer_show("报文处理参数", templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
-				$("div ." + processType).removeClass('hide');
+			window.settingLayerIndex = layer_show("报文处理参数"
+				, templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
 			});
 		},
 		//保存报文处理类型的参数
@@ -557,7 +554,7 @@ var eventList = {
 		"#processType":{
 			"change":function(){
 				var processType = $(this).val();
-				$("#processParameter").val(strIsNotEmpty(processType) ? JSON.stringify(processJson[processType]) : '');
+				$("#processParameter").val(strIsNotEmpty(processType) ? JSON.stringify(MESSAGE_PROCESS[processType]) : '');
 			}
 		},
 		//选择报文节点
@@ -612,8 +609,8 @@ var mySetting = {
 			}		
 			
 			//编辑页面高度重设
-			editPageHeight.add = (editPageHeight.add + 60);
-			editPageHeight.edit =(editPageHeight.edit + 60);
+			editPageHeight.add != null && (editPageHeight.add += 60);
+			editPageHeight.edit != null && (editPageHeight.edit += 60);
    		 	df.resolve();
    	 	},
 		editPage:{

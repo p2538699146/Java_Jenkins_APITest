@@ -346,7 +346,6 @@ var eventList = {
 			}
 			createViewWindow(currentTestObject[type].reverse().join("\n"), {
 				title:"测试信息查看", //标题
-				copyBtn:true//是否显示复制按钮
 			});
 		},
 		//测试视图界面-执行测试

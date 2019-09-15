@@ -91,9 +91,9 @@ public class URLMessageParse extends MessageParse {
 		
 		if (!allCorrectFlag) {
 			return returnMsg + "未在接口参数中定义或者类型不匹配,请检查!";
-		} 
-		
-		return "true";
+		}
+
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	private StringBuilder paraseUrlMessage(ComplexParameter parameter, StringBuilder message, Map<String, Object> messageData) {

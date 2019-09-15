@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import yi.master.business.advanced.bean.InterfaceProbe;
+import yi.master.business.advanced.enums.InterfaceProbeStatus;
 import yi.master.business.advanced.service.InterfaceProbeService;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.MessageScene;
@@ -135,8 +136,8 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 			if (StringUtils.isBlank(configJson)) {
 				model.setProbeConfigJson();
 			}
-			model.setUser((User)FrameworkUtil.getSessionMap().get("user"));
-			model.setStatus("0");
+			model.setUser(FrameworkUtil.getLoginUser());
+			model.setStatus(InterfaceProbeStatus.STOPPED.getStatus());
 		} else {
 			//修改
 			//修改不会变更测试场景
@@ -170,8 +171,8 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		} else {
 			model.setProbeConfigJson(JSONObject.fromObject(URLMessageParse.parseUrlToMap(configJson, new String[]{"probeId"})).toString());
 		}
-		model.setUser((User)FrameworkUtil.getSessionMap().get("user"));
-		model.setStatus("0");
+		model.setUser(FrameworkUtil.getLoginUser());
+		model.setStatus(InterfaceProbeStatus.STOPPED.getStatus());
 		
 		InterfaceProbe probe = null;
 		for (String id:ids) {
@@ -201,7 +202,7 @@ public class InterfaceProbeAction extends BaseAction<InterfaceProbe> {
 		if (model.getProbeId() != null) {
 			//验证是否处理停止状态
 			InterfaceProbe probe = interfaceProbeService.get(model.getProbeId());
-			if (probe != null && !"0".equals(probe.getStatus())) {
+			if (probe != null && !InterfaceProbeStatus.STOPPED.getStatus().equals(probe.getStatus())) {
 				throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该任务处于运行状态,请先停止!");
 			}
 		}

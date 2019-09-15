@@ -18,6 +18,7 @@ import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.lang.UUID;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.user.bean.User;
+import yi.master.business.user.enums.UserStatus;
 import yi.master.business.user.service.UserService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
@@ -90,17 +91,17 @@ public class UserAction extends BaseAction<User>{
 			passwdLogin = true;
 		}
 		
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 
 		if (model == null) {
 			throw new YiException(AppErrorCode.USER_ERROR_ACCOUNT);
 		}
 
-		if (user != null && user.getUserId() == model.getUserId()) {
+		if (user != null && user.getUserId().equals(model.getUserId())) {
 			throw new YiException(AppErrorCode.USER_RE_LOGIN);
 		}
 
-		if (!"0".equalsIgnoreCase(model.getStatus())) {
+		if (UserStatus.LOCKED.getStatus().equalsIgnoreCase(model.getStatus())) {
 			throw new YiException(AppErrorCode.USER_ACCOUNT_LOCK);
 		}
 
@@ -129,7 +130,7 @@ public class UserAction extends BaseAction<User>{
 	 */
 	@SuppressWarnings("rawtypes")
 	public String logout() {
-		LOGGER.info("用户" + ((User)FrameworkUtil.getSessionMap().get("user")).getRealName() + "已登出!");
+		LOGGER.info("用户" + (FrameworkUtil.getLoginUser()).getRealName() + "已登出!");
 		((SessionMap)FrameworkUtil.getSessionMap()).invalidate();
 
 		return SUCCESS;
@@ -193,7 +194,7 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String editMyName() {
-		User user = (User)FrameworkUtil.getSessionMap().get("user");		
+		User user = FrameworkUtil.getLoginUser();
 		userService.updateRealName(model.getRealName(), user.getUserId());
 		user.setRealName(model.getRealName());
 
@@ -222,7 +223,7 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String modifyPasswd() {
-		User user = (User)FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		try {
 			userService.resetPasswd(user.getUserId(), MD5Util.code(model.getPassword()));
 			user.setPassword(MD5Util.code(model.getPassword()));
@@ -243,7 +244,7 @@ public class UserAction extends BaseAction<User>{
 	 */
 	@Override
 	public String del() {
-		if (userService.get(id).getUsername().equals("admin")) {
+		if (userService.get(id).getUsername().equals(SystemConsts.SYSTEM_ADMINISTRATOR_ROLE_NAME)) {
 			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除预置管理员用户!");
 		}
 		userService.delete(id);
@@ -256,7 +257,7 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String lock() {
-		if (model.getUsername().equals("admin")) {
+		if (model.getUsername().equals(SystemConsts.SYSTEM_ADMINISTRATOR_ROLE_NAME)) {
 			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能锁定预置管理员用户!");
 		}
 		userService.lockUser(model.getUserId(), mode);
@@ -272,7 +273,7 @@ public class UserAction extends BaseAction<User>{
 	 */
 	public String resetPwd() {
 		try {
-			userService.resetPasswd(model.getUserId(), MD5Util.code("111111"));
+			userService.resetPasswd(model.getUserId(), MD5Util.code(SystemConsts.DEFAULT_USER_PASSWORD));
 		} catch (NoSuchAlgorithmException e) {
 			LOGGER.warn("NoSuchAlgorithmException", e);
 		}
@@ -296,12 +297,12 @@ public class UserAction extends BaseAction<User>{
 			model.setIfNew("atp");
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			try {
-				model.setPassword(MD5Util.code("111111"));
+				model.setPassword(MD5Util.code(SystemConsts.DEFAULT_USER_PASSWORD));
 			} catch (NoSuchAlgorithmException e) {
 				LOGGER.error("密码加密失败!", e);
 				return ERROR;
 			}
-			model.setStatus("0");
+			model.setStatus(UserStatus.NORMAL.getStatus());
 			model.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
 		} else {
 			//修改

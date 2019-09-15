@@ -48,11 +48,11 @@ public class AutoTaskAction extends BaseAction<AutoTask> {
 	public String edit() {
 		
 		checkObjectName();
-		if (!checkNameFlag.equals("true")) {
+		if (!checkNameFlag.equals(SystemConsts.DefaultBooleanIdentify.TRUE.getString())) {
 			throw new YiException(AppErrorCode.NAME_EXIST);
 		}
 		if (model.getTaskId() == null) {
-			model.setUser((User)FrameworkUtil.getSessionMap().get("user"));
+			model.setUser(FrameworkUtil.getLoginUser());
 		}
 		return super.edit();
 	}

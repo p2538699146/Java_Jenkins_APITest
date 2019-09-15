@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
+import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 
@@ -35,8 +36,7 @@ public class OPTMessageParse extends FixedMessageParse {
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		
-		return "true";
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	@Override

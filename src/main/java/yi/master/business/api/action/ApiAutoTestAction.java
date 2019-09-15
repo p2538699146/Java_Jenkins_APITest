@@ -152,8 +152,12 @@ public class ApiAutoTestAction extends BaseApiAction {
 	
 	private ApiTaskService getTaskService() {
 		
-		if ("1".equals(testType)) return interfaceApiTaskService;
-		if ("0".equals(testType)) return webApiTaskService;
+		if ("1".equals(testType)) {
+			return interfaceApiTaskService;
+		}
+		if ("0".equals(testType)) {
+			return webApiTaskService;
+		}
 		return null;
 	}
 }

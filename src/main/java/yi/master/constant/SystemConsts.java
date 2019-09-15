@@ -16,10 +16,23 @@ public interface SystemConsts {
 
 
 	/**
+	 * 完成标志
+	 */
+	enum FinishedFlag {
+		N,Y;
+	}
+
+	/**
 	 * boolean定义
 	 */
 	enum DefaultBooleanIdentify  {
+		/**
+		 * true、1
+		 */
 		TRUE("true", "1"),
+		/**
+		 * false、0
+		 */
 		FALSE("false", "0");
 
 		private String string;
@@ -118,6 +131,7 @@ public interface SystemConsts {
 		}
 	}
 
+	public static final String DEFAULT_USER_PASSWORD = "111111";
 	
 	/**
 	 * 请求带上此token代表为内部自调用接口，不需要验证权限
@@ -126,12 +140,12 @@ public interface SystemConsts {
 	
 	
 	/**
-	 * 管理员角色名
+	 * 管理员角色名和用户名
 	 * 
 	 */
 	public static final String SYSTEM_ADMINISTRATOR_ROLE_NAME = "admin";
 
-
+	public static final String API_TOKEN_ATTRIBUTE_NAME = "token";
 
 	/**
 	 * sessionMap中登录用户key值

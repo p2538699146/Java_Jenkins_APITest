@@ -4,6 +4,7 @@ import net.sf.json.JSONObject;
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.constant.MessageKeys;
+import yi.master.constant.SystemConsts;
 
 import java.util.HashSet;
 import java.util.List;
@@ -69,7 +70,7 @@ public class FixedMessageParse extends MessageParse {
 		
 		for (Parameter p:params) {
 			if (message.equals(p.getParameterIdentify())) {
-				return "true";
+				return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 			}
 		}
 		
@@ -84,9 +85,10 @@ public class FixedMessageParse extends MessageParse {
 
 	@Override
 	public String createMessageByNodes(JSONObject nodes) {
-		
 		for (Object key:nodes.keySet()) {
-			if ("rootId".equals(key.toString())) continue;
+			if ("rootId".equals(key.toString())) {
+				continue;
+			}
 			JSONObject node = nodes.getJSONObject(key.toString());
 			if (MessageKeys.MessageParameterType.isStringOrNumberType(node.getString("type"))) {
 				return node.getString("defaultValue");

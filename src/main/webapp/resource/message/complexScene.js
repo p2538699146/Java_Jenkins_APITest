@@ -171,10 +171,10 @@ var eventList = {
 				var loadIndex = layer.msg('正在测试,请耐心等待...', {icon:16, time:9999999, shade:0.4});
 				$.post(REQUEST_URL.AUTO_TEST.TEST_COMPLEX_SCENE_URL, {id:data.id}, function(json){
 					layer.close(loadIndex);
-					if (json.returnCode == 0 && json.result != null) {
-						var results = json.result;
-						if (json.result.length == undefined) {
-							results = json.result.complexSceneResults;
+					if (json.returnCode == 0 && json.data != null) {
+						var results = json.data;
+						if (json.data.length == undefined) {
+							results = json.data.complexSceneResults;
 						}
 						layer_show(data.complexSceneName + '-测试结果  点击查看对应详情', templates["complex-scene-results-view"]({results:results}), 600, 300, 1, function(layero, index){							
 							layero.find('.result-view').bind('click', function(){
@@ -183,8 +183,6 @@ var eventList = {
 						}, function(index, layero) {
 							layero.find('.result-view').unbind('click');
 						}, null)
-						
-						
 					} else {
 						layer.alert(strIsNotEmpty(json.msg) ? json.msg : '测试出错!', {icon:5});
 					}

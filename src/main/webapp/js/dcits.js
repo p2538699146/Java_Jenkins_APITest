@@ -1100,8 +1100,7 @@ function showMark(itemName, markName, obj, tipName) {
 	}
 	
 	createViewWindow(data[markName], {
-		title:itemName + '-' + tipName,
-		copyBtn:false
+		title:itemName + '-' + tipName
 	})
 }
 

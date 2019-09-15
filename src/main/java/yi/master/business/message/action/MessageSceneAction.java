@@ -21,6 +21,8 @@ import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.bean.SceneValidateRule;
 import yi.master.business.message.bean.TestData;
+import yi.master.business.message.enums.CommonStatus;
+import yi.master.business.message.enums.TestDataStatus;
 import yi.master.business.message.service.MessageSceneService;
 import yi.master.business.message.service.MessageService;
 import yi.master.business.message.service.SceneValidateRuleService;
@@ -119,7 +121,7 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 		
 		MessageParse parseUtil = MessageParse.getParseInstance(messageSceneService.get(model.getMessageSceneId()).getMessage().getMessageType());
 			
-		Set<Parameter> params = parseUtil.judgeMessageType(responseMsg).importMessageToParameter(responseMsg, new HashSet<Parameter>());
+		Set<Parameter> params = MessageParse.judgeMessageType(responseMsg).importMessageToParameter(responseMsg, new HashSet<Parameter>());
 		if (params == null) {
 			throw new YiException(AppErrorCode.MESSAGE_VALIDATE_ERROR.getCode(), "尚不支持此类型的报文格式，请检查出报文格式!");
 		}
@@ -183,11 +185,10 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 			//新增时默认该该场景添加一条默认数据		
 			TestData defaultData = new TestData();
 			defaultData.setDataDiscr("默认数据");
-			defaultData.setStatus("0");
+			defaultData.setStatus(TestDataStatus.AVAILABLE.getStatus());
 			defaultData.setMessageScene(model);
-			defaultData.setParamsData("");	
-			//defaultData.setSystems(model.getSystems());
-			defaultData.setDefaultData("0");
+			defaultData.setParamsData("");
+			defaultData.setDefaultData(CommonStatus.ENABLED.getStatus());
 			testDataService.edit(defaultData);
 			
 			//是否配置关联验证模板
@@ -249,9 +250,15 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 			Map<String, Object> object = new HashMap<String, Object>();	
 			
 			String requestUrl = "";
-			if (StringUtils.isNotBlank(model.getRequestUrl())) requestUrl = model.getRequestUrl();
-			if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) requestUrl = msg.getRequestUrl();
-			if (StringUtils.isBlank(requestUrl)) requestUrl = info.getRequestUrlReal();	
+			if (StringUtils.isNotBlank(model.getRequestUrl())) {
+				requestUrl = model.getRequestUrl();
+			}
+			if (StringUtils.isBlank(requestUrl) && StringUtils.isNotBlank(msg.getRequestUrl())) {
+				requestUrl = msg.getRequestUrl();
+			}
+			if (StringUtils.isBlank(requestUrl)) {
+				requestUrl = info.getRequestUrlReal();
+			}
 			
 			object.put("requestUrl", system.getReuqestUrl(requestUrl, system.getDefaultPath(), info.getInterfaceName()));
 			List<TestData> datas = model.getEnabledTestDatas(5, String.valueOf(system.getSystemId()));

@@ -47,9 +47,11 @@ public class ProbeEmailCreator implements EmailCreator {
 					.replaceAll("\\$\\{status\\}", TestResult.RUN_STATUS_DICT.get(result.getRunStatus()))
 					.replaceAll("\\$\\{useTime\\} ", String.valueOf(result.getUseTime())).replaceAll("\\$\\{code\\}", result.getStatusCode());						
 		} else {
-			content = "接口任务[Id=" + probe.getProbeId() + "] " + result.getMessageInfo() + " 在" + result.getOpTime()
-			+ "的探测结果级别为 [" + TestResult.QUALITY_LEVEL_DICT.get(result.getQualityLevel()) + "] ,详细结果如下,请关注!\n\n探测结果:" + TestResult.RUN_STATUS_DICT.get(result.getRunStatus()) 
-			+ "\n耗时:" + result.getUseTime() + "\n状态码:" + result.getStatusCode();
+			content = new StringBuilder().append("接口任务[Id=").append(probe.getProbeId()).append("] ").append(result.getMessageInfo()).append(" 在")
+					.append(result.getOpTime()).append("的探测结果级别为 [").append(TestResult.QUALITY_LEVEL_DICT.get(result.getQualityLevel()))
+					.append("] ,详细结果如下,请关注!\n\n探测结果:")
+					.append(TestResult.RUN_STATUS_DICT.get(result.getRunStatus()))
+					.append("\n耗时:").append(result.getUseTime()).append("\n状态码:").append(result.getStatusCode()).toString();
 		}
 		
 		MimeMessage message = new MimeMessage(session);

@@ -46,7 +46,7 @@ public class WebScriptModuleAction extends BaseAction<WebScriptModule> {
 		}
 		
 		if (StringUtils.isEmpty(model.getCreateUser())) {
-			model.setCreateUser(((User) FrameworkUtil.getSessionMap().get("user")).getRealName());
+			model.setCreateUser((FrameworkUtil.getLoginUser()).getRealName());
 		}
 		return super.edit();
 	}

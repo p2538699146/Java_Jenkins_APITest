@@ -51,7 +51,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	@Override
 	public String edit() {
 		if (model.getPtId() == null || model.getUser() == null) {
-			User user = (User) FrameworkUtil.getSessionMap().get("user");
+			User user = FrameworkUtil.getLoginUser();
 			model.setUser(user);
 		}
 		
@@ -64,7 +64,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 */
 	public String initTest() {
 		model = performanceTestConfigService.get(model.getPtId());
-		PerformanceTestObject pto = new PerformanceTestObject(model, (User) FrameworkUtil.getSessionMap().get("user"));
+		PerformanceTestObject pto = new PerformanceTestObject(model, FrameworkUtil.getLoginUser());
 		boolean flag = pto.init();
 		setData(pto);
 		if (!flag) {
@@ -78,7 +78,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String actionTest() {
-		User user  = (User) FrameworkUtil.getSessionMap().get("user");
+		User user  = FrameworkUtil.getLoginUser();
 		PerformanceTestObject pto = CacheUtil.getPtObjectsByUserId(user.getUserId()).get(objectId);
 		
 		if (pto == null) {
@@ -100,7 +100,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String viewTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		Map<Integer, PerformanceTestObject>  ptos = CacheUtil.getPtObjectsByUserId(user.getUserId());
 		JSONObject obj = new JSONObject();
 		obj.put("running", false);
@@ -129,7 +129,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String stopTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		PerformanceTestObject pto = CacheUtil.getPtObjectsByUserId(user.getUserId()).get(objectId);
 		if (pto != null && pto.isRunning()) {
 			pto.setGlobalStoped(true);			
@@ -143,7 +143,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String delTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		PerformanceTestObject pto = CacheUtil.getPtObjectsByUserId(user.getUserId()).get(objectId);
 		if (pto != null) {
 			if (pto.isRunning()) {
@@ -163,7 +163,7 @@ public class PerformanceTestConfigAction extends BaseAction<PerformanceTestConfi
 	 * @return
 	 */
 	public String listTest() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		Map<Integer, PerformanceTestObject>  ptos = CacheUtil.getPtObjectsByUserId(user.getUserId());
 		
 		JSONArray ptosArray = new JSONArray();

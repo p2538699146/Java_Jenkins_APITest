@@ -36,7 +36,7 @@ public class WebTestSuite implements Serializable {
 	/**
 	 * 浏览器类型，覆盖下属case中定义的类型
 	 */
-	private String browserType = WebTestKeys.WEB_BROSWER_TYPE_CHROME;
+	private String browserType = WebTestKeys.BrowserType.chrome.name();
 	/**
 	 * 测试配置<br>
 	 * 创建测试集时，先创建一份初始的配置

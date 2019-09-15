@@ -121,7 +121,7 @@ public class XMLMessageParse extends MessageParse {
 			return returnMsg + "未在接口参数中定义或者类型/路径不匹配,请检查!";
 		} 
 		
-		return "true";
+		return SystemConsts.DefaultBooleanIdentify.TRUE.getString();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -294,7 +294,9 @@ public class XMLMessageParse extends MessageParse {
 		String rootName = nodes.getJSONObject(nodes.getString("rootId")).getString("parameterIdentify");
 		Element message = document.addElement(rootName);
 		for (Object key:nodes.keySet()) {
-			if ("rootId".equals(key.toString())) continue;
+			if ("rootId".equals(key.toString())) {
+				continue;
+			}
 			JSONObject node = nodes.getJSONObject(key.toString());
 			if (Pattern.matches(MessageParameterType.STRING.name() + "|" + MessageParameterType.CDATA.name()
 					+ "|" + MessageParameterType.NUMBER.name(), node.getString("type").toUpperCase())) {
@@ -314,7 +316,9 @@ public class XMLMessageParse extends MessageParse {
 		String[] pathNames = path.split("\\.");
 		Element nodeObj = message;
 		for (int i = 2;i < pathNames.length;i++) {
-			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(pathNames[i])) continue;
+			if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(pathNames[i])) {
+				continue;
+			}
 			Element nodeObj_l = nodeObj.element(pathNames[i]);
 			if (nodeObj_l == null) {
 				nodeObj_l = nodeObj.addElement(pathNames[i]);

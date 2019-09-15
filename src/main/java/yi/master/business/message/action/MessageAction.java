@@ -71,11 +71,7 @@ public class MessageAction extends BaseAction<Message>{
 		List<String> conditions = new ArrayList<String>();
 		if (this.interfaceId != null) {
 			conditions.add("interfaceInfo.interfaceId=" + interfaceId);
-		}		
-		/*User user = (User) FrameworkUtil.getSessionMap().get("user");
-		if (!SystemConsts.ADMIN_ROLE_ID.equals(user.getRole().getRoleId())) {
-			conditions.add("user.userId=" + user.getUserId());
-		}*/
+		}
 		this.filterCondition = conditions.toArray(new String[0]);
 		return this.filterCondition;
 	}
@@ -133,7 +129,7 @@ public class MessageAction extends BaseAction<Message>{
 		
 		String resultFlag = parseUtil.checkParameterValidity(interfaceParams, model.getParameterJson());
 
-		if (!"true".equals(resultFlag)) {
+		if (!SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(resultFlag)) {
 			throw new YiException(AppErrorCode.MESSAGE_VALIDATE_ERROR.getCode(), resultFlag);
 		}
 
@@ -156,11 +152,11 @@ public class MessageAction extends BaseAction<Message>{
 		Set<Parameter> params = (interfaceInfoService.get(model.getInterfaceInfo().getInterfaceId())).getParameters();
 		String validateFlag = parseUtil.checkParameterValidity(new ArrayList<Parameter>(params), model.getParameterJson());
 
-		if (!"true".equals(validateFlag)) {
+		if (!SystemConsts.DefaultBooleanIdentify.TRUE.getString().equals(validateFlag)) {
 			throw new YiException(AppErrorCode.MESSAGE_VALIDATE_ERROR.getCode(), validateFlag);
 		}
 
-		User user = (User)(FrameworkUtil.getSessionMap().get("user"));
+		User user = FrameworkUtil.getLoginUser();
 		if (model.getMessageId() == null) {
 			//增加			
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));

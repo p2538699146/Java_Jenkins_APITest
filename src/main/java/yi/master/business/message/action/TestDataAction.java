@@ -15,6 +15,7 @@ import yi.master.business.message.bean.Message;
 import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.bean.TestData;
+import yi.master.business.message.enums.TestDataStatus;
 import yi.master.business.message.service.MessageSceneService;
 import yi.master.business.message.service.TestDataService;
 import yi.master.constant.MessageKeys;
@@ -108,7 +109,6 @@ public class TestDataAction extends BaseAction<TestData> {
 	 * @return
 	 */
 	public String updateParamsData () {
-		
 		if (CacheUtil.checkLockedTestData(model.getDataId())) {
 			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "该条测试数据正在被使用，请稍后再更新!");
 		}
@@ -119,7 +119,6 @@ public class TestDataAction extends BaseAction<TestData> {
 	
 	@Override
 	public String get() {
-		
 		if (model.getDataId() == null) {
 			model.setDataId(id);
 		}
@@ -222,7 +221,7 @@ public class TestDataAction extends BaseAction<TestData> {
 				continue;
 			}
 			
-			if (!"0".equals(dataArray[1]) && !"1".equals(dataArray[1])) {
+			if (TestDataStatus.getByStatus(dataArray[1]) == null) {
 				failCount++;
 				continue;
 			}

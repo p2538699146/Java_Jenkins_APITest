@@ -20,6 +20,7 @@ import yi.master.business.advanced.service.PerformanceTestResultService;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.TestResult;
 import yi.master.constant.ReturnCodeConsts;
+import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
@@ -75,9 +76,8 @@ public class PerformanceTestResultAction extends BaseAction<PerformanceTestResul
 	 * @return
 	 */
 	public String anaylzeView() {
-		model = performanceTestResultService.get(model.getPtResultId());		
-			
-		if (model != null && "Y".equals(model.getFinishFlag())) {
+		model = performanceTestResultService.get(model.getPtResultId());
+		if (model != null && SystemConsts.FinishedFlag.Y.name().equals(model.getFinishFlag())) {
 			Date maxTime = null;
 			Date minTime = null;
 			if (StringUtils.isNotBlank(rangeTime)) {

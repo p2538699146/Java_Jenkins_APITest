@@ -72,7 +72,7 @@ public class WebTestStepAction extends BaseAction<WebTestStep> {
 	
 	@Override
 	public String edit() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		if (model.getElement().getElementId() == null) model.setElement(null);
 		if (model.getSnippetCase().getCaseId() == null) model.setSnippetCase(null);
 		if (model.getStepId() == null) {

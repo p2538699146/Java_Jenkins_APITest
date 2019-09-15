@@ -66,7 +66,7 @@ public class WebTestSuiteAction extends BaseAction<WebTestSuite> {
 			config.setConfigId(webTestConfigService.save(config));
 			model.getSuiteConfig();
 			model.updateConfigJson();
-			model.setCreateUser((User) FrameworkUtil.getSessionMap().get("user"));
+			model.setCreateUser(FrameworkUtil.getLoginUser());
 			model.setTestConfig(config);			
 		}
 		super.edit();

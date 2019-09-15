@@ -40,7 +40,7 @@ public class MailAction extends BaseAction<Mail> {
 	@Override
 	public String[] prepareList() {
 		
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		if (user != null) {
 			this.filterCondition = new String[]{"receiveUser.userId=" + user.getUserId()};
 		}		
@@ -49,7 +49,7 @@ public class MailAction extends BaseAction<Mail> {
 
 	//获取未读邮件数量
 	public String getNoReadMailNum() {
-		User user = (User) FrameworkUtil.getSessionMap().get("user");
+		User user = FrameworkUtil.getLoginUser();
 		int num = 0;
 		if (user != null) {
 			num = mailService.getNoReadNum(user.getUserId());

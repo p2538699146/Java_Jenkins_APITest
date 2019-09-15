@@ -51,8 +51,6 @@ public class ComplexSceneAction extends BaseAction<ComplexScene> {
 	public String getSaveVariables () {
 		model= complexSceneService.get(model.getId());
 		model.setComplexSceneConfigs();
-		
-		//List<String> variables = new ArrayList<String>();
 		JSONArray variables = new JSONArray();
 		
 		for (Map.Entry<String, ComplexSceneConfig> entry:model.getComplexSceneConfigs().entrySet()) {

@@ -1,25 +1,29 @@
 package yi.master.business.web.action;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.user.bean.User;
 import yi.master.business.web.bean.WebTestElement;
 import yi.master.business.web.service.WebTestElementService;
-import yi.master.constant.ReturnCodeConsts;
-import yi.master.constant.WebTestKeys;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import static yi.master.constant.WebTestKeys.ElementType;
+
+/**
+ * 测试元素管理controller
+ * @author xuwangcheng14@163.com
+ * @date 2017.4
+ */
 @Controller
 @Scope("prototype")
 public class WebTestElementAction extends BaseAction<WebTestElement> {
@@ -62,17 +66,17 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 		
 		List<String> conditions = new ArrayList<String>();
 		if (StringUtils.isNotEmpty(nodeFlag)) {
-			conditions.add("elementType not in ('" + WebTestKeys.WEB_ELEMENT_TYPE_TAG + "','" + WebTestKeys.WEB_ELEMENT_TYPE_URL + "')");
+			conditions.add("elementType not in ('" + ElementType.tag.name() + "','" + ElementType.url.name() + "')");
 		}	
 		if (StringUtils.isNotEmpty(copyOrMoveFlag)) {
-			conditions.add("elementType in ('" + WebTestKeys.WEB_ELEMENT_TYPE_PAGE + "','" + WebTestKeys.WEB_ELEMENT_TYPE_FRAME + "')");
+			conditions.add("elementType in ('" + ElementType.page.name() + "','" + ElementType.frame.name()+ "')");
 		}
 		if (StringUtils.isNotEmpty(chooseFlag)) {
-			conditions.add("elementType in ('" + WebTestKeys.WEB_ELEMENT_TYPE_TAG + "','" + WebTestKeys.WEB_ELEMENT_TYPE_URL + "')");
+			conditions.add("elementType in ('" + ElementType.tag.name() + "','" + ElementType.url.name() + "')");
 		}
 		if (model.getElementId() != null) {
 			conditions.add("parentElement.elementId=" + model.getElementId());
-			conditions.add("elementType in ('" + WebTestKeys.WEB_ELEMENT_TYPE_URL + "','" + WebTestKeys.WEB_ELEMENT_TYPE_TAG + "','" + WebTestKeys.WEB_ELEMENT_TYPE_FRAME + "')");
+			conditions.add("elementType in ('" + ElementType.url.name() + "','" + ElementType.tag.name() + "','" + ElementType.frame.name() + "')");
 		}
 		
 		this.filterCondition = conditions.toArray(new String[0]);
@@ -136,7 +140,7 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 		newEle.setParentElement(targetElement);
 		newEle.setElementId(null);
 		newEle.setCreateTime(new Timestamp(System.currentTimeMillis()));
-		newEle.setCreateUser((User) FrameworkUtil.getSessionMap().get("user"));
+		newEle.setCreateUser(FrameworkUtil.getLoginUser());
 		webTestElementService.save(newEle);
 		return SUCCESS;		
 	}
@@ -148,7 +152,7 @@ public class WebTestElementAction extends BaseAction<WebTestElement> {
 	private boolean validateElementParams () {
 		WebTestElement parentElement = webTestElementService.get(model.getParentId());
 		model = webTestElementService.get(model.getElementId());
-		if (model != null && parentElement != null && parentElement.getElementType().matches(WebTestKeys.WEB_ELEMENT_TYPE_FRAME + "|" + WebTestKeys.WEB_ELEMENT_TYPE_PAGE)) {
+		if (model != null && parentElement != null && parentElement.getElementType().matches(ElementType.frame.name() + "|" + ElementType.page.name())) {
 			targetElement = parentElement;
 			return true;
 		}

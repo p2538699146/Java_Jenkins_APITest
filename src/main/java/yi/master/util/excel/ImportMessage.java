@@ -79,7 +79,7 @@ public class ImportMessage {
 			}
 			
 			try {
-				User user = (User)FrameworkUtil.getSessionMap().get("user");
+				User user = FrameworkUtil.getLoginUser();
 				info.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				info.setUser(user);
 				info.setLastModifyUser(user.getRealName());				

@@ -84,7 +84,7 @@ public class ImportInterfaceInfo {
 			}
 			try {
 				info.setCreateTime(new Timestamp(System.currentTimeMillis()));
-				User user = (User)FrameworkUtil.getSessionMap().get("user");
+				User user = FrameworkUtil.getLoginUser();
 				info.setUser(user);
 				info.setLastModifyUser(user.getRealName());
 				
