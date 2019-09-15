@@ -17,8 +17,8 @@ QQ群交流：468324085，加群验证：易大师
 #### 主要功能  
 
 - 接口、报文、场景三层分离，接口测试更加灵活多变；
-- 支持Http/Https/Socket/WebService协议接口，后续支持更多；
-- 支持Xml/Json/自定义格式报文；
+- 支持Http/Https/Socket/WebService/WebSocket/Dubbo协议接口，后续支持更多；
+- 支持Xml/Json/URL/自定义格式报文；
 - 单场景调试、测试集批量测试、定时任务测试等；
 - 多样数据验证方式；
 - 使用数据池统一管理测试数据；
