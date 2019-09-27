@@ -49,7 +49,11 @@ public class ApiUserService {
 			userService.edit(user);
 			return new ApiReturnInfo(ApiReturnInfo.SUCCESS_CODE, "添加用户信息成功!", null);
 		}
-		return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "添加失败:userid已存在!", "{\"userid\":\"" + user.getIfNew() + "\",\"username\":\"" + user.getRealName() + "\"}");
+		//如果存在就更新
+		user.setPassword(passwd);
+		user.setUsername(username);
+		userService.edit(user);
+		return new ApiReturnInfo(ApiReturnInfo.SUCCESS_CODE, "更新成功!", null);
 	}
 	
 	public ApiReturnInfo syncDel(String userid) {
