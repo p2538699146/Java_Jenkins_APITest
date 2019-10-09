@@ -120,8 +120,7 @@ public class URLMessageParse extends MessageParse {
 		
 		String[] params = parseMessageToSingleRow(message).split("&");
 		for (String s:params) {
-			String[] parameter = StringUtils.split(s, "=", 2);
-			if (parameter.length != 2) {
+			if (!s.contains("=")) {
 				return false;
 			}
 		}
@@ -181,9 +180,7 @@ public class URLMessageParse extends MessageParse {
 					}
 				}
 			}
-			if (parameter.length > 1) {
-				params.put(parameter[0], parameter[1]);
-			}			
+			params.put(parameter[0], parameter.length > 1 ? parameter[1] : "");
 		}
 		
 		return params;

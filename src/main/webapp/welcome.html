@@ -114,6 +114,7 @@
     	var df = $.Deferred();
     	df.done(function(){
     		if (!($.isEmptyObject(userInfo))) {
+    		    parent.loadMenuFun();
     			getSetting();       
     	    	getMailNum(); 
     	    	getStatisticalQuantity();

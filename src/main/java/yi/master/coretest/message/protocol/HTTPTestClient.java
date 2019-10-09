@@ -422,8 +422,8 @@ public class HTTPTestClient extends TestClient {
                 }
         		if (!StringUtils.isBlank(query.getKey())) {
         			sbQuery.append(query.getKey());
+					sbQuery.append("=");
         			if (!StringUtils.isBlank(query.getValue())) {
-        				sbQuery.append("=");
         				sbQuery.append(URLEncoder.encode(PracticalUtils.replaceGlobalVariable(query.getValue(), null), ENC_CHARSET));
         			}        			
                 }
