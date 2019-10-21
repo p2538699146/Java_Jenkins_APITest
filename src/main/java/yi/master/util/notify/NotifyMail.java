@@ -19,7 +19,7 @@ import yi.master.constant.SystemConsts;
 import yi.master.util.cache.CacheUtil;
 
 /**
- * 邮件停止工具
+ * 邮件通知工具
  * @author xuwangcheng14@163.com
  * @date 2017.2
  */
