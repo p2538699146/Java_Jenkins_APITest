@@ -130,7 +130,7 @@ var publish = {
       * getUrl:获取实体对象时的请求地址
       * rules:rules规则 定义验证规则
       * messages 提示 定义验证时展示的提示信息
-      * beforeSubmitCallback 提交表单数据之前的回调，带一个参数modeFlag表示当前是新增(0)还是编辑数据(1)
+      * beforeSubmitCallback 提交表单数据之前的回调，参数modeFlag表示当前是新增(0)还是编辑数据(1),参数formObj是提交表单的jquery对象
       * closeFlag:成功提交并返回之后是否关闭当前编辑窗口  默认为true  可选false
       * ajaxCallbackFun: ajax提交中的回调函数  如传入null,则使用默认
       * renderCallback:function(obj){}  如果默认的渲染结果不是完整或者正确的,可以传入该回调重新或者附加渲染  obj=通过get方法获取的对应实体对象
@@ -235,7 +235,7 @@ var publish = {
         	 getUrl:"",
         	 rules:{},
         	 messages:{},
-        	 beforeSubmitCallback:function(modeFlag) {},
+        	 beforeSubmitCallback:function(modeFlag, formObj) {},
         	 closeFlag:true,
         	 ajaxCallbackFun:null,
         	 renderCallback:function(obj) {},
@@ -807,10 +807,11 @@ function formValidate(formObj, rules, messages, ajaxUrl, closeFlag, ajaxCallback
 				submitHandlerCallbackFun($(form).serialize());
 				return false;
 			}
-			
-			if (beforeSubmitCallback != null) {
-				beforeSubmitCallback(publish.renderParams.editPage.modeFlag);
+
+			if (typeof beforeSubmitCallback === 'function') {
+				beforeSubmitCallback(publish.renderParams.editPage.modeFlag, $(form));
 			}
+
 			var formData = $(form).serialize();
 			$.post(ajaxUrl, formData, callbackFun);			
 		}

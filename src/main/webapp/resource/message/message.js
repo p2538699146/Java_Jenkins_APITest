@@ -86,13 +86,13 @@ var templateParams = {
 			}]
 		},
 		{
-			label:"处理类型",
+			label:"报文处理器",
 			select:[{	
 				name:"processType",
 				option:function(){
 					let options = [{
                         value:"",
-                        text:"请选择一个处理类型"
+                        text:"请选择一个报文处理器"
                     }];
 					$.each(MESSAGE_PROCESS, function(k, p) {
                         options.push({
@@ -529,11 +529,11 @@ var eventList = {
 		"#setting-process-parameter":function(){
 			var processType = $("#processType").val();
 			if (!strIsNotEmpty(processType)) {
-				layer.msg('请先选择一个处理类型!', {icon:5, time:1600});
+				layer.msg('请先选择一个报文处理器!', {icon:5, time:1600});
 				return false;
 			}
 			var processParameter = JSON.parse($("#processParameter").val() || MESSAGE_PROCESS[processType]) ;
-			window.settingLayerIndex = layer_show("报文处理参数"
+			window.settingLayerIndex = layer_show("报文处理器参数"
 				, templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
 			});
 		},

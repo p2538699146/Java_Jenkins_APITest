@@ -64,7 +64,7 @@ var templateParams = {
 		},
 		{	
 			required:true,
-			label:"预期验证值类型",  
+			label:"预期比对值类型",
 			button:[{
 				style:"primary",
 				value:"选择",
@@ -354,11 +354,11 @@ var eventList = {
 					changeTigs("4");
 					layer.close(index);
 				}}
-				,function(index){						
+				,function(index){//常量
 					changeTigs("0");
 					layer.close(index);
 				}
-				,function(index){					
+				,function(index){//入参节点
 					changeTigs("1");
 					layer.close(index);
 				});
@@ -372,6 +372,7 @@ var eventList = {
 								$("#" + name).val(value);
 							}
 						});
+						$('#mark').val(globalVariable['mark']);
 						layer.msg('已加载配置!', {icon:1, time:1500});
 						layer.close(index);
 					});
@@ -456,6 +457,8 @@ $(function(){
  * 绑定事件
  */
 function bindChooseRequestNodePath(){
+	//防止重复绑定事件，先解绑
+    $("#validateValue").unbind('click');
 	$("#validateValue").bind('click', function(){
 		chooseParameterNodePath(REQUEST_URL.MESSAGE_SCENE.GET_REQUEST_MSG_JSON_TREE, {messageSceneId:messageSceneId}, {
 			titleName:"入参节点选择",
@@ -532,7 +535,7 @@ function addEditPageHtml() {
 function showValidatRulePage(validateId) {
 	//关联验证 根据publish.renderParams.editPage.modeFlag 0为增加  1为编辑
 	if (addValidateMethodFlag == 0) {
-		layer_show('关联验证', htmls["messageScene-validateKeyword"], '840', '490', 1, function() {
+		layer_show('关联验证', htmls["messageScene-validateKeyword"], '840', '560', 1, function() {
 			if (publish.renderParams.editPage.modeFlag == 1) {
 				$.get(REQUEST_URL.VALIDATE.GET, {id:validateId},function(data){
 					if(data.returnCode == 0) {
@@ -552,6 +555,7 @@ function showValidatRulePage(validateId) {
 						$("#getValueMethod").val(data.getValueMethod || "0");
 						$("#messageScene\\.messageSceneId").val(messageSceneId);
 						$("#status").val(data.status);
+						$("#mark").val(data.mark);
 					} else {
 						layer.alert(data.msg,{icon:5});
 					}
@@ -595,6 +599,7 @@ function saveValidateJson(){
 	sendData.validateValue = $("#validateValue").val();
 	sendData.validateId = $("#validateId").val();
 	sendData.getValueMethod = $("#getValueMethod").val();
+    sendData.mark = $('#mark').val();
 	sendData["messageScene.messageSceneId"] = messageSceneId;
 	sendData["status"] = $("#status").val();
 	

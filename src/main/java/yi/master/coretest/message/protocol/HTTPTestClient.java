@@ -238,7 +238,7 @@ public class HTTPTestClient extends TestClient {
     			requestSuccessFlag = true;
     		} catch (Exception e) {
     			LOGGER.info("发送请求出错...重试次数..." + retryCount, e);
-    			errorMsg = e.getMessage();   			
+    			errorMsg = PracticalUtils.getExceptionAllinformation(e);
     		} finally {
     			retryCount++;
     		}

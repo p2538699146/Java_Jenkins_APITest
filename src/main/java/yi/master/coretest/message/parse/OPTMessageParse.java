@@ -51,7 +51,10 @@ public class OPTMessageParse extends FixedMessageParse {
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter,
 			String paramsData) {
-		
+		if (complexParameter == null) {
+			return "";
+		}
+
 		if (StringUtils.isNotEmpty(paramsData)) {
 			Map<String, Object> params = PracticalUtils.jsonToMap(paramsData);
 			for (Object o:params.values()) {

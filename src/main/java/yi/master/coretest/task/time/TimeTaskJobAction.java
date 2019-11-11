@@ -21,12 +21,7 @@ import yi.master.util.cache.CacheUtil;
  *
  */
 public class TimeTaskJobAction implements Job {
-	
-/*	@Autowired
-	private MessageAutoTest messageAutoTest;
-	@Autowired
-	private UserService userSerivce;*/
-	
+
 	private static final Logger LOGGER = Logger.getLogger(TimeTaskJobAction.class);
 	
 	@SuppressWarnings("rawtypes")

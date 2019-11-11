@@ -74,15 +74,15 @@ public class JSONMessageParse extends MessageParse {
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter, String paramsData) {
-						
+		if (complexParameter == null) {
+			return "";
+		}
 		return messageFormatBeautify(paraseJsonMessage(complexParameter, new StringBuilder(""), PracticalUtils.jsonToMap(paramsData)).toString());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		
-		
 		Object[] o = null;
 		try {
 			o = (Object[]) JsonUtil.getJsonList(message, 3);

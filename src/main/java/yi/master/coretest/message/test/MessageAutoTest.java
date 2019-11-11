@@ -243,139 +243,144 @@ public class MessageAutoTest {
 	 */
 	@SuppressWarnings("unchecked")
 	public Object singleTestComplexScene (TestMessageScene testScene, TestReport report) {
-		//该组合场景测试上下文保存的变量
-		Map<String, String> saveVariables = new HashMap<String, String>();
 		List<TestResult> results = new ArrayList<>();
-		//组合场景测试备注
-		StringBuilder complexMark = new StringBuilder();
-				
-		MessageParse parseUtil = null;
-		//停止标记
-		boolean stopFlag = false;
-		//测试最后一个的标记
-		boolean lastTestFlag = false;
-		boolean allSuccessFlag = true;
-		
-		int lastSeqNum = 1;
-		
 		//获取httpclient,其他协议的暂时也走这个，但是不影响，后期需要针对不同协议的客户端做改动
 		DefaultHttpClient procotolClient = null;
-		if (testScene.isNewClient()) {
-			procotolClient = (DefaultHttpClient) testScene.getTestClient().getTestClient();
-		}
-		
-		for (TestMessageScene scene:testScene.getScenes()) {						
-			if (stopFlag || scene == null || (lastTestFlag && !scene.getScene().getSequenceNum().equals(testScene.getScenes().size()))) { 
-				complexMark.append("测试序号为[" +  ++lastSeqNum + "]" + ",跳过测试该场景!\n");
-				continue;
-			}
-			
-			lastSeqNum = scene.getScene().getSequenceNum();
-			parseUtil = scene.getParseUtil();
-			//替换上下文变量			
-			for (Map.Entry<String, String> entry:scene.getScene().getConfig().getUseVariables().entrySet()) {
-				String value = null;
-				if (saveVariables.containsKey(entry.getValue())) {
-					//如果有对应上下文替换变量的就替换掉,否则使用常量
-					value = saveVariables.get(entry.getValue());
-				} else {
-					value = entry.getValue();					
-				}	
-				
-				if (scene.getCallParameter() == null) {
-					scene.setCallParameter(new HashMap<String, Object>());
-					scene.getCallParameter().put(MessageKeys.HTTP_PARAMETER_HEADER, new HashMap<String, String>());										
-				}
-				if (scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_QUERYS) == null) {
-					scene.getCallParameter().put(MessageKeys.HTTP_PARAMETER_QUERYS, new HashMap<String, String>());
-				}
-				
-				//根据变量名来判断是替换请求头还是请求体还是query参数
-				if (entry.getKey().startsWith("RequestHeader.")) {
-					((Map<String, String>) scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_HEADER)).put(entry.getKey().substring(entry.getKey().indexOf(".") + 1)
-							, value);
-				} else if (entry.getKey().startsWith("Querys.")) {
-					((Map<String, String>) scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_QUERYS)).put(entry.getKey().substring(entry.getKey().indexOf(".") + 1)
-							, value);					
-				} else {
-					scene.setRequestMessage(scene.getRequestMessage().replace(MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT + 
-							entry.getValue() + MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT, value));
-				}
-				
-			}
-			boolean successFlag = false;
-			int requestCount = 0;
-			TestResult result = null;
-			int maxRetryCount = scene.getScene().getConfig().getRetryCount();
-			while (!successFlag && maxRetryCount >= requestCount ++) {
+		Boolean allSuccessFlag = null;
+		//组合场景测试备注
+		StringBuilder complexMark = new StringBuilder();
 
-				result = singleTest(scene, procotolClient);
-				
-				//如果场景测试成功
-				if (MessageKeys.TestRunStatus.SUCCESS.getCode().equals(result.getRunStatus())) {
-					successFlag = true;
+		//组合场景中的场景是否为空
+		if (testScene.getScenes().size() > 0) {
+			allSuccessFlag = true;
+			//该组合场景测试上下文保存的变量
+			Map<String, String> saveVariables = new HashMap<String, String>();
+
+			//停止标记
+			boolean stopFlag = false;
+			//测试最后一个的标记
+			boolean lastTestFlag = false;
+
+			int lastSeqNum = 1;
+
+			if (testScene.isNewClient()) {
+				procotolClient = (DefaultHttpClient) testScene.getTestClient().getTestClient();
+			}
+
+			for (TestMessageScene scene:testScene.getScenes()) {
+				if (stopFlag || scene == null || (lastTestFlag && !scene.getScene().getSequenceNum().equals(testScene.getScenes().size()))) {
+					complexMark.append("测试序号为[" +  ++lastSeqNum + "]" + ",跳过测试该场景!\n");
 					continue;
 				}
-				try {
-					Thread.sleep(scene.getScene().getConfig().getIntervalTime());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					
-				}
-			}
-			result.setMark("组合场景名 [" + testScene.getComplexScene().getComplexSceneName() + "] ,执行序号 [" + scene.getScene().getSequenceNum() + "] \n\n" + result.getMark());
-			results.add(result);
-			//测试成功要获取保存变量并设置数据状态
-			if (successFlag) {
-				//保存上下文变量
-				for (Map.Entry<String, String> entry:scene.getScene().getConfig().getSaveVariables().entrySet()) {
-					String str = null;
-					//保存响应头中的变量
-					if (entry.getKey().startsWith("ResponseHeader.") && StringUtils.isNotBlank(result.getHeaders())) {
-						JSONObject header = JSONObject.fromObject(result.getHeaders());
-						String headerKey = entry.getKey().substring(entry.getKey().indexOf(".") + 1);
-						if (header.getJSONObject("ResponseHeader").has(headerKey)) {
-							str = header.getJSONObject("ResponseHeader").getString(headerKey);
-						}						
+
+				lastSeqNum = scene.getScene().getSequenceNum();
+				//替换上下文变量
+				for (Map.Entry<String, String> entry:scene.getScene().getConfig().getUseVariables().entrySet()) {
+					String value = null;
+					if (saveVariables.containsKey(entry.getValue())) {
+						//如果有对应上下文替换变量的就替换掉,否则使用常量
+						value = saveVariables.get(entry.getValue());
 					} else {
-						//保存body体中的变量
-						str = MessageParse.judgeMessageType(result.getResponseMessage()).getObjectByPath(result.getResponseMessage(), entry.getKey());
+						value = entry.getValue();
 					}
-									
-					if (StringUtils.isNotEmpty(str)) {
-						saveVariables.put(entry.getValue(), str);
+
+					if (scene.getCallParameter() == null) {
+						scene.setCallParameter(new HashMap<String, Object>());
+						scene.getCallParameter().put(MessageKeys.HTTP_PARAMETER_HEADER, new HashMap<String, String>());
 					}
-				}								
-			}			
-			//测试不成功的处理
-			if (!successFlag) {
-				allSuccessFlag = false;
-				switch (scene.getScene().getConfig().getErrorExecFlag()) {
-					//退出组合场景的测试
-				case "0":
-					stopFlag = true;
-					break;
-					//继续执行下一个场景
-				case "1":
-					break;
-					//直接执行最后一个场景
-				case "2":
-					lastTestFlag = true;
-					break;
-				default:
-					break;
+					if (scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_QUERYS) == null) {
+						scene.getCallParameter().put(MessageKeys.HTTP_PARAMETER_QUERYS, new HashMap<String, String>());
+					}
+
+					//根据变量名来判断是替换请求头还是请求体还是query参数
+					if (entry.getKey().startsWith("RequestHeader.")) {
+						((Map<String, String>) scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_HEADER)).put(entry.getKey().substring(entry.getKey().indexOf(".") + 1)
+								, value);
+					} else if (entry.getKey().startsWith("Querys.")) {
+						((Map<String, String>) scene.getCallParameter().get(MessageKeys.HTTP_PARAMETER_QUERYS)).put(entry.getKey().substring(entry.getKey().indexOf(".") + 1)
+								, value);
+					} else {
+						scene.setRequestMessage(scene.getRequestMessage().replace(MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT +
+								entry.getValue() + MessageKeys.CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT, value));
+					}
+
+				}
+				boolean successFlag = false;
+				int requestCount = 0;
+				TestResult result = null;
+				int maxRetryCount = scene.getScene().getConfig().getRetryCount();
+				while (!successFlag && maxRetryCount >= requestCount ++) {
+
+					result = singleTest(scene, procotolClient);
+
+					//如果场景测试成功
+					if (MessageKeys.TestRunStatus.SUCCESS.getCode().equals(result.getRunStatus())) {
+						successFlag = true;
+						continue;
+					}
+					try {
+						Thread.sleep(scene.getScene().getConfig().getIntervalTime());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+
+					}
+				}
+				result.setMark("组合场景名 [" + testScene.getComplexScene().getComplexSceneName() + "] ,执行序号 [" + scene.getScene().getSequenceNum() + "] \n\n" + result.getMark());
+				results.add(result);
+				//测试成功要获取保存变量并设置数据状态
+				if (successFlag) {
+					//保存上下文变量
+					for (Map.Entry<String, String> entry:scene.getScene().getConfig().getSaveVariables().entrySet()) {
+						String str = null;
+						//保存响应头中的变量
+						if (entry.getKey().startsWith("ResponseHeader.") && StringUtils.isNotBlank(result.getHeaders())) {
+							JSONObject header = JSONObject.fromObject(result.getHeaders());
+							String headerKey = entry.getKey().substring(entry.getKey().indexOf(".") + 1);
+							if (header.getJSONObject("ResponseHeader").has(headerKey)) {
+								str = header.getJSONObject("ResponseHeader").getString(headerKey);
+							}
+						} else {
+							//保存body体中的变量
+							str = MessageParse.judgeMessageType(result.getResponseMessage()).getObjectByPath(result.getResponseMessage(), entry.getKey());
+						}
+
+						if (StringUtils.isNotEmpty(str)) {
+							saveVariables.put(entry.getValue(), str);
+						}
+					}
+				}
+				//测试不成功的处理
+				if (!successFlag) {
+					allSuccessFlag = false;
+					switch (scene.getScene().getConfig().getErrorExecFlag()) {
+						//退出组合场景的测试
+						case "0":
+							stopFlag = true;
+							break;
+						//继续执行下一个场景
+						case "1":
+							break;
+						//直接执行最后一个场景
+						case "2":
+							lastTestFlag = true;
+							break;
+						default:
+							break;
+					}
+				}
+
+				//一定时间间隔后执行下一个场景
+				if (!stopFlag) {
+					try {
+						Thread.sleep(scene.getScene().getConfig().getIntervalTime());
+					} catch (InterruptedException e) {
+						LOGGER.warn("InterruptedException", e);
+					}
 				}
 			}
-			
-			//一定时间间隔后执行下一个场景
-			if (!stopFlag) {
-				try {
-					Thread.sleep(scene.getScene().getConfig().getIntervalTime());
-				} catch (InterruptedException e) {
-					LOGGER.warn("InterruptedException", e);
-				}
-			}									
-		}	
+		}
+
+
 		
 		if(testScene.getTestClient() != null) {
 			testScene.getTestClient().putBackTestClient(procotolClient);
@@ -396,8 +401,13 @@ public class MessageAutoTest {
 			complexResult.setMark(complexMark.toString());
 			complexResult.setUseTime(0);
 			complexResult.setProtocolType("FIXED");
-			complexResult.setStatusCode("000");			
-			complexResult.setRunStatus(allSuccessFlag ? MessageKeys.TestRunStatus.SUCCESS.getCode() : MessageKeys.TestRunStatus.FAIL.getCode());
+			if (allSuccessFlag == null) {
+				complexResult.setStatusCode("false");
+				complexResult.setRunStatus(MessageKeys.TestRunStatus.STOP.getCode());
+			} else {
+				complexResult.setStatusCode("000");
+				complexResult.setRunStatus(allSuccessFlag ? MessageKeys.TestRunStatus.SUCCESS.getCode() : MessageKeys.TestRunStatus.FAIL.getCode());
+			}
 			complexResult.setComplexSceneResults(new TreeSet<TestResult>(results));
 			complexResult.setRequestUrl("");
 			complexResult.setRequestMessage("");
@@ -478,12 +488,22 @@ public class MessageAutoTest {
 		}
 		//场景数量 分别为finishCount和totalCount
 		final int[] count = new int[]{0, testObjects.size()};
-		
+
+		//检查场景数量，包含单场景和组合场景中的场景
+		boolean noSceneFlag = testObjects.size() > 0 ? false : true;
 		//组装组合场景中的测试场景				
 		for (ComplexScene s:complexScenes) {
 			TestMessageScene testScene = packageComplexRequestObject(s, config);
 			count[1] = count[1] + testScene.getTestCount();
 			testObjects.add(testScene);
+
+			if (noSceneFlag && testScene.getScenes().size() > 0) {
+				noSceneFlag = false;
+			}
+		}
+
+		if (noSceneFlag) {
+			return null;
 		}
 		
 		//筛选出置顶测试场景
@@ -501,7 +521,6 @@ public class MessageAutoTest {
 		Collections.sort(testObjects, new Comparator<TestMessageScene>() {
 			@Override
 			public int compare(TestMessageScene o1, TestMessageScene o2) {
-								
 				return o2.getPriority() - o1.getPriority();
 			}
 		});

@@ -675,7 +675,6 @@ public class PracticalUtils {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("resource")
 	public static String doGetHttpRequest(String requestUrl) {
 		HTTPTestClient client = (HTTPTestClient) TestClient.getTestClientInstance("HTTP");
 		HttpRequestBase request = null;
@@ -693,7 +692,6 @@ public class PracticalUtils {
 
 			return returnMsg.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			if (request != null) {
@@ -742,7 +740,7 @@ public class PracticalUtils {
 		Map<String, Object> objs = (Map<String, Object>) obj.toBean(obj, Map.class);
 		for (String key:objs.keySet()) {
 			JSONObject o = obj.getJSONObject(key);
-			configs.put(key, (ComplexSceneConfig) o.getJSONObject(key).toBean(o, ComplexSceneConfig.class, classMap));
+			configs.put(key, (ComplexSceneConfig) JSONObject.toBean(o, ComplexSceneConfig.class, classMap));
 		}
 		
 		return configs;
