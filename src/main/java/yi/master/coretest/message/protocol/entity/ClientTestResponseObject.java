@@ -1,5 +1,7 @@
 package yi.master.coretest.message.protocol.entity;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 测试结果返回
  * @author xuwangcheng
@@ -68,6 +70,15 @@ public class ClientTestResponseObject {
 
     public void setMark(String mark) {
         this.mark = mark;
+    }
+
+    public void addMark (String mark) {
+        if (this.mark == null) {
+            this.mark = "";
+        }
+        if (StringUtils.isNotBlank(mark)) {
+            this.mark += ("\n" + mark);
+        }
     }
 }
 

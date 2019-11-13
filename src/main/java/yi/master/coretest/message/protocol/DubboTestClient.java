@@ -61,7 +61,7 @@ public class DubboTestClient extends TestClient {
         }
         String[] urls = requestUrl.split(":");
         if (3 != urls.length) {
-            responseObject.setMark("配置出错,请检查！");
+            responseObject.addMark("配置出错,请检查！");
             return responseObject;
         }
 
@@ -76,7 +76,7 @@ public class DubboTestClient extends TestClient {
         try {
             telnetClient = createClient(host, port,connectTimeOut, readTimeOut);
         } catch (IOException e) {
-            responseObject.setMark("无法连接到:" + host + ":" + port);
+            responseObject.addMark("Telnet无法连接到:" + host + ":" + port);
         }
 
         if (telnetClient != null && telnetClient.isConnected()) {
@@ -85,22 +85,24 @@ public class DubboTestClient extends TestClient {
 
             try {
                 long start = System.currentTimeMillis();
+                responseObject.addMark(StrUtil.format("Telent成功连接到{}:{}", host, port));
+                responseObject.addMark(StrUtil.format("执行命令： invoke {}({})", method, requestMessage));
                 String responseMsg = sendMsg("invoke " + method + "(" + requestMessage + ")", out, in);
                 long end = System.currentTimeMillis();
-
                 if (responseMsg != null) {
                     logger.info(StrUtil.format("[{}:{}]Dubbo请求方法{},返回内容:\n{}", host, port, method, responseMsg));
+                    responseObject.addMark(StrUtil.format("返回内容：\n{}", responseMsg));
                     if (responseMsg.indexOf("syntax error") > -1) {
-                        responseObject.setMark("请求参数格式错误(注意单个字符串请用双引号括起来)");
+                        responseObject.addMark("请求参数格式错误(注意单个字符串请用双引号括起来)");
                         return responseObject;
                     }
                     if (responseMsg.indexOf("Invalid parameters") > -1) {
-                        responseObject.setMark("缺少方法参数");
+                        responseObject.addMark("缺少方法参数");
                         return responseObject;
                     }
                     if (responseMsg.indexOf("No such service") > -1
                             || responseMsg.indexOf("No such method") > -1) {
-                        responseObject.setMark("无此方法：" + method);
+                        responseObject.addMark("无此方法：" + method);
                         return responseObject;
                     }
 
@@ -117,7 +119,7 @@ public class DubboTestClient extends TestClient {
                 responseObject.setUseTime(end - start);
                 responseObject.setResponseMessage(responseMsg);
             } catch (IOException e) {
-                responseObject.setMark("调用方法 " + method + " 失败:\n" + PracticalUtils.getExceptionAllinformation(e));
+                responseObject.addMark("调用方法 " + method + " 失败:\n" + PracticalUtils.getExceptionAllinformation(e));
             } finally {
                 if (telnetClient != null && telnetClient.isConnected()) {
                     try {

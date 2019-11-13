@@ -164,10 +164,11 @@ public class MessageAction extends BaseAction<Message>{
 		} else {
 			//删除之前的复杂参数
 			Message msg = messageService.get(model.getMessageId());
-			Integer delId = msg.getComplexParameter().getId();
-			msg.setComplexParameter(null);			
-			
-			complexParameterService.delete(delId);
+			if (msg != null && msg.getComplexParameter() != null) {
+				Integer delId = msg.getComplexParameter().getId();
+				msg.setComplexParameter(null);
+				complexParameterService.delete(delId);
+			}
 		}
 		model.setLastModifyUser(user.getRealName());
 		model.setParameterJson(parseUtil.messageFormatBeautify(model.getParameterJson()));

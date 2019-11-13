@@ -646,7 +646,7 @@ var mySetting = {
 			},
 			messages:{
 				messageName:"请输入报文名称",
-				parameterJson:"请输入正确的报文 入参并点击验证",
+				parameterJson:"请输入正确的报文入参并点击验证",
 				callParameter:"请点击配置按钮配置参数"
 			},
 			renderCallback:function(obj){
