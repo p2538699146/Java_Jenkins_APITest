@@ -83,8 +83,6 @@ public class MessageAutoTest {
 	@Autowired
 	private TestSetService testSetService;
 	@Autowired
-	private UserService userService;
-	@Autowired
 	private TestReportService testReportService;
 	@Autowired
 	private MessageValidateResponse validateUtil;
@@ -228,7 +226,7 @@ public class MessageAutoTest {
 		//解除数据预占
 		CacheUtil.removeLockedTestData(testScene.getDataId());
 		
-		result.setMark(map.get(MessageValidateResponse.VALIDATE_MAP_MSG_KEY));
+		result.setMark(map.get(MessageValidateResponse.VALIDATE_MAP_MSG_KEY) + "\n" + responseMap.getMark());
 		
 		return result;
 	}

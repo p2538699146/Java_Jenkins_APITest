@@ -172,7 +172,21 @@ var templateParams = {
 					text:"禁用"
 				}]
 				}]
-		},		
+		},
+		{
+			add: true,
+			label:"创建默认场景",
+			select:[{
+				name:"createDefaultScene",
+				option:[{
+					value:"1",
+					text:"是"
+				},{
+					value:"0",
+					text:"否"
+				}]
+			}]
+		},
 		{
 			edit:true,			
 			label:"创建日期",  
@@ -609,8 +623,8 @@ var mySetting = {
 			}		
 			
 			//编辑页面高度重设
-			editPageHeight.add != null && (editPageHeight.add += 60);
-			editPageHeight.edit != null && (editPageHeight.edit += 60);
+			editPageHeight.add != null && (editPageHeight.add += 90);
+			editPageHeight.edit != null && (editPageHeight.edit += 10);
    		 	df.resolve();
    	 	},
 		editPage:{

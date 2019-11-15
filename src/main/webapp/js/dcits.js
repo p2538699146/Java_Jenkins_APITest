@@ -722,6 +722,7 @@ function ObjectEditPage(id, ajaxUrl, callback) {
 	$(".form-horizontal").spinModal();
 	//编辑模式时将某些隐藏的控件展示
 	$(".editFlag").css("display","block");
+    $(".addFlag").css("display","none");
 	$.post(ajaxUrl, {id:id}, function(data) {
 		if (data.returnCode == 0) {
 			var o = data.data;

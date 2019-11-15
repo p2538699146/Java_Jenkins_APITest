@@ -49,4 +49,15 @@ public interface MessageSceneService extends BaseService<MessageScene>{
 	 * @param response
 	 */
 	void updateResponseExample (Integer messageSceneId, String response);
+
+	/**
+	 *  保存测试场景
+	 * @author xuwangcheng
+	 * @date 2019/11/15 17:05
+	 * @param messageScene messageScene
+	 * @param createDefaultData createDefaultData 是否创建默认的数据
+	 * @param variableId variableId 是否根据模板创建默认的验证
+	 * @return {@link Integer} id
+	 */
+	Integer save(MessageScene messageScene, Boolean createDefaultData, Integer variableId);
 }
