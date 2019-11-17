@@ -6,16 +6,16 @@ QQ群交流：468324085，加群验证：易大师
 
 [码云地址](https://gitee.com/xuwangcheng/masteryi-automated-testing)  
 [更新日志](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?title=%E6%9B%B4%E6%96%B0%E8%AF%B4%E6%98%8E&parent=)  
-[使用说明](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/)  
-[简单的功能演示视频](https://pan.baidu.com/s/1aMPchusaQt_LHDT9-v1RzQ)  
+[使用文档](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/)  
+ 
 [演示地址](http://www.xuwangcheng.com/yi)（账号 tester/11111111）   
-(**请勿使用随意使用接口探测和性能测试模块，垃圾服务器不行。**)
+
 #### 一键安装包
 百度云： https://pan.baidu.com/s/1i8siuIuPXsjlnawYFc4c6A  
-账号 admin/q708162543  
- **安装完成进入安装根目录，双击执行start.bat，弹出两个cmd窗口不要关闭，打开浏览器输入http://localhost:8080** 
-#### 主要功能  
+**账号 admin/q708162543**  
+**安装完成进入安装根目录，双击执行start.bat，弹出两个cmd窗口不要关闭，打开浏览器输入http://localhost:8080** 
 
+#### 主要功能  
 - 接口、报文、场景三层分离，接口测试更加灵活多变；
 - 支持Http/Https/Socket/WebService/WebSocket/Dubbo协议接口，后续支持更多；
 - 支持Xml/Json/URL/自定义格式报文；
