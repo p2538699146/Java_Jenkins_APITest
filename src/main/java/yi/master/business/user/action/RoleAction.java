@@ -97,11 +97,7 @@ public class RoleAction extends BaseAction<Role> {
 	 * 根据传入的id判断是否为新增或者更新
 	 */
 	@Override
-	public String edit() {		
-		if (model.getRoleId() == SystemConsts.DefaultObjectId.ADMIN_ROLE.getId()
-				|| model.getRoleId() == SystemConsts.DefaultObjectId.DEFAULT_ROLE.getId()) {
-			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除预置管理员或者默认角色信息");
-		}		
+	public String edit() {
 		checkObjectName();	
 		
 		if (!checkNameFlag.equals("true")) {
@@ -109,6 +105,10 @@ public class RoleAction extends BaseAction<Role> {
 		}
 		
 		if (model.getRoleId() != null) {
+			if (SystemConsts.DefaultObjectId.ADMIN_ROLE.getId() == model.getRoleId()
+					|| SystemConsts.DefaultObjectId.DEFAULT_ROLE.getId() == model.getRoleId()) {
+				throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能编辑预置管理员或者默认角色信息");
+			}
 			//修改
 			model.setOis(roleService.get(model.getRoleId()).getOis());
 		}

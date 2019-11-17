@@ -15,11 +15,9 @@ import org.springframework.stereotype.Controller;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.InterfaceInfo;
 import yi.master.business.message.bean.Message;
+import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.Parameter;
-import yi.master.business.message.service.ComplexParameterService;
-import yi.master.business.message.service.InterfaceInfoService;
-import yi.master.business.message.service.MessageService;
-import yi.master.business.message.service.ParameterService;
+import yi.master.business.message.service.*;
 import yi.master.business.user.bean.User;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
@@ -48,8 +46,16 @@ public class MessageAction extends BaseAction<Message>{
 	private String path;
 	
 	private String nodes;
+
+	/**
+	 * 是否在创建报文时创建一个默认的场景，只在新增时有效
+	 */
+	private Boolean createDefaultScene;
 	
 	private MessageService messageService;
+
+	@Autowired
+	private MessageSceneService messageSceneService;
 	
 	@Autowired
 	public void setMessageService(MessageService messageService) {
@@ -157,22 +163,29 @@ public class MessageAction extends BaseAction<Message>{
 		}
 
 		User user = FrameworkUtil.getLoginUser();
+        model.setLastModifyUser(user.getRealName());
+        model.setParameterJson(parseUtil.messageFormatBeautify(model.getParameterJson()));
 		if (model.getMessageId() == null) {
 			//增加			
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
-			model.setUser(user);			
+			model.setUser(user);
+            model.setComplexParameter(parseUtil.parseMessageToObject(model.getParameterJson(), new ArrayList<Parameter>(params)));
+
+            //新增
+            messageService.save(model, createDefaultScene);
 		} else {
 			//删除之前的复杂参数
 			Message msg = messageService.get(model.getMessageId());
-			Integer delId = msg.getComplexParameter().getId();
-			msg.setComplexParameter(null);			
-			
-			complexParameterService.delete(delId);
+			if (msg != null && msg.getComplexParameter() != null) {
+				Integer delId = msg.getComplexParameter().getId();
+				msg.setComplexParameter(null);
+				complexParameterService.delete(delId);
+			}
+            model.setComplexParameter(parseUtil.parseMessageToObject(model.getParameterJson(), new ArrayList<Parameter>(params)));
+			//更新
+            messageService.edit(model);
 		}
-		model.setLastModifyUser(user.getRealName());
-		model.setParameterJson(parseUtil.messageFormatBeautify(model.getParameterJson()));
-		model.setComplexParameter(parseUtil.parseMessageToObject(model.getParameterJson(), new ArrayList<Parameter>(params)));
-		messageService.edit(model);
+
 		return SUCCESS;
 	}
 	
@@ -211,4 +224,8 @@ public class MessageAction extends BaseAction<Message>{
 	public void setNodes(String nodes) {
 		this.nodes = nodes;
 	}
+
+    public void setCreateDefaultScene(Boolean createDefaultScene) {
+        this.createDefaultScene = createDefaultScene;
+    }
 }

@@ -75,6 +75,10 @@ public class XMLMessageParse extends MessageParse {
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter, String paramsData) {
+		if (complexParameter == null) {
+			return "";
+		}
+
 		return messageFormatBeautify(parseXmlMessage(complexParameter, new StringBuilder(""), PracticalUtils.jsonToMap(paramsData)).toString());
 	}
 
@@ -125,8 +129,8 @@ public class XMLMessageParse extends MessageParse {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private StringBuilder parseXmlMessage(ComplexParameter parameter, StringBuilder message, Map<String, Object> messageData) {		
-		
+	private StringBuilder parseXmlMessage(ComplexParameter parameter, StringBuilder message, Map<String, Object> messageData) {
+
 		if (parameter.getSelfParameter() == null) {
 			return null;
 		}

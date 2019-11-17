@@ -1,5 +1,6 @@
 package yi.master.coretest.message.parse;
 
+import com.mysql.fabric.xmlrpc.base.Params;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import yi.master.business.message.bean.ComplexParameter;
@@ -55,13 +56,14 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter, String paramsData) {
-			
+		if (complexParameter == null) {
+			return "";
+		}
 		return messageFormatBeautify(paraseUrlMessage(complexParameter, new StringBuilder(""), PracticalUtils.jsonToMap(paramsData)).toString().substring(1));		
 	}
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		
 		if (!messageFormatValidation(message)) {
 			return "不是合法的url入参格式,请检查!";
 		}
@@ -117,11 +119,14 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public boolean messageFormatValidation(String message) {
-		
 		String[] params = parseMessageToSingleRow(message).split("&");
 		for (String s:params) {
-			String[] parameter = StringUtils.split(s, "=", 2);
-			if (parameter.length != 2) {
+			if (!s.contains("=")) {
+				return false;
+			}
+
+			String[] ss = s.split("=");
+			if (ss == null || ss.length < 1) {
 				return false;
 			}
 		}
@@ -130,7 +135,6 @@ public class URLMessageParse extends MessageParse {
 
 	@Override
 	public Set<Parameter> importMessageToParameter(String message, Set<Parameter> existParams) {
-		
 		if (!messageFormatValidation(message)) {
 			return null;
 		}
@@ -174,6 +178,10 @@ public class URLMessageParse extends MessageParse {
 		loop:
 		for (String s:urlParams) {
 			String[] parameter = StringUtils.split(s, "=", 2);
+			if (parameter.length < 1) {
+				continue;
+			}
+
 			if (excludeAttributeNames != null) {
 				for (String name:excludeAttributeNames) {
 					if (name.equals(parameter[0])) {
@@ -181,9 +189,7 @@ public class URLMessageParse extends MessageParse {
 					}
 				}
 			}
-			if (parameter.length > 1) {
-				params.put(parameter[0], parameter[1]);
-			}			
+			params.put(parameter[0], parameter.length > 1 ? parameter[1] : "");
 		}
 		
 		return params;
@@ -194,7 +200,9 @@ public class URLMessageParse extends MessageParse {
 		
 		StringBuilder message = new StringBuilder();
 		for (Object key:nodes.keySet()) {
-			if ("rootId".equals(key.toString())) continue;
+			if ("rootId".equals(key.toString())) {
+				continue;
+			}
 			JSONObject node = nodes.getJSONObject(key.toString());
 			if (MessageKeys.MessageParameterType.isStringOrNumberType(node.getString("type"))) {
 				if (message.length() > 0) {

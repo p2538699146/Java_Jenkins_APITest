@@ -14,7 +14,7 @@
             <column name="user_id" />
         </many-to-one>
         <property name="interfaceName" type="java.lang.String">
-            <column name="interface_name" length="120" not-null="true" unique="true" />
+            <column name="interface_name" length="120" unique="true" />
         </property>
         <property name="interfaceCnName" type="java.lang.String">
             <column name="interface_cn_name" length="120" />

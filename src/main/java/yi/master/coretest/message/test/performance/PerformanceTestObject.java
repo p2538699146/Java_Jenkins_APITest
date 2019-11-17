@@ -29,6 +29,7 @@ import org.apache.struts2.json.annotations.JSON;
 import yi.master.business.advanced.bean.PerformanceTestConfig;
 import yi.master.business.advanced.bean.PerformanceTestResult;
 import yi.master.business.advanced.bean.config.performancetest.PerformanceTestAnalyzeResult;
+import yi.master.business.advanced.enums.PtParameterGetType;
 import yi.master.business.advanced.service.PerformanceTestResultService;
 import yi.master.business.message.bean.InterfaceInfo;
 import yi.master.business.message.bean.Message;
@@ -731,7 +732,7 @@ public class PerformanceTestObject {
 					}
 					//替换入参							
 					//按顺序还是随机
-					if ("1".equals(config.getParameterPickType())) {
+					if (PtParameterGetType.RANDOM.getType().equals(config.getParameterPickType())) {
 						if (threadParameters.size() == 1) {
 							index = 0;
 						} else {
@@ -740,7 +741,7 @@ public class PerformanceTestObject {
 					}
 					//可重复还是不可重复
 					Map<String, String> replaceParameter = threadParameters.get(index);
-					if ("0".equals(config.getParameterReuse())) {
+					if (SystemConsts.DefaultBooleanIdentify.FALSE.getNumber().equals(config.getParameterReuse())) {
 						//不可复用
 						threadParameters.remove(index);
 					} else {

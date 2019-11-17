@@ -301,7 +301,7 @@ public class GlobalVariable implements Serializable {
 				rule.setParameterName(JSONObject.fromObject(maps).toString());
 				rule.setValidateMethodFlag("0");
 				rule.setStatus("0");
-				rule.setMark("模板创建的关联验证");
+				rule.setMark(StringUtils.isNotBlank(this.mark) ? this.mark : "模板创建的关联验证");
 				return rule;
 			}
 

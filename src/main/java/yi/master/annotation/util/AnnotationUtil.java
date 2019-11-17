@@ -52,10 +52,6 @@ public class AnnotationUtil {
 		if ((field.getType().getCanonicalName().equals("java.sql.Timestamp") 
 				|| field.getType().getCanonicalName().equals("java.sql.Date")
 				|| field.getType().getCanonicalName().equals("java.util.Timestamp")) && getType == 0) {
-			/*if (StringUtils.isNotBlank(searchValue)) {
-				//判断是否为yyyy-MM-dd HH:mm:ss的日期格式
-				
-			}*/
 			return null;
 		}
 		String columPath = fieldName;

@@ -114,10 +114,9 @@
 	var templates;
 	var htmls;
 	var menuJson;
-    $(document).ready(function() {  
-    	//初始化加载菜单
-    	loadMenuTemplate();
-    	
+
+	var loadMenuFun;
+    $(document).ready(function() {
     	$('iframe').attr("src", "welcome.html");
     	
     	/***********通过外部登录的方式打开首页****************/
@@ -133,7 +132,10 @@
     	
     	$(".openIframeNew").on("click",function(){
     		Hui_admin_tab(this);
-    	});  
+    	});
+
+        //初始化加载菜单
+        //loadMenuTemplate();
     	
     	/*******************初始化子iFrame中的模板和远程子页面html代码***************************/
     	//模板id
@@ -164,7 +166,7 @@
     }
     
     /********************加载菜单***************************/
-    function loadMenuTemplate() {
+    loadMenuFun = function() {
     	$.get(REQUEST_URL.MENU.GET_USER_MENUS, function(data){
     		if (data.returnCode == 0) {
     			menuJson = data.data;
@@ -183,8 +185,6 @@
         				name && (layer.msg('已切换至系统：' + name, {time:2000}));    			
         			});
         		})
-    		} else {
-    			layer.alert('获取菜单信息失败:' + (data.msg || '未知原因'), {icon: 5});
     		}
     	});
     } 

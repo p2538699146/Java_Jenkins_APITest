@@ -451,7 +451,10 @@ var MESSAGE_PROTOCOL = {
         "ConnectTimeOut":"",
         "ReadTimeOut":""
     },
-    "Dubbo":{}
+    "Dubbo":{
+        "ConnectTimeOut":"",
+        "ReadTimeOut":""
+    }
 }
 
 

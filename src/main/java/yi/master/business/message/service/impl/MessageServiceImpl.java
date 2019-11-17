@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 
 import yi.master.business.base.service.impl.BaseServiceImpl;
 import yi.master.business.message.bean.Message;
+import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.dao.MessageDao;
+import yi.master.business.message.service.MessageSceneService;
 import yi.master.business.message.service.MessageService;
 
 /**
@@ -19,12 +21,36 @@ import yi.master.business.message.service.MessageService;
 public class MessageServiceImpl extends BaseServiceImpl<Message> implements MessageService{
 	
 	private MessageDao messageDao;
+
+	@Autowired
+	private MessageSceneService messageSceneService;
 	
 	@Autowired
 	public void setMessageDao(MessageDao messageDao) {
 		super.setBaseDao(messageDao);
 		this.messageDao = messageDao;
 	}
-	
 
+
+    @Override
+    public Integer save(Message message, Boolean createDefaultScene) {
+        if (message.getMessageId() != null) {
+            message.setMessageId(null);
+        }
+
+        messageDao.getSession().clear();
+	    message.setMessageId(messageDao.save(message));
+
+        if (createDefaultScene == true) {
+            MessageScene messageScene = new MessageScene();
+            messageScene.setMessage(message);
+            messageScene.setSceneName("默认场景");
+            messageScene.setSystems(message.getSystems());
+            messageScene.setMark("这是自动创建的测试场景");
+
+            messageSceneService.save(messageScene, true, null);
+        }
+
+        return message.getMessageId();
+    }
 }

@@ -211,6 +211,7 @@ public class HTTPTestClient extends TestClient {
 				}
 				
 			} catch (Exception e) {
+				returnMap.addMark("报文附加参数获取出错:" + e.getMessage());
 				LOGGER.info("报文附加参数获取出错:" + callParameter.toString(), e);
 			}
 		}
@@ -223,7 +224,6 @@ public class HTTPTestClient extends TestClient {
 		long useTime = 0;
 		HttpRequestBase request = null;	
     	Object[] returnInfo = null;
-    	String errorMsg = "";
     	
     	//失败重试
     	boolean requestSuccessFlag = false;
@@ -237,15 +237,16 @@ public class HTTPTestClient extends TestClient {
     			}
     			requestSuccessFlag = true;
     		} catch (Exception e) {
-    			LOGGER.info("发送请求出错...重试次数..." + retryCount, e);
-    			errorMsg = e.getMessage();   			
+    			LOGGER.info("发送请求出错...重试次数..." + (retryCount + 1), e);
+    			returnMap.addMark("发送请求出错...重试次数..." + (retryCount + 1));
+				returnMap.addMark(e.getMessage());
     		} finally {
     			retryCount++;
     		}
     	}
 		
 		if (!requestSuccessFlag) {
-			returnMap.setMark("发送请求出错：\n" + errorMsg);
+			returnMap.addMark("超过最大请求重试次数：" + config.getRetryCount() + ", 测试终止。");
 		}
     	
 		if (returnInfo != null) {
@@ -271,7 +272,7 @@ public class HTTPTestClient extends TestClient {
 				}				
 			} catch (Exception e) {
 				LOGGER.info("解析返回出错", e);
-				returnMap.setMark("解析返回内容出错：" + e.getMessage());
+				returnMap.addMark("解析返回内容出错：" + e.getMessage());
 			}
 			returnMap.setResponseMessage(returnMsg.toString());
 			returnMap.setStatusCode(String.valueOf(response.getStatusLine().getStatusCode()));
@@ -320,7 +321,9 @@ public class HTTPTestClient extends TestClient {
 			for (Header h:headers) {
 				if (json.get(h.getName()) != null) {
 					String newValue = json.getString(h.getName());
-					if (!newValue.endsWith(";")) newValue += ";";
+					if (!newValue.endsWith(";")) {
+						newValue += ";";
+					}
 					json.put(h.getName(), newValue + h.getValue());
 				} else {
 					json.put(h.getName(), h.getValue());
@@ -339,7 +342,9 @@ public class HTTPTestClient extends TestClient {
 	 */
 	public Object[] doGet(String host, Map<String, String> headers, Map<String, String> querys, String requestMessage, DefaultHttpClient client)
 			throws Exception {	
-		if (querys == null)  querys = new HashMap<String, String>();
+		if (querys == null)  {
+			querys = new HashMap<String, String>();
+		}
 		if (StringUtils.isNotEmpty(requestMessage) 
 				&& MessageKeys.MessageType.URL.getParseUtil().messageFormatValidation(requestMessage)) {
 			querys.putAll(URLMessageParse.parseUrlToMap(requestMessage, null));
@@ -422,8 +427,8 @@ public class HTTPTestClient extends TestClient {
                 }
         		if (!StringUtils.isBlank(query.getKey())) {
         			sbQuery.append(query.getKey());
+					sbQuery.append("=");
         			if (!StringUtils.isBlank(query.getValue())) {
-        				sbQuery.append("=");
         				sbQuery.append(URLEncoder.encode(PracticalUtils.replaceGlobalVariable(query.getValue(), null), ENC_CHARSET));
         			}        			
                 }

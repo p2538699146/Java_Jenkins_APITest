@@ -69,7 +69,7 @@ public class WebSocketTestClient extends TestClient {
             }
 
             if (StringUtils.isBlank(responseObject.getStatusCode())) {
-                responseObject.setMark("请求超时");
+                responseObject.addMark("请求超时");
                 responseObject.setStatusCode("false");
             }
 
@@ -81,7 +81,7 @@ public class WebSocketTestClient extends TestClient {
         } catch (Exception e) {
             logger.info(requestUrl + ",websocket error!", e);
             responseObject.setStatusCode("false");
-            responseObject.setMark(PracticalUtils.getExceptionAllinformation(e));
+            responseObject.addMark(PracticalUtils.getExceptionAllinformation(e));
         } finally {
             if (webSocketClient != null && webSocketClient.isOpen()) {
                 webSocketClient.close();
@@ -129,7 +129,7 @@ public class WebSocketTestClient extends TestClient {
             public void onError(Exception e) {
                 logger.info(StrUtil.format("[{}]WebSocket error:{}", url, PracticalUtils.getExceptionAllinformation(e)));
                 if (StringUtils.isBlank(responseObject.getStatusCode())) {
-                    responseObject.setMark(PracticalUtils.getExceptionAllinformation(e));
+                    responseObject.addMark(PracticalUtils.getExceptionAllinformation(e));
                     responseObject.setResponseMessage("");
                     responseObject.setStatusCode("false");
                 }

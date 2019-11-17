@@ -86,13 +86,13 @@ var templateParams = {
 			}]
 		},
 		{
-			label:"处理类型",
+			label:"报文处理器",
 			select:[{	
 				name:"processType",
 				option:function(){
 					let options = [{
                         value:"",
-                        text:"请选择一个处理类型"
+                        text:"请选择一个报文处理器"
                     }];
 					$.each(MESSAGE_PROCESS, function(k, p) {
                         options.push({
@@ -172,7 +172,22 @@ var templateParams = {
 					text:"禁用"
 				}]
 				}]
-		},		
+		},
+		{
+			add: true,
+            reminder:"创建此报文时同时创建一个默认的测试场景和测试数据。",
+			label:"创建默认场景",
+			select:[{
+				name:"createDefaultScene",
+				option:[{
+					value:"true",
+					text:"是"
+				},{
+					value:"false",
+					text:"否"
+				}]
+			}]
+		},
 		{
 			edit:true,			
 			label:"创建日期",  
@@ -529,11 +544,11 @@ var eventList = {
 		"#setting-process-parameter":function(){
 			var processType = $("#processType").val();
 			if (!strIsNotEmpty(processType)) {
-				layer.msg('请先选择一个处理类型!', {icon:5, time:1600});
+				layer.msg('请先选择一个报文处理器!', {icon:5, time:1600});
 				return false;
 			}
 			var processParameter = JSON.parse($("#processParameter").val() || MESSAGE_PROCESS[processType]) ;
-			window.settingLayerIndex = layer_show("报文处理参数"
+			window.settingLayerIndex = layer_show("报文处理器参数"
 				, templates["message-process-parameter-setting"](processParameter), 680, 400, 1, function(layero, index) {
 			});
 		},
@@ -609,8 +624,8 @@ var mySetting = {
 			}		
 			
 			//编辑页面高度重设
-			editPageHeight.add != null && (editPageHeight.add += 60);
-			editPageHeight.edit != null && (editPageHeight.edit += 60);
+			editPageHeight.add != null && (editPageHeight.add += 90);
+			editPageHeight.edit != null && (editPageHeight.edit += 10);
    		 	df.resolve();
    	 	},
 		editPage:{
@@ -646,7 +661,7 @@ var mySetting = {
 			},
 			messages:{
 				messageName:"请输入报文名称",
-				parameterJson:"请输入正确的报文 入参并点击验证",
+				parameterJson:"请输入正确的报文入参并点击验证",
 				callParameter:"请点击配置按钮配置参数"
 			},
 			renderCallback:function(obj){

@@ -179,25 +179,10 @@ public class MessageSceneAction extends BaseAction<MessageScene>{
 	
 	@Override
 	public String edit() {
-		if (model.getMessageSceneId() == null) { //新增
-			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
-			model.setMessageSceneId(messageSceneService.save(model));
-			//新增时默认该该场景添加一条默认数据		
-			TestData defaultData = new TestData();
-			defaultData.setDataDiscr("默认数据");
-			defaultData.setStatus(TestDataStatus.AVAILABLE.getStatus());
-			defaultData.setMessageScene(model);
-			defaultData.setParamsData("");
-			defaultData.setDefaultData(CommonStatus.ENABLED.getStatus());
-			testDataService.edit(defaultData);
-			
-			//是否配置关联验证模板
-			if (variableId != null) {
-				GlobalVariable v = globalVariableService.get(variableId);
-				SceneValidateRule rule = (SceneValidateRule) v.createSettingValue();
-				rule.setMessageScene(model);
-				sceneValidateRuleService.save(rule);								
-			}			
+        //新增
+		if (model.getMessageSceneId() == null) {
+			messageSceneService.save(model, true, variableId);
+			//编辑
 		} else {
 			messageSceneService.edit(model);
 		}

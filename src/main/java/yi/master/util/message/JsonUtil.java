@@ -112,16 +112,12 @@ public class JsonUtil {
 			try {
 				Map mp = null;
 				List ls = null;
-
 				if (m instanceof Map || m instanceof LinkedHashMap) {
 					mp = (LinkedHashMap) m;
 
 					for (Iterator ite = mp.entrySet().iterator(); ite.hasNext();) {
-
 						Map.Entry e = (Map.Entry) ite.next();
-
 						if (e.getValue() instanceof String) {
-
 							jsonTreeMap.put(e.getKey().toString(), e.getValue()
 									.toString());
 							jsonTreeList.add(e.getKey().toString());
@@ -155,18 +151,16 @@ public class JsonUtil {
 									parentNameC);
 
 						} else if (e.getValue() instanceof Number) {
-
 							jsonTreeList.add(e.getKey().toString());
 							jsonTreeMap.put(e.getKey().toString(),
 									String.valueOf(e.getValue()));
 							jsonTreeType.add("Number");
 							jsonTreePath.add(parentName);
-
 						} else if (e.getValue() == null) {
-
+							//不确定的类型统一识别为String类型
 							jsonTreeList.add(e.getKey().toString());
 							jsonTreeMap.put(e.getKey().toString(), "null");
-							jsonTreeType.add("Unsureness");
+							jsonTreeType.add("String");
 							jsonTreePath.add(parentName);
 						}
 					}

@@ -1,6 +1,7 @@
 package yi.master.coretest.message.parse;
 
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.constant.MessageKeys;
@@ -40,7 +41,9 @@ public class FixedMessageParse extends MessageParse {
 	@Override
 	public Set<Parameter> importMessageToParameter(String message,
 			Set<Parameter> existParams) {
-		
+		if (StringUtils.isBlank(message)) {
+			return null;
+		}
 		Set<Parameter> params = new HashSet<Parameter>();
 		Parameter param = new Parameter(message, "name", "defaultValue", "path", "String");
 		if (validateRepeatabilityParameter(existParams, param)) {
@@ -59,15 +62,15 @@ public class FixedMessageParse extends MessageParse {
 	@Override
 	public String depacketizeMessageToString(ComplexParameter complexParameter,
 			String paramsData) {
-		
+		if (complexParameter == null) {
+			return "";
+		}
 		Parameter param = complexParameter.getSelfParameter();
 		return messageFormatBeautify(param.getParameterIdentify());
 	}
 
 	@Override
 	public String checkParameterValidity(List<Parameter> params, String message) {
-		
-		
 		for (Parameter p:params) {
 			if (message.equals(p.getParameterIdentify())) {
 				return SystemConsts.DefaultBooleanIdentify.TRUE.getString();

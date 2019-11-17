@@ -105,7 +105,7 @@
 	<form action="" method="post" class="form form-horizontal" id="form-edit">
 	{{#each this}}
 		{{#if label}}
-		<div class="row cl {{#if edit}}editFlag{{/if}}" {{#if edit}}style="display: none"{{/if}}>	
+		<div class="row cl {{#if edit}}editFlag{{/if}} {{#if add}}addFlag{{/if}}" {{#if edit}}style="display: none"{{/if}}>
 			<label class="form-label col-xs-4 col-sm-3">{{#if reminder}}<a style="text-decoration: none;" href="javascript:layer.alert('{{reminder}}', {title:'提示', shadeClose:'true',offset:'120px',icon:0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>{{/if}}{{#if required}}<span class="c-red">*</span>{{/if}}{{{label}}}: </label>		
 			<div class="formControls col-xs-8 col-sm-9">	
 				{{#if objText}}

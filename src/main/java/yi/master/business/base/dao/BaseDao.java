@@ -3,6 +3,7 @@ package yi.master.business.base.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Session;
 import yi.master.business.base.bean.PageModel;
 /**
  * 通用DAO接口
@@ -101,4 +102,6 @@ public interface BaseDao<T> {
 	  * @return
 	  */
 	 int getHqlCount(String hql);
+
+    Session getSession();
 }
