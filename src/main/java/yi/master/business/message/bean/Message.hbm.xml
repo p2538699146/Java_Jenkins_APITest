@@ -10,7 +10,7 @@
             <column name="message_id" />
             <generator class="native"></generator>
         </id>
-        <many-to-one name="interfaceInfo" class="yi.master.business.message.bean.InterfaceInfo" lazy="proxy" cascade="save-update" >
+        <many-to-one name="interfaceInfo" class="yi.master.business.message.bean.InterfaceInfo" lazy="proxy" >
             <column name="interface_id" />
         </many-to-one>
         <many-to-one name="user" class="yi.master.business.user.bean.User" lazy="proxy">

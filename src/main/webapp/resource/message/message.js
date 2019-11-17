@@ -175,14 +175,15 @@ var templateParams = {
 		},
 		{
 			add: true,
+            reminder:"创建此报文时同时创建一个默认的测试场景和测试数据。",
 			label:"创建默认场景",
 			select:[{
 				name:"createDefaultScene",
 				option:[{
-					value:"1",
+					value:"true",
 					text:"是"
 				},{
-					value:"0",
+					value:"false",
 					text:"否"
 				}]
 			}]
