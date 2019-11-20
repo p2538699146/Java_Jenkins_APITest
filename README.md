@@ -10,10 +10,13 @@ QQ群交流：468324085，加群验证：易大师
  
 [演示地址](http://www.xuwangcheng.com/yi)（账号 tester/11111111）   
 
-#### 一键安装包
+#### 一键安装 for windows
 百度云： https://pan.baidu.com/s/1i8siuIuPXsjlnawYFc4c6A  
 **账号 admin/q708162543**  
 **安装完成进入安装根目录，双击执行start.bat，弹出两个cmd窗口不要关闭，打开浏览器输入http://localhost:8080** 
+
+#### Linux安装教程
+https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?sort_id=1736227&doc_id=196989
 
 #### 主要功能  
 - 接口、报文、场景三层分离，接口测试更加灵活多变；
