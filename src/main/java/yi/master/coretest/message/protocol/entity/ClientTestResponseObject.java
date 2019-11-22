@@ -30,7 +30,7 @@ public class ClientTestResponseObject {
     /**
      * 一般是测试失败时的备注
      */
-    private String mark;
+    private String mark = "";
 
     public String getResponseMessage() {
         return responseMessage;

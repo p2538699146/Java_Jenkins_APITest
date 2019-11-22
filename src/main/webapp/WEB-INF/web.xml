@@ -83,15 +83,15 @@
     </filter-mapping>
 
     <!--xss过滤-->
-    <filter>
-        <filter-name>XssEscape</filter-name>
-        <filter-class>yi.master.util.xss.XssFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>XssEscape</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
+    <!--<filter>-->
+        <!--<filter-name>XssEscape</filter-name>-->
+        <!--<filter-class>yi.master.util.xss.XssFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>XssEscape</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+        <!--<dispatcher>REQUEST</dispatcher>-->
+    <!--</filter-mapping>-->
 
     <!--hibernate session的问题解决-->
     <filter>

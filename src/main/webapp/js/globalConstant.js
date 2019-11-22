@@ -397,7 +397,7 @@ var EXPLANATION_MARK = {
 
 
 //接口自动化相关
-//报文处理类型参数设置
+//报文处理器参数设置
 var MESSAGE_PROCESS = {
     "ShanXiOpenApi":{
         "pemFilePath":""
@@ -408,6 +408,13 @@ var MESSAGE_PROCESS = {
         "publicKey":"",
         "algorithmType":"RSA"
     }
+}
+
+//接口可Mock类型
+var MESSAGE_MOCK_TYPE = {
+    "HTTP":"HTTP",
+    "Socket": "Socket",
+    "WebSocket": "WebSocket"
 }
 
 //接口协议-调用参数配置信息

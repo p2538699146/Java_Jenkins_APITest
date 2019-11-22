@@ -34,14 +34,16 @@ var templateParams = {
 						label:"协议",  
 						select:[{	
 							name:"protocolType",
-							option:[{
-								value:"HTTP",
-								text:"HTTP"
-								},
-								{
-									value:"Socket",
-									text:"Socket"
-								}]
+							option:function(){
+							    let arr = [];
+							    $.each(MESSAGE_MOCK_TYPE, function(i, n){
+							        arr.push({
+                                        value:n,
+                                        text: i
+                                    });
+                                });
+                                return arr;
+                            }()
 							}]					
 					},
 					{
@@ -112,17 +114,16 @@ var columnsSetting = [
 			  {
 				   	"data":"protocolType",
 					"render":function(data) {
-						var option = {
-          		  			"HTTP":{
-          		  				btnStyle:"success",
-          		  				status:"HTTP"
-          		  				},
-      		  				"Socket":{
-      		  					btnStyle:"primary",
-      		  					status:"Socket"
-      		  					}
-          		  	};	
-          		  	return labelCreate(data, option);
+						var option = {};
+
+					    $.each(MESSAGE_MOCK_TYPE, function(i, n) {
+                            option[i] = {
+                                btnStyle:"success",
+                                status:n
+                            }
+                        });
+
+          		  	    return labelCreate(data, option);
 			  }},
 			  {
 				  "data":null,

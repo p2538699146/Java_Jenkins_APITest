@@ -730,14 +730,14 @@ public class PracticalUtils {
 	 */
 	@SuppressWarnings({ "static-access", "unchecked", "rawtypes" })
 	public static Map<String, ComplexSceneConfig> getComplexSceneConfigs (String configJson) {
-		JSONObject obj = new JSONObject().fromObject(configJson);
+		JSONObject obj = JSONObject.fromObject(configJson);
 		Map<String, ComplexSceneConfig>	configs = new HashMap<String, ComplexSceneConfig>();
 		
 		Map<String, Class> classMap = new HashMap<String, Class>();
 		classMap.put("useVariables", Map.class);
 		classMap.put("saveVariables", Map.class);
 		
-		Map<String, Object> objs = (Map<String, Object>) obj.toBean(obj, Map.class);
+		Map<String, Object> objs = (Map<String, Object>) JSONObject.toBean(obj, Map.class);
 		for (String key:objs.keySet()) {
 			JSONObject o = obj.getJSONObject(key);
 			configs.put(key, (ComplexSceneConfig) JSONObject.toBean(o, ComplexSceneConfig.class, classMap));

@@ -25,7 +25,7 @@ public enum InterfaceProbeStatus {
 
     private String status;
 
-    private InterfaceProbeStatus (String status) {
+    InterfaceProbeStatus (String status) {
         this.status = status;
     }
 

@@ -29,8 +29,17 @@ public interface InterfaceMockService extends BaseService<InterfaceMock> {
 	void updateSetting(Integer mockId, String settingType, String configJson);
 	
 	/**
-	 * 获取所有启用状态的Socket Mock服务
+	 * 获取所有启用状态的 Mock服务
 	 * @return
 	 */
-	List<InterfaceMock> getEnableSocketMock();
+	List<InterfaceMock> getEnableMockServer();
+
+    /**
+     * 更新调用次数：包含成功和失败的
+     * @author xuwangcheng
+     * @date 2019/11/22 16:11
+     * @param mockId mockId
+     * @return
+     */
+    void updateCallCount(Integer mockId);
 }

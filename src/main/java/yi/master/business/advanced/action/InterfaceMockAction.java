@@ -14,6 +14,7 @@ import yi.master.business.advanced.bean.config.mock.MockRequestValidateConfig;
 import yi.master.business.advanced.bean.config.mock.MockResponseConfig;
 import yi.master.business.advanced.bean.config.mock.MockValidateRuleConfig;
 import yi.master.business.advanced.enums.InterfaceMockStatus;
+import yi.master.business.advanced.enums.MockConfigSettingType;
 import yi.master.business.base.dto.ParseMessageToNodesOutDTO;
 import yi.master.business.advanced.service.InterfaceMockService;
 import yi.master.business.base.action.BaseAction;
@@ -21,6 +22,7 @@ import yi.master.business.message.bean.Parameter;
 import yi.master.business.user.bean.User;
 import yi.master.constant.MessageKeys;
 import yi.master.coretest.message.parse.MessageParse;
+import yi.master.coretest.message.test.mock.MockServer;
 import yi.master.coretest.message.test.mock.MockSocketServer;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
@@ -62,6 +64,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	
 	public String updateStatus() {
 		interfaceMockService.updateStatus(model.getMockId(), model.getStatus());
+        MockServer.handleMockServer(model.getMockId());
 		return SUCCESS;
 	}
 	
@@ -75,24 +78,8 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		} else {
 			interfaceMockService.edit(model);
 		}
-		
-		//开启Socket模拟服务
-		MockSocketServer server = CacheUtil.getSocketServers().get(model.getMockId());
-		
-		if (server != null && (InterfaceMockStatus.DISABLED.getStatus().equals(model.getStatus())
-				|| !MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType()))) {
-			server.stop();
-		}
-		
-		if (server == null && InterfaceMockStatus.ENABLED.getStatus().equals(model.getStatus())
-				&& MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType())) {
-			try {
-				new MockSocketServer(model.getMockId());
-			} catch (Exception e) {
-				LOGGER.warn(e.getMessage(), e);
-			}
-		}
-		
+
+        MockServer.handleMockServer(model.getMockId());
 		setData(model);
 		return SUCCESS;
 	}
@@ -105,15 +92,15 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		String settingType = "";
 		String settingValue = "";
 		if (StringUtils.isNotBlank(model.getResponseMock())) {
-			settingType = "responseMock";
+			settingType = MockConfigSettingType.responseMock.name();
 			settingValue = model.getResponseMock();
 		}
 		if (StringUtils.isNotBlank(model.getRequestValidate())) {
-			settingType = "requestValidate";
+			settingType = MockConfigSettingType.requestValidate.name();
 			settingValue = model.getRequestValidate();
 		}
 		interfaceMockService.updateSetting(model.getMockId(), settingType, settingValue);
-		MockSocketServer thisSocket = CacheUtil.getSocketServers().get(model.getMockId());
+		MockServer thisSocket = CacheUtil.getMockServers().get(model.getMockId());
 		if (thisSocket != null) {
 			thisSocket.updateConfig(settingType, settingValue);
 		}

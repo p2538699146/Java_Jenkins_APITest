@@ -43,8 +43,13 @@ public class InterfaceMockServiceImpl extends BaseServiceImpl<InterfaceMock> imp
 	}
 
 	@Override
-	public List<InterfaceMock> getEnableSocketMock() {
+	public List<InterfaceMock> getEnableMockServer() {
 		
-		return interfaceMockDao.getEnableSocketMock();
+		return interfaceMockDao.getEnableMockServer();
 	}
+
+    @Override
+    public void updateCallCount(Integer mockId) {
+        interfaceMockDao.updateCallCount(mockId);
+    }
 }

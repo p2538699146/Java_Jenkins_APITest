@@ -13,6 +13,7 @@ import yi.master.business.log.bean.LogRecord;
 import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.GlobalSetting;
 import yi.master.business.testconfig.bean.DataDB;
+import yi.master.coretest.message.test.mock.MockServer;
 import yi.master.coretest.message.test.mock.MockSocketServer;
 import yi.master.coretest.message.test.performance.PerformanceTestObject;
 import yi.master.util.FrameworkUtil;
@@ -51,11 +52,11 @@ public class CacheUtil {
 	 * 性能测试对象
 	 */
 	private static Map<Integer, Map<Integer, PerformanceTestObject>> ptObjects = new HashMap<Integer, Map<Integer, PerformanceTestObject>>();
-	
-	/**
-	 * socket类型mock服务，key值为对应的mock对象的mockId
-	 */
-	private static Map<Integer, MockSocketServer> socketServers = new HashMap<Integer, MockSocketServer>();
+
+    /**
+     * mock相关服务，key值为对应的mock对象的mockId
+     */
+	private static Map<Integer, MockServer> mockServers = new HashMap<>();
 	
 	
 	public static void setQueryDBMap(Map<String, DataDB> queryDBMap) {
@@ -232,25 +233,25 @@ public class CacheUtil {
 		pts.put(ptObject.getObjectId(), ptObject);
 	}
 
-	/**
-	 * 设置SocketMock服务集合
-	 * @author xuwangcheng
-	 * @date 2019/8/30 15:54
-	 * @param socketServers socketServers
-	 */
-	public static void setSocketServers(
-			Map<Integer, MockSocketServer> socketServers) {
-		CacheUtil.socketServers = socketServers;
-	}
+    /**
+     *  设置Mock服务集合
+     * @author xuwangcheng
+     * @date 2019/11/22 9:49
+     * @param mockServers mockServers
+     * @return
+     */
+	public static void setMockServers (Map<Integer, MockServer> mockServers) {
+	     CacheUtil.mockServers = mockServers;
+    }
 
-	/**
-	 * 获取SocketMock服务集合
-	 * @author xuwangcheng
-	 * @date 2019/8/30 15:54
-	 * @param
-	 * @return {@link Map}
-	 */
-	public static Map<Integer, MockSocketServer> getSocketServers() {
-		return socketServers;
-	}
+    /**
+     *  获取Mock服务集合
+     * @author xuwangcheng
+     * @date 2019/11/22 9:49
+     * @param
+     * @return {@link Map}
+     */
+    public static Map<Integer, MockServer> getMockServers () {
+	    return mockServers;
+    }
 }

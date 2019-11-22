@@ -34,10 +34,15 @@ public class InterfaceMockDaoImpl extends BaseDaoImpl<InterfaceMock> implements 
 	}
 
 	@Override
-	public List<InterfaceMock> getEnableSocketMock() {
-		
-		String hql = "From InterfaceMock m where m.protocolType='Socket' and m.status='0'";
+	public List<InterfaceMock> getEnableMockServer() {
+		String hql = "From InterfaceMock m where m.protocolType in ('WebSocket', 'Socket') and m.status='0'";
 		return getSession().createQuery(hql).list();
 	}
+
+    @Override
+    public void updateCallCount(Integer mockId) {
+        String hql = "update InterfaceMock m set m.callCount=m.callCount + 1 where m.mockId=:mockId";
+        getSession().createQuery(hql).setInteger("mockId", mockId).executeUpdate();
+    }
 
 }

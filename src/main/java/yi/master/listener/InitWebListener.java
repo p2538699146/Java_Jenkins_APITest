@@ -24,6 +24,7 @@ import yi.master.business.system.service.OperationInterfaceService;
 import yi.master.business.testconfig.bean.DataDB;
 import yi.master.business.testconfig.service.DataDBService;
 import yi.master.constant.SystemConsts;
+import yi.master.coretest.message.test.mock.MockServer;
 import yi.master.coretest.message.test.mock.MockSocketServer;
 import yi.master.coretest.task.JobManager;
 import yi.master.util.FrameworkUtil;
@@ -46,7 +47,7 @@ public class InitWebListener implements ServletContextListener {
 		while (CacheUtil.saveRecord()) {}
 		
 		//关闭Mock Socket Server
-		for (MockSocketServer server:CacheUtil.getSocketServers().values()) {
+		for (MockServer server:CacheUtil.getMockServers().values()) {
 			server.stop();
 		}
 		
@@ -120,10 +121,10 @@ public class InitWebListener implements ServletContextListener {
 		new Timer().schedule(new LogRecordStorageTimeTask(), 5000, 60000);
 		
 		//启动所有的Socket Mock服务
-		List<InterfaceMock> socketMocks = ((InterfaceMockService) FrameworkUtil.getSpringBean(InterfaceMockService.class)).getEnableSocketMock();
-		for (InterfaceMock mock:socketMocks) {
+		List<InterfaceMock> mocks = ((InterfaceMockService) FrameworkUtil.getSpringBean(InterfaceMockService.class)).getEnableMockServer();
+		for (InterfaceMock mock:mocks) {
 			try {
-				new MockSocketServer(mock.getMockId());
+				MockServer.getMockServerInstance(mock.getProtocolType(), mock.getMockId()).start();
 			} catch (Exception e) {
 				LOGGER.error("Mock Socket服务失败:mockName=" + mock.getMockName() + ",mockId=" + mock.getMockId(), e);
 			}
