@@ -1058,10 +1058,10 @@ function layer_show (title, url, w, h, type, success, cancel, end, other) {
 		url="/404.html";
 	};
 	if (w == null || w == '' || w >= maxWidth) {
-		w =	maxWidth * 0.8
+		w =	maxWidth * 0.86
 	};
 	if (h == null || h == '' || h >= maxHeight) {
-		h= (maxHeight * 0.86) ;
+		h= (maxHeight * 0.9) ;
 	};
 	if (type == null || type == '') {
 		type = 2;

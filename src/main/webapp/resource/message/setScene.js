@@ -22,18 +22,17 @@ var templateParams = {
 			id:"batch-op",
 			iMarkClass:"Hui-iconfont-del3",
 			name:"批量操作"
-		},{
+		}, {
+            size:"M",
+            id:"show-complex-set-scene",
+            iconFont:"&#xe6f3;",
+            name:"组合场景"
+        }, {
 			type:"success",
 			size:"M",
 			id:"setting-set-config",
 			iconFont:"&#xe62e;",
 			name:"运行时设置"
-		},{
-			type:"success",
-			size:"M",
-			id:"show-complex-set-scene",
-			iconFont:"&#xe6f3;",
-			name:"组合场景"
 		},{
 			type:"success",
 			size:"M",

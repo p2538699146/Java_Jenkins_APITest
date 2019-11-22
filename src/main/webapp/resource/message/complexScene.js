@@ -232,9 +232,9 @@ var eventList = {
 			
 		},
 		".show-scenes":function() { //管理组合中的测试场景
-			if (setId != null) {//测试集中展示组合场景不能管理
-				return false;
-			}			
+			// if (setId != null) {//测试集中展示组合场景不能管理
+			// 	return false;
+			// }
 			var data = table.row( $(this).parents('tr') ).data();
 			layer_show(data.complexSceneName + "-组合场景设定", "messageScene.html?complexSceneId=" + data.id, null, null, 2, null, null, function() {
 				refreshTable();
