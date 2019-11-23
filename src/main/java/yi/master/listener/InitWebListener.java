@@ -73,7 +73,7 @@ public class InitWebListener implements ServletContextListener {
 
 		
 		//获取当前系统的所有接口信息  
-		LOGGER.info("获取当前系统的所有接口信息!");
+		LOGGER.info("获取系统接口信息!");
 		List<OperationInterface> ops = opService.findAll();
 		//放置到全局context中
 		context.setAttribute(SystemConsts.APPLICATION_ATTRIBUTE_OPERATION_INTERFACE, ops);
@@ -91,12 +91,7 @@ public class InitWebListener implements ServletContextListener {
 
 		//获取系统版本号，如果与数据库中的版本号不一致则更新
 		String version = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_VERSION);
-		if (StringUtils.isBlank(version)|| !version.equals(SystemConsts.VERSION)) {
-			LOGGER.warn("当前代码版本号为：v" + SystemConsts.VERSION + ",与数据库版本v" + version + "不一致！");
-
-			settingService.updateSetting(SystemConsts.GLOBAL_SETTING_VERSION, SystemConsts.VERSION);
-			CacheUtil.updateGlobalSettingValue(SystemConsts.GLOBAL_SETTING_VERSION, SystemConsts.VERSION);
-		}
+		VersionUpdateUtil.updateVersion(version);
 
 		//获取查询数据库信息
 		LOGGER.info("获取测试数据源信息!");
@@ -115,12 +110,12 @@ public class InitWebListener implements ServletContextListener {
 		jobManager.startTasks();
 		context.setAttribute(SystemConsts.QUARTZ_SCHEDULER_START_FLAG, SystemConsts.QUARTZ_SCHEDULER_IS_START);
 
-		
 		//启动操作日志异步入库线程
 		//日志信息异步入库
 		new Timer().schedule(new LogRecordStorageTimeTask(), 5000, 60000);
 		
-		//启动所有的Socket Mock服务
+		//启动所有的Mock服务
+		LOGGER.info("启动所有当前可用的Mock服务!");
 		List<InterfaceMock> mocks = ((InterfaceMockService) FrameworkUtil.getSpringBean(InterfaceMockService.class)).getEnableMockServer();
 		for (InterfaceMock mock:mocks) {
 			try {

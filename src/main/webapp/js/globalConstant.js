@@ -1,5 +1,4 @@
 //全局常量和配置
-
 //返回值
 var RETURN_CODE = {
     SUCCESS: 0,

@@ -26,6 +26,8 @@ public enum AppErrorCode {
     MOCK_INTERFACE_DISABLED(9997, "mock接口被禁止调用"),
     MOCK_INTERFACE_NOT_EXIST(9996, "未定义的mock接口"),
     MOCK_ERROR(9995, "接口mock出错,请联系接口自动化测试平台"),
+    SYSTEM_IS_UPDATING(9994, "系统正在系统,请稍后刷新访问..."),
+    SYSTEM_IS_NEED_RESTART(9993, "系统刚刚升级完成,请联系管理员重启服务器..."),
 
 
     //自动化测试

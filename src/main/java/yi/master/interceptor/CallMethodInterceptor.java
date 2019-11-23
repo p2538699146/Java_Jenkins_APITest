@@ -1,18 +1,14 @@
 package yi.master.interceptor;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import net.sf.json.JSONObject;
-
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 import org.apache.struts2.StrutsStatics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.log.enums.LogCallType;
 import yi.master.business.log.enums.LogInterceptStatus;
@@ -23,12 +19,16 @@ import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
+import yi.master.listener.VersionUpdateUtil;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.MD5Util;
 import yi.master.util.PracticalUtils;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * 每个用户调用任何一个操作接口都必须经过本拦截器
@@ -59,6 +59,16 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String intercept(ActionInvocation arg0) throws Exception {
+		ActionContext actionContext = arg0.getInvocationContext();
+		HttpServletResponse response = (HttpServletResponse) actionContext.get(StrutsStatics.HTTP_RESPONSE);
+		//判断当前系统是否需要重启
+		if (VersionUpdateUtil.getIsNeedRestart()) {
+			response.setHeader("needrestart", "true");
+			response.setStatus(HttpStatus.SC_FORBIDDEN);
+			throw new YiException(AppErrorCode.SYSTEM_IS_NEED_RESTART);
+		}
+
+
 		User user = null;
 		OperationInterface opInterface = null;
 		String callUrl = null; 
@@ -72,7 +82,7 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		String responseParams = null;
 		String mark = null;	
 		
-		ActionContext actionContext = arg0.getInvocationContext();           
+
 		HttpServletRequest request= (HttpServletRequest) actionContext.get(StrutsStatics.HTTP_REQUEST);  
 		browserAgent = request.getHeader("User-Agent");
 		userHost = PracticalUtils.getIpAddr(request);

@@ -26,9 +26,6 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 public class InterfaceMockInterceptor extends AbstractInterceptor {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private static Logger logger = Logger.getLogger(InterfaceMockInterceptor.class.getName());
