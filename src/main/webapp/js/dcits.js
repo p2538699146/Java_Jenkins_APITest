@@ -438,18 +438,23 @@ function controlButtonShowByPermission (domObj) {
     }
 
     $.each(thisPagePermissionList, function(i, n) {
-        let button;
-        try {
-            button = domObj.find(n.permissionMark);
-        } catch(err) {}
-
-        if (button != null && button.length > 0) {
-            if (top.currentUserPermissionList[n.opId] == null
-				|| n.status == '1') {
-                //删除按钮
-                button.remove();
+    	if (n.permissionMark == null || n.permissionMark == '') {
+    		return true;
+		}
+    	let marks = n.permissionMark.split(',');
+    	$.each(marks, function(t, mark) {
+            let button;
+            try {
+                button = domObj.find(mark);
+            } catch(err) {}
+            if (button != null && button.length > 0) {
+                if (top.currentUserPermissionList[n.opId] == null
+                    || n.status == '1') {
+                    //删除按钮
+                    button.remove();
+                }
             }
-        }
+		});
 	});
 }
 

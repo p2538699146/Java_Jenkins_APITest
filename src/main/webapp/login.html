@@ -68,7 +68,7 @@
 <script type="text/javascript" src="js/globalConstant.js"></script>
 <script type="text/javascript" src="js/ajaxErrorHandler.js"></script>
 <script>
-    $(document).ready(function(){   	
+    $(document).ready(function(){
     	 $("#verifyCode").siblings('img').click(function(){
     		 var that = this;
     		 $.get(REQUEST_URL.LOGIN.CREATE_VERIFY_CODE, function(data){
@@ -89,20 +89,22 @@
     		 }
     		 
     	 });
+
         //判断当前是否有用户登录
         $.post(REQUEST_URL.LOGIN.JUDGE_LOGIN,function(data){
             if(data.returnCode == 0){
                 //跳转首页
-            	window.location.href="index.html";
+                window.location.href="index.html";
             }else{
-            	//没有登录的时候检查cookie
-            	var username = getCookie("username");
-            	var loginIdentification = getCookie("loginIdentification");
-            	if(username != null && loginIdentification != null){
-            		postLogin(username, null, null,loginIdentification);
-            	}
+                //没有登录的时候检查cookie
+                var username = getCookie("username");
+                var loginIdentification = getCookie("loginIdentification");
+                if(username != null && loginIdentification != null){
+                    postLogin(username, null, null,loginIdentification);
+                }
             }
         });
+
     });
     function userLogin(){
         var username = $("#username").val();
