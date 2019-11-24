@@ -70,13 +70,6 @@ public class InitWebListener implements ServletContextListener {
 		OperationInterfaceService opService =(OperationInterfaceService)ctx.getBean("operationInterfaceService");
 		GlobalSettingService settingService = (GlobalSettingService) ctx.getBean("globalSettingService");
 		DataDBService dbService = (DataDBService) ctx.getBean("dataDBService");
-
-		
-		//获取当前系统的所有接口信息  
-		LOGGER.info("获取系统接口信息!");
-		List<OperationInterface> ops = opService.findAll();
-		//放置到全局context中
-		context.setAttribute(SystemConsts.APPLICATION_ATTRIBUTE_OPERATION_INTERFACE, ops);
 		
 		//获取网站全局设置信息
 		LOGGER.info("获取网站全局设置信息!");
@@ -92,6 +85,11 @@ public class InitWebListener implements ServletContextListener {
 		//获取系统版本号，如果与数据库中的版本号不一致则更新
 		String version = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_VERSION);
 		VersionUpdateUtil.updateVersion(version);
+
+		//获取当前系统的所有接口信息
+		LOGGER.info("获取系统接口信息!");
+		List<OperationInterface> ops = opService.findAll();
+		CacheUtil.setSystemInterfaces(ops);
 
 		//获取查询数据库信息
 		LOGGER.info("获取测试数据源信息!");

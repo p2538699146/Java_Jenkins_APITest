@@ -67,6 +67,18 @@ var templateParams = {
 				        {value:"1", text:"禁止"}]
 				}]
 		},
+            {
+                label:"所属页面名",
+                input:[{
+                    name:"pageName"
+                }]
+            },
+            {
+                label:"权限标识",
+                input:[{
+                    name:"permissionMark"
+                }]
+            },
 		{
 			edit:false,
 			label:"&nbsp;&nbsp;备注",

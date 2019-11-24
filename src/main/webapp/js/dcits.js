@@ -53,11 +53,13 @@ var advancedQueryFormHtml = "";//高级查询页面代码，防止重复渲染
  * 
  */
 /********************************************/
+var thisPageName;
+var thisPagePermissionList;
 $(function() {
 	//加载对应的js文件		
 	var r = (window.location.pathname.split("."))[0].split("/");
-	r = r[r.length-1] + ".js";
-	dynamicLoadScript(r);
+    thisPageName = r[r.length-1];
+	dynamicLoadScript(thisPageName + ".js");
 });
 
 /**
@@ -75,16 +77,20 @@ var publish = {
 		 df1.done(function(){
 			 var df = $.Deferred();
 	    	 df.done(function(){
+	    	 	//自定义数据渲染
 	    		 that.renderData(that.renderParams.customCallBack);
-	    		 //防止事件被绑定多次
+	    		 //事件代理绑定，防止事件被绑定多次
 	    		 (that.renderParams.ifFirst == true) && (that.initListeners(that.renderParams.eventList));
-	    	 }); 
+	    	 });
+
+	    	 //渲染之前的自定义初始化
 	    	 if (that.renderParams.renderType == "list") {
 	    		 that.renderParams.listPage.beforeInit(df);
 	    	 } else if (that.renderParams.renderType == "edit") {
 	    		 that.renderParams.editPage.beforeInit(df);
 	    	 }	    	 	   
 		 });
+
 		 if (that.renderParams.ifFirst == true) {
 			 that.renderTemplate(df1,that.renderParams.templateCallBack); 
 		 } else {
@@ -376,8 +382,11 @@ var publish = {
     			 }    			 
     			 e.ifUseValidate && formValidate(e.formObj, e.rules, e.messages, null, e.closeFlag, e.ajaxCallbackFun, e.beforeSubmitCallback);
     		 }    		 
-    	 } 
-    	callback(p); 
+    	 }
+
+    	 //权限按钮的显示和隐藏
+         controlButtonShowByPermission();
+		 callback(p);
      },
      /**
       * 统一绑定监听事件
@@ -393,6 +402,56 @@ var publish = {
          this.renderParams.renderType = "edit";
      }
 };
+
+/**
+ * 控制权限按钮的显示或者隐藏
+ * @param domObj
+ */
+function controlButtonShowByPermission (domObj) {
+	//跳过超级管理员用户
+	if (parent.$("#user_id").val() == SUPER_ADMIN_USER_ID) {
+		return;
+	}
+	if (thisPagePermissionList == null) {
+        //获取当前页面权限
+        $.ajax({
+            type:"post",
+            url:REQUEST_URL.OP_INTERFACE.LIST_BY_PAGE_NAME,
+            data:{pageName: thisPageName},
+            async:false,
+            success:function(json) {
+                if (json.returnCode == RETURN_CODE.SUCCESS) {
+					thisPagePermissionList = json.data;
+                } else {
+                    layer.alert(json.msg, {icon:5});
+                }
+            }
+        });
+	}
+
+	if (thisPagePermissionList.length == 0) {
+		return;
+	}
+
+    if (domObj == null) {
+        domObj = $(document);
+    }
+
+    $.each(thisPagePermissionList, function(i, n) {
+        let button;
+        try {
+            button = domObj.find(n.permissionMark);
+        } catch(err) {}
+
+        if (button != null && button.length > 0) {
+            if (top.currentUserPermissionList[n.opId] == null
+				|| n.status == '1') {
+                //删除按钮
+                button.remove();
+            }
+        }
+	});
+}
 
 //设置jQuery Ajax全局的参数  
 $.ajaxSetup({
@@ -504,10 +563,10 @@ function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting)
         data = json.data;
         
     })
-   /* //重绘完毕
+   //重绘完毕
     .on('draw.dt', function () { //初始化和刷新都会触发
-    	publish.renderParams.listPage.dtAjaxCallback();
-    })*/
+        controlButtonShowByPermission($('.table'));
+    })
     //初始化完毕
     .on( 'init.dt', function () {  //刷新表格不会触发此事件  只存在一次
     	//添加动态拖拽改变列宽的插件

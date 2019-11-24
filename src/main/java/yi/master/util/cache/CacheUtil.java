@@ -1,22 +1,18 @@
 package yi.master.util.cache;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.apache.commons.lang.StringUtils;
-
 import yi.master.business.log.bean.LogRecord;
 import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.GlobalSetting;
+import yi.master.business.system.bean.OperationInterface;
+import yi.master.business.system.service.OperationInterfaceService;
 import yi.master.business.testconfig.bean.DataDB;
 import yi.master.coretest.message.test.mock.MockServer;
-import yi.master.coretest.message.test.mock.MockSocketServer;
 import yi.master.coretest.message.test.performance.PerformanceTestObject;
 import yi.master.util.FrameworkUtil;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * web相关的一些配置数据以及全局数据的缓存设置<br>
@@ -57,6 +53,11 @@ public class CacheUtil {
      * mock相关服务，key值为对应的mock对象的mockId
      */
 	private static Map<Integer, MockServer> mockServers = new HashMap<>();
+
+	/**
+	 * 系统接口
+	 */
+	private static List<OperationInterface> systemInterfaces = new ArrayList<>();
 	
 	
 	public static void setQueryDBMap(Map<String, DataDB> queryDBMap) {
@@ -74,7 +75,34 @@ public class CacheUtil {
 	public static boolean checkLockedTestData(Integer dataId) {
 		return CacheUtil.lockedTestDatas.contains(dataId);
 	}
-	
+
+	/**
+	 *  获取所有系统接口
+	 * @author xuwangcheng
+	 * @date 2019/11/24 17:20
+	 * @param
+	 * @return {@link List}
+	 */
+	public static List<OperationInterface> getSystemInterfaces () {
+		return systemInterfaces;
+	}
+
+	public static void setSystemInterfaces(List<OperationInterface> systemInterfaces) {
+		CacheUtil.systemInterfaces = systemInterfaces;
+	}
+
+	/**
+	 *  重新获取系统接口
+	 * @author xuwangcheng
+	 * @date 2019/11/24 17:22
+	 * @param
+	 * @return
+	 */
+	public static void updateSystemInterfaces () {
+		OperationInterfaceService opService =(OperationInterfaceService)FrameworkUtil.getSpringBean("operationInterfaceService");
+		CacheUtil.systemInterfaces = opService.findAll();
+	}
+
 	/**
 	 * 获取查询数据库信息列表
 	 * @return

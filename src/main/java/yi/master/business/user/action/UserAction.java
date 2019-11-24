@@ -244,7 +244,7 @@ public class UserAction extends BaseAction<User>{
 	 */
 	@Override
 	public String del() {
-		if (userService.get(id).getUsername().equals(SystemConsts.SYSTEM_ADMINISTRATOR_ROLE_NAME)) {
+		if (SystemConsts.DefaultObjectId.ADMIN_USER.getId() == model.getUserId()) {
 			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除预置管理员用户!");
 		}
 		userService.delete(id);
@@ -257,7 +257,7 @@ public class UserAction extends BaseAction<User>{
 	 * @return
 	 */
 	public String lock() {
-		if (model.getUsername().equals(SystemConsts.SYSTEM_ADMINISTRATOR_ROLE_NAME)) {
+		if (SystemConsts.DefaultObjectId.ADMIN_USER.getId() == model.getUserId()) {
 			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能锁定预置管理员用户!");
 		}
 		userService.lockUser(model.getUserId(), mode);

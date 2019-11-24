@@ -1,8 +1,11 @@
 package yi.master.business.user.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import cn.hutool.core.collection.CollUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -12,12 +15,15 @@ import yi.master.business.system.bean.BusiMenuInfo;
 import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.system.service.BusiMenuInfoService;
 import yi.master.business.user.bean.Role;
+import yi.master.business.user.bean.User;
 import yi.master.business.user.service.RoleService;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
+import yi.master.util.cache.CacheUtil;
 
 /**
  * 角色信息Action
@@ -75,7 +81,7 @@ public class RoleAction extends BaseAction<Role> {
 	@Override
 	public String del() {
 		if (id == SystemConsts.DefaultObjectId.ADMIN_ROLE.getId() || id == SystemConsts.DefaultObjectId.DEFAULT_ROLE.getId()) {
-			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除超级管理员角色或者默认角色");
+			throw new YiException(AppErrorCode.ILLEGAL_HANDLE.getCode(), "不能删除管理员角色或者默认角色");
 		}		
 		//删除其他角色,配置该角色的用户变更成default角色
 		roleService.del(id);
@@ -88,7 +94,7 @@ public class RoleAction extends BaseAction<Role> {
 		checkNameFlag = (role != null && !role.getRoleId().equals(model.getRoleId())) ? "重复的角色名" : "true";
 		
 		if (model.getRoleId() == null) {
-			checkNameFlag = (role == null) ? "true" : "重复的接口名";
+			checkNameFlag = (role == null) ? "true" : "重复的角色名";
 		}
 	}
 	
@@ -123,7 +129,7 @@ public class RoleAction extends BaseAction<Role> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getInterfaceNodes() {		
-		List<OperationInterface> ops = (List<OperationInterface>) FrameworkUtil.getApplicationMap().get("ops");				
+		List<OperationInterface> ops = CacheUtil.getSystemInterfaces();
 		Role role = roleService.get(model.getRoleId());
 		Set<OperationInterface> ownOps = role.getOis();
 		
@@ -138,7 +144,30 @@ public class RoleAction extends BaseAction<Role> {
 		setData(ops);
 		return SUCCESS;
 	}
-	
+
+	/**
+	 * 获取当前用户的角色权限列表
+	 * @author xuwangcheng
+	 * @date 2019/11/24 18:45
+	 * @param
+	 * @return {@link String}
+	 */
+	public String getUserPermissionList () {
+		User user = FrameworkUtil.getLoginUser();
+		if (user == null) {
+			throw new YiException(AppErrorCode.NO_LOGIN);
+		}
+		Role role = roleService.get(user.getRole().getRoleId());
+		Set<OperationInterface> ownOps = role.getOis();
+		Map<Integer, OperationInterface> maps = new HashMap<>();
+		for (OperationInterface o:ownOps) {
+			maps.put(o.getOpId(), o);
+		}
+
+		setData(maps);
+		return SUCCESS;
+	}
+
 	/**
 	 * 获取当前用户的菜单树
 	 * @return

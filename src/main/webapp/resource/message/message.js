@@ -400,7 +400,6 @@ var eventList = {
 			
 			var json = JSON.parse($("#callParameter").val());
 			var callParameterViewHtml = '<article class="page-container"><form action="" method="" class="form form-horizontal">';
-						
 			if (json != null && !$.isEmptyObject(json)) {
 				$.each(json, function(i, n) {
 					callParameterViewHtml += '<div class="row cl parameter">'
@@ -429,7 +428,7 @@ var eventList = {
 			
 			callParameterViewHtml += '<div class="row cl"><div class="col-xs-7 col-sm-8 col-xs-offset-4 col-sm-offset-3"><input class="btn btn-danger radius" type="button" value="&nbsp;&nbsp;保存更改&nbsp;&nbsp;" id="change-call-parameter"></div></div></form></article>';
 			
-			layer_show(protocolType + "调用参数设置", callParameterViewHtml, 780, 500, 1, function(layero, index) {
+			layer_show(protocolType + "调用参数设置&nbsp;&nbsp;[点击参数名可打开新增参数窗口]", callParameterViewHtml, 780, 500, 1, function(layero, index) {
 				$("#change-call-parameter").attr("layer-index", index);
 			});
 			

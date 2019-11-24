@@ -84,6 +84,16 @@ public class OperationInterface implements Serializable {
 	 * 父节点名称
 	 */
 	private String parentOpName;
+
+	/**
+	 * 所属页面
+	 */
+	private String pageName;
+
+	/**
+	 * 权限标识
+	 */
+	private String permissionMark;
 	
 
 	/**
@@ -249,6 +259,22 @@ public class OperationInterface implements Serializable {
 		int result = 1;
 		result = prime * result + ((opId == null) ? 0 : opId.hashCode());
 		return result;
+	}
+
+	public void setPageName(String pageName) {
+		this.pageName = pageName;
+	}
+
+	public void setPermissionMark(String permissionMark) {
+		this.permissionMark = permissionMark;
+	}
+
+	public String getPageName() {
+		return pageName;
+	}
+
+	public String getPermissionMark() {
+		return permissionMark;
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import yi.master.business.system.dao.OperationInterfaceDao;
  * @version 1.0.0.0,2017.2.14
  */
 
+@SuppressWarnings("ALL")
 @Repository("operationInterfaceDao")
 public class OperationInterfaceDaoImpl extends BaseDaoImpl<OperationInterface> implements OperationInterfaceDao {
 
@@ -22,6 +23,12 @@ public class OperationInterfaceDaoImpl extends BaseDaoImpl<OperationInterface> i
 	public List<OperationInterface> listByRoleId(Integer roleId) {
 		String hql = "select o from OperationInterface o join o.roles r where r.roleId=:roleId";
 		return getSession().createQuery(hql).setInteger("roleId", roleId).list();
+	}
+
+	@Override
+	public List<OperationInterface> listByPageName(String pageName) {
+		String hql = "select o from OperationInterface o where o.pageName=:pageName";
+		return getSession().createQuery(hql).setString("pageName", pageName).list();
 	}
 
 }

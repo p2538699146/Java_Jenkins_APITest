@@ -99,6 +99,13 @@
     $(document).ready(function(){   	
     	getUserInfo();
 
+    	//获取权限列表
+        $.get(REQUEST_URL.ROLE.GET_USER_PERMISSION_LIST, function (json) {
+            if (json.returnCode == RETURN_CODE.SUCCESS) {
+                parent.currentUserPermissionList = json.data;
+            }
+        });
+
     	//检查版本
         $.get(REQUEST_URL.GLOBAL_SETTING.CHECK_SYSTEM_VERSION, function(json){
             if (json.returnCode == 0) {

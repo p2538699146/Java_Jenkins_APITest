@@ -29,8 +29,12 @@ public class OperationInterfaceServiceImpl extends BaseServiceImpl<OperationInte
 
 	@Override
 	public List<OperationInterface> listByRoleId(Integer roleId) {
-		
 		return operationInterfaceDao.listByRoleId(roleId);
+	}
+
+	@Override
+	public List<OperationInterface> listByPageName(String pageName) {
+		return operationInterfaceDao.listByPageName(pageName);
 	}
 
 }

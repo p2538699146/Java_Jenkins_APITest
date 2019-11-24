@@ -19,6 +19,13 @@ public interface OperationInterfaceService extends BaseService<OperationInterfac
 	 * @return
 	 */
 	List<OperationInterface> listByRoleId(Integer roleId);
-	
 
+	/**
+	 *  获取指定页面上的权限
+	 * @author xuwangcheng
+	 * @date 2019/11/24 18:56
+	 * @param pageName pageName
+	 * @return {@link List}
+	 */
+	List<OperationInterface> listByPageName(String pageName);
 }

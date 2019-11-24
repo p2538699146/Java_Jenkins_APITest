@@ -29,6 +29,12 @@
         <property name="opType" type="java.lang.String">
             <column name="op_type" length="1" />
         </property>
+        <property name="permissionMark" type="java.lang.String">
+            <column name="permission_mark" length="255" />
+        </property>
+        <property name="pageName" type="java.lang.String">
+            <column name="page_name" length="255" />
+        </property>
         <many-to-one name="oi" class="yi.master.business.system.bean.OperationInterface" lazy="proxy">
             <column name="parent_op_id" />
         </many-to-one>

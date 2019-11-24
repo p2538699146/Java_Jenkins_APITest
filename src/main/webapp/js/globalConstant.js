@@ -4,6 +4,8 @@ var RETURN_CODE = {
     SUCCESS: 0,
     NO_LOGIN: 7
 }
+//超级管理员用户
+var SUPER_ADMIN_USER_ID = 1;
 
 //请求路径
 var REQUEST_URL = {
@@ -167,7 +169,8 @@ var REQUEST_URL = {
         EDIT:"op-edit",
         LIST: "op-listOp",
         GET_NODE_TREE: "op-getNodeTree",
-        LIST_ALL: "op-listAll"
+        LIST_ALL: "op-listAll",
+        LIST_BY_PAGE_NAME: "op-listByPageName"
     },
     //查询数据源
     QUERY_DB: {
@@ -196,7 +199,8 @@ var REQUEST_URL = {
         GET_NODES_MENU: "role-getMenuNodes",
         UPDATE_POWER: "role-updateRolePower",
         UPDATE_MENU: "role-updateRoleMenu",
-        LIST_ALL: "role-listAll"
+        LIST_ALL: "role-listAll",
+        GET_USER_PERMISSION_LIST: "role-getUserPermissionList"
     },
     //用户
     USER: {

@@ -1,0 +1,2 @@
+ALTER TABLE `at_operation_interface` ADD COLUMN `permission_mark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'jquery选择器标识' AFTER `parent_op_id`;
+ALTER TABLE `at_operation_interface` ADD COLUMN `page_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '所属页面' AFTER `permission_mark`;
