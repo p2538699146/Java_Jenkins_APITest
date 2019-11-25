@@ -1,9 +1,9 @@
 package yi.master.business.advanced.service;
 
-import java.util.List;
-
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.base.service.BaseService;
+
+import java.util.List;
 
 public interface InterfaceMockService extends BaseService<InterfaceMock> {
 	/**
@@ -42,4 +42,13 @@ public interface InterfaceMockService extends BaseService<InterfaceMock> {
      * @return
      */
     void updateCallCount(Integer mockId);
+
+    /**
+     * 场景转换为Mock
+     * @author xuwangcheng
+     * @date 2019/11/25 18:34
+     * @param sceneId sceneId
+     * @return {@link boolean}
+     */
+    boolean parseSceneToMock (Integer sceneId);
 }

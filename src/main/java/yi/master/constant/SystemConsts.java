@@ -149,9 +149,6 @@ public interface SystemConsts {
 	 * sessionMap中登录用户key值
 	 */
 	String SESSION_ATTRIBUTE_LOGIN_USER = "user";
-
-	//ApplicationMap中指定属性名
-	String APPLICATION_ATTRIBUTE_OPERATION_INTERFACE = "ops";
 	
 	//SessionMap中指定属性名
 	String SESSION_ATTRIBUTE_VERIFY_CODE = "verifyCode";

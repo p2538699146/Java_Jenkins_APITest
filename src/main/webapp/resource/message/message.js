@@ -284,7 +284,7 @@ var columnsSetting = [
               		    {
                             "data":null,
                             "render":function(data, type, full, meta){
-                              var context = [{
+                                var context = [{
 	                  	    		title:"报文编辑",
 	                  	    		markClass:"object-edit",
 	                  	    		iconFont:"&#xe6df;"
@@ -293,6 +293,7 @@ var columnsSetting = [
 	                  	    		markClass:"object-del",
 	                  	    		iconFont:"&#xe6e2;"
                   	    		}];
+
                             	return btnIconTemplate(context);
                             }}
               		    ];
