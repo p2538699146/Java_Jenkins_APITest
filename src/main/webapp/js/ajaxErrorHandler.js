@@ -14,7 +14,7 @@ $.ajaxSetup({
 
                 break;
             default:
-                top.layer.alert("AJAX调用失败", {icon:5});
+                break;
         }
     }
 });
