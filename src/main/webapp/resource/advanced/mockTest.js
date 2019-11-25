@@ -1,99 +1,100 @@
 var templateParams = {
-		tableTheads:["名称", "mock地址", "协议", "入参验证", "出参设定", "已请求次数", "当前状态", "创建时间", "创建用户", "备注","操作"],
-		btnTools:[{
-			type:"primary",
-			size:"M",
-			id:"add-object",
-			iconFont:"&#xe600;",
-			name:"添加Mock接口"
-		},{
-			type:"danger",
-			size:"M",
-			id:"batch-op",
-			iconFont:"&#xe6bf;",
-			name:"批量操作"
-		}],
-		formControls:[{
-					edit:true,
-					label:"ID",  	
-					objText:"mockIdText",
-					input:[{	
-						hidden:true,
-						name:"mockId"
-						}]
-					},
-					{
-						required:true,
-						label:"名称",  
-						input:[{	
-							name:"mockName"
-							}]					
-					},
-					{
-						required:true,
-						label:"协议",  
-						select:[{	
-							name:"protocolType",
-							option:function(){
-							    let arr = [];
-							    $.each(MESSAGE_MOCK_TYPE, function(i, n){
-							        arr.push({
-                                        value:n,
-                                        text: i
-                                    });
-                                });
-                                return arr;
-                            }()
-							}]					
-					},
-					{
-						label:"mock路径",  
-						input:[{	
-							name:"mockUrl",
-							placeholder:"只在协议为HTTP时有效,请以斜杠/起始"
-							}]					
-					},				
-					{
-						label:"当前状态",  			
-						select:[{	
-							name:"status",
-							option:[{
-								value:"0",
-								text:"启用"
-								},
-								{
-									value:"1",
-									text:"禁用"
-								}]
-							}]				
-					 },
-					 {
-						 name:"createTime",
-						 value:new Date().Format("yyyy-MM-dd hh:mm:ss")
-						
-					 },
-					 {
-						 name:"user.userId"
-											
-					 },
-					 {
-						 name:"callCount",
-						 value:"0"
-					 },
-					 {
-						 name:"requestValidate"
-					 },
-					 {
-						 name:"responseMock"
-					 },
-					 {
-						label:"备注",  			
-						textarea:[{
-							name:"mark"
-						}]
-					},
-				
-]};
+    tableTheads: ["名称", "mock地址", "协议", "入参验证", "出参设定", "已请求次数", "当前状态", "创建时间", "创建用户", "备注", "操作"],
+    btnTools: [{
+        type: "primary",
+        size: "M",
+        id: "add-object",
+        iconFont: "&#xe600;",
+        name: "添加Mock接口"
+    }, {
+        type: "danger",
+        size: "M",
+        id: "batch-op",
+        iconFont: "&#xe6bf;",
+        name: "批量操作"
+    }],
+    formControls: [{
+        edit: true,
+        label: "ID",
+        objText: "mockIdText",
+        input: [{
+            hidden: true,
+            name: "mockId"
+        }]
+    },
+        {
+            required: true,
+            label: "名称",
+            input: [{
+                name: "mockName"
+            }]
+        },
+        {
+            required: true,
+            label: "协议",
+            select: [{
+                name: "protocolType",
+                option: function () {
+                    let arr = [];
+                    $.each(MESSAGE_MOCK_TYPE, function (i, n) {
+                        arr.push({
+                            value: n,
+                            text: i
+                        });
+                    });
+                    return arr;
+                }()
+            }]
+        },
+        {
+            label: "mock路径",
+            input: [{
+                name: "mockUrl",
+                placeholder: "只在协议为HTTP/WebSocket时有效,请以斜杠/起始"
+            }]
+        },
+        {
+            label: "当前状态",
+            select: [{
+                name: "status",
+                option: [{
+                    value: "0",
+                    text: "启用"
+                },
+                    {
+                        value: "1",
+                        text: "禁用"
+                    }]
+            }]
+        },
+        {
+            name: "createTime",
+            value: new Date().Format("yyyy-MM-dd hh:mm:ss")
+
+        },
+        {
+            name: "user.userId"
+
+        },
+        {
+            name: "callCount",
+            value: "0"
+        },
+        {
+            name: "requestValidate"
+        },
+        {
+            name: "responseMock"
+        },
+        {
+            label: "备注",
+            textarea: [{
+                name: "mark"
+            }]
+        },
+
+    ]
+};
 
 var columnsSetting = [
               {

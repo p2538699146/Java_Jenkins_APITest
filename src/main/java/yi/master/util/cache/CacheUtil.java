@@ -58,6 +58,7 @@ public class CacheUtil {
 	 * 系统接口
 	 */
 	private static List<OperationInterface> systemInterfaces = new ArrayList<>();
+
 	
 	
 	public static void setQueryDBMap(Map<String, DataDB> queryDBMap) {

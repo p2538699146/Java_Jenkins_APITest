@@ -9,6 +9,9 @@ var SUPER_ADMIN_USER_ID = 1;
 
 //请求路径
 var REQUEST_URL = {
+    WEB_SOCKET: {
+      PUSH_MAIL_NUM: "/push/mail",
+    },
     //登陆相关
     LOGIN: {
         LOGOUT: "user-logout",
@@ -618,4 +621,25 @@ var WEB_STEP_PARAMETER = {
             "validateData":"<span class='label label-danger radius'>不需要</span>"
         }
     }
+}
+
+
+function createWebSocket (path) {
+    if (top.homeUrl == null || top.homeUrl == '') {
+        return null;
+    }
+    let url = (top.homeUrl).replace('https', 'ws').replace('http', 'ws');
+    let ws;
+    if ('WebSocket' in window){
+        ws = new WebSocket(url + path);
+    }
+    else if ('MozWebSocket' in window){
+        ws = new MozWebSocket(url + path);
+    }
+    else{
+        console.error("该浏览器不支持websocket");
+        return null;
+    }
+
+    return ws;
 }

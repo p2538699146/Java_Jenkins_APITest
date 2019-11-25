@@ -1,19 +1,8 @@
 package yi.master.listener;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.advanced.service.InterfaceMockService;
 import yi.master.business.log.LogRecordStorageTimeTask;
@@ -25,10 +14,17 @@ import yi.master.business.testconfig.bean.DataDB;
 import yi.master.business.testconfig.service.DataDBService;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.test.mock.MockServer;
-import yi.master.coretest.message.test.mock.MockSocketServer;
 import yi.master.coretest.task.JobManager;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.cache.CacheUtil;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
 
 
 /**

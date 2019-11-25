@@ -67,11 +67,15 @@ var columnsSetting = [
 var eventList = {
 		"#batch-del-object":function(){
 			var checkboxList = $(".selectMail:checked");
-			batchDelObjs(checkboxList, REQUEST_URL.MAIL.GET);
+			batchDelObjs(checkboxList, REQUEST_URL.MAIL.GET, null, null, function() {
+                (top['welcome']).getMailNum();
+            });
 		},
 		"#batch-setting-read":function(){
 			var checkboxList = $(".selectMail:checked");
-			batchOp (checkboxList, REQUEST_URL.MAIL.CHANGE_STATUS, "处理", null, "mailId", {statusName:"readStatus", status:"0"})
+			batchOp(checkboxList, REQUEST_URL.MAIL.CHANGE_STATUS, "处理", null, "mailId", {statusName:"readStatus", status:"0"}, function() {
+                (top['welcome']).getMailNum();
+            });
 		},
 		".object-del":function(){
 			var data = table.row( $(this).parents('tr') ).data();

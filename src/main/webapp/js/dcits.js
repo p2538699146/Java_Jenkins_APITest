@@ -409,7 +409,7 @@ var publish = {
  */
 function controlButtonShowByPermission (domObj) {
 	//跳过超级管理员用户
-	if (parent.$("#user_id").val() == SUPER_ADMIN_USER_ID) {
+	if (top.userId == SUPER_ADMIN_USER_ID) {
 		return;
 	}
 	if (thisPagePermissionList == null) {

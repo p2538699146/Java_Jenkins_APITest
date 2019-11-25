@@ -1,26 +1,17 @@
 package yi.master.business.user.action;
 
-import java.io.File;
-import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.List;
-
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.LineCaptcha;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
-import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.LineCaptcha;
-import cn.hutool.core.lang.UUID;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.user.bean.User;
 import yi.master.business.user.enums.UserStatus;
 import yi.master.business.user.service.UserService;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
@@ -28,6 +19,11 @@ import yi.master.util.FrameworkUtil;
 import yi.master.util.MD5Util;
 import yi.master.util.ParameterMap;
 import yi.master.util.PracticalUtils;
+import yi.master.util.cache.CacheUtil;
+
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -108,6 +104,7 @@ public class UserAction extends BaseAction<User>{
 		setData(new ParameterMap().put("user", model)
 				.put("lastLoginTime", PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, model.getLastLoginTime())));
 
+
 		//将用户信息放入session中
 		FrameworkUtil.getSessionMap().put("user", model);
 		FrameworkUtil.getSessionMap().put("lastLoginTime", PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, model.getLastLoginTime()));
@@ -179,7 +176,8 @@ public class UserAction extends BaseAction<User>{
 		}
 
 		setData(new ParameterMap().put("user", user)
-				.put("lastLoginTime", FrameworkUtil.getSessionMap().get("lastLoginTime")));
+				.put("lastLoginTime", FrameworkUtil.getSessionMap().get("lastLoginTime"))
+                .put("homeUrl", CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_HOME)));
 
 		FrameworkUtil.getSessionMap().put("user", user);
 

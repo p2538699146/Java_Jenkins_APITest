@@ -1,41 +1,16 @@
 package yi.master.coretest.message.test;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.regex.Pattern;
-
 import cn.hutool.core.util.NumberUtil;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import net.sf.json.JSONObject;
-import yi.master.business.message.bean.ComplexScene;
-import yi.master.business.message.bean.InterfaceInfo;
-import yi.master.business.message.bean.Message;
-import yi.master.business.message.bean.MessageScene;
-import yi.master.business.message.bean.TestData;
-import yi.master.business.message.bean.TestReport;
-import yi.master.business.message.bean.TestResult;
-import yi.master.business.message.bean.TestSet;
+import yi.master.business.message.bean.*;
 import yi.master.business.message.enums.ComplexSceneSuccessFlag;
 import yi.master.business.message.enums.ComplexSceneTestClientType;
-import yi.master.business.message.service.ComplexSceneService;
-import yi.master.business.message.service.MessageSceneService;
-import yi.master.business.message.service.TestDataService;
-import yi.master.business.message.service.TestReportService;
-import yi.master.business.message.service.TestResultService;
-import yi.master.business.message.service.TestSetService;
+import yi.master.business.message.service.*;
 import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.business.testconfig.enums.TestRunType;
@@ -43,18 +18,19 @@ import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.testconfig.service.TestConfigService;
 import yi.master.business.user.bean.User;
-import yi.master.business.user.service.UserService;
 import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.process.MessageProcess;
-import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.coretest.message.protocol.TestClient;
-import yi.master.exception.AppErrorCode;
-import yi.master.exception.YiException;
+import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
+
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.regex.Pattern;
 
 
 
@@ -531,12 +507,13 @@ public class MessageAutoTest {
 							//组合场景
 							if (testSceneT.getComplexFlag()) {
 								singleTestComplexScene(testSceneT, report);
+								//单场景
 							} else {
 								TestResult result = singleTest(testSceneT, null);
 								result.setTestReport(report);
 								testResultService.save(result);
 							}
-							
+
 							synchronized (lock) {
 								count[0] += testSceneT.getTestCount();
 								//判断是否完成
