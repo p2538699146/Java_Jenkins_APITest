@@ -270,7 +270,8 @@ var REQUEST_URL = {
         UPDATE_STATUS: "mock-updateStatus",
         UPDATE_SETTING: "mock-updateSetting",
         PARSE_MESSAGE_TO_CONFIG: "mock-parseMessageToConfig",
-        PARSE_MESSAGE_TO_NODES: "mock-parseMessageToNodes"
+        PARSE_MESSAGE_TO_NODES: "mock-parseMessageToNodes",
+        PARSE_SCENE_TO_MOCK_INFO: "mock-parseSceneToMockInfo"
     },
     //性能测试
     PERFORMANCE_TEST: {

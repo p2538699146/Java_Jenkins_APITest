@@ -366,9 +366,21 @@ var eventList = {
 			});
 		},		
 		"#add-object":function(){
-			publish.renderParams.editPage.modeFlag = 0;					
-			layer_show("添加Mock接口", editHtml, editPageWidth, editPageHeight.add, 1);
-			publish.init();			
+            layer.confirm(
+                '请选择你需要进行的批量操作:',
+                {
+                    title:'添加Mock接口',
+                    btn:['从场景导入','手动添加'],
+                    shadeClose:true,
+                },function(index){
+                    layer.close(index);
+                    layer_show("选择需要Mock的场景", "chooseMessageScene.html?callbackFun=chooseScene&notMultiple=true", null, null, 2);
+                },function(index){
+                    layer.close(index);
+                    publish.renderParams.editPage.modeFlag = 0;
+                    layer_show("添加Mock接口", editHtml, editPageWidth, editPageHeight.add, 1);
+                    publish.init();
+                });
 		},
 		"#batch-op":function(){
 			layer.confirm(
@@ -460,3 +472,34 @@ $(function(){
 	publish.renderParams = $.extend(true,publish.renderParams,mySetting);
 	publish.init();
 });
+
+
+
+function chooseScene (obj) {
+    if (obj == null) {
+        return false;
+    }
+
+    if (Object.prototype.toString.call(obj) === '[object Array]' ) {//可能是多选的数组
+        layer.alert('暂时不能使用多选功能,请选择单个场景!', {title:"提示", icon:5});
+        return false;
+    }
+
+    if (MESSAGE_MOCK_TYPE[obj.protocolType] == null) {
+    	layer.alert('目前只支持HTTP/Socket/WebSocket类型的接口MOCK，请重新选择!');
+    	return false;
+	}
+
+	loading(true, '正在添加...');
+	$.get(REQUEST_URL.INTERFACE_MOCK.PARSE_SCENE_TO_MOCK_INFO, {messageSceneId: obj.messageSceneId}, function(json){
+		loading(false);
+		if (json.returnCode == RETURN_CODE.SUCCESS) {
+			layer.msg('添加成功!', {icon: 1, time: 1500})
+			refreshTable();
+		} else {
+			layer.alert(json.msg, {icon:5});
+		}
+	});
+
+
+}

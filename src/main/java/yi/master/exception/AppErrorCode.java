@@ -69,6 +69,13 @@ public enum AppErrorCode {
     //测试报告
     REPORT_INFO_NOT_EXIST(350001, "测试报告信息不存在"),
     REPORT_TEST_NO_DATA(350002, "该项测试还未完成或者没有任何测试结果"),
+
+
+    //高级测试相关
+    MOCK_PROTOCOL_NOT_SUPPORT(360001, "不支持该协议接口的Mock"),
+
+    //场景相关
+    SCENE_INFO_NOT_EXIST(370001, "测试场景不存在")
     ;
 
     private Integer code;

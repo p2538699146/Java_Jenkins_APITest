@@ -460,9 +460,11 @@ function controlButtonShowByPermission (domObj) {
 
 //设置jQuery Ajax全局的参数  
 $.ajaxSetup({
-    error: function (jqXHR, textStatus, errorThrown) {  
+    error: function (jqXHR, textStatus, errorThrown) {
+    	//关闭所有弹窗/loading等
     	layer.closeAll('dialog');
     	$(".page-container").spinModal(false);
+        loading(false);
         switch (jqXHR.status) {  
             case(500):  
                 layer.alert("服务器系统内部错误", {icon:5});  

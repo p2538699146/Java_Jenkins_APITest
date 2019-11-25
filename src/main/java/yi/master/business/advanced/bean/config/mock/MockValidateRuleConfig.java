@@ -1,13 +1,17 @@
 package yi.master.business.advanced.bean.config.mock;
 
-import java.io.Serializable;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
-
 import yi.master.business.message.bean.Parameter;
+import yi.master.constant.MessageKeys;
+import yi.master.coretest.message.parse.MessageParse;
 import yi.master.util.PracticalUtils;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class MockValidateRuleConfig implements Serializable {
 	/**
@@ -78,6 +82,39 @@ public class MockValidateRuleConfig implements Serializable {
 	}
 	public MockValidateRuleConfig() {
 		super();
+	}
+
+
+	/**
+	 *  根据报文解析验证参数
+	 * @author xuwangcheng
+	 * @date 2019/11/25 20:29
+	 * @param msg msg
+	 * @param msgType msgType
+	 * @return {@link List}
+	 */
+	public static List<MockValidateRuleConfig> parseValidateRuleList (String msg, String msgType) {
+		List<MockValidateRuleConfig> rules = new ArrayList<>();
+		if (StringUtils.isBlank(msgType)) {
+			msgType = MessageParse.judgeType(msg);
+		}
+
+		MessageParse parseUtil = MessageParse.getParseInstance(msgType);
+		if (parseUtil != null && StringUtils.isNotBlank(msg)) {
+			Set<Parameter> parameters = parseUtil.importMessageToParameter(msg, null);
+			for (Parameter param:parameters) {
+				if (MessageKeys.MessageParameterType.isStringOrNumberType(param.getType())) {
+					MockValidateRuleConfig rule = new MockValidateRuleConfig();
+					rule.setName(param.getParameterIdentify());
+					rule.setPath(param.getPath().replaceAll(MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH + "\\.*", ""));
+					rule.setType(param.getType());
+					rule.setValidateValue(param.getDefaultValue());
+					rules.add(rule);
+				}
+			}
+		}
+
+		return rules;
 	}
 	
 	/**

@@ -44,7 +44,7 @@ public interface InterfaceMockService extends BaseService<InterfaceMock> {
     void updateCallCount(Integer mockId);
 
     /**
-     * 场景转换为Mock
+     * 接口场景转换为Mock规则
      * @author xuwangcheng
      * @date 2019/11/25 18:34
      * @param sceneId sceneId
