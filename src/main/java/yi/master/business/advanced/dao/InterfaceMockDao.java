@@ -1,17 +1,18 @@
 package yi.master.business.advanced.dao;
 
-import java.util.List;
-
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.base.dao.BaseDao;
+
+import java.util.List;
 
 public interface InterfaceMockDao extends BaseDao<InterfaceMock>{
 	/**
 	 * 根据mockUrl查找指定的mock信息
 	 * @param mockUrl
+     * @param protocolType
 	 * @return
 	 */
-	InterfaceMock findByMockUrl(String mockUrl);
+	InterfaceMock findByMockUrl(String mockUrl, String protocolType);
 	/**
 	 * 更新状态
 	 * @param mockId

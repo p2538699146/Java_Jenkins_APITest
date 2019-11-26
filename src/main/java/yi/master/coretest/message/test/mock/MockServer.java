@@ -12,6 +12,7 @@ import yi.master.business.advanced.service.InterfaceMockService;
 import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 
 import java.io.IOException;
@@ -179,6 +180,23 @@ public abstract class MockServer {
         }
         return flag;
     }
+
+    /**
+     * 获取空闲可使用端口
+     * @author xuwangcheng
+     * @date 2019/11/26 9:40
+     * @param
+     * @return {@link int}
+     */
+    protected int getUnUsePort () {
+        int randomPort = PracticalUtils.getRandomNum(65535, 1024);
+        while (isLocalPortUsing(randomPort)) {
+            randomPort = PracticalUtils.getRandomNum(65535, 1024);
+        }
+
+        return randomPort;
+    }
+
     /***
      * 测试主机Host的port端口是否被使用
      * @param host
@@ -188,14 +206,22 @@ public abstract class MockServer {
     private boolean isPortUsing(String host, int port) throws UnknownHostException {
         boolean flag = false;
         InetAddress Address = InetAddress.getByName(host);
+        Socket socket = null;
         try {
             //建立一个Socket连接
-            Socket socket = new Socket(Address, port);
-            if (socket != null) {
-                socket.close();
-            }
+            socket = new Socket(Address, port);
             flag = true;
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            logger.error("IOException", e);
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    logger.error("IOException", e);
+                }
+            }
+        }
         return flag;
     }
 

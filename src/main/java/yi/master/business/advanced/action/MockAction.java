@@ -1,28 +1,27 @@
 package yi.master.business.advanced.action;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Reader;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.advanced.bean.config.mock.MockRequestValidateConfig;
 import yi.master.business.advanced.bean.config.mock.MockResponseConfig;
 import yi.master.business.advanced.service.InterfaceMockService;
+import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
-import com.opensymphony.xwork2.ActionSupport;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
 
 /**
  * 接口mock处理类<br>
@@ -54,7 +53,7 @@ public class MockAction extends ActionSupport {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String homeUrl = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_HOME);
 		String uri = request.getRequestURI().replace(homeUrl.substring(homeUrl.lastIndexOf("/")), "").substring(5);
-		InterfaceMock mock = interfaceMockService.findByMockUrl(uri);
+		InterfaceMock mock = interfaceMockService.findByMockUrl(uri, MessageKeys.ProtocolType.http.name().toUpperCase());
 		
 		MockRequestValidateConfig config = MockRequestValidateConfig.getInstance(mock.getRequestValidate());
 		

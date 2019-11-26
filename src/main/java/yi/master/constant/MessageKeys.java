@@ -143,43 +143,51 @@ public interface MessageKeys {
 		/**
 		 * http测试
 		 */
-		http(HTTPTestClient.getInstance()),
+		http(HTTPTestClient.getInstance(), "HTTP"),
 		/**
 		 * webservice测试
 		 */
-		webservice(WebserviceTestClient.getInstance()),
+		webservice(WebserviceTestClient.getInstance(), "WebService"),
 		/**
 		 * socket测试客
 		 */
-		socket(SocketTestClient.getInstance()),
+		socket(SocketTestClient.getInstance(), "Socket"),
 		/**
 		 * https测试
 		 */
-		https(HTTPTestClient.getInstance()),
+		https(HTTPTestClient.getInstance(), "HTTPS"),
 		/**
 		 * dubbo测试
 		 */
-		dubbo(DubboTestClient.getInstance()),
+		dubbo(DubboTestClient.getInstance(), "Dubbo"),
 		/**
 		 * webSocket测试
 		 */
-		websocket(WebSocketTestClient.getInstance());
+		websocket(WebSocketTestClient.getInstance(), "WebSocket");
 
+        /**
+         * 对应的协议客户端
+         */
 		private TestClient client;
+        /**
+         * 标识符号
+         */
+		private String identify;
 
-		ProtocolType(TestClient client) {
+		ProtocolType(TestClient client, String identify) {
 			this.client = client;
+			this.identify = identify;
 		}
 
 		public TestClient getClient() {
 			return client;
 		}
 
-		public void setClient(TestClient client) {
-			this.client = client;
-		}
+        public String getIdentify() {
+            return identify;
+        }
 
-		public static TestClient getClientByType (String type) {
+        public static TestClient getClientByType (String type) {
 			for (ProtocolType p:values()) {
 				if (p.name().equalsIgnoreCase(type)) {
 					return p.getClient();

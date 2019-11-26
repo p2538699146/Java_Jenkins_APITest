@@ -30,12 +30,7 @@ public class MockWebSocketServer extends MockServer {
 
     @Override
     public void start() {
-        int randomPort = PracticalUtils.getRandomNum(65535, 1024);
-        while (isLocalPortUsing(randomPort)) {
-            randomPort = PracticalUtils.getRandomNum(65535, 1024);
-        }
-
-        webSocketServer = new WebSocketServer(new InetSocketAddress(randomPort)) {
+        webSocketServer = new WebSocketServer(new InetSocketAddress(getUnUsePort())) {
             @Override
             public void onOpen(WebSocket conn, ClientHandshake handshake) {
                 logger.debug(StrUtil.format("WebSocketMockServer {} on Open...", getMockUrl()));

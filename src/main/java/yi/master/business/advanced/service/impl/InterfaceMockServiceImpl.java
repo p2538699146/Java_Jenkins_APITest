@@ -41,9 +41,8 @@ public class InterfaceMockServiceImpl extends BaseServiceImpl<InterfaceMock> imp
 	}
 
 	@Override
-	public InterfaceMock findByMockUrl(String mockUrl) {
-		
-		return interfaceMockDao.findByMockUrl(mockUrl);
+	public InterfaceMock findByMockUrl(String mockUrl, String protocolType) {
+		return interfaceMockDao.findByMockUrl(mockUrl, protocolType);
 	}
 
 	@Override
@@ -89,6 +88,7 @@ public class InterfaceMockServiceImpl extends BaseServiceImpl<InterfaceMock> imp
         	throw new YiException(AppErrorCode.INTERFACE_INFO_NOT_EXIST);
 		}
 
+		//http/socket/websocket才支持场景转mock
 		boolean flag = !MessageKeys.ProtocolType.http.name().equalsIgnoreCase(interfaceInfo.getInterfaceProtocol())
 				&& !MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(interfaceInfo.getInterfaceProtocol())
 				&& !MessageKeys.ProtocolType.websocket.name().equalsIgnoreCase(interfaceInfo.getInterfaceProtocol());
@@ -103,7 +103,7 @@ public class InterfaceMockServiceImpl extends BaseServiceImpl<InterfaceMock> imp
         mockInfo.setMark("由接口场景自动生成");
 		mockInfo.setMockName(interfaceInfo.getInterfaceName());
 
-		//获取测试地址
+		//获取mockUrl地址，按照优先级获取
 		String requestUrl = "";
 		if (StringUtils.isNotBlank(messageScene.getRequestUrl())) {
 			requestUrl = messageScene.getRequestUrl();
@@ -114,6 +114,14 @@ public class InterfaceMockServiceImpl extends BaseServiceImpl<InterfaceMock> imp
 		if (StringUtils.isBlank(requestUrl)) {
 			requestUrl = interfaceInfo.getRequestUrlReal();
 		}
+
+		//判断url是否重复
+        if (StringUtils.isNotBlank(requestUrl)) {
+            InterfaceMock im = findByMockUrl(requestUrl, interfaceInfo.getInterfaceProtocol());
+            if (im != null) {
+                throw new YiException(AppErrorCode.MOCK_URL_EXIST, requestUrl);
+            }
+        }
 
 		mockInfo.setMockUrl(requestUrl);
 		mockInfo.setProtocolType(interfaceInfo.getInterfaceProtocol());

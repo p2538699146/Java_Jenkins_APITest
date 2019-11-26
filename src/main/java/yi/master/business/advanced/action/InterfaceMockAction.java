@@ -62,6 +62,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	public String updateStatus() {
 		interfaceMockService.updateStatus(model.getMockId(), model.getStatus());
         MockServer.handleMockServer(model.getMockId());
+        setData(interfaceMockService.get(model.getMockId()));
 		return SUCCESS;
 	}
 	
@@ -157,7 +158,12 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	
 	@Override
 	public void checkObjectName() {
-		InterfaceMock mock = interfaceMockService.findByMockUrl(model.getMockUrl());
+	    //为空时不验证
+	    if (StringUtils.isBlank(model.getMockUrl())) {
+            checkNameFlag = "true";
+	        return;
+        }
+		InterfaceMock mock = interfaceMockService.findByMockUrl(model.getMockUrl(), model.getProtocolType());
 		checkNameFlag = (mock != null && !mock.getMockId().equals(model.getMockId())) ? "请求路径重复" : "true";
 		
 		if (model.getMockId() == null) {

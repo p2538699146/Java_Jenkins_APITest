@@ -1,17 +1,9 @@
 package yi.master.business.message.bean;
 // default package
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.json.annotations.JSON;
-
 import yi.master.annotation.FieldNameMapper;
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.advanced.bean.PerformanceTestConfig;
@@ -20,6 +12,13 @@ import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.constant.MessageKeys;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -94,10 +93,10 @@ public class MessageScene implements Serializable, Cloneable {
 	 */
 	private String requestUrl;
 	
-	@FieldNameMapper(fieldPath="size(testDatas)",ifSearch=false)
+	@FieldNameMapper(fieldPath="size(testDatas)", ifSearch=false)
 	private Integer testDataNum = getTestDataNum();
 	
-	@FieldNameMapper(fieldPath="size(rules)",ifSearch=false)
+	@FieldNameMapper(fieldPath="size(rules)", ifSearch=false)
 	private Integer rulesNum;
 	
 	@FieldNameMapper(fieldPath="message.messageName")

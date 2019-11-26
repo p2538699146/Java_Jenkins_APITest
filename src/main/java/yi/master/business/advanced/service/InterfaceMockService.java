@@ -9,9 +9,10 @@ public interface InterfaceMockService extends BaseService<InterfaceMock> {
 	/**
 	 * 根据mockUrl查找指定的mock信息
 	 * @param mockUrl
+     * @param protocolType
 	 * @return
 	 */
-	InterfaceMock findByMockUrl(String mockUrl);
+	InterfaceMock findByMockUrl(String mockUrl, String protocolType);
 	
 	/**
 	 * 更新状态

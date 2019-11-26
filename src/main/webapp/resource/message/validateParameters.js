@@ -424,24 +424,16 @@ var mySetting = {
 			exportExcel:false,
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 7, 8],
+            dtDrawCallback: function() {
+                $('.switch')['bootstrapSwitch']();
+                $('.switch input:checkbox').change(function(){
+                    var flag = $(this).is(':checked');
+                    var validateId = $(this).attr('value');
+                    updateStatus(validateId, flag, this);
+                });
+            },
 			dtOtherSetting:{
-				"serverSide": false,
-				"initComplete":function() {
-					$('.switch')['bootstrapSwitch']();
-	            	$('.switch input:checkbox').change(function(){
-	            		var flag = $(this).is(':checked');
-	            		var validateId = $(this).attr('value');
-	            		updateStatus(validateId, flag, this);
-	            	});
-				}
-			},
-			dtAjaxCallback:function() {
-				$('.switch')['bootstrapSwitch']();
-            	$('.switch input:checkbox').change(function(){
-            		var flag = $(this).is(':checked');
-            		var validateId = $(this).attr('value');
-            		updateStatus(validateId, flag, this);
-            	});
+				"serverSide": false
 			}
 		},
 		templateParams:templateParams		
@@ -480,10 +472,12 @@ function updateStatus(validateId, flag, obj) {
 		status = '0';
 	}
 	$.post(REQUEST_URL.VALIDATE.RULE_UPDATE_STATUS, {validateId:validateId, status:status}, function(json) {
-		if(json.returnCode != 0){
+		if(json.returnCode != RETURN_CODE.SUCCESS){
 			$(obj).click();
 			layer.alert(json.msg, {icon:5});
-		}
+		} else {
+		    layer.msg('操作成功!', {icon: 1, time: 1500});
+        }
 	});
 }
 

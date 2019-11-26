@@ -58,12 +58,11 @@ var templateParams = {
             select: [{
                 name: "status",
                 option: [{
-                    value: "0",
-                    text: "启用"
-                },
-                    {
-                        value: "1",
-                        text: "禁用"
+                    value: "1",
+                    text: "禁用"
+                }, {
+                        value: "0",
+                        text: "启用"
                     }]
             }]
         },
@@ -108,8 +107,13 @@ var columnsSetting = [
 				  
 				  "data":"mockUri",
 				  "className":"ellipsis",
-				  "render":function(data){
-					  return '<a href="' + data + '" target="_blank" title="' + data + '">' + data + '</a>';
+				  "render":function(data, type, full, meta){
+				      if (full.status == '0') {
+                          return '<a href="' + data + '" target="_blank" title="' + data + '">' + data + '</a>';
+                      } else {
+				          return '未启用';
+                      }
+
 				  }  
 			  },
 			  {
@@ -143,25 +147,29 @@ var columnsSetting = [
 			  },			  
 			  {
 				   	"data":"status",
-					"render":function(data) {
-						var option = {
-            		  			"0":{
-            		  				btnStyle:"success",
-            		  				status:"启用"
-            		  				},
-        		  				"1":{
-        		  					btnStyle:"danger",
-        		  					status:"禁用"
-        		  					}
-            		  	};	
-            		  	return labelCreate(data, option);
-			  }},
+					"render":function(data, type, full, meta) {
+						// var option = {
+            		  	// 		"0":{
+            		  	// 			btnStyle:"success",
+            		  	// 			status:"启用"
+            		  	// 			},
+        		  		// 		"1":{
+        		  		// 			btnStyle:"danger",
+        		  		// 			status:"禁用"
+        		  		// 			}
+            		  	// };
+            		  	// return labelCreate(data, option);
+
+                        var checked = '';
+                        if(data == "0") {checked = 'checked';}
+                        return '<div class="switch size-MINI" data-on-label="启用" data-off-label="禁用"><input type="checkbox" ' + checked + ' value="' + full.mockId + '"/></div>';
+                    }},
 			  ellipsisData("createTime"),
 			  ellipsisData("user.realName"),
 			  {
 				    "data":"mark",
 				    "className":"ellipsis",
-				    "render":function(data, type, full, meta ){
+				    "render":function(data, type, full, meta){
 				    	if (data != "" && data != null) {
 			  		    	return '<a href="javascript:;" onclick="showMark(\'' + full.mockName + '-\', \'mark\', this);"><span title="' + data + '">' + data + '</span></a>';
 					    	}
@@ -367,14 +375,15 @@ var eventList = {
 		},		
 		"#add-object":function(){
             layer.confirm(
-                '请选择你需要进行的批量操作:',
+                '请选择新增方式:',
                 {
                     title:'添加Mock接口',
                     btn:['从场景导入','手动添加'],
                     shadeClose:true,
                 },function(index){
                     layer.close(index);
-                    layer_show("选择需要Mock的场景", "chooseMessageScene.html?callbackFun=chooseScene&notMultiple=true", null, null, 2);
+                    layer_show("选择需要Mock的场景"
+                        , "chooseMessageScene.html?callbackFun=chooseScene&notMultiple=true&protocolType=Socket,HTTP,WebSocket", null, null, 2);
                 },function(index){
                     layer.close(index);
                     publish.renderParams.editPage.modeFlag = 0;
@@ -438,7 +447,15 @@ var mySetting = {
 			listUrl:REQUEST_URL.INTERFACE_MOCK.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
-			columnsJson:[0, 5, 6, 12]			
+			columnsJson:[0, 5, 6, 12],
+            dtDrawCallback: function() {
+                $('.switch')['bootstrapSwitch']();
+                $('.switch input:checkbox').change(function(){
+                    var flag = $(this).is(':checked');
+                    var mockId = $(this).attr('value');
+                    updateStatus(mockId, flag, this);
+                });
+            }
 		},
 		editPage:{
 			editUrl:REQUEST_URL.INTERFACE_MOCK.EDIT,
@@ -457,7 +474,10 @@ var mySetting = {
 					        },
 					        mockId:function(){
 					        	return $("#mockId").val();
-					        }
+					        },
+                            protocolType: function() {
+					            return $('#protocolType').val()
+                            }
 					}}
 				},
 				mockName:{
@@ -474,7 +494,11 @@ $(function(){
 });
 
 
-
+/**
+ * 选择测试场景的回调
+ * @param obj
+ * @returns {boolean}
+ */
 function chooseScene (obj) {
     if (obj == null) {
         return false;
@@ -486,7 +510,7 @@ function chooseScene (obj) {
     }
 
     if (MESSAGE_MOCK_TYPE[obj.protocolType] == null) {
-    	layer.alert('目前只支持HTTP/Socket/WebSocket类型的接口MOCK，请重新选择!');
+    	layer.alert('目前只支持HTTP/Socket/WebSocket类型的接口MOCK，请重新选择!', {title:"提示", icon:5});
     	return false;
 	}
 
@@ -500,6 +524,35 @@ function chooseScene (obj) {
 			layer.alert(json.msg, {icon:5});
 		}
 	});
+}
 
+/**
+ * 更新状态
+ * @param mockId
+ * @param flag
+ * @param obj
+ */
+function updateStatus (mockId, flag, obj) {
+    let status = '1';
+    if(flag == true){
+        status = '0';
+    }
+
+    loading(true, '正在处理...');
+    $.post(REQUEST_URL.INTERFACE_MOCK.UPDATE_STATUS, {mockId: mockId, status:status}, function(json) {
+        loading(false);
+        if (json.returnCode == RETURN_CODE.SUCCESS) {
+            let uriObj = $(obj).parents('tr').children('td:eq(3)');
+            if (!flag) {
+                uriObj.text('未启用');
+            } else {
+                uriObj.html('<a href="' + json.data.mockUri + '" target="_blank" title="' + json.data.mockUri + '">' + json.data.mockUri + '</a>');
+            }
+            layer.msg('操作成功!', {icon: 1, time: 1500});
+        } else {
+            layer.alert(json.msg, {title: '提示', icon: 5});
+            $(obj).click();
+        }
+    });
 
 }

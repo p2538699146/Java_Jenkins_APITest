@@ -121,6 +121,7 @@ var publish = {
       * columnsJson:不参与排序的列
       * dtOtherSetting:DT其他的自定义设置
       * dtAjaxCallback:DataTables在每次通过ajax.reload返回之后的回调
+      * dtDrawCallback: DataTables每次重绘之后的回调
       * exportExcel:是否在工具栏添加  导出到excel 的按钮工具  默认为true
       * dblclickEdit:开启双击行打开编辑页面  默认为true
       * 
@@ -219,7 +220,8 @@ var publish = {
     		 beforeInit:function(df) {
         		 df.resolve();
         	 },
-        	 dtAjaxCallback:function() {},      	 
+        	 dtAjaxCallback:function() {},
+             dtDrawCallback:function() {},
         	 tableObj:null,
         	 columnsSetting:{},
         	 columnsJson:[],
@@ -360,7 +362,7 @@ var publish = {
     	 if (p.userDefaultRender == true) {
     		 if (p.renderType == "list") {
     			 var l = p.listPage;
-    			 table = initDT(l.tableObj, l.listUrl, l.columnsSetting, l.columnsJson, l.dtOtherSetting); 
+    			 table = initDT(l.tableObj, l.listUrl, l.columnsSetting, l.columnsJson, l.dtOtherSetting, l.dtDrawCallback);
     			 
     			 /***添加导入excel插件按钮**/
     			 if (l.exportExcel) {
@@ -546,7 +548,7 @@ $.fn.delegates = function(configs) {
  * @param columnsJson  不参与排序的列 jsonArray
  * @returns table 返回对应的DataTable实例
  */
-function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting) {
+function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting, dtDrawCallback) {
 	var data = [];
 	var table = $(tableObj)
 	/*//发送ajax请求时
@@ -573,6 +575,7 @@ function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting)
    //重绘完毕
     .on('draw.dt', function () { //初始化和刷新都会触发
         controlButtonShowByPermission($('.table'));
+        typeof dtDrawCallback === 'function' && dtDrawCallback();
     })
     //初始化完毕
     .on( 'init.dt', function () {  //刷新表格不会触发此事件  只存在一次
