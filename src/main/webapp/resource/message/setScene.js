@@ -189,59 +189,6 @@ var eventList = {
 			} else {					
 				viewRunSettingConfig();	
 			}
-			
-			/*var tip = "<strong><span class=\"c-primary\">【自定义】</span></strong><br>点击<span class=\"c-warning\">'默认'</span>将会恢复为默认配置<br>点击<span class=\"c-warning\">'自定义'</span>修改或者查看当前配置!"
-			var mode = 1;
-			if (currentSetInfo.config == null) {
-				tip = "<strong><span class=\"c-primary\">【默认】</span></strong><br>点击<span class=\"c-warning\">'自定义'</span>将会创建自定义的配置信息<br>点击<span class=\"c-warning\">'默认'</span>返回!";
-				mode = 0;
-			}
-			tip += "<br>点击<span class=\"c-warning\">'自定义模板'</span>选择一个模板并配置为该测试集的运行时设置!";*/
-			
-			/*layer.confirm('当前选择的运行时配置为：' + tip, {icon: 0,title:'提示', btn:['默认', '自定义', '自定义模板'],
-				btn3:function(index) {
-					//选择自定义模板
-					$.post(top.GLOBAL_VARIABLE_LIST_URL, {variableType:"setRuntimeSetting"}, function(json) {
-						if (json.returnCode == 0) {
-							showSelectBox(json.data, "variableId", "variableName", function(variableId, globalVariable, index1) {
-								$.post(top.SET_RUN_SETTING_CONFIG_URL, {setId:currentSetInfo.setId, variableId:variableId}, function(json) {
-									if (json.returnCode == 0) {
-										currentSetInfo.config = json.config;
-										layer.msg('已确定选择！', {icon:1, time:1800});
-										layer.closeAll('page');
-									} else {
-										layer.alert(json.msg, {icon:5});
-									}
-								});																
-							})
-						} else {
-							layer.alert(json.msg, {icon:5});
-						}
-					});
-				}}
-				, function(index) {
-					if (mode == 1) {
-						settingConfig(currentSetInfo.setId, mode, function (json) {
-							currentSetInfo.config = null;
-							layer.close(index);
-							layer.msg("更新成功!", {icon:1, time:1500});
-						});
-					} else {
-						layer.close(index);
-					}										
-				}
-				, function(index) {
-					if (mode == 0) {
-						settingConfig(currentSetInfo.setId, mode, function (json) {
-							currentSetInfo.config = json.config;
-							layer.close(index);
-							viewRunSettingConfig();	
-						});
-					} else {					
-						viewRunSettingConfig();	
-					}
-									
-				});*/
 		},
 		"#update-option":function() {
 			updateTestOptions();
@@ -307,6 +254,43 @@ var eventList = {
 			});
 			
 		},
+        //测试集公共数据
+        "#set-public-data": function() {
+		    let publicData = $("#publicData").val();
+            if (!isJSON(publicData)) {
+                publicData = '{}';
+            }
+            let publicDataObject = JSON.parse(publicData);
+            customDataSettingView({
+                title: '测试集公共变量',
+                remark: '测试集公共变量的使用方式与全局变量相同，例如：${__手机号}，并且在测试集定义的公共变量优先级高于全局变量。',
+                data: publicDataObject,
+                saveCallback: function(d, index) {
+                    $('#publicData').val(JSON.stringify(d));
+                    layer.close(index);
+                }
+            });
+        },
+        //测试集公共头
+        "#set-public-http-header": function() {
+            let publicHeader = $("#publicHeader").val();
+            if (!isJSON(publicHeader)) {
+                publicHeader = '{}';
+            }
+            let publicHeaderObject = JSON.parse(publicHeader);
+            customDataSettingView({
+                title: '测试集公共请求头',
+                data: publicHeaderObject,
+                saveCallback: function(d, index) {
+                    $("#publicHeader").val(JSON.stringify(d));
+                    layer.close(index);
+                }
+            });
+        },
+        //测试集公共验证规则
+        "#set-public-validate-rule": function() {
+
+        },
 		".op-scene":function() {//单条删除或者添加
 			var tip = '删除';
 			
@@ -399,6 +383,8 @@ function resetOptions () {
 		$("#customRequestUrl").val(currentSetInfo.config.customRequestUrl);
 		$("#retryCount").val(currentSetInfo.config.retryCount);
 		$("#systems").val(currentSetInfo.config.systems);
+        $("#publicData").val(currentSetInfo.config.publicData);
+        $("#publicHeader").val(currentSetInfo.config.publicHeader);
 		appendSystem(currentSetInfo.config.businessSystems);
 	}
 }

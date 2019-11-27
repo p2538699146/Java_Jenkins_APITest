@@ -1132,20 +1132,40 @@ function layer_show (title, url, w, h, type, success, cancel, end, other) {
 	if (h == null || h == '' || h >= maxHeight) {
 		h= (maxHeight * 0.9) ;
 	};
+
+    if (w == null || w == '') {
+        w =	'86%';
+    } else {
+        if (w > maxWidth) {
+            w =	'86%';
+        } else {
+            w = w + 'px';
+        }
+    };
+    if (h == null || h == '') {
+        h= '90%' ;
+    } else {
+        if (h >= maxHeight) {
+            h= '90%' ;
+        } else {
+            h = parseInt((h / maxHeight) * 100) + '%';
+        }
+    };
+
 	if (type == null || type == '') {
 		type = 2;
 	}
 	index = layer.open($.extend(true, {
 		type: type,
-		area: [w + 'px', h + 'px'],
+		area: [w, h],
 		fix: false, //不固定
-		maxmin: false,
-		shade:0.4,
-		anim:5,
-		shadeClose:true,
+		maxmin: false,//禁止最大化最小化
+		shade:0.4,//遮罩
+		anim:5,//动画效果
+		shadeClose:true,//可以通过点击遮罩关闭
 		title: title,
 		content: url,
-		offset:'30px',
+		offset:'30px',//距上边距
 		success:function(layero, index){
 			$(layero).find('#layerIndex').val(index);
 			success && success(layero, index);
@@ -1747,6 +1767,73 @@ function layerMultipleChoose (options) {
 
 
 /**
+ * 自定义打开一个数据配置的页面
+ * @param options
+ */
+function customDataSettingView (options) {
+    let defaultOptions = {
+        title: '配置数据',
+        remark: null,
+        layerWidth:580,
+        layerHeight:450,
+        data: {},
+        saveCallback:function(data, layerIndex) {
+            layer.close(layerIndex);
+        }
+    };
+    if (typeof options == 'object') {
+        $.extend(true, defaultOptions, options);
+    }
+
+    layer_show(defaultOptions.title, templates['custom-data-setting-view']({remark: defaultOptions.remark, data: defaultOptions.data, title: defaultOptions.title})
+        , defaultOptions.layerWidth, defaultOptions.layerHeight, 1, function(layero, index){
+            //新增一堆key-value
+            $(layero).find('#custom-data-setting-add-variable').click(function() {
+                $(layero).find("#custom-data-setting-variables").append('<div class="row cl"><div class="form-label col-xs-5 col-sm-5">'
+                    + '<input type="text" class="input-text radius"></div>'
+                    + '<div class="formControls col-xs-5 col-sm-5"><input type="text" class="input-text radius"></div>'
+                    + '<div class="formControls col-xs-2 col-sm-2"><a class="btn btn-default radius">'
+                    + '<i class="Hui-iconfont">&#xe60b;</i></a></div></div>');
+            });
+
+            //删除全部数据
+            $(layero).find('#custom-data-setting-clear-all-varibale').click(function() {
+                layer.confirm('确认删除下列全部的数据吗？', {title:'警告'}, function(i){
+                    $("#custom-data-setting-variables").html('');
+                    layer.msg('全部删除成功!', {icon:1, time:1600});
+                    layer.close(i);
+                });
+            });
+
+            //删除一项数据
+            $(layero).delegate('#custom-data-setting-variables a', 'click', function() {
+                let that = this;
+                layer.confirm('确认删除该项数据吗?', {title:'警告'}, function(i) {
+                    $(that).parent('.formControls').parent('.row').remove();
+                    layer.msg('删除成功!', {icon:1, time:1600});
+                    layer.close(i);
+                });
+            });
+
+            //点击保存数据
+            $(layero).find('#update-custom-data').click(function() {
+                let configObj = {};
+                $("#custom-data-setting-variables").children('.row').each(function(i){
+                    let key = $(this).find('input').eq(0).val();
+                    let value = $(this).find('input').eq(1).val();
+                    if (strIsNotEmpty(key) && strIsNotEmpty(value)) {
+                        configObj[key] = value;
+                    }
+                });
+
+                typeof defaultOptions.saveCallback == 'function' && defaultOptions.saveCallback(configObj, index);
+            });
+    });
+
+
+}
+
+/**
  * 从form控件保存指定的值
  */
 function saveFormValue (objct) {
@@ -1991,6 +2078,7 @@ function isJSON(str) {
         }
     }
     console.log('It is not a string!')
+    return false;
 }
 
 /*********************判断两个json对象是否一样*****************************/
