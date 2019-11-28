@@ -18,6 +18,6 @@ public interface TestConfigDao extends BaseDao<TestConfig> {
 	 * @return
 	 */
 	TestConfig getConfigByUserId(Integer userId);
-	
+
 
 }

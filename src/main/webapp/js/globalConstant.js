@@ -141,7 +141,8 @@ var REQUEST_URL = {
         EDIT:"validate-edit",
         LIST: "validate-getValidates",
         FULL_RULE_GET: "validate-getValidate",
-        RULE_UPDATE_STATUS: "validate-updateValidateStatus"
+        RULE_UPDATE_STATUS: "validate-updateValidateStatus",
+        GET_CONFIG_VALIDATE_RULES: "validate-getConfigValidates",
     },
     //定时任务
     TASK: {

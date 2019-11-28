@@ -59,5 +59,12 @@
         <property name="publicHeader" type="java.lang.String">
             <column name="public_header" length="65535"/>
         </property>
+
+        <set name="rules" cascade="all" lazy="true" inverse="true">
+            <key>
+                <column name="config_id" />
+            </key>
+            <one-to-many class="yi.master.business.message.bean.SceneValidateRule" />
+        </set>
     </class>
 </hibernate-mapping>

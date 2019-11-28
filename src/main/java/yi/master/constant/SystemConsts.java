@@ -12,7 +12,7 @@ public interface SystemConsts {
 	/**
 	 * 当前版本号
 	 */
-	String VERSION = "0.2.1beta";
+	String VERSION = "0.2.2beta";
 	/**
 	 * 完成标志
 	 */

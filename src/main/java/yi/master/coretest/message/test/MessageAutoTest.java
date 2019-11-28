@@ -187,7 +187,7 @@ public class MessageAutoTest {
 		}
 				
 		
-		Map<String,String> map = validateUtil.validate(result.getResponseMessage(), testScene.getRequestMessage(), scene, msg.getMessageType());
+		Map<String,String> map = validateUtil.validate(result.getResponseMessage(), testScene.getRequestMessage(), scene, msg.getMessageType(), testScene.getConfig().getConfigId());
 		
 		//变更数据状态
 		if (MessageValidateResponse.VALIDATE_SUCCESS_FLAG.equals(map.get(MessageValidateResponse.VALIDATE_MAP_STATUS_KEY))) {

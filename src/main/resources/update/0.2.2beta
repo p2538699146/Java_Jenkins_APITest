@@ -80,4 +80,6 @@ DELETE FROM `at_operation_interface` WHERE `op_id` = 82;
 UPDATE at_busi_menu_info SET status='0' WHERE menu_id=27;
 ALTER TABLE `at_test_config` ADD COLUMN `public_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '属于该测试集的公共测试数据，json串存储' AFTER `mail_copy_address`;
 ALTER TABLE `at_test_config` ADD COLUMN `public_header` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '属于该测试集的公共请求头，只对HTTP/HTTPS有效，json串存储' AFTER `public_data`;
-CREATE TABLE `yi`.`at_config_validate_rule`  (`config_id` int(11) NOT NULL,`validate_id` int(11) NOT NULL,PRIMARY KEY (`config_id`, `validate_id`) USING BTREE) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '测试集配置与验证规则关联表' ROW_FORMAT = Dynamic;
+ALTER TABLE `at_scene_validate_rule` ADD COLUMN `config_id` int(11) NULL DEFAULT NULL COMMENT '所属测试配置' AFTER `validate_id`;
+ALTER TABLE `at_scene_validate_rule` ADD INDEX `at_scene_validate_rule_fk_config_id`(`config_id`) USING BTREE;
+ALTER TABLE `at_scene_validate_rule` ADD CONSTRAINT `at_scene_validate_rule_fk_config_id` FOREIGN KEY (`config_id`) REFERENCES `at_test_config` (`config_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;

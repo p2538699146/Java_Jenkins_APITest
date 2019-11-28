@@ -406,11 +406,11 @@ var eventList = {
 					callParameterViewHtml += '<div class="row cl parameter">'
 						+ '<label class="form-label col-xs-4 col-sm-3';
 					if (typeof n == 'object') {
-						callParameterViewHtml += ' add-child-call-parameter" style="cursor: pointer;"';
+						callParameterViewHtml += ' add-child-call-parameter" style="cursor: pointer;">';
 					} else {
-						callParameterViewHtml += '"';
+						callParameterViewHtml += '">';
 					}
-					callParameterViewHtml += '>' + i + '</label><div class="formControls col-xs-8 col-sm-9">';
+					callParameterViewHtml += i + '</label><div class="formControls col-xs-8 col-sm-9">';
 					if (typeof n == 'object') {	
 						if (!$.isEmptyObject(n)) {
 							$.each(n, function(i1, n1) {
@@ -451,7 +451,7 @@ var eventList = {
 		},
 		".add-object":function() {//添加报文
 			publish.renderParams.editPage.modeFlag = 0;					
-			currIndex = layer_show("增加报文", editHtml, editPageWidth, editPageHeight.add, 1);
+			currIndex = layer_show("增加报文", editHtml, editPageWidth, null, 1);
 			publish.init();			
 		},
 		".batch-del-object":function() {//批量删除报文
@@ -467,7 +467,7 @@ var eventList = {
 			messageId = data.messageId;
 			publish.renderParams.editPage.modeFlag = 1;
 			publish.renderParams.editPage.objId = messageId;
-			layer_show("编辑报文信息", editHtml, editPageWidth, editPageHeight.edit, 1);
+			layer_show("编辑报文信息", editHtml, editPageWidth, null, 1);
 			publish.init();	
 		},
 		"#choose-business-system":function () {//选择测试环境
@@ -624,8 +624,8 @@ var mySetting = {
 			}		
 			
 			//编辑页面高度重设
-			editPageHeight.add != null && (editPageHeight.add += 90);
-			editPageHeight.edit != null && (editPageHeight.edit += 10);
+			// editPageHeight.add != null && (editPageHeight.add += 97);
+			// editPageHeight.edit != null && (editPageHeight.edit += 16);
    		 	df.resolve();
    	 	},
 		editPage:{

@@ -266,7 +266,10 @@ var eventList = {
                 remark: '测试集公共变量的使用方式与全局变量相同，例如：${__手机号}，并且在测试集定义的公共变量优先级高于全局变量。',
                 data: publicDataObject,
                 saveCallback: function(d, index) {
-                    $('#publicData').val(JSON.stringify(d));
+                    if (!CompareJsonObj(d, publicDataObject)) {
+                        $('#publicData').val(JSON.stringify(d));
+						//layer.msg('你更新了测试集公共变量，记得点击保存按钮保存变更！', {time: 1700});
+					}
                     layer.close(index);
                 }
             });
@@ -283,14 +286,17 @@ var eventList = {
                 remark: '测试集公共请求头只对HTTP/HTTPS协议类型的接口场景有效，优先级高于测试报文中配置的请求头。',
                 data: publicHeaderObject,
                 saveCallback: function(d, index) {
-                    $("#publicHeader").val(JSON.stringify(d));
+                    if (!CompareJsonObj(d, publicHeaderObject)) {
+                        $("#publicHeader").val(JSON.stringify(d));
+                        //layer.msg('你更新了测试集公共请求头，记得点击保存按钮保存变更！', {time: 1700});
+                    }
                     layer.close(index);
                 }
             });
         },
         //测试集公共验证规则
         "#set-public-validate-rule": function() {
-            layer.msg('暂时不可用，请期待下个版本！', {time: 1600});
+            layer_show(currentSetInfo.setName + '-测试集公共验证规则', 'validateParameters.html?configId=' + currentSetInfo.config.configId, null, null, 2);
         },
 		".op-scene":function() {//单条删除或者添加
 			var tip = '删除';

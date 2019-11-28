@@ -2,10 +2,12 @@ package yi.master.business.testconfig.bean;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.json.annotations.JSON;
+import yi.master.business.message.bean.SceneValidateRule;
 import yi.master.util.PracticalUtils;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -119,6 +121,11 @@ public class TestConfig implements Serializable, Cloneable {
      * 所属测试环境
      */
     private Set<BusinessSystem> businessSystems;
+
+	/**
+	 * 关联的测试配置
+	 */
+	private Set<SceneValidateRule> rules = new HashSet<>();
 	
 	public TestConfig(Integer userId, String requestUrlFlag,
 			Integer connectTimeOut, Integer readTimeOut, String httpMethodFlag,
@@ -237,8 +244,6 @@ public class TestConfig implements Serializable, Cloneable {
 		this.httpMethodFlag = httpMethodFlag;
 	}
 
-	
-
 	public String getCustomRequestUrl() {
 		return customRequestUrl;
 	}
@@ -287,7 +292,6 @@ public class TestConfig implements Serializable, Cloneable {
         this.publicData = publicData;
     }
 
-
     public String getPublicHeader() {
         return publicHeader;
     }
@@ -296,8 +300,16 @@ public class TestConfig implements Serializable, Cloneable {
         this.publicHeader = publicHeader;
     }
 
+	public void setRules(Set<SceneValidateRule> rules) {
+		this.rules = rules;
+	}
 
-    @Override
+	@JSON(serialize=false)
+	public Set<SceneValidateRule> getRules() {
+		return rules;
+	}
+
+	@Override
 	public Object clone() {
 		TestConfig config = null;
 		try {

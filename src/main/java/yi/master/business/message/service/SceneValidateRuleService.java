@@ -1,9 +1,9 @@
 package yi.master.business.message.service;
 
-import java.util.List;
-
 import yi.master.business.base.service.BaseService;
 import yi.master.business.message.bean.SceneValidateRule;
+
+import java.util.List;
 
 public interface SceneValidateRuleService extends BaseService<SceneValidateRule>{
 	
@@ -36,4 +36,13 @@ public interface SceneValidateRuleService extends BaseService<SceneValidateRule>
 	 * @param status
 	 */
 	void updateStatus(Integer validateId, String status);
+
+	/**
+	 *  获取配置下的公共验证规则
+	 * @author xuwangcheng
+	 * @date 2019/11/28 21:46
+	 * @param configId configId
+	 * @return {@link List}
+	 */
+	List<SceneValidateRule> getConfigRules (Integer configId);
 }
