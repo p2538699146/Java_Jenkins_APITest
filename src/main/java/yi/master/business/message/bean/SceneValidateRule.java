@@ -1,11 +1,11 @@
 package yi.master.business.message.bean;
 
-import java.io.Serializable;
-
 import org.apache.struts2.json.annotations.JSON;
-
 import yi.master.annotation.FieldNameMapper;
 import yi.master.annotation.FieldRealSearch;
+import yi.master.business.testconfig.bean.TestConfig;
+
+import java.io.Serializable;
 
 /**
  * 出参验证规则
@@ -22,6 +22,7 @@ public class SceneValidateRule implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer validateId;
 	private MessageScene messageScene;
+	private TestConfig testConfig;
 	
 	/**
 	 * 根据validate_method_flag的值有不同的含义：<br>
@@ -152,8 +153,14 @@ public class SceneValidateRule implements Serializable {
 		this.mark = mark;
 	}
 
+	public void setTestConfig(TestConfig testConfig) {
+		this.testConfig = testConfig;
+	}
 
-
+	@JSON(serialize=false)
+	public TestConfig getTestConfig() {
+		return testConfig;
+	}
 
 	@Override
 	public String toString() {

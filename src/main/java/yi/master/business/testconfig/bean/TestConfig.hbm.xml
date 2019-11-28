@@ -52,6 +52,19 @@
         </property>
         <property name="mailCopyAddress" type="java.lang.String">
             <column name="mail_copy_address" length="2000"/>
-        </property>       
+        </property>
+        <property name="publicData" type="java.lang.String">
+            <column name="public_data" length="65535"/>
+        </property>
+        <property name="publicHeader" type="java.lang.String">
+            <column name="public_header" length="65535"/>
+        </property>
+
+        <set name="rules" cascade="all" lazy="true" inverse="true">
+            <key>
+                <column name="config_id" />
+            </key>
+            <one-to-many class="yi.master.business.message.bean.SceneValidateRule" />
+        </set>
     </class>
 </hibernate-mapping>

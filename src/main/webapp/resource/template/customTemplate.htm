@@ -575,14 +575,14 @@
 				</div>
 	</div>	
 	<div class="row cl">
-		<label class="form-label col-xs-5 col-sm-3"><a style="text-decoration: none;" href="javascript:layer.alert('输入测试集中包含的场景ID(不包括组合场景)，并用逗号分隔，执行时将会优先按照顺序执行这些场景。', {title:'提示', shadeClose:'true'});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>置顶场景：</label>
+		<label class="form-label col-xs-5 col-sm-3"><a style="text-decoration: none;" href="javascript:layer.alert('输入测试集中包含的场景ID(不包括组合场景)，并用逗号分隔，执行时将会优先按照顺序执行这些场景。', {title:'说明', shadeClose:'true', icon: 0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>置顶场景：</label>
 			<div class="formControls col-xs-7 col-sm-9">
 				<input type="text" class="input-text radius" id="topScenes" name="topScenes" value="{{ topScenes }}" placeholder="测试场景id,使用逗号分隔">
 			</div>
 	</div>
 	<input type="hidden" name="systems" id="systems" values="{{systems}}"/>
 	<div class="row cl">
-		<label class="form-label col-xs-5 col-sm-3">可执行测试环境：</label>
+		<label class="form-label col-xs-5 col-sm-3"><a style="text-decoration: none;" href="javascript:layer.alert('如果该处配置了至少一个测试环境，则测试时只会对该测试环境下的接口场景进行测试，否则，测试所有可用的环境。', {title:'说明', shadeClose:'true', icon: 0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>可执行测试环境：</label>
 			<div class="formControls col-xs-7 col-sm-9">
 				<input type="button" class="btn btn-danger radius  size-S" value="选择" id="choose-business-system">
 			</div>
@@ -598,7 +598,17 @@
 			<div class="formControls col-xs-7 col-sm-9">
 				<input type="text" class="input-text radius" id="mailCopyAddress" name="mailCopyAddress" value="{{ mailCopyAddress }}" placeholder="多条请以逗号分隔">
 			</div>
-	</div>		
+	</div>
+    <div class="row cl">
+        <label class="form-label col-xs-5 col-sm-3"><a style="text-decoration: none;" href="javascript:layer.alert('<span style=\'color:red;\'>只对该测试集有效并且只在测试集测试过程中生效：</span>存在同名的测试变量、Header优先使用该处配置。验证规则将会附加到测试集中的每个测试场景中。', {title:'说明', shadeClose:'true', icon: 0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>测试集公共信息：</label>
+        <div class="formControls col-xs-7 col-sm-9">
+            <button class="btn btn-success radius size-MINI" type="button" id="set-public-data">公共变量</button>
+            <input type="hidden" id="publicData", name="publicData" value="{{ publicData }}">
+            <button class="btn btn-success radius size-MINI" type="button" id="set-public-http-header">HTTP头信息</button>
+            <input type="hidden" id="publicHeader", name="publicHeader" value="{{ publicHeader }}">
+            <button class="btn btn-primary radius size-MINI" type="button" id="set-public-validate-rule">验证规则</button>
+        </div>
+    </div>
 	<div class="row cl">
 		<div class="col-xs-7 col-sm-9 col-xs-offset-5 col-sm-offset-3">
 			<button class="btn btn-primary radius" type="button" id="update-option"><i class="Hui-iconfont">&#xe632;</i>保存</button>
@@ -2005,8 +2015,46 @@
 </script>
 
 
-
-
+<!--自定义数据配置视图页面-->
+<script id="custom-data-setting-view" type="text/x-handlebars-template">
+    <article class="page-container" style="padding-top: 6px;">
+        <form action="" method="post" class="form form-horizontal">
+            <div class="row cl">
+                <div class="formControls col-xs-12 col-sm-12">
+                    {{#if remark}}<p style="color:red;">{{ remark }}</p>{{/if}}
+                    <strong>{{title}}:&nbsp;&nbsp;</strong>
+                    <button class="btn btn-primary radius" type="button" id="custom-data-setting-add-variable"><i class="Hui-iconfont">&#xe600;</i> 增加</button>&nbsp;&nbsp;
+                    <button class="btn btn-danger radius" type="button" id="custom-data-setting-clear-all-varibale"><i class="Hui-iconfont">&#xe6e2;</i> 清除所有</button>
+                    <br>
+                    <div id="custom-data-setting-variables">
+                        {{#if data}}
+                        {{#each data}}
+                        <div class="row cl">
+                            <div class="form-label col-xs-5 col-sm-5">
+                                <input type="text" class="input-text radius" value='{{@key}}'>
+                            </div>
+                            <div class="formControls col-xs-5 col-sm-5">
+                                <input type="text" class="input-text radius" value='{{this}}'>
+                            </div>
+                            <div class="formControls col-xs-2 col-sm-2">
+                                <a class="btn btn-default radius"><i class="Hui-iconfont">&#xe60b;</i></a>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="layerIndex"/>
+            <div class="row cl" style="margin-top:18px;">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <button class="btn btn-success radius" type="button" id="update-custom-data"><i class="Hui-iconfont">&#xe632;</i> 保存数据</button>
+                    <button class="btn btn-default radius" type="button" onclick="layer.close($(this).parents('form').find('#layerIndex').val());">&nbsp;&nbsp;关闭&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </article>
+</script>
 
 
 

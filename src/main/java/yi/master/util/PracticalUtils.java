@@ -1,37 +1,8 @@
 package yi.master.util;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-
+import cn.hutool.core.collection.CollUtil;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -39,25 +10,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hyperic.sigar.Sigar;
-
-import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.LineCaptcha;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 import yi.master.business.advanced.bean.config.probe.ProbeConfig;
 import yi.master.business.api.bean.ApiReturnInfo;
-import yi.master.business.message.bean.ComplexSceneConfig;
-import yi.master.business.message.bean.Parameter;
-import yi.master.business.message.bean.TestReport;
-import yi.master.business.message.bean.TestResult;
-import yi.master.business.message.bean.TestSet;
+import yi.master.business.message.bean.*;
 import yi.master.business.message.service.TestResultService;
 import yi.master.business.message.service.TestSetService;
 import yi.master.business.testconfig.bean.BusinessSystem;
 import yi.master.business.testconfig.bean.GlobalVariable;
 import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.testconfig.service.GlobalVariableService;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.protocol.HTTPTestClient;
@@ -65,6 +26,16 @@ import yi.master.coretest.message.protocol.TestClient;
 import yi.master.util.cache.CacheUtil;
 import yi.master.util.jsonlib.JsonDateValueProcessor;
 import yi.master.util.message.JsonUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 常用工具类
@@ -260,7 +231,7 @@ public class PracticalUtils {
 	/**
 	 * 时间格式化
 	 * 
-	 * @param fromat
+	 * @param format
 	 * @param date
 	 * @return
 	 */
@@ -320,7 +291,7 @@ public class PracticalUtils {
 	/**
 	 * 生成静态报告文件<br>
 	 * 2018-01-01报告模板有改动<br>
-	 * 参见 {@link #createReportNew(Map)}
+	 * 参见 {@link #createReportNew}
 	 * @param report
 	 * @param title
 	 *            html标题
@@ -400,7 +371,7 @@ public class PracticalUtils {
 
 	/**
 	 * 生成离线的测试报告<br>
-	 * @param reportObject 包含报告所需的各种信息，同接口getReportDetail返回内容
+	 * @param reportDetails 包含报告所需的各种信息，同接口getReportDetail返回内容
 	 * @return
 	 * @throws Exception 
 	 */
@@ -644,7 +615,9 @@ public class PracticalUtils {
 	 */
 	public static String replaceGlobalVariable(String msg,
 			GlobalVariableService globalVariableService) {
-		if (StringUtils.isBlank(msg)) return msg; 
+		if (StringUtils.isBlank(msg)) {
+            return msg;
+        }
 		
 		if (globalVariableService == null) {
 			globalVariableService = (GlobalVariableService) FrameworkUtil.getSpringBean("globalVariableService");
@@ -669,6 +642,37 @@ public class PracticalUtils {
 		}
 		return msg;
 	}
+
+	/**
+	 *  替换测试集公共数据变量
+	 * @author xuwangcheng
+	 * @date 2019/11/28 17:59
+	 * @param msg msg
+	 * @param params params
+	 * @return {@link String}
+	 */
+	public static String replaceSetPublicVariable(String msg, Map<String, Object> params) {
+        if (StringUtils.isBlank(msg) || CollUtil.isEmpty(params)) {
+            return msg;
+        }
+
+        String regex = "\\$\\{__(.*?)\\}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(msg);
+
+        String dataKey = null;
+        while (matcher.find()) {
+            dataKey = "\\$\\{__" + matcher.group(1) + "\\}";
+            if (!msg.contains("${__" + matcher.group(1) + "}")) {
+                continue;
+            }
+            if (params.get(matcher.group(1)) != null) {
+                msg = msg.replaceAll(dataKey, params.get(matcher.group(1)).toString());
+            }
+        }
+
+        return msg;
+    }
 
 	/**
 	 * 发送http请求-get方式
@@ -730,14 +734,14 @@ public class PracticalUtils {
 	 */
 	@SuppressWarnings({ "static-access", "unchecked", "rawtypes" })
 	public static Map<String, ComplexSceneConfig> getComplexSceneConfigs (String configJson) {
-		JSONObject obj = new JSONObject().fromObject(configJson);
+		JSONObject obj = JSONObject.fromObject(configJson);
 		Map<String, ComplexSceneConfig>	configs = new HashMap<String, ComplexSceneConfig>();
 		
 		Map<String, Class> classMap = new HashMap<String, Class>();
 		classMap.put("useVariables", Map.class);
 		classMap.put("saveVariables", Map.class);
 		
-		Map<String, Object> objs = (Map<String, Object>) obj.toBean(obj, Map.class);
+		Map<String, Object> objs = (Map<String, Object>) JSONObject.toBean(obj, Map.class);
 		for (String key:objs.keySet()) {
 			JSONObject o = obj.getJSONObject(key);
 			configs.put(key, (ComplexSceneConfig) JSONObject.toBean(o, ComplexSceneConfig.class, classMap));
@@ -979,7 +983,7 @@ public class PracticalUtils {
 	
 	/**
 	 * 使用关联配置获取指定内容
-	 * @param map 关联规则
+	 * @param maps 关联规则
 	 * @param msg 
 	 * @return
 	 */

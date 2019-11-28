@@ -1,19 +1,17 @@
 package yi.master.business.user.action;
 
-import java.sql.Timestamp;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.user.bean.Mail;
 import yi.master.business.user.bean.User;
 import yi.master.business.user.service.MailService;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
+
+import java.sql.Timestamp;
 
 /**
  * 用户邮件Action
@@ -78,6 +76,10 @@ public class MailAction extends BaseAction<Mail> {
 	}
 	
 
+	public String sendMail () {
+	    mailService.sendSystemMail("测试", "测试", FrameworkUtil.getLoginUser().getUserId());
+	    return SUCCESS;
+    }
 	
 	/****************************************************************************************************************/
 	public void setStatus(String status) {

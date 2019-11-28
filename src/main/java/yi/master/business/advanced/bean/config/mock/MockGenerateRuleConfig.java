@@ -49,11 +49,18 @@ public class MockGenerateRuleConfig implements Serializable {
 	public MockGenerateRuleConfig() {
 		super();
 	}
-	
+
+    /**
+     * 生成指定的内容
+     * @param requestMsg
+     * @return
+     */
 	public String generateValue(String requestMsg) {
 		switch (this.generateType) {
 		case "node":
-			if (StringUtils.isBlank(requestMsg)) return this.generateValue;
+			if (StringUtils.isBlank(requestMsg)) {
+                return this.generateValue;
+            }
 			MessageParse parseUtil = MessageParse.getParseInstance(MessageParse.judgeType(requestMsg));
 			return parseUtil.getObjectByPath(requestMsg, this.generateValue);
 		case "variable":

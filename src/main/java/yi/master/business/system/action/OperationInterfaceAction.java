@@ -1,13 +1,15 @@
 package yi.master.business.system.action;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.system.service.OperationInterfaceService;
-import yi.master.constant.ReturnCodeConsts;
+import yi.master.util.cache.CacheUtil;
+
+import java.util.ArrayList;
 
 /**
  * 系统操作接口Action
@@ -37,7 +39,17 @@ public class OperationInterfaceAction extends BaseAction<OperationInterface> {
 	@Override
 	public String edit() {
 		model.setOi(new OperationInterface(model.getParentOpId2()));
-		return super.edit();
+		operationInterfaceService.edit(model);
+		jsonObject.setData(model);
+		CacheUtil.updateSystemInterfaces();
+		return SUCCESS;
+	}
+
+	@Override
+	public String del() {
+		operationInterfaceService.delete(id);
+		CacheUtil.updateSystemInterfaces();
+		return SUCCESS;
 	}
 
 	/**
@@ -48,7 +60,22 @@ public class OperationInterfaceAction extends BaseAction<OperationInterface> {
 		setData(operationInterfaceService.findAll());
 		return SUCCESS;
 	}
-	
+
+	/**
+	 *  获取指定页面的权限列表
+	 * @author xuwangcheng
+	 * @date 2019/11/24 19:05
+	 * @param
+	 * @return {@link String}
+	 */
+	public String listByPageName () {
+		setData(new ArrayList<>());
+		if (StringUtils.isNotBlank(model.getPageName())) {
+			setData(operationInterfaceService.listByPageName(model.getPageName()));
+		}
+		return SUCCESS;
+	}
+
 	/**************************************************************************/
 	
 	public void setOpType(Integer opType) {

@@ -220,7 +220,7 @@ var eventList = {
 			opObj("确认要删除此配置信息吗？", REQUEST_URL.PERFORMANCE_TEST.DEL, {id:data.ptId}, this, "删除成功!");
 		},
 		"#choose-message-scene":function(){ //选择测试场景
-			layer_show("选择测试接口场景", "chooseMessageScene.html?callbackFun=chooseScene", null, null, 2);
+			layer_show("选择测试接口场景", "chooseMessageScene.html?callbackFun=chooseScene&notMultiple=true", null, null, 2);
 		},
 		"#choose-business-system":function(){//选择业务系统
 			if (!strIsNotEmpty($("#protocolType").val())) {

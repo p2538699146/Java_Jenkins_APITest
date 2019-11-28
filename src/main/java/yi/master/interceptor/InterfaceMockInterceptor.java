@@ -1,11 +1,11 @@
 package yi.master.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import org.apache.log4j.Logger;
 import org.apache.struts2.StrutsStatics;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import yi.master.business.advanced.action.MockAction;
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.advanced.enums.InterfaceMockStatus;
@@ -15,20 +15,17 @@ import yi.master.business.log.enums.LogInterceptStatus;
 import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
+import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class InterfaceMockInterceptor extends AbstractInterceptor {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private static Logger logger = Logger.getLogger(InterfaceMockInterceptor.class.getName());
@@ -64,7 +61,7 @@ public class InterfaceMockInterceptor extends AbstractInterceptor {
 		String homeUrl = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_HOME);
 		callUrl = request.getRequestURI().replace(homeUrl.substring(homeUrl.lastIndexOf("/")), "").substring(5);		
 		
-		InterfaceMock mock = interfaceMockService.findByMockUrl(callUrl);
+		InterfaceMock mock = interfaceMockService.findByMockUrl(callUrl, MessageKeys.ProtocolType.http.name().toUpperCase());
 		if (mock == null) {
 			interceptStatus = LogInterceptStatus.MOCK_NOT_EXIST.getStatus();
 			recordService.saveRecord(user, opInterface, callUrl, interceptStatus, callType, userHost, browserAgent,

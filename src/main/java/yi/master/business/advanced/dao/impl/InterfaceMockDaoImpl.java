@@ -12,10 +12,11 @@ import yi.master.business.base.dao.impl.BaseDaoImpl;
 public class InterfaceMockDaoImpl extends BaseDaoImpl<InterfaceMock> implements InterfaceMockDao {
 
 	@Override
-	public InterfaceMock findByMockUrl(String mockUrl) {
-		
-		String hql = "From InterfaceMock m where m.mockUrl=:mockUrl";		
-		return (InterfaceMock) getSession().createQuery(hql).setString("mockUrl", mockUrl).uniqueResult();
+	public InterfaceMock findByMockUrl(String mockUrl, String protocolType) {
+		String hql = "From InterfaceMock m where m.mockUrl=:mockUrl and m.protocolType=:protocolType";
+		return (InterfaceMock) getSession().createQuery(hql)
+                .setString("mockUrl", mockUrl)
+                .setString("protocolType", protocolType).uniqueResult();
 	}
 
 	@Override
@@ -34,10 +35,15 @@ public class InterfaceMockDaoImpl extends BaseDaoImpl<InterfaceMock> implements 
 	}
 
 	@Override
-	public List<InterfaceMock> getEnableSocketMock() {
-		
-		String hql = "From InterfaceMock m where m.protocolType='Socket' and m.status='0'";
+	public List<InterfaceMock> getEnableMockServer() {
+		String hql = "From InterfaceMock m where m.protocolType in ('WebSocket', 'Socket') and m.status='0'";
 		return getSession().createQuery(hql).list();
 	}
+
+    @Override
+    public void updateCallCount(Integer mockId) {
+        String hql = "update InterfaceMock m set m.callCount=m.callCount + 1 where m.mockId=:mockId";
+        getSession().createQuery(hql).setInteger("mockId", mockId).executeUpdate();
+    }
 
 }

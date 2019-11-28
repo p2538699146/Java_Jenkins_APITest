@@ -1,4 +1,5 @@
 var messageSceneId; //当前正在操作的sceneId
+var configId; //当前正在操作的configId
 var currIndex;//当前正在操作的layer窗口的index
 var responseExample;
 
@@ -96,6 +97,9 @@ var templateParams = {
 			name:"messageScene.messageSceneId"
 		},
 		{
+			name:"testConfig.configId"
+		},
+		{
 			name:"validateMethodFlag",
 			value:"1"
 		},
@@ -143,8 +147,8 @@ var columnsSetting = [
                       {
                     	  "data":"parameterName",
                     	  "className":"ellipsis",
-                    	  "render":function(data) {                   		  
-                    		  if (data == "1") {
+                    	  "render":function(data, type, row, meta) {
+                    		  if (row.validateMethodFlag == "1") {
                     			  return '<span title="' + data + '">' + data + '</span>';
                     		  } else {
                     			  return "";
@@ -229,6 +233,10 @@ var columnsSetting = [
 
 var eventList = {
 		"#view-response-example":function(){//查看返回示例报文
+			if (messageSceneId == null) {
+				layer.msg('没有返回报文可供查看!', {time: 1600});
+				return false;
+			}
 			if (responseExample != null) {
 				createViewWindow(responseExample, {
 					title:"返回报文示例", //标题
@@ -262,6 +270,10 @@ var eventList = {
 			});
 		},
 		"#choose-response-node-path":function(){//选择返回报文入参节点
+            if (messageSceneId == null) {
+                layer.msg('请手动输入节点路径！', {time: 1600});
+                return false;
+            }
 			chooseParameterNodePath(REQUEST_URL.MESSAGE_SCENE.GET_RESPONSE_MSG_JSON_TREE, {messageSceneId:messageSceneId}, {
 				titleName:"出参节点选择",
 				isChoosePath:true, 
@@ -346,11 +358,11 @@ var eventList = {
 						}							
 					});			
 				},
-				btn4:function(){//全局变量
+				btn4:function(index){//全局变量
 					changeTigs("3");
 					layer.close(index);
 				},
-				btn5:function(){//正则表达式
+				btn5:function(index){//正则表达式
 					changeTigs("4");
 					layer.close(index);
 				}}
@@ -388,7 +400,14 @@ var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df){
 			messageSceneId = GetQueryString("messageSceneId");
-			publish.renderParams.listPage.listUrl = REQUEST_URL.VALIDATE.LIST + "?messageSceneId=" + messageSceneId;
+			configId = GetQueryString("configId");
+			if (messageSceneId != null) {
+                publish.renderParams.listPage.listUrl = REQUEST_URL.VALIDATE.LIST + "?messageSceneId=" + messageSceneId;
+			} else {
+                publish.renderParams.listPage.listUrl = REQUEST_URL.VALIDATE.GET_CONFIG_VALIDATE_RULES + "?configId=" + configId;
+                $('#view-response-example').hide();
+			}
+
 			df.resolve();			   		 	
    	 	},
 		editPage:{
@@ -411,6 +430,7 @@ var mySetting = {
 			},
 			beforeInit:function(df){
 				$("#messageScene\\.messageSceneId").val(messageSceneId);
+				$("#testConfig\\.configId").val(configId);
        		 	df.resolve();
        	 	},
        	 	renderCallback:function(obj){
@@ -424,24 +444,16 @@ var mySetting = {
 			exportExcel:false,
 			columnsSetting:columnsSetting,
 			columnsJson:[0, 7, 8],
+            dtDrawCallback: function() {
+                $('.switch')['bootstrapSwitch']();
+                $('.switch input:checkbox').change(function(){
+                    var flag = $(this).is(':checked');
+                    var validateId = $(this).attr('value');
+                    updateStatus(validateId, flag, this);
+                });
+            },
 			dtOtherSetting:{
-				"serverSide": false,
-				"initComplete":function() {
-					$('.switch')['bootstrapSwitch']();
-	            	$('.switch input:checkbox').change(function(){
-	            		var flag = $(this).is(':checked');
-	            		var validateId = $(this).attr('value');
-	            		updateStatus(validateId, flag, this);
-	            	});
-				}
-			},
-			dtAjaxCallback:function() {
-				$('.switch')['bootstrapSwitch']();
-            	$('.switch input:checkbox').change(function(){
-            		var flag = $(this).is(':checked');
-            		var validateId = $(this).attr('value');
-            		updateStatus(validateId, flag, this);
-            	});
+				"serverSide": false
 			}
 		},
 		templateParams:templateParams		
@@ -457,6 +469,9 @@ $(function(){
  * 绑定事件
  */
 function bindChooseRequestNodePath(){
+	if (messageSceneId == null) {
+		return false;
+	}
 	//防止重复绑定事件，先解绑
     $("#validateValue").unbind('click');
 	$("#validateValue").bind('click', function(){
@@ -480,10 +495,12 @@ function updateStatus(validateId, flag, obj) {
 		status = '0';
 	}
 	$.post(REQUEST_URL.VALIDATE.RULE_UPDATE_STATUS, {validateId:validateId, status:status}, function(json) {
-		if(json.returnCode != 0){
+		if(json.returnCode != RETURN_CODE.SUCCESS){
 			$(obj).click();
 			layer.alert(json.msg, {icon:5});
-		}
+		} else {
+		    layer.msg('操作成功!', {icon: 1, time: 1500});
+        }
 	});
 }
 
@@ -516,7 +533,6 @@ function changeTigs(type) {
 	
 	$("#validateValue").attr("placeholder", selectGetValueMethodTig[type][0]);
 	$("#tipMsg").text(selectGetValueMethodTig[type][1]);
-	//$("#getValueMethodText").text(selectGetValueMethodTig[type][2]);
 	$("#select-get-value-method").before('<strong>' + selectGetValueMethodTig[type][2] + '&nbsp;&nbsp;</strong>');
 }
 
@@ -535,7 +551,7 @@ function addEditPageHtml() {
 function showValidatRulePage(validateId) {
 	//关联验证 根据publish.renderParams.editPage.modeFlag 0为增加  1为编辑
 	if (addValidateMethodFlag == 0) {
-		layer_show('关联验证', htmls["messageScene-validateKeyword"], '840', '560', 1, function() {
+		layer_show('关联验证', htmls["messageScene-validateKeyword"], '840', '570', 1, function() {
 			if (publish.renderParams.editPage.modeFlag == 1) {
 				$.get(REQUEST_URL.VALIDATE.GET, {id:validateId},function(data){
 					if(data.returnCode == 0) {
@@ -554,6 +570,7 @@ function showValidatRulePage(validateId) {
 						$("#validateId").val(data.validateId);
 						$("#getValueMethod").val(data.getValueMethod || "0");
 						$("#messageScene\\.messageSceneId").val(messageSceneId);
+                        $("#testConfig\\.configId").val(configId);
 						$("#status").val(data.status);
 						$("#mark").val(data.mark);
 					} else {
@@ -601,6 +618,7 @@ function saveValidateJson(){
 	sendData.getValueMethod = $("#getValueMethod").val();
     sendData.mark = $('#mark').val();
 	sendData["messageScene.messageSceneId"] = messageSceneId;
+    sendData["testConfig.configId"] = configId;
 	sendData["status"] = $("#status").val();
 	
 	$.post(REQUEST_URL.VALIDATE.EDIT, sendData, function(data){

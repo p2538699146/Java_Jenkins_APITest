@@ -103,19 +103,33 @@ var columnsSetting = [
                   ];
 var eventList = {
 		"#batch-choose":function(){//批量选择
-			var $checkbox = $(".selectScene:checked");
+			let $checkbox = $(".selectScene:checked");
 			if ($checkbox.length < 1) {
 				return false;
 			}
-			var dataArr = [];
+			let dataArr = [];
+			let flag = true;
 			$.each($checkbox, function(i, n){
-				dataArr.push(table.row( $(n).parents('tr') ).data());
+			    let d = table.row( $(n).parents('tr') ).data();
+                if (enabledProtocolTypes != null && enabledProtocolTypes.indexOf(d.protocolType) == -1) {
+                    layer.alert('只能选择协议类型为' + enabledProtocolTypes.join('/') + '类型的接口场景，请重新选择!', {title:"提示", icon:5});
+                    flag = false;
+                    return false;
+                }
+				dataArr.push(d);
 			});
+			if (!flag) {
+			    return;
+            }
 			choosedCallBackFun(dataArr);
 			parent.layer.close(parent.layer.getFrameIndex(window.name));
 		},
 		".choose-this-scene":function() {//选择场景
 			var data = table.row( $(this).parents('tr') ).data();
+			if (enabledProtocolTypes != null && enabledProtocolTypes.indexOf(data.protocolType) == -1) {
+                layer.alert('只能选择协议类型为' + enabledProtocolTypes.join('/') + '类型的接口场景，请重新选择!', {title:"提示", icon:5});
+			    return;
+            }
 			choosedCallBackFun(data);
 			parent.layer.close(parent.layer.getFrameIndex(window.name));
 		},
@@ -152,7 +166,7 @@ var eventList = {
 		}
 };
 
-
+var enabledProtocolTypes;
 var mySetting = {
 		eventList:eventList,
 		templateCallBack:function(df) {
@@ -161,6 +175,11 @@ var mySetting = {
 			if (GetQueryString("notMultiple") == 'true') {
 				$('#batch-choose').hide();
 			}
+			//指定查询的协议了类型
+            let protocols = GetQueryString('protocolType');
+			if (strIsNotEmpty(protocols)) {
+			    enabledProtocolTypes = protocols.split(',');
+            }
 					
 			df.resolve();
 		},

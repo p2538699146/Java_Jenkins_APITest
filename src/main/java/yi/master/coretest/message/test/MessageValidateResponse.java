@@ -1,16 +1,11 @@
 package yi.master.coretest.message.test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
+import cn.hutool.core.collection.CollUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.SceneValidateRule;
 import yi.master.business.message.enums.CommonStatus;
@@ -23,6 +18,11 @@ import yi.master.coretest.message.parse.MessageParse;
 import yi.master.util.DBUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * 接口自动化<br>
@@ -61,9 +61,12 @@ public class MessageValidateResponse {
 	 * status 验证结果 0-成功 1-不成功<br>
 	 * msg 备注信息 
 	 */
-	public Map<String,String> validate(String responseMessage, String requestMessage, MessageScene scene, String messageType) {
+	public Map<String,String> validate(String responseMessage, String requestMessage, MessageScene scene, String messageType, Integer configId) {
 		List<SceneValidateRule> rules = validateRuleService.getParameterValidate(scene.getMessageSceneId());
-		
+		List<SceneValidateRule> configRules = validateRuleService.getConfigRules(configId);
+
+		CollUtil.addAll(rules, configRules);
+
 		if (rules.size() < 1) {
 			Map<String,String> map = new HashMap<String, String>();
 			map.put(VALIDATE_MAP_STATUS_KEY, VALIDATE_SUCCESS_FLAG);

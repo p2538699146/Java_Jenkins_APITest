@@ -53,11 +53,13 @@ var advancedQueryFormHtml = "";//高级查询页面代码，防止重复渲染
  * 
  */
 /********************************************/
+var thisPageName;
+var thisPagePermissionList;
 $(function() {
 	//加载对应的js文件		
 	var r = (window.location.pathname.split("."))[0].split("/");
-	r = r[r.length-1] + ".js";
-	dynamicLoadScript(r);
+    thisPageName = r[r.length-1];
+	dynamicLoadScript(thisPageName + ".js");
 });
 
 /**
@@ -75,16 +77,20 @@ var publish = {
 		 df1.done(function(){
 			 var df = $.Deferred();
 	    	 df.done(function(){
+	    	 	//自定义数据渲染
 	    		 that.renderData(that.renderParams.customCallBack);
-	    		 //防止事件被绑定多次
+	    		 //事件代理绑定，防止事件被绑定多次
 	    		 (that.renderParams.ifFirst == true) && (that.initListeners(that.renderParams.eventList));
-	    	 }); 
+	    	 });
+
+	    	 //渲染之前的自定义初始化
 	    	 if (that.renderParams.renderType == "list") {
 	    		 that.renderParams.listPage.beforeInit(df);
 	    	 } else if (that.renderParams.renderType == "edit") {
 	    		 that.renderParams.editPage.beforeInit(df);
 	    	 }	    	 	   
 		 });
+
 		 if (that.renderParams.ifFirst == true) {
 			 that.renderTemplate(df1,that.renderParams.templateCallBack); 
 		 } else {
@@ -115,6 +121,7 @@ var publish = {
       * columnsJson:不参与排序的列
       * dtOtherSetting:DT其他的自定义设置
       * dtAjaxCallback:DataTables在每次通过ajax.reload返回之后的回调
+      * dtDrawCallback: DataTables每次重绘之后的回调
       * exportExcel:是否在工具栏添加  导出到excel 的按钮工具  默认为true
       * dblclickEdit:开启双击行打开编辑页面  默认为true
       * 
@@ -213,7 +220,8 @@ var publish = {
     		 beforeInit:function(df) {
         		 df.resolve();
         	 },
-        	 dtAjaxCallback:function() {},      	 
+        	 dtAjaxCallback:function() {},
+             dtDrawCallback:function() {},
         	 tableObj:null,
         	 columnsSetting:{},
         	 columnsJson:[],
@@ -354,7 +362,7 @@ var publish = {
     	 if (p.userDefaultRender == true) {
     		 if (p.renderType == "list") {
     			 var l = p.listPage;
-    			 table = initDT(l.tableObj, l.listUrl, l.columnsSetting, l.columnsJson, l.dtOtherSetting); 
+    			 table = initDT(l.tableObj, l.listUrl, l.columnsSetting, l.columnsJson, l.dtOtherSetting, l.dtDrawCallback);
     			 
     			 /***添加导入excel插件按钮**/
     			 if (l.exportExcel) {
@@ -376,8 +384,11 @@ var publish = {
     			 }    			 
     			 e.ifUseValidate && formValidate(e.formObj, e.rules, e.messages, null, e.closeFlag, e.ajaxCallbackFun, e.beforeSubmitCallback);
     		 }    		 
-    	 } 
-    	callback(p); 
+    	 }
+
+    	 //权限按钮的显示和隐藏
+         controlButtonShowByPermission();
+		 callback(p);
      },
      /**
       * 统一绑定监听事件
@@ -394,11 +405,68 @@ var publish = {
      }
 };
 
+/**
+ * 控制权限按钮的显示或者隐藏
+ * @param domObj
+ */
+function controlButtonShowByPermission (domObj) {
+	//跳过超级管理员用户
+	if (top.userId == SUPER_ADMIN_USER_ID) {
+		return;
+	}
+	if (thisPagePermissionList == null) {
+        //获取当前页面权限
+        $.ajax({
+            type:"post",
+            url:REQUEST_URL.OP_INTERFACE.LIST_BY_PAGE_NAME,
+            data:{pageName: thisPageName},
+            async:false,
+            success:function(json) {
+                if (json.returnCode == RETURN_CODE.SUCCESS) {
+					thisPagePermissionList = json.data;
+                } else {
+                    layer.alert(json.msg, {icon:5});
+                }
+            }
+        });
+	}
+
+	if (thisPagePermissionList.length == 0) {
+		return;
+	}
+
+    if (domObj == null) {
+        domObj = $(document);
+    }
+
+    $.each(thisPagePermissionList, function(i, n) {
+    	if (n.permissionMark == null || n.permissionMark == '') {
+    		return true;
+		}
+    	let marks = n.permissionMark.split(',');
+    	$.each(marks, function(t, mark) {
+            let button;
+            try {
+                button = domObj.find(mark);
+            } catch(err) {}
+            if (button != null && button.length > 0) {
+                if (top.currentUserPermissionList[n.opId] == null
+                    || n.status == '1') {
+                    //删除按钮
+                    button.remove();
+                }
+            }
+		});
+	});
+}
+
 //设置jQuery Ajax全局的参数  
 $.ajaxSetup({
-    error: function (jqXHR, textStatus, errorThrown) {  
+    error: function (jqXHR, textStatus, errorThrown) {
+    	//关闭所有弹窗/loading等
     	layer.closeAll('dialog');
     	$(".page-container").spinModal(false);
+        loading(false);
         switch (jqXHR.status) {  
             case(500):  
                 layer.alert("服务器系统内部错误", {icon:5});  
@@ -480,7 +548,7 @@ $.fn.delegates = function(configs) {
  * @param columnsJson  不参与排序的列 jsonArray
  * @returns table 返回对应的DataTable实例
  */
-function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting) {
+function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting, dtDrawCallback) {
 	var data = [];
 	var table = $(tableObj)
 	/*//发送ajax请求时
@@ -504,10 +572,11 @@ function initDT (tableObj, ajaxUrl, columnsSetting, columnsJson, dtOtherSetting)
         data = json.data;
         
     })
-   /* //重绘完毕
+   //重绘完毕
     .on('draw.dt', function () { //初始化和刷新都会触发
-    	publish.renderParams.listPage.dtAjaxCallback();
-    })*/
+        controlButtonShowByPermission($('.table'));
+        typeof dtDrawCallback === 'function' && dtDrawCallback();
+    })
     //初始化完毕
     .on( 'init.dt', function () {  //刷新表格不会触发此事件  只存在一次
     	//添加动态拖拽改变列宽的插件
@@ -1058,25 +1127,45 @@ function layer_show (title, url, w, h, type, success, cancel, end, other) {
 		url="/404.html";
 	};
 	if (w == null || w == '' || w >= maxWidth) {
-		w =	maxWidth * 0.8
+		w =	maxWidth * 0.86
 	};
 	if (h == null || h == '' || h >= maxHeight) {
-		h= (maxHeight * 0.86) ;
+		h= (maxHeight * 0.9) ;
 	};
+
+    if (w == null || w == '') {
+        w =	'86%';
+    } else {
+        if (w > maxWidth) {
+            w =	'86%';
+        } else {
+            w = w + 'px';
+        }
+    };
+    if (h == null || h == '') {
+        h= '90%' ;
+    } else {
+        if (h >= maxHeight) {
+            h= '90%' ;
+        } else {
+            h = parseInt((h / maxHeight) * 100) + '%';
+        }
+    };
+
 	if (type == null || type == '') {
 		type = 2;
 	}
 	index = layer.open($.extend(true, {
 		type: type,
-		area: [w + 'px', h + 'px'],
+		area: [w, h],
 		fix: false, //不固定
-		maxmin: false,
-		shade:0.4,
-		anim:5,
-		shadeClose:true,
+		maxmin: false,//禁止最大化最小化
+		shade:0.4,//遮罩
+		anim:5,//动画效果
+		shadeClose:true,//可以通过点击遮罩关闭
 		title: title,
 		content: url,
-		offset:'30px',
+		offset:'30px',//距上边距
 		success:function(layero, index){
 			$(layero).find('#layerIndex').val(index);
 			success && success(layero, index);
@@ -1678,6 +1767,73 @@ function layerMultipleChoose (options) {
 
 
 /**
+ * 自定义打开一个数据配置的页面
+ * @param options
+ */
+function customDataSettingView (options) {
+    let defaultOptions = {
+        title: '配置数据',
+        remark: null,
+        layerWidth:580,
+        layerHeight:450,
+        data: {},
+        saveCallback:function(data, layerIndex) {
+            layer.close(layerIndex);
+        }
+    };
+    if (typeof options == 'object') {
+        $.extend(true, defaultOptions, options);
+    }
+
+    layer_show(defaultOptions.title, templates['custom-data-setting-view']({remark: defaultOptions.remark, data: defaultOptions.data, title: defaultOptions.title})
+        , defaultOptions.layerWidth, defaultOptions.layerHeight, 1, function(layero, index){
+            //新增一堆key-value
+            $(layero).find('#custom-data-setting-add-variable').click(function() {
+                $(layero).find("#custom-data-setting-variables").append('<div class="row cl"><div class="form-label col-xs-5 col-sm-5">'
+                    + '<input type="text" class="input-text radius"></div>'
+                    + '<div class="formControls col-xs-5 col-sm-5"><input type="text" class="input-text radius"></div>'
+                    + '<div class="formControls col-xs-2 col-sm-2"><a class="btn btn-default radius">'
+                    + '<i class="Hui-iconfont">&#xe60b;</i></a></div></div>');
+            });
+
+            //删除全部数据
+            $(layero).find('#custom-data-setting-clear-all-varibale').click(function() {
+                layer.confirm('确认删除下列全部的数据吗？', {title:'警告'}, function(i){
+                    $("#custom-data-setting-variables").html('');
+                    layer.msg('全部删除成功!', {icon:1, time:1600});
+                    layer.close(i);
+                });
+            });
+
+            //删除一项数据
+            $(layero).delegate('#custom-data-setting-variables a', 'click', function() {
+                let that = this;
+                layer.confirm('确认删除该项数据吗?', {title:'警告'}, function(i) {
+                    $(that).parent('.formControls').parent('.row').remove();
+                    layer.msg('删除成功!', {icon:1, time:1600});
+                    layer.close(i);
+                });
+            });
+
+            //点击保存数据
+            $(layero).find('#update-custom-data').click(function() {
+                let configObj = {};
+                $("#custom-data-setting-variables").children('.row').each(function(i){
+                    let key = $(this).find('input').eq(0).val();
+                    let value = $(this).find('input').eq(1).val();
+                    if (strIsNotEmpty(key) && strIsNotEmpty(value)) {
+                        configObj[key] = value;
+                    }
+                });
+
+                typeof defaultOptions.saveCallback == 'function' && defaultOptions.saveCallback(configObj, index);
+            });
+    });
+
+
+}
+
+/**
  * 从form控件保存指定的值
  */
 function saveFormValue (objct) {
@@ -1922,6 +2078,7 @@ function isJSON(str) {
         }
     }
     console.log('It is not a string!')
+    return false;
 }
 
 /*********************判断两个json对象是否一样*****************************/

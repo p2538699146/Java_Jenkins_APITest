@@ -12,7 +12,7 @@ public interface SystemConsts {
 	/**
 	 * 当前版本号
 	 */
-	public static final String VERSION = "0.2.1beta";
+	String VERSION = "0.2.2beta";
 	/**
 	 * 完成标志
 	 */
@@ -129,94 +129,89 @@ public interface SystemConsts {
 		}
 	}
 
-	public static final String DEFAULT_USER_PASSWORD = "111111";
+	String DEFAULT_USER_PASSWORD = "111111";
 	
 	/**
 	 * 请求带上此token代表为内部自调用接口，不需要验证权限
 	 */
-	public static final String REQUEST_ALLOW_TOKEN = "ec189a1731d73dfe16d8f9df16d67187";
-	
-	
-	/**
-	 * 管理员角色名和用户名
-	 * 
-	 */
-	public static final String SYSTEM_ADMINISTRATOR_ROLE_NAME = "admin";
+	String REQUEST_ALLOW_TOKEN = "ec189a1731d73dfe16d8f9df16d67187";
 
-	public static final String API_TOKEN_ATTRIBUTE_NAME = "token";
+
+	String API_TOKEN_ATTRIBUTE_NAME = "token";
 
 	/**
 	 * sessionMap中登录用户key值
 	 */
-	public static final String SESSION_ATTRIBUTE_LOGIN_USER = "user";
+	String SESSION_ATTRIBUTE_LOGIN_USER = "user";
 
-	//ApplicationMap中指定属性名
-	public static final String APPLICATION_ATTRIBUTE_OPERATION_INTERFACE = "ops";
-	
-	//SessionMap中指定属性名
-	public static final String SESSION_ATTRIBUTE_VERIFY_CODE = "verifyCode";
-	
-	//定时任务相关标志词语	
-	public static final String QUARTZ_TIME_TASK_NAME_PREFIX_KEY = "timeScheduleJob";
-	public static final String QUARTZ_PROBE_TASK_NAME_PREFIX_KEY = "probeScheduleJob";	
-	public static final String QUARTZ_SCHEDULER_START_FLAG = "quartzStatus";	
-	public static final String QUARTZ_SCHEDULER_IS_START = "true"; 	
-	public static final String QUARTZ_SCHEDULER_IS_STOP = "false";
+    /**
+     * SessionMap中指定属性名
+     */
+	String SESSION_ATTRIBUTE_VERIFY_CODE = "verifyCode";
+
+    /**
+     * 定时任务相关标志词语
+     */
+	String QUARTZ_TIME_TASK_NAME_PREFIX_KEY = "timeScheduleJob";
+	String QUARTZ_PROBE_TASK_NAME_PREFIX_KEY = "probeScheduleJob";	
+	String QUARTZ_SCHEDULER_START_FLAG = "quartzStatus";	
+	String QUARTZ_SCHEDULER_IS_START = "true"; 	
+	String QUARTZ_SCHEDULER_IS_STOP = "false";
 	
 	///////////////////////////////////全局设置指定设置名称/////////////////////////////////////////////////////////////////////
 	/**
 	 * 通用设置
 	 */
-	public static final String GLOBAL_SETTING_HOME = "home";
-	public static final String GLOBAL_SETTING_VERSION = "version";
-	public static final String GLOBAL_SETTING_LOGSWITCH = "logSwitch";
+	String GLOBAL_SETTING_HOME = "home";
+	String GLOBAL_SETTING_VERSION = "version";
+	String GLOBAL_SETTING_LOGSWITCH = "logSwitch";
 
 	/**
 	 * 接口自动化测试相关全局配置
 	 */
-	public static final String GLOBAL_SETTING_MESSAGE_ENCODING = "messageEncoding";
-	public static final String GLOBAL_SETTING_MESSAGE_REPORT_TITLE = "messageReportTitle";
+	String GLOBAL_SETTING_MESSAGE_ENCODING = "messageEncoding";
+	String GLOBAL_SETTING_MESSAGE_REPORT_TITLE = "messageReportTitle";
 	/**
 	 * 邮件推送格式
 	 */
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE = "messageMailStyle";
+	String GLOBAL_SETTING_MESSAGE_MAIL_STYLE = "messageMailStyle";
 	/**
 	 * 探测邮件格式
 	 */
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_PROBE_REPORT = "probe";
+	String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_PROBE_REPORT = "probe";
 	/**
 	 * 定时任务邮件格式
 	 */
-	public static final String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_TASK_REPORT = "time";
+	String GLOBAL_SETTING_MESSAGE_MAIL_STYLE_TASK_REPORT = "time";
 
 	/**
 	 * web自动化脚本相关
 	 */
-	public static final String GLOBAL_SETTING_WEB_SCRIPT_WORKPLACE = "webscriptWorkPlace";
-	public static final String GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH = "webscriptModulePath";
+	String GLOBAL_SETTING_WEB_SCRIPT_WORKPLACE = "webscriptWorkPlace";
+	String GLOBAL_SETTING_WEB_SCRIPT_MODULE_PATH = "webscriptModulePath";
 
 	/**
 	 * 邮箱推送相关
 	 */
-	public static final String GLOBAL_SETTING_IF_SEND_REPORT_MAIL = "sendReportMail";
-	public static final String GLOBAL_SETTING_MAIL_SERVER_HOST = "mailHost";
-	public static final String GLOBAL_SETTING_MAIL_SERVER_PORT = "mailPort";
-	public static final String GLOBAL_SETTING_MAIL_AUTH_USERNAME = "mailUsername";
-	public static final String GLOBAL_SETTING_MAIL_AUTH_PASSWORD = "mailPassword";
-	public static final String GLOBAL_SETTING_MAIL_RECEIVE_ADDRESS = "mailReceiveAddress";
-	public static final String GLOBAL_SETTING_MAIL_COPY_ADDRESS = "mailCopyAddress";
-	public static final String GLOBAL_SETTING_MAIL_SSL_FLAG = "mailSSL";
-	public static final String GLOBAL_SETTING_MAIL_SEND_ADDRESS = "mailSendAddress";
-	public static final String GLOBAL_SETTING_MAIL_PERSONAL_NAME = "mailPersonalName";
+	String GLOBAL_SETTING_IF_SEND_REPORT_MAIL = "sendReportMail";
+	String GLOBAL_SETTING_MAIL_SERVER_HOST = "mailHost";
+	String GLOBAL_SETTING_MAIL_SERVER_PORT = "mailPort";
+	String GLOBAL_SETTING_MAIL_AUTH_USERNAME = "mailUsername";
+	String GLOBAL_SETTING_MAIL_AUTH_PASSWORD = "mailPassword";
+	String GLOBAL_SETTING_MAIL_RECEIVE_ADDRESS = "mailReceiveAddress";
+	String GLOBAL_SETTING_MAIL_COPY_ADDRESS = "mailCopyAddress";
+	String GLOBAL_SETTING_MAIL_SSL_FLAG = "mailSSL";
+	String GLOBAL_SETTING_MAIL_SEND_ADDRESS = "mailSendAddress";
+	String GLOBAL_SETTING_MAIL_PERSONAL_NAME = "mailPersonalName";
 	
 	/**
 	 * 日志记录接口白名单
 	 */
-	public static final String GLOBAL_SETTING_LOG_RECORD_WHITELIST = "logRecordWhitelist";
+	String GLOBAL_SETTING_LOG_RECORD_WHITELIST = "logRecordWhitelist";
 	/**
 	 * 日志记录接口黑名单
 	 */
-	public static final String GLOBAL_SETTING_LOG_RECORD_BLACKLIST = "logRecordBlacklist";
+	String GLOBAL_SETTING_LOG_RECORD_BLACKLIST = "logRecordBlacklist";
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -224,40 +219,40 @@ public interface SystemConsts {
 	/**
 	 * 测试报告静态html存储文件夹
 	 */
-	public static final String REPORT_VIEW_HTML_FOLDER = "reportHtml";
+	String REPORT_VIEW_HTML_FOLDER = "reportHtml";
 	/**
 	 * 静态报告模板
 	 */
-	public static final String REPORT_VIEW_HTML_FIXED_HTML_NEW = "offlineReportTemplateNew.xml";
+	String REPORT_VIEW_HTML_FIXED_HTML_NEW = "offlineReportTemplateNew.xml";
 	/**
 	 * 测试集测试请求地址
 	 */
-	public static final String AUTO_TASK_TEST_RMI_URL = "test-scenesTest";
+	String AUTO_TASK_TEST_RMI_URL = "test-scenesTest";
 	
 	/**
 	 * 接口探测测试请求地址
 	 */
-	public static final String PROBE_TASK_TEST_RMI_URL = "test-probeTest";
+	String PROBE_TASK_TEST_RMI_URL = "test-probeTest";
 	
 	/**
 	 * 生成静态报告请求地址
 	 */
-	public static final String CREATE_STATIC_REPORT_HTML_RMI_URL = "report-generateStaticReportHtml";
+	String CREATE_STATIC_REPORT_HTML_RMI_URL = "report-generateStaticReportHtml";
 	
 	/**
 	 * 上传或者下载 excel保存的文件夹
 	 */
-	public static final String EXCEL_FILE_FOLDER = "excel";
+	String EXCEL_FILE_FOLDER = "excel";
 
 
 	/**
 	 * 检查版本升级的网址
 	 */
-	public static final String CHECK_VERSION_UPGRADE_URL = "http://www.xuwangcheng.com/yi/api/checkVersion";
-	//public static final String CHECK_VERSION_UPGRADE_URL = "http://localhost:8080/api/checkVersion";
+	String CHECK_VERSION_UPGRADE_URL = "http://www.xuwangcheng.com/yi/api/checkVersion";
+	//String CHECK_VERSION_UPGRADE_URL = "http://localhost:8080/api/checkVersion";
 
 	/**
 	 * 版本升级地址
 	 */
-	public static final String VERSION_UPGRADE_URL = "https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?sort_id=1608611&doc_id=196989";
+	String VERSION_UPGRADE_URL = "https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?sort_id=1608611&doc_id=196989";
 }

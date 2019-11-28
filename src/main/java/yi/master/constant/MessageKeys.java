@@ -143,43 +143,51 @@ public interface MessageKeys {
 		/**
 		 * http测试
 		 */
-		http(HTTPTestClient.getInstance()),
+		http(HTTPTestClient.getInstance(), "HTTP"),
 		/**
 		 * webservice测试
 		 */
-		webservice(WebserviceTestClient.getInstance()),
+		webservice(WebserviceTestClient.getInstance(), "WebService"),
 		/**
 		 * socket测试客
 		 */
-		socket(SocketTestClient.getInstance()),
+		socket(SocketTestClient.getInstance(), "Socket"),
 		/**
 		 * https测试
 		 */
-		https(HTTPTestClient.getInstance()),
+		https(HTTPTestClient.getInstance(), "HTTPS"),
 		/**
 		 * dubbo测试
 		 */
-		dubbo(DubboTestClient.getInstance()),
+		dubbo(DubboTestClient.getInstance(), "Dubbo"),
 		/**
 		 * webSocket测试
 		 */
-		websocket(WebSocketTestClient.getInstance());
+		websocket(WebSocketTestClient.getInstance(), "WebSocket");
 
+        /**
+         * 对应的协议客户端
+         */
 		private TestClient client;
+        /**
+         * 标识符号
+         */
+		private String identify;
 
-		private ProtocolType(TestClient client) {
+		ProtocolType(TestClient client, String identify) {
 			this.client = client;
+			this.identify = identify;
 		}
 
 		public TestClient getClient() {
 			return client;
 		}
 
-		public void setClient(TestClient client) {
-			this.client = client;
-		}
+        public String getIdentify() {
+            return identify;
+        }
 
-		public static TestClient getClientByType (String type) {
+        public static TestClient getClientByType (String type) {
 			for (ProtocolType p:values()) {
 				if (p.name().equalsIgnoreCase(type)) {
 					return p.getClient();
@@ -209,7 +217,7 @@ public interface MessageKeys {
 
 		private String code;
 
-		private TestRunStatus (String code) {
+		TestRunStatus (String code) {
 			this.code = code;
 		}
 
@@ -256,48 +264,49 @@ public interface MessageKeys {
 
 
 	/**协议公共调用参数*/
-	public static final String PUBLIC_PARAMETER_CONNECT_TIMEOUT = "ConnectTimeOut";
-	public static final String PUBLIC_PARAMETER_READ_TIMEOUT = "ReadTimeOut";
-	public static final String PUBLIC_PARAMETER_USERNAME = "Username";
-	public static final String PUBLIC_PARAMETER_PASSWORD = "Password";
-	public static final String PUBLIC_PARAMETER_METHOD = "Method";
+	String PUBLIC_PARAMETER_CONNECT_TIMEOUT = "ConnectTimeOut";
+	String PUBLIC_PARAMETER_READ_TIMEOUT = "ReadTimeOut";
+	String PUBLIC_PARAMETER_USERNAME = "Username";
+	String PUBLIC_PARAMETER_PASSWORD = "Password";
+	String PUBLIC_PARAMETER_METHOD = "Method";
 
 
 	/**HTTP协议调用参数*/
-	public static final String HTTP_PARAMETER_HEADER = "Headers";
-	public static final String HTTP_PARAMETER_QUERYS = "Querys";
-	public static final String HTTP_PARAMETER_AUTHORIZATION = "Authorization";
-	public static final String HTTP_PARAMETER_ENC_TYPE = "EncType";
-	public static final String HTTP_PARAMETER_REC_ENC_TYPE = "RecEncType";
+	String HTTP_PARAMETER_HEADER = "Headers";
+	String HTTP_PARAMETER_QUERYS = "Querys";
+	String HTTP_PARAMETER_AUTHORIZATION = "Authorization";
+	String HTTP_PARAMETER_ENC_TYPE = "EncType";
+	String HTTP_PARAMETER_REC_ENC_TYPE = "RecEncType";
 
 	/**webservice协议调用参数*/
-	public static final String WEB_SERVICE_PARAMETER_NAMESPACE = "Namespace";
+	String WEB_SERVICE_PARAMETER_NAMESPACE = "Namespace";
 
 
 	/**默认path路径根节点*/
-	public static final String MESSAGE_PARAMETER_DEFAULT_ROOT_PATH = "TopRoot";
+	String MESSAGE_PARAMETER_DEFAULT_ROOT_PATH = "TopRoot";
+	String MESSAGE_PARAMETER_CUSTOM_PATH_NAME = "path";
 
 
 	/**测试环境中默认路径中的替换变量*/
-	public static final String BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE = "\\$\\{name\\}";
-	public static final String BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE = "\\$\\{path\\}";
+	String BUSINESS_SYSTEM_DEFAULTPATH_NAME_ATTRIBUTE = "\\$\\{name\\}";
+	String BUSINESS_SYSTEM_DEFAULTPATH_PATH_ATTRIBUTE = "\\$\\{path\\}";
 
 
 	/**
 	 * 使用节点参数时需要再参数路径左右加上以下左右边界
 	 */
-	public static final String CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT = "#";
-	public static final String CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT = "#";
+	String CUSTOM_PARAMETER_BOUNDARY_SYMBOL_LEFT = "#";
+	String CUSTOM_PARAMETER_BOUNDARY_SYMBOL_RIGHT = "#";
 
 
 	/**
 	 * quartz定时任务执行的测试将会在对应的测试报告添加下面的备注
 	 */
-	public static final String QUARTZ_AUTO_TEST_REPORT_MARK = "自动化定时任务";
+	String QUARTZ_AUTO_TEST_REPORT_MARK = "自动化定时任务";
 
 	/**
 	 * 缺少测试数据时测试详情中的备注
 	 */
-	public static final String NO_ENOUGH_TEST_DATA_RESULT_MARK = "缺少测试数据";
+	String NO_ENOUGH_TEST_DATA_RESULT_MARK = "缺少测试数据";
 	
 }

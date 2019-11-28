@@ -104,8 +104,10 @@ public class Parameter implements Serializable {
      * @return
      */
     public static Integer getParentId (String path, Set<Parameter> parameters) {
-    	if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equals(path)) {
-    		return 0; //根节点
+    	if (MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH.equalsIgnoreCase(path)
+                || MessageKeys.MESSAGE_PARAMETER_CUSTOM_PATH_NAME.equalsIgnoreCase(path)) {
+            //根节点
+    		return 0;
     	}
     	
     	String parentIdentify = path.substring(path.lastIndexOf(".") + 1);
@@ -114,7 +116,8 @@ public class Parameter implements Serializable {
     	if (p != null) {
     		return p.getParameterId();
     	}
-    	return null; //找不到父节点
+        //找不到父节点
+    	return null;
     }
     
     private static Parameter findParam (String identify, String path, Set<Parameter> parameters) {
@@ -241,23 +244,37 @@ public class Parameter implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) {
+            return true;
+        }
+
+		if (obj == null){
+            return false;
+        }
+
+		if (getClass() != obj.getClass()) {
+            return false;
+        }
+
 		Parameter other = (Parameter) obj;
 		if (parameterIdentify == null) {
 			if (other.parameterIdentify != null)
-				return false;
+            {
+                return false;
+            }
 		} else if (!parameterIdentify.equals(other.parameterIdentify))
-			return false;
+            {
+                return false;
+            }
 		if (path == null) {
 			if (other.path != null)
-				return false;
+            {
+                return false;
+            }
 		} else if (!path.equals(other.path))
-			return false;
+        {
+            return false;
+        }
 		return true;
 	}
 

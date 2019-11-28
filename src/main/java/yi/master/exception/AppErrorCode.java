@@ -26,6 +26,8 @@ public enum AppErrorCode {
     MOCK_INTERFACE_DISABLED(9997, "mock接口被禁止调用"),
     MOCK_INTERFACE_NOT_EXIST(9996, "未定义的mock接口"),
     MOCK_ERROR(9995, "接口mock出错,请联系接口自动化测试平台"),
+    SYSTEM_IS_UPDATING(9994, "系统正在系统,请稍后刷新访问..."),
+    SYSTEM_IS_NEED_RESTART(9993, "系统刚刚升级完成,请联系管理员重启服务器..."),
 
 
     //自动化测试
@@ -67,6 +69,14 @@ public enum AppErrorCode {
     //测试报告
     REPORT_INFO_NOT_EXIST(350001, "测试报告信息不存在"),
     REPORT_TEST_NO_DATA(350002, "该项测试还未完成或者没有任何测试结果"),
+
+
+    //高级测试相关
+    MOCK_PROTOCOL_NOT_SUPPORT(360001, "不支持该协议接口的Mock"),
+    MOCK_URL_EXIST(360002, "已存在Url路径为{}的Mock信息,请重新选择或者修改接口场景中的请求路径！"),
+
+    //场景相关
+    SCENE_INFO_NOT_EXIST(370001, "测试场景不存在")
     ;
 
     private Integer code;

@@ -284,7 +284,7 @@ var columnsSetting = [
               		    {
                             "data":null,
                             "render":function(data, type, full, meta){
-                              var context = [{
+                                var context = [{
 	                  	    		title:"报文编辑",
 	                  	    		markClass:"object-edit",
 	                  	    		iconFont:"&#xe6df;"
@@ -293,6 +293,7 @@ var columnsSetting = [
 	                  	    		markClass:"object-del",
 	                  	    		iconFont:"&#xe6e2;"
                   	    		}];
+
                             	return btnIconTemplate(context);
                             }}
               		    ];
@@ -400,17 +401,16 @@ var eventList = {
 			
 			var json = JSON.parse($("#callParameter").val());
 			var callParameterViewHtml = '<article class="page-container"><form action="" method="" class="form form-horizontal">';
-						
 			if (json != null && !$.isEmptyObject(json)) {
 				$.each(json, function(i, n) {
 					callParameterViewHtml += '<div class="row cl parameter">'
 						+ '<label class="form-label col-xs-4 col-sm-3';
 					if (typeof n == 'object') {
-						callParameterViewHtml += ' add-child-call-parameter" style="cursor: pointer;"';
+						callParameterViewHtml += ' add-child-call-parameter" style="cursor: pointer;">';
 					} else {
-						callParameterViewHtml += '"';
+						callParameterViewHtml += '">';
 					}
-					callParameterViewHtml += '>' + i + '</label><div class="formControls col-xs-8 col-sm-9">';
+					callParameterViewHtml += i + '</label><div class="formControls col-xs-8 col-sm-9">';
 					if (typeof n == 'object') {	
 						if (!$.isEmptyObject(n)) {
 							$.each(n, function(i1, n1) {
@@ -429,7 +429,7 @@ var eventList = {
 			
 			callParameterViewHtml += '<div class="row cl"><div class="col-xs-7 col-sm-8 col-xs-offset-4 col-sm-offset-3"><input class="btn btn-danger radius" type="button" value="&nbsp;&nbsp;保存更改&nbsp;&nbsp;" id="change-call-parameter"></div></div></form></article>';
 			
-			layer_show(protocolType + "调用参数设置", callParameterViewHtml, 780, 500, 1, function(layero, index) {
+			layer_show(protocolType + "调用参数设置&nbsp;&nbsp;[点击参数名可打开新增参数窗口]", callParameterViewHtml, 780, 500, 1, function(layero, index) {
 				$("#change-call-parameter").attr("layer-index", index);
 			});
 			
@@ -451,7 +451,7 @@ var eventList = {
 		},
 		".add-object":function() {//添加报文
 			publish.renderParams.editPage.modeFlag = 0;					
-			currIndex = layer_show("增加报文", editHtml, editPageWidth, editPageHeight.add, 1);
+			currIndex = layer_show("增加报文", editHtml, editPageWidth, null, 1);
 			publish.init();			
 		},
 		".batch-del-object":function() {//批量删除报文
@@ -467,7 +467,7 @@ var eventList = {
 			messageId = data.messageId;
 			publish.renderParams.editPage.modeFlag = 1;
 			publish.renderParams.editPage.objId = messageId;
-			layer_show("编辑报文信息", editHtml, editPageWidth, editPageHeight.edit, 1);
+			layer_show("编辑报文信息", editHtml, editPageWidth, null, 1);
 			publish.init();	
 		},
 		"#choose-business-system":function () {//选择测试环境
@@ -624,8 +624,8 @@ var mySetting = {
 			}		
 			
 			//编辑页面高度重设
-			editPageHeight.add != null && (editPageHeight.add += 90);
-			editPageHeight.edit != null && (editPageHeight.edit += 10);
+			// editPageHeight.add != null && (editPageHeight.add += 97);
+			// editPageHeight.edit != null && (editPageHeight.edit += 16);
    		 	df.resolve();
    	 	},
 		editPage:{

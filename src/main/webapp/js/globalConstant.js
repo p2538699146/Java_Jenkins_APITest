@@ -1,13 +1,17 @@
 //全局常量和配置
-
 //返回值
 var RETURN_CODE = {
     SUCCESS: 0,
     NO_LOGIN: 7
 }
+//超级管理员用户
+var SUPER_ADMIN_USER_ID = 1;
 
 //请求路径
 var REQUEST_URL = {
+    WEB_SOCKET: {
+      PUSH_MAIL_NUM: "/push/mail",
+    },
     //登陆相关
     LOGIN: {
         LOGOUT: "user-logout",
@@ -137,7 +141,8 @@ var REQUEST_URL = {
         EDIT:"validate-edit",
         LIST: "validate-getValidates",
         FULL_RULE_GET: "validate-getValidate",
-        RULE_UPDATE_STATUS: "validate-updateValidateStatus"
+        RULE_UPDATE_STATUS: "validate-updateValidateStatus",
+        GET_CONFIG_VALIDATE_RULES: "validate-getConfigValidates",
     },
     //定时任务
     TASK: {
@@ -168,7 +173,8 @@ var REQUEST_URL = {
         EDIT:"op-edit",
         LIST: "op-listOp",
         GET_NODE_TREE: "op-getNodeTree",
-        LIST_ALL: "op-listAll"
+        LIST_ALL: "op-listAll",
+        LIST_BY_PAGE_NAME: "op-listByPageName"
     },
     //查询数据源
     QUERY_DB: {
@@ -197,7 +203,8 @@ var REQUEST_URL = {
         GET_NODES_MENU: "role-getMenuNodes",
         UPDATE_POWER: "role-updateRolePower",
         UPDATE_MENU: "role-updateRoleMenu",
-        LIST_ALL: "role-listAll"
+        LIST_ALL: "role-listAll",
+        GET_USER_PERMISSION_LIST: "role-getUserPermissionList"
     },
     //用户
     USER: {
@@ -264,7 +271,8 @@ var REQUEST_URL = {
         UPDATE_STATUS: "mock-updateStatus",
         UPDATE_SETTING: "mock-updateSetting",
         PARSE_MESSAGE_TO_CONFIG: "mock-parseMessageToConfig",
-        PARSE_MESSAGE_TO_NODES: "mock-parseMessageToNodes"
+        PARSE_MESSAGE_TO_NODES: "mock-parseMessageToNodes",
+        PARSE_SCENE_TO_MOCK_INFO: "mock-parseSceneToMockInfo"
     },
     //性能测试
     PERFORMANCE_TEST: {
@@ -397,7 +405,7 @@ var EXPLANATION_MARK = {
 
 
 //接口自动化相关
-//报文处理类型参数设置
+//报文处理器参数设置
 var MESSAGE_PROCESS = {
     "ShanXiOpenApi":{
         "pemFilePath":""
@@ -408,6 +416,13 @@ var MESSAGE_PROCESS = {
         "publicKey":"",
         "algorithmType":"RSA"
     }
+}
+
+//接口可Mock类型
+var MESSAGE_MOCK_TYPE = {
+    "HTTP":"HTTP",
+    "Socket": "Socket",
+    "WebSocket": "WebSocket"
 }
 
 //接口协议-调用参数配置信息
@@ -608,4 +623,25 @@ var WEB_STEP_PARAMETER = {
             "validateData":"<span class='label label-danger radius'>不需要</span>"
         }
     }
+}
+
+
+function createWebSocket (path) {
+    if (top.homeUrl == null || top.homeUrl == '') {
+        return null;
+    }
+    let url = (top.homeUrl).replace('https', 'ws').replace('http', 'ws');
+    let ws;
+    if ('WebSocket' in window){
+        ws = new WebSocket(url + path);
+    }
+    else if ('MozWebSocket' in window){
+        ws = new MozWebSocket(url + path);
+    }
+    else{
+        console.error("该浏览器不支持websocket");
+        return null;
+    }
+
+    return ws;
 }

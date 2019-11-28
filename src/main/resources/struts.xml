@@ -12,6 +12,8 @@
     <constant name="struts.enable.DynamicMethodInvocation" value="false" />
     <!-- 开发模式 -->
     <constant name="struts.devMode" value="false" />
+    <!--过滤websocket请求-->
+    <constant name="struts.action.excludePattern" value="/push/.*"></constant>
     
     <!-- 接口mock请求处理  -->
     <package name="mock" namespace="/mock" extends="dcitsManager">

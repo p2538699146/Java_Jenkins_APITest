@@ -1,14 +1,13 @@
 package yi.master.business.message.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import yi.master.business.base.service.impl.BaseServiceImpl;
 import yi.master.business.message.bean.SceneValidateRule;
 import yi.master.business.message.dao.SceneValidateRuleDao;
 import yi.master.business.message.service.SceneValidateRuleService;
+
+import java.util.List;
 
 @Service("sceneValidateRuleService")
 public class SceneValidateRuleServiceImpl extends BaseServiceImpl<SceneValidateRule> implements SceneValidateRuleService {
@@ -44,6 +43,11 @@ public class SceneValidateRuleServiceImpl extends BaseServiceImpl<SceneValidateR
 	public void updateStatus(Integer validateId, String status) {
 		
 		sceneValidateRuleDao.updateStatus(validateId, status);
+	}
+
+	@Override
+	public List<SceneValidateRule> getConfigRules(Integer configId) {
+		return sceneValidateRuleDao.getConfigRules(configId);
 	}
 
 }

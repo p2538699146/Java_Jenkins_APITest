@@ -1,35 +1,32 @@
 package yi.master.business.advanced.action;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.advanced.bean.config.mock.MockRequestValidateConfig;
 import yi.master.business.advanced.bean.config.mock.MockResponseConfig;
 import yi.master.business.advanced.bean.config.mock.MockValidateRuleConfig;
-import yi.master.business.advanced.enums.InterfaceMockStatus;
-import yi.master.business.base.dto.ParseMessageToNodesOutDTO;
+import yi.master.business.advanced.enums.MockConfigSettingType;
 import yi.master.business.advanced.service.InterfaceMockService;
 import yi.master.business.base.action.BaseAction;
+import yi.master.business.base.dto.ParseMessageToNodesOutDTO;
 import yi.master.business.message.bean.Parameter;
-import yi.master.business.user.bean.User;
-import yi.master.constant.MessageKeys;
 import yi.master.coretest.message.parse.MessageParse;
-import yi.master.coretest.message.test.mock.MockSocketServer;
+import yi.master.coretest.message.test.mock.MockServer;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 接口mock相关接口
@@ -51,6 +48,8 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	private InterfaceMockService interfaceMockService;
 	
 	private String message;
+
+	private Integer messageSceneId;
 	
 	@Autowired
 	public void setInterfaceMockService(
@@ -62,6 +61,8 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	
 	public String updateStatus() {
 		interfaceMockService.updateStatus(model.getMockId(), model.getStatus());
+        MockServer.handleMockServer(model.getMockId());
+        setData(interfaceMockService.get(model.getMockId()));
 		return SUCCESS;
 	}
 	
@@ -75,28 +76,25 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		} else {
 			interfaceMockService.edit(model);
 		}
-		
-		//开启Socket模拟服务
-		MockSocketServer server = CacheUtil.getSocketServers().get(model.getMockId());
-		
-		if (server != null && (InterfaceMockStatus.DISABLED.getStatus().equals(model.getStatus())
-				|| !MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType()))) {
-			server.stop();
-		}
-		
-		if (server == null && InterfaceMockStatus.ENABLED.getStatus().equals(model.getStatus())
-				&& MessageKeys.ProtocolType.socket.name().equalsIgnoreCase(model.getProtocolType())) {
-			try {
-				new MockSocketServer(model.getMockId());
-			} catch (Exception e) {
-				LOGGER.warn(e.getMessage(), e);
-			}
-		}
-		
+
+        MockServer.handleMockServer(model.getMockId());
 		setData(model);
 		return SUCCESS;
 	}
-	
+
+
+	/**
+	 *  解析接口场景为Mock规则
+	 * @author xuwangcheng
+	 * @date 2019/11/25 20:56
+	 * @param
+	 * @return {@link String}
+	 */
+	public String parseSceneToMockInfo () {
+		interfaceMockService.parseSceneToMock(messageSceneId);
+		return SUCCESS;
+	}
+
 	/**
 	 * 更新配置内容
 	 * @return
@@ -105,15 +103,15 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		String settingType = "";
 		String settingValue = "";
 		if (StringUtils.isNotBlank(model.getResponseMock())) {
-			settingType = "responseMock";
+			settingType = MockConfigSettingType.responseMock.name();
 			settingValue = model.getResponseMock();
 		}
 		if (StringUtils.isNotBlank(model.getRequestValidate())) {
-			settingType = "requestValidate";
+			settingType = MockConfigSettingType.requestValidate.name();
 			settingValue = model.getRequestValidate();
 		}
 		interfaceMockService.updateSetting(model.getMockId(), settingType, settingValue);
-		MockSocketServer thisSocket = CacheUtil.getSocketServers().get(model.getMockId());
+		MockServer thisSocket = CacheUtil.getMockServers().get(model.getMockId());
 		if (thisSocket != null) {
 			thisSocket.updateConfig(settingType, settingValue);
 		}
@@ -127,20 +125,8 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	 * @return
 	 */
 	public String parseMessageToConfig() {
-		MessageParse parseUtil = MessageParse.getParseInstance(MessageParse.judgeType(message));
-		Set<Parameter> parameters = parseUtil.importMessageToParameter(message, null);
-		JSONArray rules = new JSONArray();
-		for (Parameter param:parameters) {
-			if (MessageKeys.MessageParameterType.isStringOrNumberType(param.getType())) {
-				MockValidateRuleConfig rule = new MockValidateRuleConfig();
-				rule.setName(param.getParameterIdentify());
-				rule.setPath(param.getPath().replaceAll(MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH + "\\.*", ""));
-				rule.setType(param.getType());
-				rule.setValidateValue(param.getDefaultValue());
-				rules.add(rule);
-			}
-		}
-		setData(rules.toString());
+		List<MockValidateRuleConfig> rules = MockValidateRuleConfig.parseValidateRuleList(message, null);
+		setData(JSONArray.fromObject(rules).toString());
 		return SUCCESS;
 	}
 	
@@ -172,7 +158,12 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	
 	@Override
 	public void checkObjectName() {
-		InterfaceMock mock = interfaceMockService.findByMockUrl(model.getMockUrl());
+	    //为空时不验证
+	    if (StringUtils.isBlank(model.getMockUrl())) {
+            checkNameFlag = "true";
+	        return;
+        }
+		InterfaceMock mock = interfaceMockService.findByMockUrl(model.getMockUrl(), model.getProtocolType());
 		checkNameFlag = (mock != null && !mock.getMockId().equals(model.getMockId())) ? "请求路径重复" : "true";
 		
 		if (model.getMockId() == null) {
@@ -184,5 +175,8 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-}	
+
+	public void setMessageSceneId(Integer messageSceneId) {
+		this.messageSceneId = messageSceneId;
+	}
+}

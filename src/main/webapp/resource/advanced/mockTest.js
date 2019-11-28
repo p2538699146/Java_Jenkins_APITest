@@ -1,97 +1,99 @@
 var templateParams = {
-		tableTheads:["名称", "mock地址", "协议", "入参验证", "出参设定", "已请求次数", "当前状态", "创建时间", "创建用户", "备注","操作"],
-		btnTools:[{
-			type:"primary",
-			size:"M",
-			id:"add-object",
-			iconFont:"&#xe600;",
-			name:"添加Mock接口"
-		},{
-			type:"danger",
-			size:"M",
-			id:"batch-op",
-			iconFont:"&#xe6bf;",
-			name:"批量操作"
-		}],
-		formControls:[{
-					edit:true,
-					label:"ID",  	
-					objText:"mockIdText",
-					input:[{	
-						hidden:true,
-						name:"mockId"
-						}]
-					},
-					{
-						required:true,
-						label:"名称",  
-						input:[{	
-							name:"mockName"
-							}]					
-					},
-					{
-						required:true,
-						label:"协议",  
-						select:[{	
-							name:"protocolType",
-							option:[{
-								value:"HTTP",
-								text:"HTTP"
-								},
-								{
-									value:"Socket",
-									text:"Socket"
-								}]
-							}]					
-					},
-					{
-						label:"mock路径",  
-						input:[{	
-							name:"mockUrl",
-							placeholder:"只在协议为HTTP时有效,请以斜杠/起始"
-							}]					
-					},				
-					{
-						label:"当前状态",  			
-						select:[{	
-							name:"status",
-							option:[{
-								value:"0",
-								text:"启用"
-								},
-								{
-									value:"1",
-									text:"禁用"
-								}]
-							}]				
-					 },
-					 {
-						 name:"createTime",
-						 value:new Date().Format("yyyy-MM-dd hh:mm:ss")
-						
-					 },
-					 {
-						 name:"user.userId"
-											
-					 },
-					 {
-						 name:"callCount",
-						 value:"0"
-					 },
-					 {
-						 name:"requestValidate"
-					 },
-					 {
-						 name:"responseMock"
-					 },
-					 {
-						label:"备注",  			
-						textarea:[{
-							name:"mark"
-						}]
-					},
-				
-]};
+    tableTheads: ["名称", "mock地址", "协议", "入参验证", "出参设定", "已请求次数", "当前状态", "创建时间", "创建用户", "备注", "操作"],
+    btnTools: [{
+        type: "primary",
+        size: "M",
+        id: "add-object",
+        iconFont: "&#xe600;",
+        name: "添加Mock接口"
+    }, {
+        type: "danger",
+        size: "M",
+        id: "batch-op",
+        iconFont: "&#xe6bf;",
+        name: "批量操作"
+    }],
+    formControls: [{
+        edit: true,
+        label: "ID",
+        objText: "mockIdText",
+        input: [{
+            hidden: true,
+            name: "mockId"
+        }]
+    },
+        {
+            required: true,
+            label: "名称",
+            input: [{
+                name: "mockName"
+            }]
+        },
+        {
+            required: true,
+            label: "协议",
+            select: [{
+                name: "protocolType",
+                option: function () {
+                    let arr = [];
+                    $.each(MESSAGE_MOCK_TYPE, function (i, n) {
+                        arr.push({
+                            value: n,
+                            text: i
+                        });
+                    });
+                    return arr;
+                }()
+            }]
+        },
+        {
+            label: "mock路径",
+            input: [{
+                name: "mockUrl",
+                placeholder: "只在协议为HTTP/WebSocket时有效,请以斜杠/起始"
+            }]
+        },
+        {
+            label: "当前状态",
+            select: [{
+                name: "status",
+                option: [{
+                    value: "1",
+                    text: "禁用"
+                }, {
+                        value: "0",
+                        text: "启用"
+                    }]
+            }]
+        },
+        {
+            name: "createTime",
+            value: new Date().Format("yyyy-MM-dd hh:mm:ss")
+
+        },
+        {
+            name: "user.userId"
+
+        },
+        {
+            name: "callCount",
+            value: "0"
+        },
+        {
+            name: "requestValidate"
+        },
+        {
+            name: "responseMock"
+        },
+        {
+            label: "备注",
+            textarea: [{
+                name: "mark"
+            }]
+        },
+
+    ]
+};
 
 var columnsSetting = [
               {
@@ -105,24 +107,28 @@ var columnsSetting = [
 				  
 				  "data":"mockUri",
 				  "className":"ellipsis",
-				  "render":function(data){
-					  return '<a href="' + data + '" target="_blank" title="' + data + '">' + data + '</a>';
+				  "render":function(data, type, full, meta){
+				      if (full.status == '0') {
+                          return '<a href="' + data + '" target="_blank" title="' + data + '">' + data + '</a>';
+                      } else {
+				          return '未启用';
+                      }
+
 				  }  
 			  },
 			  {
 				   	"data":"protocolType",
 					"render":function(data) {
-						var option = {
-          		  			"HTTP":{
-          		  				btnStyle:"success",
-          		  				status:"HTTP"
-          		  				},
-      		  				"Socket":{
-      		  					btnStyle:"primary",
-      		  					status:"Socket"
-      		  					}
-          		  	};	
-          		  	return labelCreate(data, option);
+						var option = {};
+
+					    $.each(MESSAGE_MOCK_TYPE, function(i, n) {
+                            option[i] = {
+                                btnStyle:"success",
+                                status:n
+                            }
+                        });
+
+          		  	    return labelCreate(data, option);
 			  }},
 			  {
 				  "data":null,
@@ -141,25 +147,29 @@ var columnsSetting = [
 			  },			  
 			  {
 				   	"data":"status",
-					"render":function(data) {
-						var option = {
-            		  			"0":{
-            		  				btnStyle:"success",
-            		  				status:"启用"
-            		  				},
-        		  				"1":{
-        		  					btnStyle:"danger",
-        		  					status:"禁用"
-        		  					}
-            		  	};	
-            		  	return labelCreate(data, option);
-			  }},
+					"render":function(data, type, full, meta) {
+						// var option = {
+            		  	// 		"0":{
+            		  	// 			btnStyle:"success",
+            		  	// 			status:"启用"
+            		  	// 			},
+        		  		// 		"1":{
+        		  		// 			btnStyle:"danger",
+        		  		// 			status:"禁用"
+        		  		// 			}
+            		  	// };
+            		  	// return labelCreate(data, option);
+
+                        var checked = '';
+                        if(data == "0") {checked = 'checked';}
+                        return '<div class="switch size-MINI" data-on-label="启用" data-off-label="禁用"><input type="checkbox" ' + checked + ' value="' + full.mockId + '"/></div>';
+                    }},
 			  ellipsisData("createTime"),
 			  ellipsisData("user.realName"),
 			  {
 				    "data":"mark",
 				    "className":"ellipsis",
-				    "render":function(data, type, full, meta ){
+				    "render":function(data, type, full, meta){
 				    	if (data != "" && data != null) {
 			  		    	return '<a href="javascript:;" onclick="showMark(\'' + full.mockName + '-\', \'mark\', this);"><span title="' + data + '">' + data + '</span></a>';
 					    	}
@@ -364,9 +374,22 @@ var eventList = {
 			});
 		},		
 		"#add-object":function(){
-			publish.renderParams.editPage.modeFlag = 0;					
-			layer_show("添加Mock接口", editHtml, editPageWidth, editPageHeight.add, 1);
-			publish.init();			
+            layer.confirm(
+                '请选择新增方式:',
+                {
+                    title:'添加Mock接口',
+                    btn:['从场景导入','手动添加'],
+                    shadeClose:true,
+                },function(index){
+                    layer.close(index);
+                    layer_show("选择需要Mock的场景"
+                        , "chooseMessageScene.html?callbackFun=chooseScene&notMultiple=true&protocolType=Socket,HTTP,WebSocket", null, null, 2);
+                },function(index){
+                    layer.close(index);
+                    publish.renderParams.editPage.modeFlag = 0;
+                    layer_show("添加Mock接口", editHtml, editPageWidth, editPageHeight.add, 1);
+                    publish.init();
+                });
 		},
 		"#batch-op":function(){
 			layer.confirm(
@@ -424,7 +447,15 @@ var mySetting = {
 			listUrl:REQUEST_URL.INTERFACE_MOCK.LIST,
 			tableObj:".table-sort",
 			columnsSetting:columnsSetting,
-			columnsJson:[0, 5, 6, 12]			
+			columnsJson:[0, 5, 6, 12],
+            dtDrawCallback: function() {
+                $('.switch')['bootstrapSwitch']();
+                $('.switch input:checkbox').change(function(){
+                    var flag = $(this).is(':checked');
+                    var mockId = $(this).attr('value');
+                    updateStatus(mockId, flag, this);
+                });
+            }
 		},
 		editPage:{
 			editUrl:REQUEST_URL.INTERFACE_MOCK.EDIT,
@@ -443,7 +474,10 @@ var mySetting = {
 					        },
 					        mockId:function(){
 					        	return $("#mockId").val();
-					        }
+					        },
+                            protocolType: function() {
+					            return $('#protocolType').val()
+                            }
 					}}
 				},
 				mockName:{
@@ -458,3 +492,67 @@ $(function(){
 	publish.renderParams = $.extend(true,publish.renderParams,mySetting);
 	publish.init();
 });
+
+
+/**
+ * 选择测试场景的回调
+ * @param obj
+ * @returns {boolean}
+ */
+function chooseScene (obj) {
+    if (obj == null) {
+        return false;
+    }
+
+    if (Object.prototype.toString.call(obj) === '[object Array]' ) {//可能是多选的数组
+        layer.alert('暂时不能使用多选功能,请选择单个场景!', {title:"提示", icon:5});
+        return false;
+    }
+
+    if (MESSAGE_MOCK_TYPE[obj.protocolType] == null) {
+    	layer.alert('目前只支持HTTP/Socket/WebSocket类型的接口MOCK，请重新选择!', {title:"提示", icon:5});
+    	return false;
+	}
+
+	loading(true, '正在添加...');
+	$.get(REQUEST_URL.INTERFACE_MOCK.PARSE_SCENE_TO_MOCK_INFO, {messageSceneId: obj.messageSceneId}, function(json){
+		loading(false);
+		if (json.returnCode == RETURN_CODE.SUCCESS) {
+			layer.msg('添加成功!', {icon: 1, time: 1500})
+			refreshTable();
+		} else {
+			layer.alert(json.msg, {icon:5});
+		}
+	});
+}
+
+/**
+ * 更新状态
+ * @param mockId
+ * @param flag
+ * @param obj
+ */
+function updateStatus (mockId, flag, obj) {
+    let status = '1';
+    if(flag == true){
+        status = '0';
+    }
+
+    loading(true, '正在处理...');
+    $.post(REQUEST_URL.INTERFACE_MOCK.UPDATE_STATUS, {mockId: mockId, status:status}, function(json) {
+        loading(false);
+        if (json.returnCode == RETURN_CODE.SUCCESS) {
+            let uriObj = $(obj).parents('tr').children('td:eq(3)');
+            if (!flag) {
+                uriObj.text('未启用');
+            } else {
+                uriObj.html('<a href="' + json.data.mockUri + '" target="_blank" title="' + json.data.mockUri + '">' + json.data.mockUri + '</a>');
+            }
+            layer.msg('操作成功!', {icon: 1, time: 1500});
+        } else {
+            layer.alert(json.msg, {title: '提示', icon: 5});
+            $(obj).click();
+        }
+    });
+
+}

@@ -1,17 +1,18 @@
 package yi.master.business.advanced.service;
 
-import java.util.List;
-
 import yi.master.business.advanced.bean.InterfaceMock;
 import yi.master.business.base.service.BaseService;
+
+import java.util.List;
 
 public interface InterfaceMockService extends BaseService<InterfaceMock> {
 	/**
 	 * 根据mockUrl查找指定的mock信息
 	 * @param mockUrl
+     * @param protocolType
 	 * @return
 	 */
-	InterfaceMock findByMockUrl(String mockUrl);
+	InterfaceMock findByMockUrl(String mockUrl, String protocolType);
 	
 	/**
 	 * 更新状态
@@ -29,8 +30,26 @@ public interface InterfaceMockService extends BaseService<InterfaceMock> {
 	void updateSetting(Integer mockId, String settingType, String configJson);
 	
 	/**
-	 * 获取所有启用状态的Socket Mock服务
+	 * 获取所有启用状态的 Mock服务
 	 * @return
 	 */
-	List<InterfaceMock> getEnableSocketMock();
+	List<InterfaceMock> getEnableMockServer();
+
+    /**
+     * 更新调用次数：包含成功和失败的
+     * @author xuwangcheng
+     * @date 2019/11/22 16:11
+     * @param mockId mockId
+     * @return
+     */
+    void updateCallCount(Integer mockId);
+
+    /**
+     * 接口场景转换为Mock规则
+     * @author xuwangcheng
+     * @date 2019/11/25 18:34
+     * @param sceneId sceneId
+     * @return {@link boolean}
+     */
+    boolean parseSceneToMock (Integer sceneId);
 }
