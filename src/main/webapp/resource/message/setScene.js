@@ -280,6 +280,7 @@ var eventList = {
             let publicHeaderObject = JSON.parse(publicHeader);
             customDataSettingView({
                 title: '测试集公共请求头',
+                remark: '测试集公共请求头只对HTTP/HTTPS协议类型的接口场景有效，优先级高于测试报文中配置的请求头。',
                 data: publicHeaderObject,
                 saveCallback: function(d, index) {
                     $("#publicHeader").val(JSON.stringify(d));
@@ -289,7 +290,7 @@ var eventList = {
         },
         //测试集公共验证规则
         "#set-public-validate-rule": function() {
-
+            layer.msg('暂时不可用，请期待下个版本！', {time: 1600});
         },
 		".op-scene":function() {//单条删除或者添加
 			var tip = '删除';

@@ -1,6 +1,7 @@
 package yi.master.business.testconfig.bean;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.json.annotations.JSON;
 import yi.master.util.PracticalUtils;
 
 import java.io.Serializable;
@@ -140,6 +141,7 @@ public class TestConfig implements Serializable, Cloneable {
 		
 	}
 
+	@JSON(serialize = false)
     public Map<String, Object> getPublicDataObject () {
         Map<String, Object> maps = PracticalUtils.jsonToMap(publicData);
         if (maps == null) {
@@ -149,6 +151,7 @@ public class TestConfig implements Serializable, Cloneable {
         return maps;
     }
 
+    @JSON(serialize = false)
     public Map<String, Object> getPublicHeaderObject () {
         Map<String, Object> maps = PracticalUtils.jsonToMap(publicHeader);
         if (maps == null) {

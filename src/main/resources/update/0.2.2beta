@@ -78,7 +78,5 @@ UPDATE `at_operation_interface` SET `op_name` = '删除指定菜单信息', `cal
 DELETE FROM `at_operation_interface` WHERE `op_id` = 81;
 DELETE FROM `at_operation_interface` WHERE `op_id` = 82;
 UPDATE at_busi_menu_info SET status='0' WHERE menu_id=27;
-
-
 ALTER TABLE `at_test_config` ADD COLUMN `public_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '属于该测试集的公共测试数据，json串存储' AFTER `mail_copy_address`;
 ALTER TABLE `at_test_config` ADD COLUMN `public_header` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '属于该测试集的公共请求头，只对HTTP/HTTPS有效，json串存储' AFTER `public_data`;

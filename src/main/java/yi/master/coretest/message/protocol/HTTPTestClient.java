@@ -1,22 +1,7 @@
 package yi.master.coretest.message.protocol;
 
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
+import cn.hutool.core.collection.CollUtil;
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.*;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -37,7 +22,6 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.log4j.Logger;
-
 import org.springframework.http.HttpMethod;
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.constant.MessageKeys;
@@ -45,6 +29,16 @@ import yi.master.coretest.message.parse.URLMessageParse;
 import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.coretest.message.protocol.entity.HttpDeleteWithBody;
 import yi.master.util.PracticalUtils;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.*;
 
 /**
  * 接口自动化<br>
@@ -194,6 +188,8 @@ public class HTTPTestClient extends TestClient {
 		
 		int connectTimeOut = config.getConnectTimeOut();
 		int readTimeOut = config.getReadTimeOut();
+
+		//报文配置的调用参数解析
 		if (callParameter != null) {
 			try {
 				headers = (Map<String, String>) callParameter.get(MessageKeys.HTTP_PARAMETER_HEADER);	
@@ -215,6 +211,21 @@ public class HTTPTestClient extends TestClient {
 				LOGGER.info("报文附加参数获取出错:" + callParameter.toString(), e);
 			}
 		}
+
+		//替换测试集的公共测试头
+        Map<String, Object> setPublicHeader = config.getPublicHeaderObject();
+        if (CollUtil.isNotEmpty(setPublicHeader)) {
+		    if (headers == null) {
+		        headers = new HashMap<>();
+            }
+
+            for (String key:setPublicHeader.keySet()) {
+		       if (setPublicHeader.get(key) != null) {
+                   headers.put(key, setPublicHeader.get(key).toString());
+               }
+            }
+        }
+
 		//请求超时
 		client.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, connectTimeOut); 
 		//读取超时

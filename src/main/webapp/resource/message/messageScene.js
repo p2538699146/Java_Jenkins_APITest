@@ -328,7 +328,7 @@ var eventList = {
 				});
 				
 				if (JSON.stringify(updateConfig) != JSON.stringify(data.config)) {
-					$.post(REQUEST_URL.COMPLEX_SCENE.UPDATE_CONFIG_INFO, {id:complexSceneId, sequenceNum:data.sequenceNum, config:JSON.stringify(updateConfig)}, function (json) {
+					$.post(REQUEST_URL.COMPLEX_SCENE.UPDATE_SCENE_CONFIG, {id:complexSceneId, sequenceNum:data.sequenceNum, config:JSON.stringify(updateConfig)}, function (json) {
 						if (json.returnCode == 0) {
 							layer.msg("已更新配置信息", {icon:1, time:1800});
 							refreshTable();

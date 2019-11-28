@@ -135,13 +135,7 @@ public interface SystemConsts {
 	 * 请求带上此token代表为内部自调用接口，不需要验证权限
 	 */
 	String REQUEST_ALLOW_TOKEN = "ec189a1731d73dfe16d8f9df16d67187";
-	
-	
-	/**
-	 * 管理员角色名和用户名
-	 * 
-	 */
-	String SYSTEM_ADMINISTRATOR_ROLE_NAME = "admin";
+
 
 	String API_TOKEN_ATTRIBUTE_NAME = "token";
 
@@ -149,11 +143,15 @@ public interface SystemConsts {
 	 * sessionMap中登录用户key值
 	 */
 	String SESSION_ATTRIBUTE_LOGIN_USER = "user";
-	
-	//SessionMap中指定属性名
+
+    /**
+     * SessionMap中指定属性名
+     */
 	String SESSION_ATTRIBUTE_VERIFY_CODE = "verifyCode";
-	
-	//定时任务相关标志词语	
+
+    /**
+     * 定时任务相关标志词语
+     */
 	String QUARTZ_TIME_TASK_NAME_PREFIX_KEY = "timeScheduleJob";
 	String QUARTZ_PROBE_TASK_NAME_PREFIX_KEY = "probeScheduleJob";	
 	String QUARTZ_SCHEDULER_START_FLAG = "quartzStatus";	

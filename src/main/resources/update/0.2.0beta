@@ -1,1 +1,0 @@
-update at_global_setting set setting_value='易大师接口自动化测试平台' where setting_name='siteName';

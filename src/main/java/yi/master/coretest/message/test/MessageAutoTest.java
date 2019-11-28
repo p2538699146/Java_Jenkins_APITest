@@ -670,10 +670,12 @@ public class MessageAutoTest {
 							}
 							paramsData.put(MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH + "." + entry.getKey(), replaceVariable);
 						}
-					} 
+					}
+					//替换测试集公共变量
+                    requestMessage = PracticalUtils.replaceSetPublicVariable(parseUtil.depacketizeMessageToString(msg.getComplexParameter()
+                            , paramsData.toString()), config.getPublicDataObject());
 					//替换入参报文中的全局变量
-					requestMessage = PracticalUtils.replaceGlobalVariable(parseUtil.depacketizeMessageToString(msg.getComplexParameter(),
-							paramsData.toString()), globalVariableService);	
+					requestMessage = PracticalUtils.replaceGlobalVariable(requestMessage, globalVariableService);
 									
 				}
 				testScene.setTestClient(TestClient.getTestClientInstance(info.getInterfaceProtocol()));

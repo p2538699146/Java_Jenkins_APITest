@@ -6,14 +6,11 @@ import cn.hutool.core.io.resource.ClassPathResource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import yi.master.business.system.dao.GlobalSettingDao;
-import yi.master.business.system.service.GlobalSettingService;
 import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
 
@@ -46,6 +43,7 @@ public class VersionUpdateUtil {
         ALL_VERSION_LIST.add("0.1.5beta");
         ALL_VERSION_LIST.add("0.2.0beta");
         ALL_VERSION_LIST.add("0.2.1beta");
+        ALL_VERSION_LIST.add("0.2.2beta");
     }
 
     /**

@@ -600,7 +600,7 @@
 			</div>
 	</div>
     <div class="row cl">
-        <label class="form-label col-xs-5 col-sm-3"><a style="text-decoration: none;" href="javascript:layer.alert('只对该测试集有效：存在同名的测试变量、Header优先使用该处配置。验证规则将会附加到测试集中的每个测试场景中。', {title:'说明', shadeClose:'true', icon: 0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>测试集公共信息：</label>
+        <label class="form-label col-xs-5 col-sm-3"><a style="text-decoration: none;" href="javascript:layer.alert('<span style=\'color:red;\'>只对该测试集有效并且只在测试集测试过程中生效：</span>存在同名的测试变量、Header优先使用该处配置。验证规则将会附加到测试集中的每个测试场景中。', {title:'说明', shadeClose:'true', icon: 0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>测试集公共信息：</label>
         <div class="formControls col-xs-7 col-sm-9">
             <button class="btn btn-success radius size-MINI" type="button" id="set-public-data">公共变量</button>
             <input type="hidden" id="publicData", name="publicData" value="{{ publicData }}">
