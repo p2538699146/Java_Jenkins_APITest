@@ -113,7 +113,7 @@ public class VersionUpdateUtil {
             if (CollUtil.isNotEmpty(sqls)) {
                 for (String sql:sqls) {
                     if (StringUtils.isNotBlank(sql)) {
-                        isNeedRestart = true;
+                        //isNeedRestart = true;
 
                         logger.info("Update System execute SQL:" + sql);
                         settingDao.getSession().createSQLQuery(sql).executeUpdate();
