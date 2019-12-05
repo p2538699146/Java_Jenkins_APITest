@@ -8,8 +8,8 @@ QQ群交流：468324085，加群验证：易大师
 [更新日志](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?title=%E6%9B%B4%E6%96%B0%E8%AF%B4%E6%98%8E&parent=)  
 [使用文档](https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/)  
  
-[演示地址](http://www.xuwangcheng.com/yi)（账号 tester/11111111）   
-
+[演示地址](http://www.xuwangcheng.com/yi)（账号 tester/11111111）     
+[交流论坛](https://yi.xuwangcheng.com/)  
 #### 一键安装 for windows
 百度云： https://pan.baidu.com/s/1i8siuIuPXsjlnawYFc4c6A  
 **账号 admin/q708162543**  
