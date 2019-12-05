@@ -402,6 +402,7 @@ function updateTestOptions(){
 	$.post(REQUEST_URL.AUTO_TEST.UPDATE_TEST_CONFIG_URL, updateConfigData, function(data){
 		if(data.returnCode == 0){
 			currentSetInfo.config = data.data;
+			layer.closeAll('page');
 			layer.msg('更新成功',{icon:1, time:1500});
 		} else {
 			layer.alert("更新失败：" + data.msg, {icon:5});
