@@ -455,13 +455,13 @@ var MESSAGE_PROTOCOL = {
         "ConnectTimeOut":"",
         "ReadTimeOut":""
     },
-    "WebService":{
-        "ConnectTimeOut":"",
-        "Namespace":"",
-        "Method":"",
-        "Username":"",
-        "Password":""
-    },
+    // "WebService":{
+    //     "ConnectTimeOut":"",
+    //     "Namespace":"",
+    //     "Method":"",
+    //     "Username":"",
+    //     "Password":""
+    // },
     "WebSocket":{
         "ConnectTimeOut":"",
         "ReadTimeOut":""

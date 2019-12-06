@@ -1,17 +1,15 @@
 package yi.master.coretest.message.protocol;
 
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.rpc.client.RPCServiceClient;
-
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.constant.MessageKeys;
 import yi.master.coretest.message.protocol.entity.ClientTestResponseObject;
 import yi.master.util.PracticalUtils;
+
+import javax.xml.namespace.QName;
+import java.util.Map;
 
 public class WebserviceTestClient extends TestClient {
 	private static WebserviceTestClient webserviceTestClient;
@@ -41,7 +39,9 @@ public class WebserviceTestClient extends TestClient {
 			password = (String) callParameter.get(MessageKeys.PUBLIC_PARAMETER_PASSWORD);
 			namespace = (String) callParameter.get(MessageKeys.WEB_SERVICE_PARAMETER_NAMESPACE);
 			method = (String) callParameter.get(MessageKeys.PUBLIC_PARAMETER_METHOD);
-			connectTimeOut = (int)callParameter.get(MessageKeys.PUBLIC_PARAMETER_CONNECT_TIMEOUT);
+            if (PracticalUtils.isNumeric(callParameter.get(MessageKeys.PUBLIC_PARAMETER_CONNECT_TIMEOUT))) {
+                connectTimeOut = Integer.parseInt((String) callParameter.get(MessageKeys.PUBLIC_PARAMETER_CONNECT_TIMEOUT));
+            }
 		}
 		
 		String responseMessage = "";
@@ -126,8 +126,7 @@ public class WebserviceTestClient extends TestClient {
 					new Object[] { request }, new Class[] { String.class });
 			return result[0].toString();
 		} catch (Exception e) {
-				
-			LOGGER.debug("Fail to call web-service url=" + requestUrl + ",namespace=" + namespace + ",method=" + method + "!", e);
+			LOGGER.error("Fail to call web-service url=" + requestUrl + ",namespace=" + namespace + ",method=" + method + "!", e);
 			throw e;
 		}
 				          
