@@ -630,17 +630,21 @@ function createWebSocket (path) {
     if (top.homeUrl == null || top.homeUrl == '') {
         return null;
     }
-    let url = (top.homeUrl).replace('https', 'ws').replace('http', 'ws');
-    let ws;
-    if ('WebSocket' in window){
-        ws = new WebSocket(url + path);
-    }
-    else if ('MozWebSocket' in window){
-        ws = new MozWebSocket(url + path);
-    }
-    else{
-        console.error("该浏览器不支持websocket");
-        return null;
+    let url = (top.homeUrl).replace('https', 'wss').replace('http', 'ws');
+    let ws = null;
+    try {
+        if ('WebSocket' in window){
+            ws = new WebSocket(url + path);
+        }
+        else if ('MozWebSocket' in window){
+            ws = new MozWebSocket(url + path);
+        }
+        else{
+            console.error("该浏览器不支持websocket");
+            return null;
+        }
+    } catch (err) {
+        console.error(err);
     }
 
     return ws;
