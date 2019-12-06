@@ -314,6 +314,7 @@ public class TestConfig implements Serializable, Cloneable {
 		TestConfig config = null;
 		try {
 			config = (TestConfig) super.clone();
+			config.setRules(new HashSet<>());
 		} catch (Exception e) {
 			
 			LOGGER.warn("clone exception!", e);
