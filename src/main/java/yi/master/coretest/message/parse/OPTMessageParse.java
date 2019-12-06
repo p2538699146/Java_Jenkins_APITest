@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import yi.master.business.message.bean.ComplexParameter;
 import yi.master.business.message.bean.Parameter;
 import yi.master.business.message.service.ParameterService;
+import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
@@ -44,7 +45,7 @@ public class OPTMessageParse extends FixedMessageParse {
 			List<Parameter> params) {
 		
 		ParameterService ps = (ParameterService) FrameworkUtil.getSpringBean("parameterService");
-		int pid = ps.save(new Parameter(message, "name", "defaultValue", "path", "String"));
+		int pid = ps.save(new Parameter("defaultName", "", message, MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH, "String"));
 		return new ComplexParameter(new Parameter(pid), null, null);
 	}
 
@@ -61,8 +62,12 @@ public class OPTMessageParse extends FixedMessageParse {
 				return messageFormatBeautify(o.toString());
 			}
 		}
-		
-		return messageFormatBeautify(complexParameter.getSelfParameter().getParameterIdentify());
+
+		if ("defaultValue".equals(complexParameter.getSelfParameter().getDefaultValue())) {
+            return messageFormatBeautify(complexParameter.getSelfParameter().getParameterIdentify());
+        } else {
+            return messageFormatBeautify(complexParameter.getSelfParameter().getDefaultValue());
+        }
 	}
 	
 }

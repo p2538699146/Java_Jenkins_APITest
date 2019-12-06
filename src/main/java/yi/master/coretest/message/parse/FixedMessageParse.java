@@ -45,7 +45,7 @@ public class FixedMessageParse extends MessageParse {
 			return null;
 		}
 		Set<Parameter> params = new HashSet<Parameter>();
-		Parameter param = new Parameter(message, "name", "defaultValue", "path", "String");
+		Parameter param = new Parameter("defaultName", "", message, MessageKeys.MESSAGE_PARAMETER_DEFAULT_ROOT_PATH, "String");
 		if (validateRepeatabilityParameter(existParams, param)) {
 			params.add(param);
 		}
@@ -66,7 +66,12 @@ public class FixedMessageParse extends MessageParse {
 			return "";
 		}
 		Parameter param = complexParameter.getSelfParameter();
-		return messageFormatBeautify(param.getParameterIdentify());
+
+        if ("defaultValue".equals(param.getDefaultValue())) {
+            return messageFormatBeautify(param.getParameterIdentify());
+        } else {
+            return messageFormatBeautify(param.getDefaultValue());
+        }
 	}
 
 	@Override
