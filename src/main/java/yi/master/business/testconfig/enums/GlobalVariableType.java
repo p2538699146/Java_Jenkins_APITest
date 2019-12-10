@@ -52,5 +52,9 @@ public enum GlobalVariableType {
     /**
      * 动态接口
      */
-    dynamicInterface
+    dynamicInterface,
+    /**
+     * 文件
+     */
+    fileParameter
 }

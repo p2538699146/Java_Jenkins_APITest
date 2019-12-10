@@ -124,6 +124,17 @@
 	<beans>
 		<import resource="applicationContext-autoTask.xml"/>
 		<!-- 目前暫時没有用到redis -->
-<!-- 		<import resource="redis.xml"/> -->
-	</beans>
+        <!-- <import resource="redis.xml"/> -->
+
+        <!--自定义属性配置-->
+        <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+            <property name="attributes">
+                <map>
+                    <!--全局变量文件类型保存路径:绝对路径-->
+                    <entry key="globalVariableFileSavePath" value=""/>
+                </map>
+            </property>
+        </bean>
+
+    </beans>
 </beans>

@@ -1,16 +1,5 @@
 package yi.master.util.excel;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -21,21 +10,18 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import yi.master.business.message.bean.InterfaceInfo;
-import yi.master.business.message.bean.Message;
-import yi.master.business.message.bean.MessageScene;
-import yi.master.business.message.bean.Parameter;
-import yi.master.business.message.bean.TestData;
-import yi.master.business.message.service.InterfaceInfoService;
-import yi.master.business.message.service.MessageSceneService;
-import yi.master.business.message.service.MessageService;
-import yi.master.business.message.service.ParameterService;
-import yi.master.business.message.service.TestDataService;
+import yi.master.business.message.bean.*;
+import yi.master.business.message.service.*;
 import yi.master.business.user.bean.User;
 import yi.master.coretest.message.parse.MessageParse;
 import yi.master.coretest.message.protocol.TestClient;
 import yi.master.util.FrameworkUtil;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * 从指定excel中读取对象内容
@@ -215,8 +201,7 @@ public class ImportInterfaceInfo {
 				info.setStatus("0");
 			}
 		} catch (Exception e) {
-			
-			e.printStackTrace();
+            LOGGER.error("数据异常,请检查上传文档格式.导入该条信息失败!", e);
 			flag = false;
 			tigs.append("<span class=\"c-red\">数据异常,请检查上传文档格式.导入该条信息失败!</span><br>");
 		}
@@ -259,8 +244,7 @@ public class ImportInterfaceInfo {
 			 InputStream is = new FileInputStream(path);
 			 hssfWorkbook = new HSSFWorkbook(is);			 
 		} catch (Exception e) {
-			
-			e.printStackTrace();
+			LOGGER.error(e);
 		}
 		InterfaceInfo info = null;
 		List<InterfaceInfo> infos = new ArrayList<InterfaceInfo>();
@@ -317,7 +301,7 @@ public class ImportInterfaceInfo {
             InputStream is = new FileInputStream(path);
             xssfWorkbook = new XSSFWorkbook(is);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         InterfaceInfo info = null;
 		List<InterfaceInfo> infos = new ArrayList<InterfaceInfo>();

@@ -1,19 +1,12 @@
 package yi.master.business.testconfig.bean;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Map;
-
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.json.annotations.JSON;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-
-import net.sf.json.JSONObject;
 import yi.master.annotation.FieldRealSearch;
 import yi.master.business.message.bean.SceneValidateRule;
 import yi.master.business.testconfig.enums.GlobalVariableType;
@@ -23,6 +16,12 @@ import yi.master.constant.GlobalVariableConstant;
 import yi.master.coretest.message.test.MessageAutoTest;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 
@@ -58,8 +57,10 @@ public class GlobalVariable implements Serializable {
 	 */
 	private String variableName;
 
-	@FieldRealSearch(names = {"HTTP调用参数", "Socket调用参数", "WebService调用参数", "验证关联规则", "测试集运行时配置", "常量", "日期", "随机数", "时间戳", "随机字符串", "动态接口"},
-			values = {"httpCallParameter", "socketCallParameter", "webServiceCallParameter", "relatedKeyWord", "setRuntimeSetting", "constant", "datetime", "randomNum", "currentTimestamp", "randomString", "dynamicInterface"})
+	@FieldRealSearch(names = {"HTTP调用参数", "Socket调用参数", "WebService调用参数", "验证关联规则", "测试集运行时配置"
+            , "常量", "日期", "随机数", "时间戳", "随机字符串", "动态接口", "文件参数"},
+			values = {"httpCallParameter", "socketCallParameter", "webServiceCallParameter", "relatedKeyWord", "setRuntimeSetting"
+                    , "constant", "datetime", "randomNum", "currentTimestamp", "randomString", "dynamicInterface", "fileParameter"})
 	private String variableType;
 	/**
 	 * 如果这个变量可以被使用,则需要设置key值<br>
@@ -77,6 +78,7 @@ public class GlobalVariable implements Serializable {
 	 * <i>randomString</i> 	两个数字，第一位表示字符串长度，第二位表示组成：0-只有大写字母 1-只有小写字母  2-大小写字母混合 3-数字和字母<br>
 	 * <i>uuid</i> 间隔符<br>
 	 * <i>dynamicInterface</i> 对应配置的JSON字符串
+     * <i>fileParameter</i> 文件路径
 	 */
 	private String value;
 	/**
@@ -252,7 +254,8 @@ public class GlobalVariable implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private Map<String, String> parseJsonToMap() throws JsonParseException, JsonMappingException, IOException {		
-		if (StringUtils.isNotBlank(this.value) && !GlobalVariableType.constant.name().equalsIgnoreCase(this.variableType)) {
+		if (StringUtils.isNotBlank(this.value) && !GlobalVariableType.constant.name().equalsIgnoreCase(this.variableType)
+            && !GlobalVariableType.fileParameter.name().equalsIgnoreCase(this.variableType)) {
 			return mapper.readValue(this.value, Map.class);
 		}
 		return null;

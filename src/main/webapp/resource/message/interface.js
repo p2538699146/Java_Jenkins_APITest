@@ -1,5 +1,4 @@
 var interfaceId; //当前正在编辑的interface的id
-var currIndex;//当前正在操作的layer窗口的index
 
 var templateParams = {
 		tableTheads:["名称", "中文名","类型","协议","创建时间","状态","创建用户","最后修改","报文管理", "参数管理", "备注","操作"],

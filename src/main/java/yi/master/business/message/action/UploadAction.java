@@ -1,22 +1,20 @@
 package yi.master.business.message.action;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.base.bean.ReturnJSONObject;
 import yi.master.constant.ReturnCodeConsts;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.ParameterMap;
+import yi.master.util.cache.CustomSettingVariable;
 import yi.master.util.upload.Upload;
-import com.opensymphony.xwork2.ActionSupport;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
  * 文件上传Action
@@ -48,6 +46,12 @@ public class UploadAction extends ActionSupport {
 	 * 提交过来的file的MIME类型
 	 */
 	private String fileFileContentType;
+
+    /**
+     * 0 - 普通
+     * 1 - 全局变量文件
+     */
+	private String type;
     
     public String upload() {
     	int returnCode = ReturnCodeConsts.SUCCESS_CODE;
@@ -57,7 +61,11 @@ public class UploadAction extends ActionSupport {
     		returnCode = ReturnCodeConsts.NO_FILE_UPLOAD_CODE;
     		msg = "未发现上传的文件!";
     	} else {
-    		String fps = Upload.singleUpload(file, this.getFileFileName());
+    	    String parentPath = null;
+    	    if ("1".equals(type)) {
+                parentPath = CustomSettingVariable.GLOBAL_VARIABLE_FILE_SAVE_PATH;
+            }
+    		String fps = Upload.singleUpload(file, this.getFileFileName(), parentPath);
     		
     		if (fps == null) {
     			returnCode = ReturnCodeConsts.SYSTEM_ERROR_CODE;
@@ -122,5 +130,9 @@ public class UploadAction extends ActionSupport {
 	public String getDownloadFileName() {
 		return downloadFileName;
 	}
-	
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }

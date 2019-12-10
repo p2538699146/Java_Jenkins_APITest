@@ -18,8 +18,15 @@ public @interface CustomConditionSetting {
 	public static final String DATETIME_TYPE = "datetime";
 	public static final String STRING_TYPE = "string";
 
-	//条件类型，目前支持string、datetime
+    /**
+     * 条件类型，目前支持string、datetime
+     * @return
+     */
 	String conditionType() default STRING_TYPE;
-	//运算符，目前仅支持 ‘like’ 和 ‘=’ '>' '<'
+
+    /**
+     * 运算符，目前仅支持 ‘like’ 和 ‘=’ '>' '<'
+     * @return
+     */
 	String operator() default "like";
 }

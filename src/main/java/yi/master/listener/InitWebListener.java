@@ -17,6 +17,7 @@ import yi.master.coretest.message.test.mock.MockServer;
 import yi.master.coretest.task.JobManager;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.cache.CacheUtil;
+import yi.master.util.cache.CustomSettingVariable;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -82,6 +83,12 @@ public class InitWebListener implements ServletContextListener {
 		String version = CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_VERSION);
 		VersionUpdateUtil.updateVersion(version);
 
+        //获取项目根路径
+        FrameworkUtil.setProjectPath(context.getRealPath(""));
+
+		//获取自定义配置信息
+        CustomSettingVariable.setSettingVariable(context);
+
 		//获取当前系统的所有接口信息
 		LOGGER.info("获取系统接口信息!");
 		List<OperationInterface> ops = opService.findAll();
@@ -95,9 +102,6 @@ public class InitWebListener implements ServletContextListener {
 			dataDBMap.put(String.valueOf(db.getDbId()), db);
 		}
 		CacheUtil.setQueryDBMap(dataDBMap);
-		
-		//获取项目根路径
-		FrameworkUtil.setProjectPath(context.getRealPath(""));
 		
 		//启动quartz定时任务
 		JobManager jobManager = (JobManager) FrameworkUtil.getSpringBean("jobManager");

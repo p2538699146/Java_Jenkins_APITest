@@ -1,6 +1,5 @@
 var interfaceId; //当前的测试id
 var parameterId;//当前正在操作的参数
-var currIndex;//当前正在操作的layer窗口的index
 
 //导入报文参数
 var showHtml = '<div class="page-container">'+

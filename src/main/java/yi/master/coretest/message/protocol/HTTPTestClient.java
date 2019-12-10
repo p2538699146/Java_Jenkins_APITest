@@ -1,6 +1,7 @@
 package yi.master.coretest.message.protocol;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.FileUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.*;
@@ -12,6 +13,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
@@ -33,6 +35,7 @@ import yi.master.util.PracticalUtils;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -483,14 +486,21 @@ public class HTTPTestClient extends TestClient {
 			Map<String, String> bodyMap = URLMessageParse.parseUrlToMap(body, new String[]{});
 			MultipartEntity requestEntity = new MultipartEntity();
 
-			for (String key:bodyMap.keySet()) {
+            for (String key:bodyMap.keySet()) {
+                //判断是否为文件参数
+                File f = new File(bodyMap.get(key));
+                if (FileUtil.exist(f)) {
+                    FileBody fileBody = new FileBody(new File(bodyMap.get(key)));
+                    requestEntity.addPart("file", fileBody);
+                    continue;
+                }
 				requestEntity.addPart(key, new StringBody(bodyMap.get(key)));
 			}
 					
 			return requestEntity;
 		}
 
-		//multipart/form-data的方式提交
+		//application/x-www-form-urlencoded的方式提交
 		//此时body体必须为url格式
 		if ("application/x-www-form-urlencoded".equalsIgnoreCase(headers.get(contentTypeKey))) {
 			headers.remove(contentTypeKey);

@@ -1,6 +1,5 @@
 var messageId; //当前messageid
 var messageSceneId; //当前正在操作的sceneId
-var currIndex;//当前正在操作的layer窗口的index
 
 var interfaceName;
 var messageName;

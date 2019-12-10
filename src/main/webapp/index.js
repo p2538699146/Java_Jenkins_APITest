@@ -86,25 +86,25 @@ function loadChildrenHtml (options) {
 
 /********************加载菜单***************************/
 loadMenuFun = function() {
-    $.get(REQUEST_URL.MENU.GET_USER_MENUS, function(data){
-        if (data.returnCode == 0) {
-            menuJson = data.data;
-            var systemSwitchDom = $('#system-type-name').siblings('ul');
-            var defaultTypeKey = null;
-            $.each(menuJson, function(systemKey, content){
-                defaultTypeKey == null && (defaultTypeKey = systemKey);
-                systemSwitchDom.append('<li><a system-type="' + systemKey + '" href="javascript:void(0)" class="switch-system"><i class="Hui-iconfont ' + content.icon + '"></i>' + content.name + '</a></li>');
-            });
+    GLOBAL_UTILS.ajaxUtils.ajaxGet(REQUEST_URL.MENU.GET_USER_MENUS, function(data) {
+        menuJson = data.data;
+        var systemSwitchDom = $('#system-type-name').siblings('ul');
+        var defaultTypeKey = null;
+        $.each(menuJson, function(systemKey, content){
+            defaultTypeKey == null && (defaultTypeKey = systemKey);
+            systemSwitchDom.append('<li><a system-type="' + systemKey + '" href="javascript:void(0)" class="switch-system"><i class="Hui-iconfont ' + content.icon + '"></i>' + content.name + '</a></li>');
+        });
 
-            $("#menu-page").load("./resource/template/menuTemplate.htm", function(){
-                templates['menu-template'] = Handlebars.compile($("#menu-page > script").html());
-                switchMenu(getCookie('menuType') == null ? defaultTypeKey : getCookie('menuType'), true, defaultTypeKey);
-                $(".switch-system").click(function(){
-                    var name = switchMenu($(this).attr('system-type'));
-                    name && (layer.msg('已切换至系统：' + name, {time:2000}));
-                });
-            })
-        }
+        $("#menu-page").load("./resource/template/menuTemplate.htm", function(){
+            templates['menu-template'] = Handlebars.compile($("#menu-page > script").html());
+            switchMenu(getCookie('menuType') == null ? defaultTypeKey : getCookie('menuType'), true, defaultTypeKey);
+            $(".switch-system").click(function(){
+                var name = switchMenu($(this).attr('system-type'));
+                name && (layer.msg('已切换至系统：' + name, {time:2000}));
+            });
+        })
+    }, function(data){
+        return false;
     });
 }
 /**

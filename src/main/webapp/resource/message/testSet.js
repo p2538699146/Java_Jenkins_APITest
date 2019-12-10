@@ -1,6 +1,5 @@
 var setId; //当前正在操作的set
 var setName; //当前正在操作的setName
-var currIndex;//当前正在操作的layer窗口的index
 
 
 var selectMode = "1";//是否为选择模式，只供选择0-是   1-不是
@@ -155,8 +154,7 @@ var columnsSetting = [
 var eventList = {
 		"#add-object":function() {
 			publish.renderParams.editPage.modeFlag = 0;					
-			currIndex = layer_show("增加测试集", editHtml, "600", "400", 1);
-			//layer.full(index);
+			currIndex = layer_show("增加测试集", editHtml, "600", "450", 1);
 			publish.init();			
 		},
 		"#batch-del-object":function() {

@@ -1,5 +1,3 @@
-var currIndex;//当前正在操作的layer窗口的index
-
 
 var templateParams = {
 		tableTheads:["测试集", "场景数", "成功数", "失败数", "异常数", "进度", "开始时间", "结束时间", "测试人" ,"备注", "操作"],

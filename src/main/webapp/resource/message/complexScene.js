@@ -1,5 +1,4 @@
 var setId; //当前测试id
-var currIndex;//当前正在操作的layer窗口的index
 var addMode;
 var templateParams = {
 		tableTheads:["名称", "包含场景", "创建时间", "独立客户端测试","备注", "操作"],

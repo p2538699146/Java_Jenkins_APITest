@@ -1,5 +1,6 @@
 package yi.master.coretest.message.test;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.NumberUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -587,8 +588,13 @@ public class MessageAutoTest {
 				testScene.getScenes().add(null);
 			}
 		}	
-		if(testScene.getScenes().size() > 0) {
-			testScene.setTestClient(testScene.getScenes().get(0).getTestClient());
+		if(CollUtil.isNotEmpty(testScene.getScenes())) {
+		    for (TestMessageScene tms:testScene.getScenes()) {
+		        if (tms != null && tms.getTestClient() != null) {
+                    testScene.setTestClient(tms.getTestClient());
+                    break;
+                }
+            }
 		}
 		testScene.setTestCount(ComplexSceneSuccessFlag.SEPARATE_STATISTICS_RESULT.getFlag().equals(complexScene.getSuccessFlag()) ? sceneCount : 1);
 		return testScene;		

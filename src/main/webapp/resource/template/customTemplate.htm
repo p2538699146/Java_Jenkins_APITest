@@ -584,7 +584,8 @@
 	<div class="row cl">
 		<label class="form-label col-xs-5 col-sm-3"><a style="text-decoration: none;" href="javascript:layer.alert('如果该处配置了至少一个测试环境，则测试时只会对该测试环境下的接口场景进行测试，否则，测试所有可用的环境。', {title:'说明', shadeClose:'true', icon: 0});"><i class="Hui-iconfont" style="color:green;">&#xe6cd;</i></a>可执行测试环境：</label>
 			<div class="formControls col-xs-7 col-sm-9">
-				<input type="button" class="btn btn-danger radius  size-S" value="选择" id="choose-business-system">
+				<input type="button" class="btn btn-success radius  size-S" value="选择" id="choose-business-system">
+                <input type="button" class="btn btn-danger radius  size-S" value="清除" id="clear-business-system">
 			</div>
 	</div>	
 	<div class="row cl">
@@ -878,7 +879,7 @@
 		</div>
 	</div>
 	<div class="row cl httpCallParameter hide">
-		<label class="form-label col-xs-4 col-sm-3">URL参数：</label>
+		<label class="form-label col-xs-4 col-sm-3">Query参数：</label>
 		<div class="formControls col-xs-8 col-sm-9">
 			<textarea style="height: 80px;" class="textarea radius" id="Querys" name="Querys" placeholder="id=324&#10;name=baika&#10;age=32"></textarea>
 		</div>

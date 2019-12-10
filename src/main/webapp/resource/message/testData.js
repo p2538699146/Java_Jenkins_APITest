@@ -1,6 +1,5 @@
 var messageSceneId; //当前正在操作的sceneId
 var sceneName; //当前场景名称
-var currIndex;//当前正在操作的layer窗口的index
 var protocolType;
 
 var currParams; //当前设置数据内容

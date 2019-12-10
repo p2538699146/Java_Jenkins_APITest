@@ -35,6 +35,9 @@ var htmls = top.htmls;
 var editHtml = "";//编辑页面代码,防止重复渲染
 var advancedQueryFormHtml = "";//高级查询页面代码，防止重复渲染
 
+
+var GLOBAL_UTILS = top.GLOBAL_UTILS;
+
 /**************说明文档*****************/
 /**
  * 写法：<a mark-name="parameterizedFilePath" class="btn btn-default radius explanation-mark"><i class="Hui-iconfont">&#xe6cd;</i></a>
@@ -57,7 +60,7 @@ var thisPageName;
 var thisPagePermissionList;
 $(function() {
 	//加载对应的js文件		
-	var r = (window.location.pathname.split("."))[0].split("/");
+	let r = (window.location.pathname.split("."))[0].split("/");
     thisPageName = r[r.length-1];
 	dynamicLoadScript(thisPageName + ".js");
 });
@@ -1148,7 +1151,7 @@ function layer_show (title, url, w, h, type, success, cancel, end, other) {
         if (h >= maxHeight) {
             h= '90%' ;
         } else {
-            h = parseInt((h / maxHeight) * 100) + '%';
+            h = Math.ceil((h / maxHeight) * 100) + '%';
         }
     };
 
@@ -1330,6 +1333,7 @@ function createImportExcelMark(title, templatePath, uploadUrl, importUrl) {
 			    ,url: uploadUrl //上传接口
 			    ,accept:"file"
 			    ,exts:"xlsx|xls"
+                  ,data: {type: "0"}
 			    ,size:"102400"
 			    ,drag:false
 			    ,before:function(obj) {

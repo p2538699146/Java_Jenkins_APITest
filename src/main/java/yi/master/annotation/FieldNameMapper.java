@@ -15,10 +15,21 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldNameMapper {
-	//对应的HQL中的查询名
+    /**
+     * 对应的HQL中的查询名
+     * @return
+     */
 	String fieldPath() default "";
-	//该字段是否需要被全局模糊查询
+
+    /**
+     * 该字段是否需要被全局模糊查询
+     * @return
+     */
 	boolean ifSearch() default true;
-	//是否可以被排序
+
+    /**
+     * 是否可以被排序
+     * @return
+     */
 	boolean ifOrder() default true;
 }

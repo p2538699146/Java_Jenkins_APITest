@@ -168,6 +168,11 @@ var eventList = {
 				}
 			});
 		},
+        "#clear-business-system":function() { //测试集配置清除可执行测试环境
+            $("#choose-business-system").siblings('p').remove();
+            $("#systems").val('');
+            layer.msg('已清除!', {icon: 1, time: 1500});
+        },
 		"#batch-op":function() { //批量操作 删除或者添加
 			var checkboxList = $(".selectScene:checked");
 			var opName = "删除";

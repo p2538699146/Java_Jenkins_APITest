@@ -1,17 +1,16 @@
 package yi.master.annotation.util;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import yi.master.annotation.CustomConditionSetting;
+import yi.master.annotation.FieldNameMapper;
+import yi.master.annotation.FieldRealSearch;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-
-import yi.master.annotation.CustomConditionSetting;
-import yi.master.annotation.FieldNameMapper;
-import yi.master.annotation.FieldRealSearch;
 
 /**
  * 前台DataTables中表格列与后端实体类的字段映射处理
@@ -49,9 +48,10 @@ public class AnnotationUtil {
 			return null;
 		}
 		//由于mysql中 Datetime字段不能通过like查询，目前暂时不对Datetime字段进行搜索
-		if ((field.getType().getCanonicalName().equals("java.sql.Timestamp") 
-				|| field.getType().getCanonicalName().equals("java.sql.Date")
-				|| field.getType().getCanonicalName().equals("java.util.Timestamp")) && getType == 0) {
+        boolean fieldTypeFlag = field.getType().getCanonicalName().equals("java.sql.Timestamp")
+                || field.getType().getCanonicalName().equals("java.sql.Date")
+                || field.getType().getCanonicalName().equals("java.util.Timestamp");
+		if (fieldTypeFlag && getType == 0) {
 			return null;
 		}
 		String columPath = fieldName;

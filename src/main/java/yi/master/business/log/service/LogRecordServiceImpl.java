@@ -1,11 +1,7 @@
 package yi.master.business.log.service;
 
-import java.sql.Timestamp;
-import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import yi.master.business.base.service.impl.BaseServiceImpl;
 import yi.master.business.log.bean.LogRecord;
 import yi.master.business.log.dao.LogRecordDao;
@@ -13,6 +9,9 @@ import yi.master.business.system.bean.OperationInterface;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
 import yi.master.util.cache.CacheUtil;
+
+import java.sql.Timestamp;
+import java.util.regex.Pattern;
 
 @Service("logRecordService")
 public class LogRecordServiceImpl extends BaseServiceImpl<LogRecord> implements LogRecordService {
@@ -34,7 +33,7 @@ public class LogRecordServiceImpl extends BaseServiceImpl<LogRecord> implements 
 			String mark) {
 		
 		//检查日志开关并排除某些url
-		if (!"0".equals(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_LOGSWITCH)) 
+		if (!"0".equals(CacheUtil.getSettingValue(SystemConsts.GLOBAL_SETTING_LOG_SWITCH))
 				|| Pattern.matches("log-.*|mail-getNoReadMailNum|.*[Ll]ist.*|.*-get.*|ptc-viewTest", callUrl)) {
 			return;
 		}		

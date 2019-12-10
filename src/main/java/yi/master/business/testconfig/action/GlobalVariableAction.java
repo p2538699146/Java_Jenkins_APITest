@@ -1,23 +1,22 @@
 package yi.master.business.testconfig.action;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.testconfig.bean.GlobalVariable;
+import yi.master.business.testconfig.enums.GlobalVariableUniqueScope;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.user.bean.User;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -56,7 +55,7 @@ public class GlobalVariableAction extends BaseAction<GlobalVariable> {
 			model.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			model.setUser(new User(user.getUserId()));
 			model.setExpiryDate(new Timestamp(System.currentTimeMillis()));
-			model.setUniqueScope("0");
+			model.setUniqueScope(GlobalVariableUniqueScope.GLOBAL.getScope());
 			if (model.getValidityPeriod() == null) {
 				model.setValidityPeriod(0);
 			}

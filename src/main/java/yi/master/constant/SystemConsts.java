@@ -9,12 +9,15 @@ package yi.master.constant;
  * @version 1.0.0.0,2017.2.13
  */
 public interface SystemConsts {
+
 	/**
 	 * 当前版本号
 	 */
 	String VERSION = "0.2.2beta";
+
+
 	/**
-	 * 完成标志
+	 * 测试完成标志
 	 */
 	enum FinishedFlag {
 		N,Y;
@@ -129,6 +132,9 @@ public interface SystemConsts {
 		}
 	}
 
+
+
+
 	String DEFAULT_USER_PASSWORD = "111111";
 	
 	/**
@@ -158,13 +164,13 @@ public interface SystemConsts {
 	String QUARTZ_SCHEDULER_IS_START = "true"; 	
 	String QUARTZ_SCHEDULER_IS_STOP = "false";
 	
-	///////////////////////////////////全局设置指定设置名称/////////////////////////////////////////////////////////////////////
+	///////////////////////////////////全局配置相关/////////////////////////////////////////////////////////////////////
 	/**
 	 * 通用设置
 	 */
 	String GLOBAL_SETTING_HOME = "home";
 	String GLOBAL_SETTING_VERSION = "version";
-	String GLOBAL_SETTING_LOGSWITCH = "logSwitch";
+	String GLOBAL_SETTING_LOG_SWITCH = "logSwitch";
 
 	/**
 	 * 接口自动化测试相关全局配置
@@ -213,17 +219,24 @@ public interface SystemConsts {
 	 */
 	String GLOBAL_SETTING_LOG_RECORD_BLACKLIST = "logRecordBlacklist";
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
+	/////////////////////////////////////文件存放路径/////////////////////////////////////////////////////////////
+
 	/**
 	 * 测试报告静态html存储文件夹
 	 */
 	String REPORT_VIEW_HTML_FOLDER = "reportHtml";
+    /**
+     * 上传或者下载 excel保存的文件夹
+     */
+    String EXCEL_FILE_FOLDER = "excel";
+
 	/**
 	 * 静态报告模板
 	 */
 	String REPORT_VIEW_HTML_FIXED_HTML_NEW = "offlineReportTemplateNew.xml";
+
+
+	////////////////////////////////////内部请求地址//////////////////////////////////////////////////////////
 	/**
 	 * 测试集测试请求地址
 	 */
@@ -238,13 +251,10 @@ public interface SystemConsts {
 	 * 生成静态报告请求地址
 	 */
 	String CREATE_STATIC_REPORT_HTML_RMI_URL = "report-generateStaticReportHtml";
-	
-	/**
-	 * 上传或者下载 excel保存的文件夹
-	 */
-	String EXCEL_FILE_FOLDER = "excel";
 
 
+
+    ///////////////////////////////////版本升级相关////////////////////////////////////////////////////////
 	/**
 	 * 检查版本升级的网址
 	 */

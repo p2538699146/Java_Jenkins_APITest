@@ -1,6 +1,5 @@
 var messageSceneId; //当前正在操作的sceneId
 var configId; //当前正在操作的configId
-var currIndex;//当前正在操作的layer窗口的index
 var responseExample;
 
 

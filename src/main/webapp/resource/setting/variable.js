@@ -144,7 +144,14 @@ var variableTypeInfo = {
 			layerWidth: "733",
 			keyIsNull:false,
 			ifCreate:true
-		}
+		},
+        fileParameter: {
+            text:"文件参数",
+            settingValue:"",
+            layerHeight:"",
+            keyIsNull:false,
+            ifCreate:true
+        }
 };
 
 function variableTypeList () {
@@ -211,7 +218,8 @@ var templateParams = {
 				        {value:"currentTimestamp", text:variableTypeInfo.currentTimestamp.text},
 				        {value:"randomString", text:variableTypeInfo.randomString.text},
 				        {value:"uuid", text:variableTypeInfo.uuid.text},
-				        {value:"dynamicInterface", text:variableTypeInfo.dynamicInterface.text}]
+				        {value:"dynamicInterface", text:variableTypeInfo.dynamicInterface.text},
+                        {value:"fileParameter", text:variableTypeInfo.fileParameter.text}]
 				}]
 		},
 		{
@@ -243,7 +251,8 @@ var templateParams = {
 			reminder:"表明一些需要动态生成的变量在指定的时间范围内不会再次生成而使用上一次生成的值，单位为秒",
 			input:[{	
 				name:"validityPeriod",
-				placeholder:"单位为秒,默认为0"
+				placeholder:"单位为秒,默认为0",
+                value: "0"
 				}]
 		},
 		{
@@ -257,7 +266,11 @@ var templateParams = {
 				 style:"success",
 				 value:"配置",
 				 name:"setting-variable-value"
-			}]
+			},{
+                style:"success",
+                value:"上传文件",
+                name:"upload-file"
+            }]
 		},
 		{
 			edit:true,
@@ -353,7 +366,11 @@ var columnsSetting = [
 		   			dynamicInterface:{
 		   				status:"动态接口",
 		   				btnStyle:"danger"
-		   			}
+		   			},
+                    fileParameter:{
+                        status:"文件参数",
+                        btnStyle:"success"
+                    }
 		   	};
 		   	return labelCreate(data, context);
 		}
@@ -374,7 +391,7 @@ var columnsSetting = [
 	    "className":"ellipsis",
 	    "render":function(data, type, full, meta ) {
 	    	if (data != null && data.trim().length > 0) {	    		
-	    		if (full.variableType == "constant") {
+	    		if (full.variableType == "constant" || full.variableType == "fileParameter") {
 	    			return '<a href="javascript:;" onclick="showMark(\'' + full.variableName + '\', \'value\', this, \'value值\');"><span title="' + data + '">' + data + '</span></a>';
 	    		} else {
 	    			return btnTextTemplate([{
@@ -472,8 +489,8 @@ var eventList = {
 		},
 		".variable-create":function() {//生成变量
 			var data = table.row( $(this).parents('tr') ).data();
-			if (data.variableType == "constant") {
-				layer.alert('<span class="c-success">常量值：</span><br>' + data.value, {icon:1, anim:5, title:data.variableName});
+			if (data.variableType == "constant" || data.variableType == "fileParameter") {
+				layer.alert('<span class="c-success">常量值：</span><br>' + data.value, {icon:1, anim:5, offset: '120px', title:data.variableName});
 				return;
 			}
 			$.post(REQUEST_URL.GLOBAL_VARIABLE.CREATE_VARIABLE, {variableId:data.variableId}, function(json) {
@@ -542,7 +559,6 @@ var eventList = {
 			}
 			
 		}
-		
 };
 
 
@@ -553,15 +569,49 @@ var mySetting = {
 			getUrl:REQUEST_URL.GLOBAL_VARIABLE.GET,
 			beforeInit:function(df){				
 				$("#setting-variable-value").attr('type', 'hidden');
+                $("#upload-file").attr('type', 'hidden');
+				$("#key").val(uuid());
+
+                let loadIndex;
+                layui.use('upload', function(){
+                    let upload = layui.upload;
+                    //执行实例
+                    let uploadInst = upload.render({
+                        elem: '#upload-file' //绑定元素
+                        ,url: REQUEST_URL.FILE.UPLOAD_FILE //上传接口
+                        ,accept:"file"
+                        ,data: {type: "1"}
+                        ,size:"1024000"
+                        ,drag:false
+                        ,before:function(obj) {
+                            loadIndex = layer.msg('正在上传文件中...', {icon:16, time:99999, shade:0.4});
+                        }
+                        ,done: function(res){
+                            //上传完毕回调
+                            if (res.returnCode == 0) {//上传成功
+                                layer.close(loadIndex);
+                                layer.msg('文件上传成功!', {icon: 1, time: 1500});
+                                $('#upload-file').prev('span').remove();
+                                $('#upload-file').before('<span>' + res.data.path + '&nbsp;&nbsp;</span>');
+                                $('#value').val(res.data.path);
+                            } else {
+                                layer.close(loadIndex);
+                                layer.alert(res.msg, {icon:5});
+                            }
+                        }
+                    });
+                });
+
 				df.resolve();
 			},
 			renderCallback:function(obj){
 				$("#variableType").trigger('change');
-				$("#uniqueScope").trigger('change');				
+				$("#uniqueScope").trigger('change');
 			},
 			messages:{
 				variableName:"请输入变量或者模板的名称",
-				key:"请设定一个唯一的Key值"
+				key:"请设定一个唯一的Key值",
+                value: "请输入值或者点击配置按钮"
 			},
 			rules:{
 				variableName:{
@@ -620,8 +670,7 @@ $(function(){
 /**
  * 根据variableType改变form表单显示
  */
-function changeFormByVariableType (variableType) {	
-	
+function changeFormByVariableType (variableType) {
 	switch (variableType) {
 		case "httpCallParameter":
 		case "socketCallParameter":
@@ -629,21 +678,23 @@ function changeFormByVariableType (variableType) {
 		case "relatedKeyWord":
 		case "setRuntimeSetting":
 		case "dynamicInterface":
-			showOrHideInput('hidden', 'button');
+			showOrHideInput('hidden', 'button', 'hidden', '');
 			break;
 		case "datetime":
 		case "randomNum":
 		case "randomString":
 		case "uuid":
-			showOrHideInput('hidden', 'button');
+			showOrHideInput('hidden', 'button', 'hidden', '');
 			break;
 		case "currentTimestamp":
-			showOrHideInput('hidden', 'hidden');
-			$("#value").val(" ");
+			showOrHideInput('hidden', 'hidden', 'hidden', ' ');
 			break;	
 		case "constant":
-			showOrHideInput('text', 'hidden');
+			showOrHideInput('text', 'hidden', 'hidden', '');
 			break;
+        case "fileParameter":
+            showOrHideInput('hidden', 'hidden', 'button', '');
+            break;
 		default:
 			break;
 	}
@@ -656,9 +707,16 @@ function changeFormByVariableType (variableType) {
  * @param settingButton_type
  * @returns
  */
-function showOrHideInput(value_type, settingButton_type) {
+function showOrHideInput(value_type, settingButton_type, uploadButton_type, value) {
 	$("#value").attr('type', value_type);
 	$("#setting-variable-value").attr('type', settingButton_type);
+	$("#upload-file").attr('type', uploadButton_type);
+	if ('button' == uploadButton_type && strIsNotEmpty($('#value').val())) {
+        $('#upload-file').before('<span>' + $('#value').val() + '&nbsp;&nbsp;</span>');
+    } else {
+        $("#upload-file").prev('span').remove();
+    }
+    $("#value").val(value);
 }
 
 /**
@@ -701,7 +759,6 @@ function showSettingPage(title) {
 								minChooseCount:1,
 								//选择之后的回调	
 								confirmCallback:function (chooseValues, chooseObjects, index) {
-									console.log();
 									$(".dynamicInterface #systemNameText").text(chooseObjects[0]['systemName']);
 									$(".dynamicInterface #systemName").val(chooseObjects[0]['systemName']);
 									$(".dynamicInterface #systemId").val(chooseValues[0]);
@@ -717,9 +774,8 @@ function showSettingPage(title) {
 				$(layero).find('#choose-scene').click(function(){
 					layer_show("选择测试场景", "../advanced/chooseMessageScene.html?callbackFun=chooseTestScene&notMultiple=true", null, null, 2);	
 				});			
-				if (strIsNotEmpty(settingValue)) {
-					$.each(JSON.parse(settingValue), function(i, n) {						
-						
+				if (isJSON(settingValue)) {
+					$.each(JSON.parse(settingValue), function(i, n) {
 						if ($("#" + i)) {
 							
 							//HTTP调用参数单独处理
@@ -758,4 +814,22 @@ function chooseTestScene (sceneObj) {
 	$('.dynamicInterface #sceneId').val(sceneObj.messageSceneId);
 	$('.dynamicInterface #sceneName').val(sceneObj.interfaceName + '-' + sceneObj.messageName + '-' + sceneObj.sceneName);
 	$('.dynamicInterface #sceneNameText').text(sceneObj.interfaceName + '-' + sceneObj.messageName + '-' + sceneObj.sceneName);
+}
+
+/**
+ * uuid生成
+ * @returns
+ */
+function uuid() {
+    var s = [];
+    var hexDigits = "0123456789abcdef";
+    for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+    s[8] = s[13] = s[18] = s[23] = "";
+
+    var uuid = s.join("");
+    return uuid;
 }

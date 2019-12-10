@@ -1,5 +1,4 @@
 var taskId;
-var currIndex;//当前正在操作的layer窗口的index
 var quartzStatus;//quartz定时器状态
 var expressionEditHtml;//cron表达式简单编辑页面
 

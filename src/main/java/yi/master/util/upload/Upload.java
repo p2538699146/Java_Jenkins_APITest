@@ -1,17 +1,12 @@
 package yi.master.util.upload;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-
 import yi.master.constant.SystemConsts;
 import yi.master.util.FrameworkUtil;
+
+import java.io.*;
+import java.text.SimpleDateFormat;
 
 /**
  * upload上传工具类
@@ -29,9 +24,14 @@ public class Upload {
 	 * @param fileName  文件原名
 	 * @return 保存的文件路径
 	 */
-	public static String singleUpload (Object file, String fileName) {
-		String projectPath = SystemConsts.EXCEL_FILE_FOLDER + File.separator + newName(fileName);
-		String path = FrameworkUtil.getProjectPath() + File.separator + projectPath;
+	public static String singleUpload (Object file, String fileName, String parentPath) {
+        String path = parentPath;
+	    if (StringUtils.isBlank(parentPath)) {
+            path = FrameworkUtil.getProjectPath() + File.separator + SystemConsts.EXCEL_FILE_FOLDER;
+        }
+
+
+	    path +=  File.separator + newName(fileName);
 		InputStream is = null;
         OutputStream os = null;
         
@@ -57,7 +57,6 @@ public class Upload {
         	}						
             
 		} catch (Exception e) {
-			
 			LOGGER.error("上传文件失败：源文件名-" + fileName + "目的文件-" + path, e);
 			return null;
 		} finally {
@@ -90,7 +89,7 @@ public class Upload {
 		String[] paths = new String[files.length];
         
 		for (int i = 0; i < files.length; i++) {
-			paths[i] = singleUpload(files[i], fileNames[i]);
+			paths[i] = singleUpload(files[i], fileNames[i], null);
 		}
 		
 		return paths;

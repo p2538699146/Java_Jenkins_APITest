@@ -156,6 +156,7 @@ var mySetting = {
        	 }
 		},
 		templateCallBack:function(df) {
+            editPageHeight.add += 40;
 			createNodeTree();
    	 		df.resolve();
    	 	}	

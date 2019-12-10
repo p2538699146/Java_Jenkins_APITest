@@ -1,6 +1,5 @@
 var interfaceId; //当前interfaceId
 var messageId; //当前正在操作的messageid
-var currIndex;//当前正在操作的layer窗口的index
 var protocolType;//当前配置的协议类型
 
 
