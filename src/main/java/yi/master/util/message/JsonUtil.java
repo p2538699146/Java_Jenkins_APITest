@@ -1,15 +1,9 @@
 package yi.master.util.message;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.codehaus.jackson.map.ObjectMapper;
-
 import yi.master.constant.MessageKeys;
+
+import java.util.*;
 
 /**
  * 通用多层json递归解析。在没有Object对象，或是极度复杂的多级嵌套json，情况下以类的方式，直接获取结果。
@@ -324,7 +318,6 @@ public class JsonUtil {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("###[Error] getObject() " + e.getMessage());
 		}
 
 		return o;

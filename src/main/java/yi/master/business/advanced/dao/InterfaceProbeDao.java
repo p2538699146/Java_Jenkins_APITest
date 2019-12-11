@@ -1,12 +1,12 @@
 package yi.master.business.advanced.dao;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.base.dao.BaseDao;
 import yi.master.business.message.bean.TestResult;
-import yi.master.statement.vo.ProbeResultSynopsisView;
+import yi.master.statement.probe.ProbeResultSynopsisView;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 public interface InterfaceProbeDao extends BaseDao<InterfaceProbe> {
 	

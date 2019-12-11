@@ -1,24 +1,21 @@
 package yi.master.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import com.opensymphony.xwork2.ActionContext;
-
 import yi.master.annotation.util.AnnotationUtil;
 import yi.master.business.base.service.BaseService;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 框架工具类
@@ -41,8 +38,9 @@ public class FrameworkUtil {
 	private static ApplicationContext ctx;
 	
 	private static ServletContext webContext;
-	
-	/**
+
+
+    /**
 	 * 获取当前登录用户
 	 * @return
 	 */
@@ -190,9 +188,8 @@ public class FrameworkUtil {
 	public static ApplicationContext getCtx () {
 		return ctx;
 	}
-	
-	
-	public static void setCtx(ApplicationContext ctx) {
+
+    public static void setCtx(ApplicationContext ctx) {
 		FrameworkUtil.ctx = ctx;
 	}
 	

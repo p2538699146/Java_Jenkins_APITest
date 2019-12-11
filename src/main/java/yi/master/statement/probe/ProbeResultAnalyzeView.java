@@ -1,10 +1,10 @@
-package yi.master.statement.vo;
+package yi.master.statement.probe;
+
+import org.apache.struts2.json.annotations.JSON;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.struts2.json.annotations.JSON;
 
 /**
  * 

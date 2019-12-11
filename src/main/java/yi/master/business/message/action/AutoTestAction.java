@@ -1,15 +1,10 @@
 package yi.master.business.message.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.advanced.service.InterfaceProbeService;
 import yi.master.business.base.bean.ReturnJSONObject;
@@ -18,28 +13,27 @@ import yi.master.business.message.bean.MessageScene;
 import yi.master.business.message.bean.TestData;
 import yi.master.business.message.bean.TestResult;
 import yi.master.business.message.enums.TestDataStatus;
-import yi.master.business.message.service.ComplexSceneService;
-import yi.master.business.message.service.MessageSceneService;
-import yi.master.business.message.service.TestDataService;
-import yi.master.business.message.service.TestResultService;
-import yi.master.business.message.service.TestSetService;
+import yi.master.business.message.service.*;
 import yi.master.business.testconfig.bean.TestConfig;
 import yi.master.business.testconfig.service.BusinessSystemService;
 import yi.master.business.testconfig.service.GlobalVariableService;
 import yi.master.business.testconfig.service.TestConfigService;
 import yi.master.business.user.bean.User;
 import yi.master.business.user.service.UserService;
-import static yi.master.constant.MessageKeys.*;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.coretest.message.test.MessageAutoTest;
 import yi.master.coretest.message.test.TestMessageScene;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
-import yi.master.util.PracticalUtils;
 import yi.master.util.FrameworkUtil;
+import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.ModelDriven;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static yi.master.constant.MessageKeys.InterfaceBusiType;
+import static yi.master.constant.MessageKeys.QUARTZ_AUTO_TEST_REPORT_MARK;
 
 /**
  * 接口自动化
@@ -120,7 +114,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 			throw new YiException(AppErrorCode.AUTO_TEST_NO_SCENE);
 		}
 		
-		Object results = autoTest.singleTestComplexScene(autoTest.packageComplexRequestObject(complexScene, config), null);
+		Object results = autoTest.singleTestComplexScene(autoTest.packageComplexRequestObject(complexScene, config), null, true);
 		jsonObject.data(results);
 		return SUCCESS;
 	}
@@ -159,7 +153,7 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 	
 	
 	/**
-	 * 单场景测试
+	 * 单场景调试
 	 * @return
 	 */
 	public String sceneTest() {
@@ -194,8 +188,6 @@ public class AutoTestAction extends ActionSupport implements ModelDriven<TestCon
 		}
 				
 		TestResult result = autoTest.singleTest(testObject, null);
-		
-		testResultService.save(result);		
 
 		jsonObject.data(result);
 		return SUCCESS;

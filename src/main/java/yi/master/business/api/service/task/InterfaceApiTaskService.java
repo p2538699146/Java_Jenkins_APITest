@@ -1,24 +1,23 @@
 package yi.master.business.api.service.task;
 
-import java.util.List;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import yi.master.business.api.bean.ApiReturnInfo;
 import yi.master.business.message.bean.TestReport;
 import yi.master.business.message.bean.TestSet;
 import yi.master.business.message.service.TestReportService;
 import yi.master.business.message.service.TestSetService;
 import yi.master.business.user.service.UserService;
+import yi.master.constant.MessageKeys;
 import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.test.MessageAutoTest;
 import yi.master.util.PracticalUtils;
 import yi.master.util.cache.CacheUtil;
+
+import java.util.List;
 
 @Service
 public class InterfaceApiTaskService implements ApiTaskService {
@@ -44,16 +43,15 @@ public class InterfaceApiTaskService implements ApiTaskService {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "该guid已存在,请更换", null);
 		}
 		
-		int[] result = autoTest.batchTest(userService.get(SystemConsts.DefaultObjectId.ADMIN_USER.getId()), setId, "外部API调用", guid);
+		int[] result = autoTest.batchTest(userService.get(SystemConsts.DefaultObjectId.ADMIN_USER.getId()), setId, MessageKeys.API_CALL_TEST_REPORT_MARK, guid);
 		
 		if (result == null) {
 			return new ApiReturnInfo(ApiReturnInfo.ERROR_CODE, "没有足够的测试场景可供测试", null);
 		}
 		
 		TestReport report = reportService.get(result[0]);
-		if ("Y".equalsIgnoreCase(report.getFinishFlag())) {
-			return checkTask(report);		
-			
+		if (SystemConsts.FinishedFlag.Y.name().equalsIgnoreCase(report.getFinishFlag())) {
+			return checkTask(report);
 		} else {
 			JSONObject obj = new JSONObject();			
 			obj.put("taskId", report.getReportId());
@@ -82,7 +80,7 @@ public class InterfaceApiTaskService implements ApiTaskService {
 
 	@Override
 	public ApiReturnInfo listModule() {
-		
+		//对于接口测试来说，模块ID即测试集ID
 		JSONArray arr = new JSONArray();
 		
 		List<TestSet> sets = setService.findAll("parented='1'");

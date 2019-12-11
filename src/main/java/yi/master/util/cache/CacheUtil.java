@@ -5,12 +5,15 @@ import yi.master.business.log.bean.LogRecord;
 import yi.master.business.log.service.LogRecordService;
 import yi.master.business.system.bean.GlobalSetting;
 import yi.master.business.system.bean.OperationInterface;
+import yi.master.business.system.service.GlobalSettingService;
 import yi.master.business.system.service.OperationInterfaceService;
 import yi.master.business.testconfig.bean.DataDB;
+import yi.master.constant.SystemConsts;
 import yi.master.coretest.message.test.mock.MockServer;
 import yi.master.coretest.message.test.performance.PerformanceTestObject;
 import yi.master.util.FrameworkUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -59,7 +62,10 @@ public class CacheUtil {
 	 */
 	private static List<OperationInterface> systemInterfaces = new ArrayList<>();
 
-	
+    /**
+     * 首页地址
+     */
+    private static String homeUrl;
 	
 	public static void setQueryDBMap(Map<String, DataDB> queryDBMap) {
 		CacheUtil.queryDBMap = queryDBMap;
@@ -282,5 +288,25 @@ public class CacheUtil {
      */
     public static Map<Integer, MockServer> getMockServers () {
 	    return mockServers;
+    }
+
+    /**
+     * 自动获取首页地址，只有一次
+     * @param request
+     */
+    public static void setHomeUrl (HttpServletRequest request) {
+        if (StringUtils.isNotBlank(homeUrl)) {
+            return;
+        }
+        if (request != null) {
+            homeUrl = request.getRequestURL().toString().replace(request.getServletPath(), "");
+            //更新数据库中内容
+            if (!homeUrl.equals(getSettingValue(SystemConsts.GLOBAL_SETTING_HOME))) {
+                //如果不相同则更新
+                GlobalSettingService globalSettingService = (GlobalSettingService) FrameworkUtil.getSpringBean(GlobalSettingService.class);
+                globalSettingService.updateSetting(SystemConsts.GLOBAL_SETTING_HOME, homeUrl);
+                updateGlobalSettingValue(SystemConsts.GLOBAL_SETTING_HOME, homeUrl);
+            }
+        }
     }
 }

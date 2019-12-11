@@ -1,4 +1,4 @@
-package yi.master.statement.vo;
+package yi.master.statement.probe;
 
 /**
  * 探测结果分析-质量等级统计

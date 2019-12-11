@@ -1,12 +1,12 @@
 package yi.master.business.advanced.service;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.base.service.BaseService;
 import yi.master.business.message.bean.TestResult;
-import yi.master.statement.vo.ProbeResultSynopsisView;
+import yi.master.statement.probe.ProbeResultSynopsisView;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 public interface InterfaceProbeService extends BaseService<InterfaceProbe> {
 	/**

@@ -1,4 +1,4 @@
-package yi.master.statement.vo;
+package yi.master.statement.index;
 
 /**
  * 测试统计

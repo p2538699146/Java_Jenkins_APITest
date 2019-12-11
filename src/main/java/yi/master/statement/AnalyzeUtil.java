@@ -1,21 +1,21 @@
 package yi.master.statement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.advanced.bean.config.probe.ProbeConfig;
 import yi.master.business.base.service.BaseService;
 import yi.master.business.message.service.TestResultService;
-import yi.master.statement.vo.ProbeResultAnalyzeQuality;
-import yi.master.statement.vo.ProbeResultAnalyzeStability;
-import yi.master.statement.vo.ProbeResultAnalyzeView;
-import yi.master.statement.vo.ProbeResultSynopsisView;
-import yi.master.statement.vo.StatisticalQuantity;
+import yi.master.statement.index.StatisticalQuantity;
+import yi.master.statement.probe.ProbeResultAnalyzeQuality;
+import yi.master.statement.probe.ProbeResultAnalyzeStability;
+import yi.master.statement.probe.ProbeResultAnalyzeView;
+import yi.master.statement.probe.ProbeResultSynopsisView;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 数据报表分析
@@ -23,16 +23,13 @@ import yi.master.util.PracticalUtils;
  *
  */
 public class AnalyzeUtil {
-	
-	public static final String STATISTICAL_QUANTITY_INTERFACE_NAME = "interfaceInfo";
-	
-	public static final String STATISTICAL_QUANTITY_MESSAGE_NAME = "message";
-	
-	public static final String STATISTICAL_QUANTITY_SCENE_NAME = "messageScene";
-	
-	public static final String STATISTICAL_QUANTITY_SET_NAME = "testSet";
-	
-	public static final String STATISTICAL_QUANTITY_REPORT_NAME = "testReport";
+
+    private static final String STATISTICAL_QUANTITY_INTERFACE_NAME = "interfaceInfo";
+    private static final String STATISTICAL_QUANTITY_MESSAGE_NAME = "message";
+    private static final String STATISTICAL_QUANTITY_SCENE_NAME = "messageScene";
+    private static final String STATISTICAL_QUANTITY_SET_NAME = "testSet";
+    private static final String STATISTICAL_QUANTITY_REPORT_NAME = "testReport";
+	private static final String TABLE_CREATE_TIME_COLUMN_NAME = "createTime";
 	
 	/**
 	 * 测试统计
@@ -57,10 +54,10 @@ public class AnalyzeUtil {
 		for (StatisticalQuantity sl:statistics.values()) {
 			BaseService service = (BaseService) FrameworkUtil.getSpringBean(sl.getItemName() + "Service");
 			sl.setTotalCount(service.totalCount());
-			sl.setTodayCount(service.countByTime("createTime", PracticalUtils.getTodayZeroTime()));
-			sl.setYesterdayCount(service.countByTime("createTime", PracticalUtils.getYesterdayZeroTime(), PracticalUtils.getTodayZeroTime()));
-			sl.setThisWeekCount(service.countByTime("createTime", PracticalUtils.getThisWeekFirstDayZeroTime()));
-			sl.setThisMonthCount(service.countByTime("createTime", PracticalUtils.getThisMonthFirstDayZeroTime()));
+			sl.setTodayCount(service.countByTime(TABLE_CREATE_TIME_COLUMN_NAME, PracticalUtils.getTodayZeroTime()));
+			sl.setYesterdayCount(service.countByTime(TABLE_CREATE_TIME_COLUMN_NAME, PracticalUtils.getYesterdayZeroTime(), PracticalUtils.getTodayZeroTime()));
+			sl.setThisWeekCount(service.countByTime(TABLE_CREATE_TIME_COLUMN_NAME, PracticalUtils.getThisWeekFirstDayZeroTime()));
+			sl.setThisMonthCount(service.countByTime(TABLE_CREATE_TIME_COLUMN_NAME, PracticalUtils.getThisMonthFirstDayZeroTime()));
 		}
 		
 		return statistics;
@@ -70,7 +67,6 @@ public class AnalyzeUtil {
 	/**
 	 * 分析探测结果集并返回报表
 	 * @param probe
-	 * @param results
 	 * @return
 	 */
 	public static ProbeResultAnalyzeView analyzeProbeResults (InterfaceProbe probe) {
@@ -113,7 +109,14 @@ public class AnalyzeUtil {
 		
 		return view;
 	}
-	
+
+	/**
+	 *  统计不同测试结果的数量
+	 * @author xuwangcheng
+	 * @param timeBucket timeBucket
+	 * @param status status
+	 * @return {@link List}
+	 */
 	private static List<Integer> countRunStatus(List<String> timeBucket, List<List> status) {
 		List<Integer> list = new ArrayList<Integer>();
 		loop:
@@ -152,7 +155,13 @@ public class AnalyzeUtil {
 		return returnObj;
 		
 	}
-	
+
+	/**
+	 *  level的文字说明
+	 * @author xuwangcheng
+	 * @param level level
+	 * @return {@link String}
+	 */
 	private static String probeQualityLevelName(Integer level) {
 		if (ProbeConfig.PROBE_EXCELLENT_LEVEL.equals(level)) {
 			return "ExcellentLevel(优秀)";

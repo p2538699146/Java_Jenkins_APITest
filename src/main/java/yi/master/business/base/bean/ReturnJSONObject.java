@@ -1,7 +1,6 @@
 package yi.master.business.base.bean;
 
 
-import org.apache.struts2.json.annotations.JSON;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 

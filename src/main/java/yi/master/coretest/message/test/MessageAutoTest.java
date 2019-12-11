@@ -212,12 +212,15 @@ public class MessageAutoTest {
 	
 	
 	/**
-	 * 测试组合场景
-	 * @param testScene
-	 * @return
+	 *  测试组合场景
+	 * @author xuwangcheng
+	 * @param testScene testScene 测试场景对象
+	 * @param report report 测试报告对象
+	 * @param ifDebug ifDebug 是否调试：调试时不保存结果到数据库
+	 * @return {@link Object}
 	 */
 	@SuppressWarnings("unchecked")
-	public Object singleTestComplexScene (TestMessageScene testScene, TestReport report) {
+	public Object singleTestComplexScene (TestMessageScene testScene, TestReport report, boolean ifDebug) {
 		List<TestResult> results = new ArrayList<>();
 		//获取httpclient,其他协议的暂时也走这个，但是不影响，后期需要针对不同协议的客户端做改动
 		DefaultHttpClient procotolClient = null;
@@ -387,15 +390,20 @@ public class MessageAutoTest {
 			complexResult.setRequestUrl("");
 			complexResult.setRequestMessage("");
 			complexResult.setResponseMessage("");
-			testResultService.save(complexResult);
+
+			if (!ifDebug) {
+                testResultService.save(complexResult);
+            }
 			
 			return complexResult;
 		}
 		
 		if (ComplexSceneSuccessFlag.SEPARATE_STATISTICS_RESULT.getFlag().equals(testScene.getComplexScene().getSuccessFlag())) {
 			for (TestResult result:results) {
-				result.setTestReport(report);				
-				testResultService.save(result);
+				result.setTestReport(report);
+                if (!ifDebug) {
+                    testResultService.save(result);
+                }
 			}
 			return results;
 		}
@@ -404,10 +412,13 @@ public class MessageAutoTest {
 	}
 	
 	/**
-	 * 批量测试
-	 * @param user
-	 * @param setId
-	 * @return
+	 *  批量测试/测试集测试
+	 * @author xuwangcheng
+	 * @param user user 测试用户
+	 * @param setId setId 测试集ID
+	 * @param testMark testMark 测试配置
+	 * @param guid guid 唯一测试标识：外包API调用时才会有
+	 * @return {@link int[]}
 	 */
 	public int[] batchTest (User user, Integer setId, String testMark, String guid) {		
 		
@@ -507,7 +518,7 @@ public class MessageAutoTest {
 						public void run() {
 							//组合场景
 							if (testSceneT.getComplexFlag()) {
-								singleTestComplexScene(testSceneT, report);
+								singleTestComplexScene(testSceneT, report, false);
 								//单场景
 							} else {
 								TestResult result = singleTest(testSceneT, null);

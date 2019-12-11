@@ -1,17 +1,16 @@
 package yi.master.business.advanced.service.impl;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.advanced.dao.InterfaceProbeDao;
 import yi.master.business.advanced.service.InterfaceProbeService;
 import yi.master.business.base.service.impl.BaseServiceImpl;
 import yi.master.business.message.bean.TestResult;
-import yi.master.statement.vo.ProbeResultSynopsisView;
+import yi.master.statement.probe.ProbeResultSynopsisView;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 @Service("interfaceProbeService")
 public class InterfaceProbeServiceImpl extends BaseServiceImpl<InterfaceProbe> implements InterfaceProbeService {

@@ -303,6 +303,10 @@ public interface MessageKeys {
 	 * quartz定时任务执行的测试将会在对应的测试报告添加下面的备注
 	 */
 	String QUARTZ_AUTO_TEST_REPORT_MARK = "自动化定时任务";
+    /**
+     * 第三方通过API调用执行的测试报告备注
+     */
+	String API_CALL_TEST_REPORT_MARK = "外部API调用";
 
 	/**
 	 * 缺少测试数据时测试详情中的备注

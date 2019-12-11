@@ -84,7 +84,8 @@ public class CallMethodInterceptor extends AbstractInterceptor {
 		String mark = null;	
 		
 
-		HttpServletRequest request= (HttpServletRequest) actionContext.get(StrutsStatics.HTTP_REQUEST);  
+		HttpServletRequest request= (HttpServletRequest) actionContext.get(StrutsStatics.HTTP_REQUEST);
+		CacheUtil.setHomeUrl(request);
 		browserAgent = request.getHeader("User-Agent");
 		userHost = PracticalUtils.getIpAddr(request);
 		

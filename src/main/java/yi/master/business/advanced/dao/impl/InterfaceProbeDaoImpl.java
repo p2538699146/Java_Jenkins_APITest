@@ -1,18 +1,17 @@
 package yi.master.business.advanced.dao.impl;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
-
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.advanced.dao.InterfaceProbeDao;
 import yi.master.business.base.dao.impl.BaseDaoImpl;
 import yi.master.business.message.bean.TestResult;
-import yi.master.statement.vo.ProbeResultSynopsisView;
+import yi.master.statement.probe.ProbeResultSynopsisView;
 import yi.master.util.PracticalUtils;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 @Repository("interfaceProbeDao")
 public class InterfaceProbeDaoImpl extends BaseDaoImpl<InterfaceProbe> implements InterfaceProbeDao {

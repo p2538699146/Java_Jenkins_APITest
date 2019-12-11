@@ -24,6 +24,12 @@ import yi.master.util.cache.CacheUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
+
+/**
+ * Http/https接口Mock拦截器
+ * @author xuwangcheng
+ * @version 1.0.0.0,2018.4.1
+ */
 public class InterfaceMockInterceptor extends AbstractInterceptor {
 
 	private static final long serialVersionUID = 1L;
