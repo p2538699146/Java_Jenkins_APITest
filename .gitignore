@@ -30,3 +30,5 @@ logs/
 .classpath
 .idea
 /*.iml
+out
+/src/main/java/yi/master/util/UtilTest.java

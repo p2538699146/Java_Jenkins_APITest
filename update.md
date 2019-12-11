@@ -19,7 +19,8 @@
 
 ### v0.2.3beat
 #### 2019.1206
-- 完善：固定格式、自定义格式报文的一些处理逻辑
+- 完善：固定格式、自定义格式报文的一些处理逻辑；
+- 新增：支持文件上传接口，详细使用参见https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?sort_id=1559135&doc_id=196989；
 
 
 ### v0.2.2beta

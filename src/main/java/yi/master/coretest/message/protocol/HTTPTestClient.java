@@ -491,7 +491,7 @@ public class HTTPTestClient extends TestClient {
                 File f = new File(bodyMap.get(key));
                 if (FileUtil.exist(f)) {
                     FileBody fileBody = new FileBody(new File(bodyMap.get(key)));
-                    requestEntity.addPart("file", fileBody);
+                    requestEntity.addPart(key, fileBody);
                     continue;
                 }
 				requestEntity.addPart(key, new StringBody(bodyMap.get(key)));

@@ -630,15 +630,16 @@ public class PracticalUtils {
 		GlobalVariable variable = null;
 		String useVariable = null;
 		while (matcher.find()) {
-			useVariable = "\\$\\{__" + matcher.group(1) + "\\}";
-			if (!msg.contains("${__" + matcher.group(1) + "}")) {
+			//useVariable = "\\$\\{__" + matcher.group(1) + "\\}";
+            useVariable = "${__" + matcher.group(1) + "}";
+			if (!msg.contains(useVariable)) {
 				continue;
 			}
 			variable = globalVariableService.findByKey(matcher.group(1));
 			if (variable == null) {
 				continue;
 			}
-			msg = msg.replaceAll(useVariable, String.valueOf(variable.createSettingValue()));
+			msg = msg.replace(useVariable, String.valueOf(variable.createSettingValue()));
 		}
 		return msg;
 	}
