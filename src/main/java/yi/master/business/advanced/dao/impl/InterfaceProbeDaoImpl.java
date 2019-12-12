@@ -7,7 +7,7 @@ import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.advanced.dao.InterfaceProbeDao;
 import yi.master.business.base.dao.impl.BaseDaoImpl;
 import yi.master.business.message.bean.TestResult;
-import yi.master.statement.probe.ProbeResultSynopsisView;
+import yi.master.business.reportform.bean.probe.ProbeResultSynopsisView;
 import yi.master.util.PracticalUtils;
 
 import java.sql.Timestamp;

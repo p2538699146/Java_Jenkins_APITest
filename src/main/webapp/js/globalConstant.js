@@ -12,6 +12,9 @@ var REQUEST_URL = {
     WEB_SOCKET: {
       PUSH_MAIL_NUM: "/push/mail",
     },
+    REPORT_FORM: {
+        GET_INDEX_CHART_RENDER_DATA: "reportForm-getIndexChartRenderData"
+    },
     //登陆相关
     LOGIN: {
         LOGOUT: "user-logout",

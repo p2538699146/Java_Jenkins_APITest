@@ -1,4 +1,4 @@
-package yi.master.statement.probe;
+package yi.master.business.reportform.bean.probe;
 
 import org.apache.struts2.json.annotations.JSON;
 

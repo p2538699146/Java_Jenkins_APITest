@@ -2,6 +2,27 @@ $(document).ready(function(){
     //获取登陆之后的相关信息
     queryLoginInfo();
 
+    //渲染散点图,折线图
+    $.get(REQUEST_URL.REPORT_FORM.GET_INDEX_CHART_RENDER_DATA, function(data) {
+        if (data.returnCode == RETURN_CODE.SUCCESS) {
+            // let echartsObj1 = echarts.init(document.getElementById('test-report-charts-view'), 'shine');
+            // echartsObj1.setOption(scatterChartViewOption(data.data.overview));
+
+            let echartsObj2 = echarts.init(document.getElementById('day-add-charts-view'), 'shine');
+            echartsObj2.setOption(lineChartViewOption(data.data.stat));
+
+            window.addEventListener("resize", () => {
+                //echartsObj1.resize();
+                echartsObj2.resize();
+            });
+
+        } else {
+            console.error(data.msg);
+        }
+    });
+
+
+
     //获取权限列表
     $.get(REQUEST_URL.ROLE.GET_USER_PERMISSION_LIST, function (json) {
         if (json.returnCode == RETURN_CODE.SUCCESS) {
@@ -22,6 +43,135 @@ $(document).ready(function(){
         }
     });
 });
+
+function lineChartViewOption (data) {
+    let option = {
+        backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+            offset: 0,
+            color: '#f7f8fa'
+        }, {
+            offset: 1,
+            color: '#F5FAFE'
+        }]),
+        title: {
+            text: '测试工作统计(最近一个月)'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['新增接口','新增报文','新增场景','新增报告']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            name: '时间',
+            boundaryGap: false,
+            data: data.time
+        },
+        yAxis: {
+            name: '新增数',
+            type: 'value'
+        },
+        series: [
+            {
+                name:'新增接口',
+                type:'line',
+                data:data.data[0]
+            },
+            {
+                name:'新增报文',
+                type:'line',
+                data:data.data[1]
+            },
+            {
+                name:'新增场景',
+                type:'line',
+                data:data.data[2]
+            },
+            {
+                name:'新增报告',
+                type:'line',
+                data:data.data[3]
+            }
+        ]
+    };
+    return option;
+}
+
+
+function scatterChartViewOption (data) {
+    let option = {
+        backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+            offset: 0,
+            color: '#f7f8fa'
+        }, {
+            offset: 1,
+            color: '#F5FAFE'
+        }]),
+        title: {
+            text: '测试成功率趋势',
+            subtext: '最近一个月',
+            textAlign: 'left'
+
+        },
+        tooltip: {
+            trigger:'item',
+            formatter:function(params){
+                return params.data[0] + ' ' + params.data[2] + ' <br>测试成功率: <strong>' + params.data[1] + '%</strong>';
+            },
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        // dataZoom: [{
+        //     type: 'inside'
+        // }, {
+        //     type: 'slider'
+        // }],
+        legend: {
+            right: 10,
+            data: []
+        },
+        xAxis: {
+            name: '测试时间',
+            type:"time",
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            },
+        },
+        yAxis: {
+            name: '成功率[%]',
+            type:"value",
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            }
+        },
+        series: []
+    };
+
+    $.each(data, function(setId, info) {
+        option.legend.data.push(info[0][2]);
+        option.series.push({
+            name: info[0][2],
+            data: info,
+            type: 'scatter',
+            symbolSize: 14
+        });
+
+    });
+
+    return option;
+}
 
 /**
  * 获取登陆之好的相关信息：包括用户信息，全局配置，测试统计数据等

@@ -324,6 +324,16 @@
 				<param name="ignoreHierarchy">false</param>
 			</result>
 		</action>
+
+        <!-- 报表 -->
+        <action name="reportForm-*" class="yi.master.business.reportform.controller.ReportFormController" method="{1}">
+            <interceptor-ref name="myPrepareInterceptorsStack"></interceptor-ref>
+            <interceptor-ref name="callMethodInterceptor"></interceptor-ref>
+            <result type="json">
+                <param name="root">jsonObject</param>
+                <param name="ignoreHierarchy">false</param>
+            </result>
+        </action>
 		
 		
 		<!-- 山西本地化-web自动化模块管理 -->

@@ -1,14 +1,14 @@
-package yi.master.statement;
+package yi.master.business.reportform;
 
 import yi.master.business.advanced.bean.InterfaceProbe;
 import yi.master.business.advanced.bean.config.probe.ProbeConfig;
 import yi.master.business.base.service.BaseService;
 import yi.master.business.message.service.TestResultService;
-import yi.master.statement.index.StatisticalQuantity;
-import yi.master.statement.probe.ProbeResultAnalyzeQuality;
-import yi.master.statement.probe.ProbeResultAnalyzeStability;
-import yi.master.statement.probe.ProbeResultAnalyzeView;
-import yi.master.statement.probe.ProbeResultSynopsisView;
+import yi.master.business.reportform.bean.index.StatisticalQuantity;
+import yi.master.business.reportform.bean.probe.ProbeResultAnalyzeQuality;
+import yi.master.business.reportform.bean.probe.ProbeResultAnalyzeStability;
+import yi.master.business.reportform.bean.probe.ProbeResultAnalyzeView;
+import yi.master.business.reportform.bean.probe.ProbeResultSynopsisView;
 import yi.master.util.FrameworkUtil;
 import yi.master.util.PracticalUtils;
 

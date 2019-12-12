@@ -1,17 +1,16 @@
 package yi.master.business.base.dao.impl;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import yi.master.business.base.bean.PageModel;
 import yi.master.business.base.dao.BaseDao;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 通用DAO接口的实现类
@@ -205,7 +204,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	@Override
 	public int countByTime(String fieldName, Date ...time) {
-		
 		int count = 0;
 		String hql = "select count(t) from " + clazz.getSimpleName() + " t where t." + fieldName + ">:endTime1";			
 		if (time.length > 1) {

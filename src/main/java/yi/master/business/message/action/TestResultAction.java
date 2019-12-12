@@ -12,8 +12,7 @@ import yi.master.business.advanced.service.InterfaceProbeService;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.message.bean.TestResult;
 import yi.master.business.message.service.TestResultService;
-import yi.master.constant.ReturnCodeConsts;
-import yi.master.statement.AnalyzeUtil;
+import yi.master.business.reportform.AnalyzeUtil;
 
 /**
  * 接口自动化<br>

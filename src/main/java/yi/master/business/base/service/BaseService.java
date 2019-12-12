@@ -1,9 +1,9 @@
 package yi.master.business.base.service;
 
+import yi.master.business.base.bean.PageModel;
+
 import java.util.Date;
 import java.util.List;
-
-import yi.master.business.base.bean.PageModel;
 
 /**
  * 通用service接口

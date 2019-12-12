@@ -1,11 +1,11 @@
 package yi.master.business.base.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
 import yi.master.business.base.bean.PageModel;
 import yi.master.business.base.dao.BaseDao;
 import yi.master.business.base.service.BaseService;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 通用service实现类
@@ -73,7 +73,6 @@ public class BaseServiceImpl<T> implements BaseService<T>{
 
 	@Override
 	public int countByTime(String fieldName, Date ...time) {
-		
 		return baseDao.countByTime(fieldName, time);
 	}
 
@@ -83,6 +82,5 @@ public class BaseServiceImpl<T> implements BaseService<T>{
 		
 		return baseDao.getHqlCount(hql);
 	}
-	
-	
+
 }

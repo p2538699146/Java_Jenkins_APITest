@@ -1,10 +1,10 @@
 package yi.master.business.base.dao;
 
-import java.util.Date;
-import java.util.List;
-
 import org.hibernate.Session;
 import yi.master.business.base.bean.PageModel;
+
+import java.util.Date;
+import java.util.List;
 /**
  * 通用DAO接口
  * 

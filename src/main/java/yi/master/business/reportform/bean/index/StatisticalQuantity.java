@@ -1,4 +1,4 @@
-package yi.master.statement.index;
+package yi.master.business.reportform.bean.index;
 
 /**
  * 测试统计

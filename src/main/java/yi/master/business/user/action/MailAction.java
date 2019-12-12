@@ -77,7 +77,6 @@ public class MailAction extends BaseAction<Mail> {
 	
 
 	public String sendMail () {
-	    mailService.sendSystemMail("测试", "测试", FrameworkUtil.getLoginUser().getUserId());
 	    return SUCCESS;
     }
 	
