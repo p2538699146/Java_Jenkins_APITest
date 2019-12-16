@@ -1,25 +1,23 @@
 package yi.master.business.system.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import yi.master.business.base.action.BaseAction;
 import yi.master.business.system.bean.BusiMenuInfo;
 import yi.master.business.system.service.BusiMenuInfoService;
 import yi.master.business.user.bean.Role;
 import yi.master.business.user.bean.User;
 import yi.master.business.user.service.RoleService;
-import yi.master.constant.ReturnCodeConsts;
 import yi.master.constant.SystemConsts;
 import yi.master.exception.AppErrorCode;
 import yi.master.exception.YiException;
 import yi.master.util.FrameworkUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 业务菜单信息
@@ -83,12 +81,19 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 		JSONObject json = new JSONObject();
 		//一级节点
 		for (BusiMenuInfo m1:oneLevMenus) {
+		    if (SystemConsts.DefaultBooleanIdentify.FALSE.getNumber().equals(m1.getStatus())) {
+                continue;
+            }
 			JSONObject jobj = new JSONObject();
 			jobj.put("name", m1.getMenuName());
 			jobj.put("icon", m1.getIconName());
 			jobj.put("menu", new JSONArray());
 			//二级节点
-			for (BusiMenuInfo m2:m1.getChilds()) {
+			loop1:
+            for (BusiMenuInfo m2:m1.getChilds()) {
+                if (SystemConsts.DefaultBooleanIdentify.FALSE.getNumber().equals(m2.getStatus())) {
+                    continue loop1;
+                }
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("id", m1.getMenuId() + "-" + m2.getMenuId());
 				jobj2.put("name", m2.getMenuName());
@@ -96,7 +101,11 @@ public class BusiMenuInfoAction extends BaseAction<BusiMenuInfo> {
 				
 				jobj2.put("childs", new JSONArray());
 				//三级节点
+                loop2:
 				for (BusiMenuInfo m3:m2.getChilds()) {
+                    if (SystemConsts.DefaultBooleanIdentify.FALSE.getNumber().equals(m3.getStatus())) {
+                        continue loop2;
+                    }
 					for (BusiMenuInfo userM:userMenus) {
 						if (userM.getMenuId().equals(m3.getMenuId())) {
 							JSONObject jobj3 = new JSONObject();

@@ -48,37 +48,3 @@ Handlebars.registerHelper('validate_path', function(v1) {
     return "";
 });
 
-/**
- * 获取地址栏参数
- * @param name
- * @returns
- */
-function GetQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null)
-        return decodeURIComponent(r[2]);
-    return null;
-}
-
-/**
- * 判断是否为json格式字符串
- * @param str
- */
-function isJSON(str) {
-    if (typeof str == 'string') {
-        try {
-            var obj=JSON.parse(str);
-            if(typeof obj == 'object' && obj ){
-                return true;
-            }else{
-                return false;
-            }
-
-        } catch(e) {
-            console.log('error：'+str+'!!!'+e);
-            return false;
-        }
-    }
-    console.log('It is not a string!')
-}

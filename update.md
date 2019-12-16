@@ -49,6 +49,7 @@
 - 完善：固定格式、自定义格式报文的一些处理逻辑；
 - 新增：支持文件上传接口，详细使用参见https://gitee.com/xuwangcheng/masteryi-automated-testing/wikis/pages?sort_id=1559135&doc_id=196989；
 - 更新：不再保存测试场景调试时的测试结果到数据库；
+- 新增：首页图表展示近期工作情况（有点丑）；
 
 ### v0.2.2beta
 #### 2019.11.28
