@@ -2,6 +2,7 @@ package yi.master.business.reportform.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import yi.master.business.message.bean.TestReport;
 import yi.master.business.reportform.dao.ReportFormDao;
 import yi.master.business.reportform.service.ReportFormService;
 
@@ -24,11 +25,18 @@ public class ReportFormServiceImpl implements ReportFormService {
     @Override
     public Map<String, Integer> queryCountByTime(String tableName, String beginTime, String endTime) {
         List<Object[]> os = reportFormDao.queryCountByTime(tableName, beginTime, endTime);
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<>(20);
         for (Object[] o:os) {
             map.put(o[0].toString(), Integer.valueOf(o[1].toString()));
         }
 
         return map;
     }
+
+    @Override
+    public List<TestReport> queryReportByTime(String beginTime, String endTime) {
+        return reportFormDao.queryReportByTime(beginTime, endTime);
+    }
+
+
 }

@@ -5,17 +5,19 @@ $(document).ready(function(){
     //渲染散点图,折线图
     $.get(REQUEST_URL.REPORT_FORM.GET_INDEX_CHART_RENDER_DATA, function(data) {
         if (data.returnCode == RETURN_CODE.SUCCESS) {
-            // let echartsObj1 = echarts.init(document.getElementById('test-report-charts-view'), 'shine');
-            // echartsObj1.setOption(scatterChartViewOption(data.data.overview));
+            let echartsObj1 = echarts.init(document.getElementById('test-report-charts-view'), 'shine');
+            echartsObj1.setOption(scatterChartViewOption(data.data.overview));
+            echartsObj1.on('click', function(params){
+                window.open("resource/message/reportView.html?reportId=" + params.data[4]);
+            });
 
             let echartsObj2 = echarts.init(document.getElementById('day-add-charts-view'), 'shine');
             echartsObj2.setOption(lineChartViewOption(data.data.stat));
 
             window.addEventListener("resize", () => {
-                //echartsObj1.resize();
+                echartsObj1.resize();
                 echartsObj2.resize();
             });
-
         } else {
             console.error(data.msg);
         }
@@ -54,7 +56,9 @@ function lineChartViewOption (data) {
             color: '#F5FAFE'
         }]),
         title: {
-            text: '测试工作统计(最近一个月)'
+            text: '测试工作统计',
+            subtext: '最近一个月',
+            textAlign: 'left'
         },
         tooltip: {
             trigger: 'axis'
@@ -63,9 +67,9 @@ function lineChartViewOption (data) {
             data:['新增接口','新增报文','新增场景','新增报告']
         },
         grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
+            left: '8%',
+            right: '8%',
+            bottom: '8%',
             containLabel: true
         },
         xAxis: {
@@ -115,7 +119,7 @@ function scatterChartViewOption (data) {
             color: '#F5FAFE'
         }]),
         title: {
-            text: '测试成功率趋势',
+            text: '测试通过率趋势',
             subtext: '最近一个月',
             textAlign: 'left'
 
@@ -123,7 +127,7 @@ function scatterChartViewOption (data) {
         tooltip: {
             trigger:'item',
             formatter:function(params){
-                return params.data[0] + ' ' + params.data[2] + ' <br>测试成功率: <strong>' + params.data[1] + '%</strong>';
+                return params.data[0] + ' ' + params.data[2] + ' <br>通过率: <strong>' + params.data[1] + '%</strong>';
             },
             axisPointer: {
                 type: 'cross'
@@ -140,7 +144,7 @@ function scatterChartViewOption (data) {
         },
         xAxis: {
             name: '测试时间',
-            type:"time",
+            type:"category",
             splitLine: {
                 lineStyle: {
                     type: 'dashed'
@@ -148,7 +152,7 @@ function scatterChartViewOption (data) {
             },
         },
         yAxis: {
-            name: '成功率[%]',
+            name: '通过率[%]',
             type:"value",
             splitLine: {
                 lineStyle: {

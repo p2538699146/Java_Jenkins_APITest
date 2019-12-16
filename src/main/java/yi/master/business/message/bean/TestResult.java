@@ -1,17 +1,16 @@
 package yi.master.business.message.bean;
 
+import org.apache.struts2.json.annotations.JSON;
+import yi.master.annotation.FieldNameMapper;
+import yi.master.business.advanced.bean.InterfaceProbe;
+import yi.master.business.advanced.bean.config.probe.ProbeConfig;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.struts2.json.annotations.JSON;
-
-import yi.master.annotation.FieldNameMapper;
-import yi.master.business.advanced.bean.InterfaceProbe;
-import yi.master.business.advanced.bean.config.probe.ProbeConfig;
 
 /**
  * 测试详情结果
@@ -348,14 +347,12 @@ public class TestResult implements Serializable, Comparable<TestResult> {
 
 	@Override
 	public int compareTo(TestResult o) {
-		
 		//return -(o.getOpTime().compareTo(this.opTime));
 		return this.opTime.compareTo(o.getOpTime());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		
 		return super.equals(obj);
 	}
 

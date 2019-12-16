@@ -1,18 +1,17 @@
 package yi.master.business.message.bean;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.struts2.json.annotations.JSON;
-
 import yi.master.annotation.CustomConditionSetting;
 import yi.master.annotation.FieldNameMapper;
 import yi.master.annotation.FieldRealSearch;
 import yi.master.business.user.bean.User;
 import yi.master.constant.SystemConsts;
 import yi.master.util.PracticalUtils;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 测试报告
@@ -212,6 +211,8 @@ public class TestReport implements Serializable{
 				break;
 			case "2":
 				this.stopNum++;
+				break;
+			default:
 				break;
 			}
 		}

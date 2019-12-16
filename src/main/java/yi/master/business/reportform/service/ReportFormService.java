@@ -1,5 +1,8 @@
 package yi.master.business.reportform.service;
 
+import yi.master.business.message.bean.TestReport;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,4 +22,14 @@ public interface ReportFormService {
      * @return {@link Map}
      */
     Map<String, Integer> queryCountByTime(String tableName, String beginTime, String endTime);
+
+    /**
+     * 查询指定时间内测试报告
+     * @author xuwangcheng
+     * @date 2019/12/16 9:02
+     * @param beginTime beginTime
+     * @param endTime endTime
+     * @return {@link List}
+     */
+    List<TestReport> queryReportByTime(String beginTime, String endTime);
 }
