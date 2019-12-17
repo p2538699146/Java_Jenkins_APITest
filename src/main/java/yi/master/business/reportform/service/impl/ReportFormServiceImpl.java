@@ -1,11 +1,15 @@
 package yi.master.business.reportform.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import yi.master.business.message.bean.TestReport;
 import yi.master.business.reportform.dao.ReportFormDao;
 import yi.master.business.reportform.service.ReportFormService;
+import yi.master.util.PracticalUtils;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +38,25 @@ public class ReportFormServiceImpl implements ReportFormService {
     }
 
     @Override
-    public List<TestReport> queryReportByTime(String beginTime, String endTime) {
-        return reportFormDao.queryReportByTime(beginTime, endTime);
+    public List<TestReport> queryReportByTime(String beginTime, String endTime, List<String> includeScope) {
+        return reportFormDao.queryReportByTime(beginTime, endTime, includeScope);
     }
 
+    @Override
+    public List[] querySceneResultResponseTime(Integer messageSceneId, String beginTime, String endTime, List<String> includeScope) {
+        List<List> lists = reportFormDao.querySceneResultResponseTime(messageSceneId, beginTime, endTime, includeScope);
+        if (CollUtil.isEmpty(lists)) {
+            return new ArrayList[2];
+        }
 
+        ArrayList<String> datetime = new ArrayList<String>();
+        ArrayList<String> responseTime = new ArrayList<String>();
+
+        for (List list:lists) {
+            datetime.add(PracticalUtils.formatDate(PracticalUtils.FULL_DATE_PATTERN, (Timestamp)list.get(0)));
+            responseTime.add(list.get(1).toString());
+        }
+
+        return new ArrayList[]{datetime, responseTime};
+    }
 }

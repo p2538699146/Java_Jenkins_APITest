@@ -24,21 +24,79 @@ import java.util.*;
  */
 public class IndexChartRenderData {
     /**
-     * 散点图数据
+     * 统计开始时间
+     */
+    private String beginDate = DateUtil.formatDate(DateUtil.offsetDay(new Date(), -30)) + " 00:00:00";
+    /**
+     * 统计结束时间
+     */
+    private String endDate = DateUtil.formatDate(new Date()) + " 23:59:59";
+
+    /**
+     * 测试报告：散点图数据
      */
     private Map<Integer, List<List<Object>>> overview = new HashMap<>();
     /**
-     * 折线图数据
+     * 新增详情：折线图数据
      */
     private StatData stat = new StatData();
 
-    private IndexChartRenderData () {}
+    public IndexChartRenderData (String beginDate, String endDate) {
+        if (StringUtils.isNotBlank(beginDate)) {
+            this.beginDate = beginDate;
+        }
+        if (StringUtils.isNotBlank(endDate)) {
+            this.endDate = endDate;
+        }
+    }
 
-    public static IndexChartRenderData getRenderData(ReportFormService reportFormService) {
-        IndexChartRenderData renderData = new IndexChartRenderData();
-        String beginDate = DateUtil.formatDate(DateUtil.offsetDay(new Date(), -30)) + " 00:00:00";
-        String endDate = DateUtil.formatDate(new Date()) + " 23:59:59";
+    public IndexChartRenderData () {
+    }
 
+    public IndexChartRenderData (String rangeDate) {
+        if (StringUtils.isNotBlank(rangeDate)) {
+            String[] ss = rangeDate.split("~");
+            this.beginDate = ss[0].trim();
+            if (ss.length == 2) {
+                this.endDate = ss[1].trim();
+            }
+        }
+    }
+
+    public void setOverview(List<String> includeScope) {
+        ReportFormService reportFormService = (ReportFormService) FrameworkUtil.getSpringBean(ReportFormService.class);
+        TestSetService setService = (TestSetService) FrameworkUtil.getSpringBean("testSetService");
+        TestReportService reportService = (TestReportService) FrameworkUtil.getSpringBean("testReportService");
+        //测试报告趋势
+        List<TestReport> reports = reportFormService.queryReportByTime(beginDate, endDate, includeScope);
+        for (TestReport report:reports) {
+            //测试集必须存在
+            TestSet testSet = setService.get(Integer.valueOf(report.getTestMode()));
+            if (testSet == null) {
+                continue;
+            }
+            if (StringUtils.isBlank(report.getDetailsJson())) {
+                report.setDetailsJson(PracticalUtils.setReportDetails(report));
+                reportService.edit(report);
+            }
+
+            if (overview.get(testSet.getSetId()) == null) {
+                overview.put(testSet.getSetId(), new ArrayList<List<Object>>());
+            }
+
+            List<Object> objs = new ArrayList<>();
+            objs.add(DateUtil.formatDateTime(report.getFinishTime()));
+            objs.add(JSONObject.fromObject(report.getDetailsJson()).getJSONObject("desc").getString("successRate"));
+            objs.add(testSet.getSetName());
+            objs.add(testSet.getSetId());
+            objs.add(report.getReportId());
+
+            overview.get(testSet.getSetId()).add(objs);
+        }
+    }
+
+    public void setStat() {
+        ReportFormService reportFormService = (ReportFormService) FrameworkUtil.getSpringBean(ReportFormService.class);
 
         //新增接口报文场景报告等数据
         Map<String, Integer> interfaceMap = reportFormService.queryCountByTime("at_interface_info", beginDate, endDate);
@@ -66,44 +124,14 @@ public class IndexChartRenderData {
             reportCountList.add(getCount(reportMap, t));
         }
 
-        renderData.getStat().setTime(time);
-        renderData.getStat().getData().add(interfaceCountList);
-        renderData.getStat().getData().add(msgCountList);
-        renderData.getStat().getData().add(sceneCountList);
-        renderData.getStat().getData().add(reportCountList);
-
-        TestSetService setService = (TestSetService) FrameworkUtil.getSpringBean("testSetService");
-        TestReportService reportService = (TestReportService) FrameworkUtil.getSpringBean("testReportService");
-        //测试报告趋势
-        List<TestReport> reports = reportFormService.queryReportByTime(beginDate, endDate);
-        Map<Integer, List<List<Object>>> overview = renderData.getOverview();
-        for (TestReport report:reports) {
-            //测试集必须存在
-            TestSet testSet = setService.get(Integer.valueOf(report.getTestMode()));
-            if (testSet == null) {
-                continue;
-            }
-            if (StringUtils.isBlank(report.getDetailsJson())) {
-                report.setDetailsJson(PracticalUtils.setReportDetails(report));
-                reportService.edit(report);
-            }
-
-            if (overview.get(testSet.getSetId()) == null) {
-                overview.put(testSet.getSetId(), new ArrayList<List<Object>>());
-            }
-
-            List<Object> objs = new ArrayList<>();
-            objs.add(DateUtil.formatDateTime(report.getFinishTime()));
-            objs.add(JSONObject.fromObject(report.getDetailsJson()).getJSONObject("desc").getString("successRate"));
-            objs.add(testSet.getSetName());
-            objs.add(testSet.getSetId());
-            objs.add(report.getReportId());
-
-            overview.get(testSet.getSetId()).add(objs);
-        }
-
-        return renderData;
+        getStat().setTime(time);
+        getStat().getData().add(interfaceCountList);
+        getStat().getData().add(msgCountList);
+        getStat().getData().add(sceneCountList);
+        getStat().getData().add(reportCountList);
     }
+
+
 
     @JSON(serialize = false)
     private static Integer getCount (Map<String, Integer> m, String time) {
@@ -112,14 +140,6 @@ public class IndexChartRenderData {
         } else {
             return 0;
         }
-    }
-
-    public void setOverview(Map<Integer, List<List<Object>>> overview) {
-        this.overview = overview;
-    }
-
-    public void setStat(StatData stat) {
-        this.stat = stat;
     }
 
     public Map<Integer, List<List<Object>>> getOverview() {
@@ -132,7 +152,7 @@ public class IndexChartRenderData {
 
     public class StatData {
         private List<List<Integer>> data = new ArrayList<>();
-        private List<String> time;
+        private List<String> time = new ArrayList<>();
 
         public void setData(List<List<Integer>> data) {
             this.data = data;

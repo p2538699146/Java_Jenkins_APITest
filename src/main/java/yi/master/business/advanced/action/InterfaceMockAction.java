@@ -138,7 +138,7 @@ public class InterfaceMockAction extends BaseAction<InterfaceMock> {
 		MessageParse parseUtil = MessageParse.getParseInstance(MessageParse.judgeType(message));
 		Set<Parameter> params = parseUtil.importMessageToParameter(message, new HashSet<Parameter>());
 		if (params == null) {
-			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "尚不支持此类型的报文格式，请检查出报文格式!");
+			throw new YiException(AppErrorCode.NO_RESULT.getCode(), "尚不支持此类型的报文格式，请检查报文格式!");
 		}
 		//自定义parmeterId
 		int count = 1;

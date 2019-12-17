@@ -3,25 +3,25 @@ $(document).ready(function(){
     queryLoginInfo();
 
     //渲染散点图,折线图
-    $.get(REQUEST_URL.REPORT_FORM.GET_INDEX_CHART_RENDER_DATA, function(data) {
-        if (data.returnCode == RETURN_CODE.SUCCESS) {
-            let echartsObj1 = echarts.init(document.getElementById('test-report-charts-view'), 'shine');
-            echartsObj1.setOption(scatterChartViewOption(data.data.overview));
-            echartsObj1.on('click', function(params){
-                window.open("resource/message/reportView.html?reportId=" + params.data[4]);
-            });
-
-            let echartsObj2 = echarts.init(document.getElementById('day-add-charts-view'), 'shine');
-            echartsObj2.setOption(lineChartViewOption(data.data.stat));
-
-            window.addEventListener("resize", () => {
-                echartsObj1.resize();
-                echartsObj2.resize();
-            });
-        } else {
-            console.error(data.msg);
-        }
-    });
+    // $.get(REQUEST_URL.REPORT_FORM.GET_INDEX_CHART_RENDER_DATA, function(data) {
+    //     if (data.returnCode == RETURN_CODE.SUCCESS) {
+    //         let echartsObj1 = echarts.init(document.getElementById('test-report-charts-view'), 'shine');
+    //         echartsObj1.setOption(scatterChartViewOption(data.data.overview));
+    //         echartsObj1.on('click', function(params){
+    //             window.open("resource/message/reportView.html?reportId=" + params.data[4]);
+    //         });
+    //
+    //         let echartsObj2 = echarts.init(document.getElementById('day-add-charts-view'), 'shine');
+    //         echartsObj2.setOption(lineChartViewOption(data.data.stat));
+    //
+    //         window.addEventListener("resize", () => {
+    //             echartsObj1.resize();
+    //             echartsObj2.resize();
+    //         });
+    //     } else {
+    //         console.error(data.msg);
+    //     }
+    // });
 
 
 

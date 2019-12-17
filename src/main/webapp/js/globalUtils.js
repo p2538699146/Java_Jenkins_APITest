@@ -452,7 +452,7 @@ var GLOBAL_UTILS = {
          * @param val
          */
         removeValue:function(arr, val){
-            var index = arr.indexOf(val);
+            let index = arr.indexOf(val);
             if (index > -1) {
                 arr.splice(index, 1);
             }

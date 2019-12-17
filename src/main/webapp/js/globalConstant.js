@@ -12,8 +12,12 @@ var REQUEST_URL = {
     WEB_SOCKET: {
       PUSH_MAIL_NUM: "/push/mail",
     },
+    //报表统计相关
     REPORT_FORM: {
-        GET_INDEX_CHART_RENDER_DATA: "reportForm-getIndexChartRenderData"
+        GET_INDEX_CHART_RENDER_DATA: "reportForm-getIndexChartRenderData",
+        GET_DAILY_ADD_CHART_RENDER_DATA: "reportForm-getDailyAddChartRenderData",
+        GET_TEST_REPORT_CHART_RENDER_DATA: 'reportForm-getTestReportChartRenderData',
+        GET_SCENE_REPORT_RESPONSE_TIME_TREND_DATA: 'reportForm-getSceneReportResponseTimeTrendData'
     },
     //登陆相关
     LOGIN: {
