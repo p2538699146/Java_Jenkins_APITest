@@ -55,7 +55,14 @@ public class SceneReportChartRenderData {
         }
     }
 
-
+    /**
+     * 设置场景响应数据的趋势数据
+     * @author xuwangcheng
+     * @date 2019/12/18 9:07
+     * @param messageSceneId messageSceneId 指定的场景ID
+     * @param includeScope includeScope 统计范围
+     * @return
+     */
     public void setTrendData (Integer messageSceneId, List<String> includeScope) {
         ReportFormService reportFormService = (ReportFormService) FrameworkUtil.getSpringBean(ReportFormService.class);
         List[] list = reportFormService.querySceneResultResponseTime(messageSceneId, beginDate, endDate, includeScope);

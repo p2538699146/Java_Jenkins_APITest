@@ -1,5 +1,3 @@
-UPDATE `yi_20191127`.`at_busi_menu_info` SET `menu_name` = '批量比对', `menu_url` = 'nopower.html?v=2', `icon_name` = '', `parent_id` = 9, `node_level` = 2, `seq` = 30, `status` = '0', `create_time` = '2018-12-28 09:30:38', `create_user` = 1, `mark` = '' WHERE `menu_id` = 12;
-
-UPDATE `yi_20191127`.`at_busi_menu_info` SET `menu_name` = '服务调用地图', `menu_url` = 'resource/reporting/callMap.html', `icon_name` = '', `parent_id` = 22, `node_level` = 2, `seq` = 10, `status` = '0', `create_time` = '2018-12-28 09:39:00', `create_user` = 1, `mark` = '' WHERE `menu_id` = 23;
-
-UPDATE `yi_20191127`.`at_busi_menu_info` SET `menu_name` = '测试报表', `menu_url` = 'resource/reporting/reportForm.html', `icon_name` = '', `parent_id` = 22, `node_level` = 2, `seq` = 20, `status` = '1', `create_time` = '2018-12-28 09:39:00', `create_user` = 1, `mark` = '' WHERE `menu_id` = 24;
+UPDATE `at_busi_menu_info` SET `menu_name` = '批量比对', `menu_url` = 'nopower.html?v=2', `icon_name` = '', `parent_id` = 9, `node_level` = 2, `seq` = 30, `status` = '0', `create_time` = '2018-12-28 09:30:38', `create_user` = 1, `mark` = '' WHERE `menu_id` = 12;
+UPDATE `at_busi_menu_info` SET `menu_name` = '服务调用地图', `menu_url` = 'resource/reporting/callMap.html', `icon_name` = '', `parent_id` = 22, `node_level` = 2, `seq` = 10, `status` = '0', `create_time` = '2018-12-28 09:39:00', `create_user` = 1, `mark` = '' WHERE `menu_id` = 23;
+UPDATE `at_busi_menu_info` SET `menu_name` = '测试报表', `menu_url` = 'resource/reporting/reportForm.html', `icon_name` = '', `parent_id` = 22, `node_level` = 2, `seq` = 20, `status` = '1', `create_time` = '2018-12-28 09:39:00', `create_user` = 1, `mark` = '' WHERE `menu_id` = 24;

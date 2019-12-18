@@ -41,7 +41,7 @@ public interface ReportFormService {
      * @param beginTime beginTime
      * @param endTime endTime
      * @param includeScope includeScope 包含范围
-     * @return {@link List[]} List数组，list[0]为探测时间列表  list[1]为相对应的响应时间ms列表
+     * @return {@link List} List数组，list[0]为探测时间列表  list[1]为相对应的响应时间ms列表
      */
     List[] querySceneResultResponseTime (Integer messageSceneId, String beginTime, String endTime, List<String> includeScope);
 }

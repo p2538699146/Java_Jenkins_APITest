@@ -29,6 +29,7 @@ public class AnalyzeUtil {
     private static final String STATISTICAL_QUANTITY_SCENE_NAME = "messageScene";
     private static final String STATISTICAL_QUANTITY_SET_NAME = "testSet";
     private static final String STATISTICAL_QUANTITY_REPORT_NAME = "testReport";
+
 	private static final String TABLE_CREATE_TIME_COLUMN_NAME = "createTime";
 	
 	/**

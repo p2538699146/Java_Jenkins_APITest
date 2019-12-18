@@ -63,6 +63,13 @@ public class IndexChartRenderData {
         }
     }
 
+    /**
+     * 设置测试报告趋势数据
+     * @author xuwangcheng
+     * @date 2019/12/18 9:12
+     * @param includeScope includeScope
+     * @return
+     */
     public void setOverview(List<String> includeScope) {
         ReportFormService reportFormService = (ReportFormService) FrameworkUtil.getSpringBean(ReportFormService.class);
         TestSetService setService = (TestSetService) FrameworkUtil.getSpringBean("testSetService");
@@ -95,6 +102,13 @@ public class IndexChartRenderData {
         }
     }
 
+    /**
+     * 设置每日新增趋势数据
+     * @author xuwangcheng
+     * @date 2019/12/18 9:13
+     * @param
+     * @return
+     */
     public void setStat() {
         ReportFormService reportFormService = (ReportFormService) FrameworkUtil.getSpringBean(ReportFormService.class);
 
